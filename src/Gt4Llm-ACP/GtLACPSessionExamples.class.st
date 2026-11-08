@@ -309,6 +309,41 @@ GtLACPSessionExamples >> commentaryRenderedBetweenTools [
 ]
 
 { #category : #examples }
+GtLACPSessionExamples >> commentarySelectionSurvivesStreaming [
+	<gtExample>
+	| scripter session row editor selection |
+	scripter := self streamedCommentaryEditor.
+	session := scripter model.
+	row := (scripter element query // #'acp-message-2') anyOne.
+	editor := (self editorsIn: row)
+			detect: [ :each | each text asString = 'Hello' ].
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ editor selecter
+						from: 0 to: 5;
+						select ] ].
+	selection := editor selection copy.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'messageId' -> 'streamed-commentary'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> ' world'} asDictionary} asDictionary
+						to: session ] ].
+	scripter pulseUntilReady.
+	self assert: (scripter element query // #'acp-message-2') anyOne == row.
+	self assert: ((self editorsIn: row) identityIncludes: editor).
+	self assert: editor text asString equals: 'Hello world'.
+	self assert: editor selection equals: selection.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
 GtLACPSessionExamples >> compactAssistantHeaders [
 	<gtExample>
 	| element scripter |
@@ -421,6 +456,32 @@ GtLACPSessionExamples >> completedChat [
  | turn |
  turn := GtLACPExamples new streamedTurn.
  ^ turn session asElement
+]
+
+{ #category : #examples }
+GtLACPSessionExamples >> completedReplyAppendsToExistingEditor [
+	<gtExample>
+	| scripter session row editor |
+	scripter := self finalReplyRetainsStreamedEditor.
+	session := scripter model.
+	row := (scripter element query // #'acp-message-2') anyOne.
+	editor := (row query // #'acp-final-text') anyOne.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'messageId' -> 'streamed-commentary'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> ' again'} asDictionary} asDictionary
+						to: session ] ].
+	scripter pulseUntilReady.
+	self assert: (scripter element query // #'acp-message-2') anyOne == row.
+	self assert: (row query // #'acp-final-text') anyOne == editor.
+	self assert: editor text asString equals: 'Hello world again'.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
@@ -603,6 +664,33 @@ GtLACPSessionExamples >> finalReplyManualCollapsePersists [
  scripter assertStep: [ :step | step id: #'acp-final-section'; satisfies: #isCollapsed ].
  scripter assertStep: [ :step | step id: #'acp-final-preview'; exists ].
  ^ scripter
+]
+
+{ #category : #examples }
+GtLACPSessionExamples >> finalReplyRetainsStreamedEditor [
+	<gtExample>
+	| scripter session turn row editor |
+	scripter := self streamAppendsToExistingCommentaryEditor.
+	session := scripter model.
+	turn := session currentTurn.
+	row := (scripter element query // #'acp-message-2') anyOne.
+	editor := (self editorsIn: row)
+			detect: [ :each | each text asString = 'Hello world' ].
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ session connection transport
+						receive: {'jsonrpc' -> '2.0'.
+								'id' -> turn request id.
+								'result' -> {'stopReason' -> 'end_turn'} asDictionary} asDictionary ] ].
+	scripter pulseUntilReady.
+	self assert: session isReady.
+	self assert: (scripter element query // #'acp-message-2') anyOne == row.
+	self assert: (row query // #'acp-final-text') anyOne == editor.
+	self assert: editor text asString equals: 'Hello world'.
+	self assert: (row query // #'acp-final-section') anyOne isExpanded.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
@@ -809,6 +897,37 @@ GtLACPSessionExamples >> messageSpecificRows [
  ^ scripter
 ]
 
+{ #category : #'examples - streaming' }
+GtLACPSessionExamples >> newCommentaryKeepsEarlierEditor [
+	<gtExample>
+	| scripter session row first parent |
+	scripter := self streamAppendsToExistingCommentaryEditor.
+	session := scripter model.
+	row := (scripter element query // #'acp-message-2') anyOne.
+	first := (self editorsIn: row)
+			detect: [ :each | each text asString = 'Hello world' ].
+	parent := first parent.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'messageId' -> 'second-commentary'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> 'A separate message.'} asDictionary} asDictionary
+						to: session ] ].
+	self assert: (scripter element query // #'acp-message-2') anyOne == row.
+	self assert: ((self editorsIn: row) identityIncludes: first).
+	self assert: first parent == parent.
+	self assert: first text asString equals: 'Hello world'.
+	self
+		assert: ((self editorsIn: row)
+				anySatisfy: [ :editor | editor ~~ first and: [ editor text asString = 'A separate message.' ] ]).
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
 { #category : #examples }
 GtLACPSessionExamples >> newTurnFollowsBottom [
  <gtExample>
@@ -847,24 +966,56 @@ GtLACPSessionExamples >> newTurnPreservesReadingPosition [
  ^ scripter
 ]
 
-{ #category : #examples }
+{ #category : #updating }
 GtLACPSessionExamples >> olderMessageChangeRefreshesOnlyItsRow [
- <gtExample>
- | scripter session firstRow secondRow lastRow |
- scripter := self unchangedRowsSurviveStreamingAndNewTurn.
- session := scripter model.
- scripter assertStep: [ :step | step id: #'acp-message-1'; satisfies: [ :row | firstRow := row. true ] ].
- scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row | secondRow := row. true ] ].
- scripter assertStep: [ :step | step id: #'acp-message-4'; satisfies: [ :row | lastRow := row. true ] ].
- scripter doStep: [ :step | step block: [ :element |
-  session announceMessageChanged: session turns first assistantMessage.
-  element updateMessages ] ].
- scripter assertStep: [ :step | step id: #'acp-message-1'; satisfies: [ :row | row == firstRow ] ].
- scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row |
-  row ~~ secondRow and: [ row viewModel == secondRow viewModel ] ] ].
- scripter assertStep: [ :step | step id: #'acp-message-4'; satisfies: [ :row | row == lastRow ] ].
- self assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| scripter session firstRow secondRow lastRow |
+	scripter := self unchangedRowsSurviveStreamingAndNewTurn.
+	session := scripter model.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-1';
+				satisfies: [ :row | 
+					firstRow := row.
+					true ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-2';
+				satisfies: [ :row | 
+					secondRow := row.
+					true ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-4';
+				satisfies: [ :row | 
+					lastRow := row.
+					true ] ].
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ :element | 
+					session announceMessageChanged: session turns first assistantMessage.
+					element updateMessages ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-1';
+				satisfies: [ :row | row == firstRow ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-2';
+				satisfies: [ :row | row == secondRow and: [ row viewModel == secondRow viewModel ] ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-4';
+				satisfies: [ :row | row == lastRow ] ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
@@ -1048,6 +1199,31 @@ GtLACPSessionExamples >> scrollingUpCancelsPendingFollow [
   chat messageViewport scrollBy: 0 @ -200 ] ].
  scripter assertStep: [ :step | step satisfies: [ :chat | chat isAtStreamEnd not ] ].
  ^ scripter
+]
+
+{ #category : #'examples - streaming' }
+GtLACPSessionExamples >> secondCommentaryGroupsExistingEditor [
+	<gtExample>
+	| scripter editor content |
+	scripter := self singleCommentaryAppendsWithoutReparenting.
+	editor := (scripter element query // #'acp-work-content') anyOne.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'messageId' -> 'second-commentary'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> 'Another message'} asDictionary} asDictionary
+						to: scripter model ] ].
+	content := (scripter element query // #'acp-work-content') anyOne.
+	self assert: content children size equals: 2.
+	self assert: content children first == editor.
+	self assert: editor text asString equals: 'Hello world'.
+	self assert: content children second text asString equals: 'Another message'.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
@@ -1716,6 +1892,60 @@ GtLACPSessionExamples >> shortToolCallLabels [
 	^ scripter
 ]
 
+{ #category : #'examples - streaming' }
+GtLACPSessionExamples >> singleCommentaryAppendsWithoutReparenting [
+	<gtExample>
+	| scripter editor parent |
+	scripter := self singleCommentaryUsesEditorAsContent.
+	editor := (scripter element query // #'acp-work-content') anyOne.
+	parent := editor parent.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'messageId' -> 'only-commentary'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> ' world'} asDictionary} asDictionary
+						to: scripter model ] ].
+
+	self assert: (scripter element query // #'acp-work-content') anyOne == editor.
+	self assert: editor parent == parent.
+	self assert: editor text asString equals: 'Hello world'.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #'examples - streaming' }
+GtLACPSessionExamples >> singleCommentaryUsesEditorAsContent [
+	<gtExample>
+	| session chat scripter |
+	session := GtLACPExamples new session.
+	session prompt: 'Explain the project'.
+	GtLACPExamples new
+		sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+				'messageId' -> 'only-commentary'.
+				'content'
+					-> {'type' -> 'text'.
+							'text' -> 'Hello'} asDictionary} asDictionary
+		to: session.
+	chat := session asElement.
+	chat viewModel messageViewModels last workExpanded: true.
+	scripter := BlScripter new
+			extent: 1000 @ 900;
+			model: session;
+			element: chat;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-content';
+				satisfies: [ :content | (content isKindOf: BrEditor) and: [ content text asString = 'Hello' ] ] ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
 { #category : #examples }
 GtLACPSessionExamples >> stableAssistantGroup [
  <gtExample>
@@ -1734,6 +1964,35 @@ GtLACPSessionExamples >> stableAssistantGroup [
  ^ model
 ]
 
+{ #category : #'examples - streaming' }
+GtLACPSessionExamples >> streamAppendsToExistingCommentaryEditor [
+	<gtExample>
+	| scripter session row editor |
+	scripter := self streamedCommentaryEditor.
+	session := scripter model.
+	row := (scripter element query // #'acp-message-2') anyOne.
+	editor := (self editorsIn: row)
+			detect: [ :each | each text asString = 'Hello' ].
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'messageId' -> 'streamed-commentary'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> ' world'} asDictionary} asDictionary
+						to: session ] ].
+	scripter pulseUntilReady.
+	self
+		assert: (scripter element query // #'acp-message-2') anyOne == row
+		description: 'Streaming must retain the assistant row'.
+	self assert: ((self editorsIn: row) identityIncludes: editor).
+	self assert: editor text asString equals: 'Hello world'.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
 { #category : #examples }
 GtLACPSessionExamples >> streamFollowsBottom [
  <gtExample>
@@ -1747,6 +2006,72 @@ GtLACPSessionExamples >> streamFollowsBottom [
  scripter assertStep: [ :step | step satisfies: [ :chat |
   chat isAtStreamEnd and: [ session currentTurn messages last text includesSubstring: 'Additional streamed line 24' ] ] ].
  ^ scripter
+]
+
+{ #category : #updating }
+GtLACPSessionExamples >> streamPreservesMessageElement [
+	<gtExample>
+	| chat session scripter originalRow originalModel |
+	chat := self chatWithToolCalls.
+	session := chat viewModel session.
+	scripter := BlScripter new
+			extent: 1000 @ 1000;
+			model: session;
+			element: chat;
+			yourself.
+	scripter click
+		id: #'acp-work-toggle';
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-2';
+				satisfies: [ :row | 
+					originalRow := row.
+					originalModel := row viewModel.
+					true ] ].
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ :element | 
+					GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> ' More progress.'} asDictionary} asDictionary
+						to: session.
+					element updateMessages ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-message-2';
+				satisfies: [ :row | row == originalRow and: [ row viewModel == originalModel ] ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-section';
+				satisfies: #isExpanded ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-tool-tool-1';
+				exists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-section';
+				notExists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-content';
+				satisfies: [ :pane | 
+					(self editorsIn: pane)
+						anySatisfy: [ :child | 
+							(child isKindOf: BrEditor)
+								and: [ child text asString endsWith: ' More progress.' ] ] ] ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
@@ -1774,34 +2099,6 @@ GtLACPSessionExamples >> streamPreservesReadingPosition [
 ]
 
 { #category : #examples }
-GtLACPSessionExamples >> streamRecreatesMessageElement [
- <gtExample>
- | chat session scripter originalRow originalModel |
- chat := self chatWithToolCalls.
- session := chat viewModel session.
- scripter := BlScripter new extent: 1000 @ 1000; model: session; element: chat; yourself.
- scripter click id: #'acp-work-toggle'; play.
- scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row |
-  originalRow := row.
-  originalModel := row viewModel.
-  true ] ].
- scripter doStep: [ :step | step block: [ :element |
-  GtLACPExamples new sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
-   'content' -> { 'type' -> 'text'. 'text' -> ' More progress.' } asDictionary } asDictionary to: session.
-  element updateMessages ] ].
- scripter assertStep: [ :step | step id: #'acp-message-2'; satisfies: [ :row |
-  row ~~ originalRow and: [ row viewModel == originalModel ] ] ].
- scripter assertStep: [ :step | step id: #'acp-work-section'; satisfies: #isExpanded ].
- scripter assertStep: [ :step | step id: #'acp-tool-tool-1'; exists ].
- scripter assertStep: [ :step | step id: #'acp-final-section'; notExists ].
- scripter assertStep: [ :step | step id: #'acp-work-content'; satisfies: [ :pane |
-  (self editorsIn: pane) anySatisfy: [ :child | (child isKindOf: BrEditor) and: [
-   child text asString endsWith: ' More progress.' ] ] ] ].
- self assertNoRenderingErrorsIn: scripter.
- ^ scripter
-]
-
-{ #category : #examples }
 GtLACPSessionExamples >> streamResumesFollowingAtBottom [
  <gtExample>
  | scripter session |
@@ -1815,6 +2112,80 @@ GtLACPSessionExamples >> streamResumesFollowingAtBottom [
     1 to: 12 do: [ :index | stream nextPutAll: 'Following resumed'; lf ] ]) } asDictionary } asDictionary to: session ] ].
  scripter assertStep: [ :step | step satisfies: [ :chat | chat isAtStreamEnd ] ].
  ^ scripter
+]
+
+{ #category : #examples }
+GtLACPSessionExamples >> streamedCommentaryEditor [
+	<gtExample>
+	| chat session scripter |
+	chat := self chatWithToolCalls.
+	session := chat viewModel session.
+	scripter := BlScripter new
+			extent: 1000 @ 1000;
+			model: session;
+			element: chat;
+			yourself.
+	scripter click
+		id: #'acp-work-toggle';
+		play.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'messageId' -> 'streamed-commentary'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> 'Hello'} asDictionary} asDictionary
+						to: session ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-content';
+				satisfies: [ :pane | (self editorsIn: pane) anySatisfy: [ :editor | editor text asString = 'Hello' ] ] ].
+	^ scripter
+]
+
+{ #category : #'examples - streaming' }
+GtLACPSessionExamples >> streamedMarkdownKeepsExistingEditor [
+	<gtExample>
+	| scripter session row editor |
+	scripter := self streamedCommentaryEditor.
+	session := scripter model.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'messageId' -> 'markdown-commentary'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> '**bo'} asDictionary} asDictionary
+						to: session ] ].
+	scripter pulseUntilReady.
+	row := (scripter element query // #'acp-message-2') anyOne.
+	editor := (self editorsIn: row) detect: [ :each | each text asString = '**bo' ].
+	self assert: (editor styler isKindOf: BlTextNullStyler).
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ GtLACPExamples new
+						sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'messageId' -> 'markdown-commentary'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> 'ld**'} asDictionary} asDictionary
+						to: session ] ].
+	scripter pulseUntilReady.
+	self assert: ((self editorsIn: row) identityIncludes: editor).
+	self assert: editor text asString equals: '**bold**'.
+	self assert: (editor styler isKindOf: BlTextNullStyler).
+	self
+		assert: ((editor text attributesAt: 3)
+				anySatisfy: [ :attribute | attribute isKindOf: BlFontWeightAttribute ]).
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }

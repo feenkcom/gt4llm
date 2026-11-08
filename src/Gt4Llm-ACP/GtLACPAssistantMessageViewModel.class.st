@@ -129,6 +129,11 @@ GtLACPAssistantMessageViewModel >> migrateLegacyExpansionState [
 	sectionExpansion := nil
 ]
 
+{ #category : #updating }
+GtLACPAssistantMessageViewModel >> renderingKey [
+	^ {self}
+]
+
 { #category : #navigation }
 GtLACPAssistantMessageViewModel >> revealInteraction: aRequest [
 	self workExpanded: true.

@@ -1003,7 +1003,7 @@ GtLACPSubagentExamples >> disconnectedChildren [
 	^ root
 ]
 
-{ #category : #examples }
+{ #category : #updating }
 GtLACPSubagentExamples >> expandedAgentRefreshIsLocal [
 	<gtExample>
 	| scripter root child nested hash nestedHash parentRow childElement nestedElement siblingHeader siblingHash |
@@ -1081,7 +1081,7 @@ GtLACPSubagentExamples >> expandedAgentRefreshIsLocal [
 		assertStep: [ :step | 
 			step
 				id: ('acp-agent-section-' , nestedHash) asSymbol;
-				satisfies: [ :agent | agent messageElement ~~ nestedElement ] ].
+				satisfies: [ :agent | agent messageElement == nestedElement ] ].
 	scripter
 		assertStep: [ :step | 
 			step

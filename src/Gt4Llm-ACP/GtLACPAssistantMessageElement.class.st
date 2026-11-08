@@ -1,5 +1,5 @@
 "
-I render an assistant response with work and reply disclosures, ordered reasoning, clickable tool-call summaries and explicit permissions. A message view model creates and builds me.
+I render an assistant response with work and final-reply disclosures. I retain one text editor per conversation-message object, whose identity is resolved from the protocol role and message ID by the turn. When message text changes, I assign freshly styled text to the existing editor. Unchanged text skips the update. Text-only updates retain the row and its structure; changes to tools, interactions, or turn state rebuild the necessary presentation while reusing message editors, including when the final reply moves out of work.
 "
 Class {
 	#name : #GtLACPAssistantMessageElement,
@@ -7,7 +7,11 @@ Class {
 	#instVars : [
 		'workSummaryElement',
 		'workSummaryUpdater',
-		'workExpander'
+		'workExpander',
+		'messageEditors',
+		'structuralSnapshot',
+		'renderedVersion',
+		'workContents'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -17,6 +21,13 @@ GtLACPAssistantMessageElement >> agentWorkElementFor: anAssistantMessage [
 	^ GtLACPAgentMessageElement new
 		messageViewModel: (viewModel delegatedViewModelFor: anAssistantMessage);
 		yourself
+]
+
+{ #category : #updating }
+GtLACPAssistantMessageElement >> build [
+	super build.
+	structuralSnapshot := self presentationStructure.
+	renderedVersion := viewModel renderingVersion
 ]
 
 { #category : #building }
@@ -100,11 +111,22 @@ GtLACPAssistantMessageElement >> finalContent [
  ^ self finalContentFor: viewModel
 ]
 
-{ #category : #building }
+{ #category : #updating }
 GtLACPAssistantMessageElement >> finalContentFor: model [
-	| pane tabs |
+	| pane tabs views |
+	views := model message finalReplyViewsInContext: model phlowContext.
+	views := views
+			collect: [ :view | 
+				view title = 'Markdown'
+					ifTrue: [ view
+							stencil: [ | editor |
+								editor := self textEditorForMessage: model replyMessages first.
+								editor removeFromParent.
+								editor id: #'acp-final-text'.
+								editor ] ]
+					ifFalse: [ view ] ].
 	tabs := GtPhlowCompositeView new
-			views: (model message finalReplyViewsInContext: model phlowContext);
+			views: views;
 			asElementDo: [ :element | 
 				element
 					hMatchParent;
@@ -139,6 +161,11 @@ GtLACPAssistantMessageElement >> initialize [
   postponedDuration: 150 milliseconds; yourself
 ]
 
+{ #category : #updating }
+GtLACPAssistantMessageElement >> messageEditors [
+	^ messageEditors ifNil: [ messageEditors := IdentityDictionary new ]
+]
+
 { #category : #hooks }
 GtLACPAssistantMessageElement >> onAddedToSceneGraph [
  super onAddedToSceneGraph.
@@ -170,6 +197,38 @@ GtLACPAssistantMessageElement >> permissionElementFor: permission [
 	^ permission asElement
 ]
 
+{ #category : #updating }
+GtLACPAssistantMessageElement >> presentationStructure [
+	| turn |
+	turn := viewModel turn.
+	^ {turn stateName.
+		viewModel message localActivityItems asArray.
+		viewModel replyMessages asArray.
+		viewModel message delegatedMessages asArray.
+		(viewModel toolCalls
+			collect: [ :tool | 
+				{tool summary.
+					(tool permissionRequests
+						collect: [ :request | 
+							{request.
+								request state} ]) asArray.
+					(tool elicitationRequests
+						collect: [ :request | 
+							{request.
+								request state} ]) asArray} ]) asArray.
+		(turn permissionRequests
+			collect: [ :request | 
+				{request.
+					request state} ]) asArray.
+		(turn elicitationRequests
+			collect: [ :request | 
+				{request.
+					request state} ]) asArray.
+		viewModel isWorkExpanded.
+		viewModel isFinalReplyExpanded.
+		turn error}
+]
+
 { #category : #building }
 GtLACPAssistantMessageElement >> questionsElementFor: aTool [
 	| pane |
@@ -190,6 +249,35 @@ GtLACPAssistantMessageElement >> questionsElementFor: aTool [
 								right: 5);
 						yourself) ].
 	^ pane
+]
+
+{ #category : #private }
+GtLACPAssistantMessageElement >> refresh [
+	| snapshot version |
+	version := viewModel renderingVersion.
+	renderedVersion = version ifTrue: [ ^ self ].
+	self messageEditors
+		keysAndValuesDo: [ :message :editor | self updateEditor: editor forMessage: message ].
+	snapshot := self presentationStructure.
+	snapshot = structuralSnapshot
+		ifFalse: [ self removeChildren.
+			workSummaryElement := nil.
+			workExpander := nil.
+			self addChild: self buildHeader as: #'acp-message-header'.
+			self buildContent.
+			structuralSnapshot := snapshot ].
+	self updateWorkSummary.
+	renderedVersion := version
+]
+
+{ #category : #private }
+GtLACPAssistantMessageElement >> textEditorForMessage: aMessage [
+	| editor |
+	editor := self messageEditors
+			at: aMessage
+			ifAbsentPut: [ self textElementFor: aMessage text ].
+	self updateEditor: editor forMessage: aMessage.
+	^ editor
 ]
 
 { #category : #building }
@@ -245,6 +333,28 @@ GtLACPAssistantMessageElement >> toolElementFor: aTool [
 	^ pane
 ]
 
+{ #category : #private }
+GtLACPAssistantMessageElement >> updateContentChildren: elements in: content [
+	content children asArray
+		do: [ :child | (elements identityIncludes: child) ifFalse: [ child removeFromParent ] ].
+	elements
+		withIndexDo: [ :child :index | 
+			(content children asArray identityIndexOf: child) = index
+				ifFalse: [ child hasParent ifTrue: [ child removeFromParent ].
+					content addChild: child at: index ] ]
+]
+
+{ #category : #private }
+GtLACPAssistantMessageElement >> updateEditor: anEditor forMessage: aMessage [
+	| text |
+	text := aMessage text.
+	text = anEditor text asString ifTrue: [ ^ self ].
+	anEditor
+		text: (GtLMessageStyler new
+				objectRegistry: viewModel phlowContext objectRegistry;
+				privateStyle: text asRopedText)
+]
+
 { #category : #building }
 GtLACPAssistantMessageElement >> updateWorkSummary [
 	workSummaryElement ifNil: [ ^ self ].
@@ -282,32 +392,46 @@ GtLACPAssistantMessageElement >> workContent [
  ^ self workContentFor: viewModel message
 ]
 
-{ #category : #building }
+{ #category : #private }
 GtLACPAssistantMessageElement >> workContentFor: anAssistantMessage [
-	| pane |
-	pane := BrVerticalPane new
-			hMatchParent;
-			vFitContent;
-			yourself.
-	anAssistantMessage == viewModel message
-		ifTrue: [ pane id: viewModel workContentId ].
+	| elements content |
+	elements := OrderedCollection new.
 	anAssistantMessage localActivityItems
 		do: [ :item | 
 			(item isKindOf: GtLACPToolCall)
-				ifTrue: [ pane addChild: (self toolElementFor: item) ]
+				ifTrue: [ elements add: (self toolElementFor: item) ]
 				ifFalse: [ item isInterSessionMessage
-						ifTrue: [ pane
-								addChild: (BrLabel new
+						ifTrue: [ elements
+								add: (BrLabel new
 										aptitude: BrGlamorousLabelAptitude;
 										text: item chatLabel;
 										yourself) ].
-					pane addChild: (self textElementFor: item text) ] ].
+					elements
+						add: ((self textEditorForMessage: item)
+								id: ('acp-text-' , item identityHash asString) asSymbol;
+								yourself) ] ].
 	anAssistantMessage turn elicitationRequests
 		select: [ :each | each toolCall isNil ]
-		thenDo: [ :each | pane addChild: each asElement ].
+		thenDo: [ :each | elements add: each asElement ].
 	anAssistantMessage delegatedMessages
-		do: [ :delegated | pane addChild: (self agentWorkElementFor: delegated) ].
-	^ pane
+		do: [ :delegated | elements add: (self agentWorkElementFor: delegated) ].
+	(elements size = 1 and: [ elements first isKindOf: BrEditor ])
+		ifTrue: [ content := elements first ]
+		ifFalse: [ content := self workContents
+					at: anAssistantMessage
+					ifAbsentPut: [ BrVerticalPane new
+							hMatchParent;
+							vFitContent;
+							yourself ].
+			self updateContentChildren: elements in: content ].
+	anAssistantMessage == viewModel message
+		ifTrue: [ content id: viewModel workContentId ].
+	^ content
+]
+
+{ #category : #private }
+GtLACPAssistantMessageElement >> workContents [
+	^ workContents ifNil: [ workContents := IdentityDictionary new ]
 ]
 
 { #category : #building }

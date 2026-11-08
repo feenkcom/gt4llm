@@ -130,7 +130,8 @@ GtLACPAgentMessageElement >> onSessionChanged: anAnnouncement [
 GtLACPAgentMessageElement >> updateContent [
 	(self isExpanded and: [ messageElement notNil ]) ifFalse: [ ^ self ].
 	renderedVersion = messageViewModel renderingVersion ifTrue: [ ^ self ].
-	expanderAptitude refreshContent
+	messageElement refresh.
+	renderedVersion := messageViewModel renderingVersion
 ]
 
 { #category : #updating }
