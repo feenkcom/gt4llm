@@ -96,9 +96,10 @@ GtLACPAttentionScripterExamples >> badgeScrollsToSubagentTool [
 { #category : #examples }
 GtLACPAttentionScripterExamples >> dropdownRevealsCollapsedQuestion [
 	<gtExample>
-	| scripter request |
+	| scripter request workSection |
 	scripter := self twoPendingInteractionsInSessionTool.
 	request := scripter model at: 'request'.
+	workSection := (scripter element query // #'acp-work-section') anyOne.
 	scripter clickStep: [ :step | step id: #'acp-work-toggle' ].
 	scripter clickStep: [ :step | step id: #'acp-message-input-needed' ].
 	scripter
@@ -112,6 +113,8 @@ GtLACPAttentionScripterExamples >> dropdownRevealsCollapsedQuestion [
 			step
 				id: #'acp-work-section';
 				satisfies: #isExpanded ].
+	self
+		assert: (scripter element query // #'acp-work-section') anyOne == workSection.
 	self assertInteraction: request visibleIn: scripter.
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
@@ -162,7 +165,7 @@ GtLACPAttentionScripterExamples >> dropdownRevealsPermission [
 { #category : #examples }
 GtLACPAttentionScripterExamples >> dropdownScrollsInsideLongSubagent [
 	<gtExample>
-	| scripter |
+	| scripter agentElement |
 	scripter := self
 			longSubagentWithInteraction: [ :child | 
 				GtLACPElicitationExamples new
@@ -177,6 +180,7 @@ GtLACPAttentionScripterExamples >> dropdownScrollsInsideLongSubagent [
 						receivePermissionIn: (scripter model at: 'session')
 						requestId: 'root-dropdown-permission' ] ].
 	scripter pulseUntilReady.
+	agentElement := (scripter element query // GtLACPAgentMessageElement) anyOne.
 	scripter clickStep: [ :step | step id: #'acp-session-state-marker' ].
 	scripter
 		clickStep: [ :step | 
@@ -184,6 +188,8 @@ GtLACPAttentionScripterExamples >> dropdownScrollsInsideLongSubagent [
 				onSpaceRoot;
 				// #'acp-input-needed-item-2' ].
 	scripter pulseUntilReady.
+	self
+		assert: (scripter element query // GtLACPAgentMessageElement) anyOne == agentElement.
 	self assertInteractionNearTop: (scripter model at: 'request') in: scripter.
 	^ scripter
 ]

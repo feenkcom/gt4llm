@@ -11,7 +11,9 @@ Class {
 		'commentElements',
 		'structuralSnapshot',
 		'renderedVersion',
-		'workContents'
+		'workContents',
+		'finalExpander',
+		'agentElements'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
@@ -34,11 +36,19 @@ GtLACPAssistantMessageElement >> addInterSessionLabelFor: aMessage to: elements 
 				yourself)
 ]
 
+{ #category : #accessing }
+GtLACPAssistantMessageElement >> agentElements [
+	^ agentElements ifNil: [ agentElements := OrderedCollection new ]
+]
+
 { #category : #building }
 GtLACPAssistantMessageElement >> agentWorkElementFor: anAssistantMessage [
-	^ GtLACPAgentMessageElement new
-		messageViewModel: (viewModel delegatedViewModelFor: anAssistantMessage);
-		yourself
+	| element |
+	element := GtLACPAgentMessageElement new
+			messageViewModel: (viewModel delegatedViewModelFor: anAssistantMessage);
+			yourself.
+	self agentElements add: element.
+	^ element
 ]
 
 { #category : #updating }
@@ -63,9 +73,8 @@ GtLACPAssistantMessageElement >> buildErrorContent [
 
 { #category : #building }
 GtLACPAssistantMessageElement >> buildFinalReplySection [
-	| expander |
 	viewModel replyMessages ifEmpty: [ ^ self ].
-	expander := BrExpander new
+	finalExpander := BrExpander new
 			id: viewModel finalSectionId;
 			aptitude: (BrGlamorousExpanderSubtleAptitude new
 					sidebarExtraPadding: (BlInsets top: 9);
@@ -76,12 +85,12 @@ GtLACPAssistantMessageElement >> buildFinalReplySection [
 			header: [ self finalReplyPreview ];
 			content: [ self finalContent ];
 			yourself.
-	((expander childNamed: #sidebar) childNamed: #'expander--toggle')
+	((finalExpander childNamed: #sidebar) childNamed: #'expander--toggle')
 		id: viewModel finalToggleId.
-	expander expanded: viewModel isFinalReplyExpanded.
-	expander whenExpandedDo: [ viewModel finalReplyExpanded: true ].
-	expander whenCollapsedDo: [ viewModel finalReplyExpanded: false ].
-	self addChild: expander
+	finalExpander expanded: viewModel isFinalReplyExpanded.
+	finalExpander whenExpandedDo: [ viewModel finalReplyExpanded: true ].
+	finalExpander whenCollapsedDo: [ viewModel finalReplyExpanded: false ].
+	self addChild: finalExpander
 ]
 
 { #category : #building }
@@ -224,7 +233,7 @@ GtLACPAssistantMessageElement >> onSessionChanged: anAnnouncement [
 					workSummaryUpdater requestUpdate ])
 ]
 
-{ #category : #updating }
+{ #category : #building }
 GtLACPAssistantMessageElement >> presentationStructure [
 	| turn |
 	turn := viewModel turn.
@@ -251,8 +260,6 @@ GtLACPAssistantMessageElement >> presentationStructure [
 			collect: [ :request | 
 				{request.
 					request state} ]) asArray.
-		viewModel isWorkExpanded.
-		viewModel isFinalReplyExpanded.
 		turn error}
 ]
 
@@ -267,9 +274,12 @@ GtLACPAssistantMessageElement >> refresh [
 		ifFalse: [ self removeChildren.
 			workSummaryElement := nil.
 			workExpander := nil.
+			finalExpander := nil.
+			self agentElements removeAll.
 			self addChild: self buildHeader as: #'acp-message-header'.
 			self buildContent.
 			structuralSnapshot := snapshot ].
+	self updateExpansion.
 	self updateWorkSummary.
 	renderedVersion := version
 ]
@@ -290,6 +300,14 @@ GtLACPAssistantMessageElement >> updateContentChildren: elements in: content [
 			(content children asArray identityIndexOf: child) = index
 				ifFalse: [ child hasParent ifTrue: [ child removeFromParent ].
 					content addChild: child at: index ] ]
+]
+
+{ #category : #updating }
+GtLACPAssistantMessageElement >> updateExpansion [
+	workExpander ifNotNil: [ workExpander expanded: viewModel isWorkExpanded ].
+	finalExpander
+		ifNotNil: [ finalExpander expanded: viewModel isFinalReplyExpanded ].
+	self agentElements do: [ :element | element refresh ]
 ]
 
 { #category : #building }
@@ -338,6 +356,7 @@ GtLACPAssistantMessageElement >> workContentFor: anAssistantMessage [
 	anAssistantMessage turn elicitationRequests
 		select: [ :each | each toolCall isNil ]
 		thenDo: [ :each | elements add: each asElement ].
+	self agentElements removeAll.
 	anAssistantMessage delegatedMessages
 		do: [ :delegated | elements add: (self agentWorkElementFor: delegated) ].
 	content := self workContents
