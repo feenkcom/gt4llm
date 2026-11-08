@@ -67,6 +67,7 @@ GtLSmalltalkCodeEvaluationResult >> gtCodeFor: aView [
 						background: BrGlamorousColors backdropColor;
 						addChild: ((GtPharoSnippetCoder new
 								forSource: self code;
+								format;
 								subscribeToSystem;
 								asExpandedOnlyElement)
 								margin: (BlInsets all: 10);
@@ -81,24 +82,22 @@ GtLSmalltalkCodeEvaluationResult >> gtCodeFor: aView [
 								hMatchParent) ] ]
 		gemstoneDo: [ | stencilBindings stencilData |
 			stencilBindings := Dictionary new.
-			bindings ifNotNil: [
-				bindings keysAndValuesDo: [ :k :v |
-					stencilBindings at: k put: (GtRsrProxyServiceServer object: v) ] ].
+			bindings
+				ifNotNil: [ bindings
+						keysAndValuesDo: [ :k :v | stencilBindings at: k put: (GtRsrProxyServiceServer object: v) ] ].
 			stencilData := Dictionary new
-				at: #code put: self code;
-				at: #object put: (GtRsrProxyServiceServer object: object);
-				yourself.
-			stencilBindings ifNotEmpty: [
-				stencilData at: #bindings put: stencilBindings ].
+					at: #code put: self code;
+					at: #object put: (GtRsrProxyServiceServer object: object);
+					yourself.
+			stencilBindings
+				ifNotEmpty: [ stencilData at: #bindings put: stencilBindings ].
 			aView explicit
 				title: 'Code and object';
 				priority: 9;
-				declarativeStencil: [
-					GtPhlowNamedStencil new
+				declarativeStencil: [ GtPhlowNamedStencil new
 						stencilClassName: #GtLSmalltalkCodeEvaluationResultGemStoneStencil;
 						stencilData: stencilData;
-						dataSerializationStrategy: GtPhlowStencilDataSerializationStrategy
-							forMixedProxyDataEncoding ] ]
+						dataSerializationStrategy: GtPhlowStencilDataSerializationStrategy forMixedProxyDataEncoding ] ]
 ]
 
 { #category : #printing }
