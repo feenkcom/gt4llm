@@ -214,6 +214,26 @@ GtLACPConnection >> initialize [
  lock := Mutex new
 ]
 
+{ #category : #testing }
+GtLACPConnection >> isFailed [
+	^ state = #failed
+]
+
+{ #category : #testing }
+GtLACPConnection >> isInitializing [
+	^ state = #initializing
+]
+
+{ #category : #testing }
+GtLACPConnection >> isReady [
+	^ state = #ready
+]
+
+{ #category : #testing }
+GtLACPConnection >> isStopped [
+	^ state = #stopped
+]
+
 { #category : #accessing }
 GtLACPConnection >> lastError [
  ^ lastError
@@ -236,13 +256,18 @@ GtLACPConnection >> lock: anObject [
 
 { #category : #requests }
 GtLACPConnection >> newRequest: aMethod parameters: aDictionary [
- | aRequest |
- (#(initializing ready) includes: state) ifFalse: [ self error: 'Connection is not running' ].
- lock critical: [
-  nextId := nextId + 1.
-  aRequest := GtLACPRequest new id: nextId; method: aMethod; parameters: aDictionary; yourself.
-  pendingRequests at: nextId put: aRequest ].
- ^ aRequest
+	| aRequest |
+	(self isInitializing or: [ self isReady ])
+		ifFalse: [ self error: 'Connection is not running' ].
+	lock
+		critical: [ nextId := nextId + 1.
+			aRequest := GtLACPRequest new
+					id: nextId;
+					method: aMethod;
+					parameters: aDictionary;
+					yourself.
+			pendingRequests at: nextId put: aRequest ].
+	^ aRequest
 ]
 
 { #category : #accessing }
@@ -399,7 +424,7 @@ GtLACPConnection >> sessions: anObject [
 { #category : #lifecycle }
 GtLACPConnection >> start [
 	| result |
-	state = #stopped ifFalse: [ self error: 'Connection has already been started' ].
+	self isStopped ifFalse: [ self error: 'Connection has already been started' ].
 	state := #initializing.
 	transport connection: self.
 	[ transport start.
@@ -436,10 +461,10 @@ GtLACPConnection >> state: anObject [
 
 { #category : #lifecycle }
 GtLACPConnection >> stop [
- state = #stopped ifTrue: [ ^ self ].
- self failed: 'Connection stopped'.
- transport close.
- state := #stopped
+	self isStopped ifTrue: [ ^ self ].
+	self failed: 'Connection stopped'.
+	transport close.
+	state := #stopped
 ]
 
 { #category : #accessing }

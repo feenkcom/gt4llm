@@ -1079,22 +1079,39 @@ GtLACPSessionExamples >> selectionSurvivesUnrelatedUpdates [
 
 { #category : #examples }
 GtLACPSessionExamples >> sendAndStop [
- <gtExample>
- | scripter session button |
- scripter := self typedMessage.
- session := scripter model.
- button := scripter element actionButton.
- scripter click id: #'acp-action'; play.
- self assert: session turns size equals: 1.
- scripter assertStep: [ :step |
-  step id: #'acp-input'; value: [ :editor | editor text asString ] equals: [ '' ] ].
- scripter assertStep: [ :step | step id: #'acp-action'; satisfies: [ :action |
-  action == button and: [ action isEnabled and: [ action label asString = 'Stop' ] ] ] ].
- scripter click id: #'acp-action'; play.
- self assert: session currentTurn state equals: #cancelling.
- scripter assertStep: [ :step | step id: #'acp-action'; satisfies: [ :action |
-  action == button and: [ action isEnabled not and: [ action label asString = 'Stopping…' ] ] ] ].
- ^ scripter
+	<gtExample>
+	| scripter session button |
+	scripter := self typedMessage.
+	session := scripter model.
+	button := scripter element actionButton.
+	scripter click
+		id: #'acp-action';
+		play.
+	self assert: session turns size equals: 1.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-input';
+				value: [ :editor | editor text asString ] equals: [ '' ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-action';
+				satisfies: [ :action | 
+					action == button
+						and: [ action isEnabled and: [ action label asString = 'Stop' ] ] ] ].
+	scripter click
+		id: #'acp-action';
+		play.
+	self assert: session currentTurn isCancelling.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-action';
+				satisfies: [ :action | 
+					action == button
+						and: [ action isEnabled not and: [ action label asString = 'Stopping…' ] ] ] ].
+	^ scripter
 ]
 
 { #category : #examples }
@@ -1179,7 +1196,7 @@ GtLACPSessionExamples >> sessionToolChildCannotCloseSession [
 			yourself.
 	self assert: child canClose not.
 	self assertCloseActionUnavailableIn: scripter.
-	self assert: root state equals: #ready.
+	self assert: root isReady.
 	self assert: root connection state equals: #ready.
 	self assertNoRenderingErrorsIn: scripter.
 	^ scripter
@@ -1208,7 +1225,7 @@ GtLACPSessionExamples >> sessionToolCloseAsksForConfirmation [
 		onSpaceRoot;
 		// #'acp-close-session-confirm';
 		play.
-	self assert: session state equals: #ready.
+	self assert: session isReady.
 	self assert: session connection state equals: #ready.
 	self assertNoRenderingErrorsIn: scripter.
 	^ scripter
@@ -1231,8 +1248,8 @@ GtLACPSessionExamples >> sessionToolClosePreservesOtherSessions [
 			element: element;
 			yourself.
 	self closeSessionFromMenuIn: scripter.
-	self assert: session state equals: #closed.
-	self assert: other state equals: #ready.
+	self assert: session isClosed.
+	self assert: other isReady.
 	self assert: other canPrompt.
 	self assert: session connection state equals: #ready.
 	self assert: (session connection sessions at: other remoteSessionId) == other.
@@ -1247,7 +1264,7 @@ GtLACPSessionExamples >> sessionToolClosesSession [
 	scripter := self sessionToolWithViews.
 	session := scripter model.
 	self closeSessionFromMenuIn: scripter.
-	self assert: session state equals: #closed.
+	self assert: session isClosed.
 	self assert: session connection state equals: #stopped.
 	self assert: session connection pendingRequests isEmpty.
 	self

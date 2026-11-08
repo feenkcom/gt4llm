@@ -78,8 +78,7 @@ GtLACPChatViewModel >> messageViewModels [
 							model message: input.
 							stream nextPut: model ].
 					(turn activity notEmpty
-						or: [ turn assistantMessage hasWork
-								or: [ turn isActive or: [ turn state = #failed ] ] ])
+						or: [ turn assistantMessage hasWork or: [ turn isActive or: [ turn isFailed ] ] ])
 						ifTrue: [ | model |
 							model := messageCache
 									at: turn

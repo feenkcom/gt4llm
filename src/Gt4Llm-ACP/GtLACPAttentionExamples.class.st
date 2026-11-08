@@ -74,7 +74,7 @@ GtLACPAttentionExamples >> localAnswerRemovesNotification [
 	request := context at: 'request'.
 	session := context at: 'session'.
 	notifications := context at: 'notifications'.
-	self assert: session state equals: #prompting.
+	self assert: session isPrompting.
 	self assert: session presentationState equals: #inputNeeded.
 	self assert: notifications size equals: 1.
 	self assert: notifications asArray first == request inputNotification.
@@ -87,7 +87,7 @@ GtLACPAttentionExamples >> localAnswerRemovesNotification [
 		submit.
 	self assert: notifications size equals: 0.
 	self assert: session presentationState equals: #prompting.
-	self assert: session state equals: #prompting.
+	self assert: session isPrompting.
 	^ context
 ]
 

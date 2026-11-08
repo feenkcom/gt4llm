@@ -33,57 +33,61 @@ GtLACPLiveExamples >> claudeCodeRegisteredSession [
 	self class enabled ifFalse: [ ^ nil ].
 	registry := GtLACPSessionRegistry new.
 	session := registry newClaudeCodeSessionIn: FileLocator temp.
-	[ self assert: session state equals: #ready.
+	[ self assert: session isReady.
 	self assert: registry lastSession == session ] ensure: [ session close ].
 	^ registry
 ]
 
 { #category : #'live examples' }
 GtLACPLiveExamples >> claudeCodeSession [
- <gtExample>
- | session |
- self class enabled ifFalse: [ ^ nil ].
- session := GtLACPClaudeCodeClient new startSessionIn: FileLocator temp.
- [ self assert: session state equals: #ready ]
- ensure: [ session close ].
- ^ session
+	<gtExample>
+	| session |
+	self class enabled ifFalse: [ ^ nil ].
+	session := GtLACPClaudeCodeClient new startSessionIn: FileLocator temp.
+	[ self assert: session isReady ] ensure: [ session close ].
+	^ session
 ]
 
 { #category : #'live examples' }
 GtLACPLiveExamples >> claudeCodeTurn [
- <gtExample>
- | session turn |
- self class enabled ifFalse: [ ^ nil ].
- session := GtLACPClaudeCodeClient new startSessionIn: FileLocator temp.
- [ turn := session prompt: 'Reply exactly "ACP connected". Do not use tools or change files.'.
- turn waitForSeconds: 60.
- self assert: turn state equals: #completed.
- self assert: (turn messages anySatisfy: [ :each | each role = #agent and: [ each text includesSubstring: 'ACP connected' ] ]) ]
- ensure: [ session close ].
- ^ session
+	<gtExample>
+	| session turn |
+	self class enabled ifFalse: [ ^ nil ].
+	session := GtLACPClaudeCodeClient new startSessionIn: FileLocator temp.
+	[ turn := session
+			prompt: 'Reply exactly "ACP connected". Do not use tools or change files.'.
+	turn waitForSeconds: 60.
+	self assert: turn isCompleted.
+	self
+		assert: (turn messages
+				anySatisfy: [ :each | each role = #agent and: [ each text includesSubstring: 'ACP connected' ] ]) ]
+		ensure: [ session close ].
+	^ session
 ]
 
 { #category : #'live examples' }
 GtLACPLiveExamples >> codexSession [
- <gtExample>
- | session |
- self class enabled ifFalse: [ ^ nil ].
- session := GtLACPCodexClient new startSessionIn: FileLocator temp.
- [ self assert: session state equals: #ready ]
- ensure: [ session close ].
- ^ session
+	<gtExample>
+	| session |
+	self class enabled ifFalse: [ ^ nil ].
+	session := GtLACPCodexClient new startSessionIn: FileLocator temp.
+	[ self assert: session isReady ] ensure: [ session close ].
+	^ session
 ]
 
 { #category : #'live examples' }
 GtLACPLiveExamples >> codexTurn [
- <gtExample>
- | session turn |
- self class enabled ifFalse: [ ^ nil ].
- session := GtLACPCodexClient new startSessionIn: FileLocator temp.
- [ turn := session prompt: 'Reply exactly "ACP connected". Do not use tools or change files.'.
- turn waitForSeconds: 60.
- self assert: turn state equals: #completed.
- self assert: (turn messages anySatisfy: [ :each | each role = #agent and: [ each text includesSubstring: 'ACP connected' ] ]) ]
- ensure: [ session close ].
- ^ session
+	<gtExample>
+	| session turn |
+	self class enabled ifFalse: [ ^ nil ].
+	session := GtLACPCodexClient new startSessionIn: FileLocator temp.
+	[ turn := session
+			prompt: 'Reply exactly "ACP connected". Do not use tools or change files.'.
+	turn waitForSeconds: 60.
+	self assert: turn isCompleted.
+	self
+		assert: (turn messages
+				anySatisfy: [ :each | each role = #agent and: [ each text includesSubstring: 'ACP connected' ] ]) ]
+		ensure: [ session close ].
+	^ session
 ]

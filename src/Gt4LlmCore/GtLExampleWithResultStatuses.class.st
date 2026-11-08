@@ -49,6 +49,16 @@ GtLExampleWithResultStatuses >> failureResults [
 	^ self exampleWithStatuses select: #isFailureResult
 ]
 
+{ #category : #views }
+GtLExampleWithResultStatuses >> gtExampleDependenciesFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Dependencies';
+		priority: 30;
+		object: [ GtExampleGroup withAll: (exampleWithStatuses collect: #exampleWithResult) ];
+		view: #gtDependenciesFor:
+]
+
 { #category : #'gt - extensions' }
 GtLExampleWithResultStatuses >> gtExampleWithStatusesFor: aView [
 	<gtView>

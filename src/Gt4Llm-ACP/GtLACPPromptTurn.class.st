@@ -1,5 +1,5 @@
 "
-I own one prompt's execution and protocol timeline. User prompts are GtLACPUserMessage objects; my GtLACPAssistantMessage exposes the assistant's tools and reasoning separately from its final reply.
+I own one prompt's execution and protocol timeline. My state is a GtLACPPromptTurnState object, which holds a back-reference to me. I delegate activity, cancellation, completion, failure, observation, connection loss, closing and final-reply selection to its hierarchy. stateName supplies the presentation label. User prompts are GtLACPUserMessage objects, and my GtLACPAssistantMessage exposes the assistant's work separately from its final reply.
 "
 Class {
 	#name : #GtLACPPromptTurn,
@@ -25,6 +25,12 @@ Class {
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
+
+{ #category : #'private - lifecycle' }
+GtLACPPromptTurn >> abandonPendingInteractions [
+	permissionRequests do: #abandon.
+	self elicitationRequests do: #abandon
+]
 
 { #category : #accessing }
 GtLACPPromptTurn >> activity [
@@ -71,19 +77,41 @@ GtLACPPromptTurn >> assistantMessage [
   assistantMessage := GtLACPAssistantMessage new turn: self; yourself ]
 ]
 
+{ #category : #testing }
+GtLACPPromptTurn >> canCancel [
+	^ self state canCancel
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> cancel [
+	^ self state cancel
+]
+
+{ #category : #'private - lifecycle' }
+GtLACPPromptTurn >> cancelPendingInteractions [
+	permissionRequests do: #cancel.
+	self elicitationRequests do: #cancel
+]
+
 { #category : #accessing }
 GtLACPPromptTurn >> childCoordinationMessages [
  ^ messages select: [ :message |
   message isInterSessionMessage and: [ message isChildCoordination ] ]
 ]
 
-{ #category : #private }
+{ #category : #lifecycle }
+GtLACPPromptTurn >> close [
+	^ self state close
+]
+
+{ #category : #lifecycle }
 GtLACPPromptTurn >> complete: aReason [
-	stopReason := aReason.
-	state := aReason = 'cancelled' ifTrue: [ #cancelled ] ifFalse: [ #completed ].
-	finishedAt := DateAndTime now.
-	permissionRequests do: #cancel.
-	self elicitationRequests do: #cancel
+	^ self state complete: aReason
+]
+
+{ #category : #lifecycle }
+GtLACPPromptTurn >> connectionClosed: aReason [
+	^ self state connectionClosed: aReason
 ]
 
 { #category : #accessing }
@@ -106,6 +134,11 @@ GtLACPPromptTurn >> delegatedTurns [
   child turns copy select: [ :each | each parentTurn == self ] ]
 ]
 
+{ #category : #lifecycle }
+GtLACPPromptTurn >> disconnect [
+	^ self state disconnect
+]
+
 { #category : #accessing }
 GtLACPPromptTurn >> elicitationRequests [
 	^ elicitationRequests ifNil: [ elicitationRequests := OrderedCollection new ]
@@ -116,21 +149,19 @@ GtLACPPromptTurn >> error [
  ^ error
 ]
 
-{ #category : #private }
+{ #category : #lifecycle }
 GtLACPPromptTurn >> fail: aReason [
-	error := aReason.
-	state := #failed.
-	finishedAt := DateAndTime now.
-	permissionRequests do: #abandon.
-	self elicitationRequests do: #abandon
+	^ self state fail: aReason
 ]
 
-{ #category : #accessing }
+{ #category : #lifecycle }
 GtLACPPromptTurn >> finalMessage [
-	(#(completed replayed idle) includes: state) ifFalse: [ ^ nil ].
-	^ messages reversed
-		detect: [ :message | message role = #agent ]
-		ifNone: [ nil ]
+	^ self state finalMessage
+]
+
+{ #category : #lifecycle }
+GtLACPPromptTurn >> finishIdle [
+	^ self state finishIdle
 ]
 
 { #category : #accessing }
@@ -186,14 +217,19 @@ GtLACPPromptTurn >> gtMessagesFor: aView [
 
 { #category : #views }
 GtLACPPromptTurn >> gtOutcomeFor: aView [
- <gtView>
- ^ aView columnedList title: 'Outcome'; priority: 0;
-  items: [ { 'Status' -> state. 'Stop reason' -> stopReason.
-   'Failure' -> error. 'Started' -> startedAt. 'Finished' -> finishedAt } ];
-  column: 'Turn outcome' text: #key;
-  column: 'Value' text: [ :entry | entry value printString ];
-  send: #value;
-  actionUpdateButtonTooltip: 'Refresh turn outcome'
+	<gtView>
+	^ aView columnedList
+		title: 'Outcome';
+		priority: 0;
+		items: [ {'Status' -> self state.
+				'Stop reason' -> stopReason.
+				'Failure' -> error.
+				'Started' -> startedAt.
+				'Finished' -> finishedAt} ];
+		column: 'Turn outcome' text: #key;
+		column: 'Value' text: [ :entry | entry value printString ];
+		send: #value;
+		actionUpdateButtonTooltip: 'Refresh turn outcome'
 ]
 
 { #category : #views }
@@ -221,16 +257,16 @@ GtLACPPromptTurn >> includesInteraction: aRequest [
 						anySatisfy: [ :child | child includesInteraction: aRequest ] ] ]
 ]
 
-{ #category : #updates }
+{ #category : #initialization }
 GtLACPPromptTurn >> initialize [
- super initialize.
- state := #running.
- messages := OrderedCollection new.
- toolCalls := OrderedCollection new.
- permissionRequests := OrderedCollection new.
- startedAt := DateAndTime now.
- activity := OrderedCollection new.
- activityVersion := 2
+	super initialize.
+	self state: GtLACPPromptTurnRunningState new.
+	messages := OrderedCollection new.
+	toolCalls := OrderedCollection new.
+	permissionRequests := OrderedCollection new.
+	startedAt := DateAndTime now.
+	activity := OrderedCollection new.
+	activityVersion := 2
 ]
 
 { #category : #accessing }
@@ -240,9 +276,71 @@ GtLACPPromptTurn >> inputMessages [
    message isOutgoing not and: [ message isChildCoordination not ] ] ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 GtLACPPromptTurn >> isActive [
- ^ #(running cancelling) includes: state
+	^ self state isActive
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> isCancelled [
+	^ self state isCancelled
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> isCancelling [
+	^ self state isCancelling
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> isClosed [
+	^ self state isClosed
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> isCompleted [
+	^ self state isCompleted
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> isDisconnected [
+	^ self state isDisconnected
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> isFailed [
+	^ self state isFailed
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> isFinished [
+	^ self state isFinished
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> isIdle [
+	^ self state isIdle
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> isObserved [
+	^ self state isObserved
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> isReplayed [
+	^ self state isReplayed
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> isRunning [
+	^ self state isRunning
+]
+
+{ #category : #'private - accessing' }
+GtLACPPromptTurn >> lastAgentMessage [
+	^ messages reversed
+		detect: [ :message | message role = #agent ]
+		ifNone: [ nil ]
 ]
 
 { #category : #accessing }
@@ -253,6 +351,11 @@ GtLACPPromptTurn >> messages [
 { #category : #accessing }
 GtLACPPromptTurn >> messages: anObject [
  messages := anObject
+]
+
+{ #category : #lifecycle }
+GtLACPPromptTurn >> observe [
+	^ self state observe
 ]
 
 { #category : #accessing }
@@ -291,6 +394,49 @@ GtLACPPromptTurn >> pendingInteractions [
 	^ requests asArray
 ]
 
+{ #category : #'private - lifecycle' }
+GtLACPPromptTurn >> performCancel [
+	self state: GtLACPPromptTurnCancellingState new.
+	self cancelPendingInteractions
+]
+
+{ #category : #'private - lifecycle' }
+GtLACPPromptTurn >> performClose [
+	self state: GtLACPPromptTurnClosedState new.
+	finishedAt := DateAndTime now.
+	self cancelPendingInteractions
+]
+
+{ #category : #'private - lifecycle' }
+GtLACPPromptTurn >> performComplete: aReason [
+	stopReason := aReason.
+	self state: (GtLACPPromptTurnState forStopReason: aReason).
+	finishedAt := DateAndTime now.
+	self cancelPendingInteractions
+]
+
+{ #category : #'private - lifecycle' }
+GtLACPPromptTurn >> performDisconnect [
+	self state: GtLACPPromptTurnDisconnectedState new.
+	finishedAt := DateAndTime now.
+	self abandonPendingInteractions
+]
+
+{ #category : #'private - lifecycle' }
+GtLACPPromptTurn >> performFail: aReason [
+	error := aReason.
+	self state: GtLACPPromptTurnFailedState new.
+	finishedAt := DateAndTime now.
+	self abandonPendingInteractions
+]
+
+{ #category : #'private - lifecycle' }
+GtLACPPromptTurn >> performFinishIdle [
+	self state: GtLACPPromptTurnIdleState new.
+	finishedAt := DateAndTime now.
+	self cancelPendingInteractions
+]
+
 { #category : #accessing }
 GtLACPPromptTurn >> permissionRequests [
  ^ permissionRequests
@@ -311,8 +457,14 @@ GtLACPPromptTurn >> presentationOf: aMessage [
 
 { #category : #printing }
 GtLACPPromptTurn >> printOn: aStream [
- aStream nextPutAll: 'Turn ('; nextPutAll: state asString; nextPutAll: ')'.
- stopReason ifNotNil: [ aStream space; nextPutAll: stopReason ]
+	aStream
+		nextPutAll: 'Turn (';
+		nextPutAll: self state asString;
+		nextPutAll: ')'.
+	stopReason
+		ifNotNil: [ aStream
+				space;
+				nextPutAll: stopReason ]
 ]
 
 { #category : #updating }
@@ -412,6 +564,11 @@ GtLACPPromptTurn >> session: anObject [
  session := anObject
 ]
 
+{ #category : #lifecycle }
+GtLACPPromptTurn >> start [
+	^ self state start
+]
+
 { #category : #accessing }
 GtLACPPromptTurn >> startedAt [
  ^ startedAt
@@ -424,12 +581,18 @@ GtLACPPromptTurn >> startedAt: anObject [
 
 { #category : #accessing }
 GtLACPPromptTurn >> state [
- ^ state
+	^ state
 ]
 
 { #category : #accessing }
-GtLACPPromptTurn >> state: anObject [
- state := anObject
+GtLACPPromptTurn >> state: aState [
+	state := aState.
+	state turn: self
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> stateName [
+	^ self state name
 ]
 
 { #category : #accessing }

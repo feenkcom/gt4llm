@@ -17,19 +17,21 @@ GtLACPExamples >> assertRaisesError: aBlock raise: aClass [
 
 { #category : #examples }
 GtLACPExamples >> cancelledTurn [
- <gtExample>
- | permission session turn |
- permission := self pendingPermission.
- session := permission session.
- turn := session currentTurn.
- session cancelTurn.
- self assert: permission state equals: #cancelled.
- self assert: turn state equals: #cancelling.
- session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
-  'result' -> { 'stopReason' -> 'cancelled' } asDictionary } asDictionary.
- self assert: turn state equals: #cancelled.
- self assert: session state equals: #ready.
- ^ turn
+	<gtExample>
+	| permission session turn |
+	permission := self pendingPermission.
+	session := permission session.
+	turn := session currentTurn.
+	session cancelTurn.
+	self assert: permission state equals: #cancelled.
+	self assert: turn isCancelling.
+	session connection transport
+		receive: {'jsonrpc' -> '2.0'.
+				'id' -> turn request id.
+				'result' -> {'stopReason' -> 'cancelled'} asDictionary} asDictionary.
+	self assert: turn isCancelled.
+	self assert: session isReady.
+	^ turn
 ]
 
 { #category : #examples }
@@ -43,16 +45,16 @@ GtLACPExamples >> claudeClient [
 
 { #category : #examples }
 GtLACPExamples >> closedSession [
- <gtExample>
- | permission session |
- permission := self pendingPermission.
- session := permission session.
- session close.
- self assert: session state equals: #closed.
- self assert: session connection state equals: #stopped.
- self assert: session connection pendingRequests isEmpty.
- self assert: permission state equals: #cancelled.
- ^ session
+	<gtExample>
+	| permission session |
+	permission := self pendingPermission.
+	session := permission session.
+	session close.
+	self assert: session isClosed.
+	self assert: session connection state equals: #stopped.
+	self assert: session connection pendingRequests isEmpty.
+	self assert: permission state equals: #cancelled.
+	^ session
 ]
 
 { #category : #examples }
@@ -160,45 +162,47 @@ GtLACPExamples >> connectionHistorySnapshotsPayloads [
 
 { #category : #examples }
 GtLACPExamples >> disconnectedTurn [
- <gtExample>
- | session turn |
- session := self session.
- turn := session prompt: 'Hello'.
- session connection failed: 'Agent exited unexpectedly'.
- self assert: turn state equals: #failed.
- self assert: session state equals: #failed.
- self assert: session connection pendingRequests isEmpty.
- ^ turn
+	<gtExample>
+	| session turn |
+	session := self session.
+	turn := session prompt: 'Hello'.
+	session connection failed: 'Agent exited unexpectedly'.
+	self assert: turn isFailed.
+	self assert: session isFailed.
+	self assert: session connection pendingRequests isEmpty.
+	^ turn
 ]
 
 { #category : #examples }
 GtLACPExamples >> distinctDirectories [
- <gtExample>
- | client first second |
- client := GtLACPCodexClient new transportFactory: [ :config :directory | self transport ]; yourself.
- first := client startSessionIn: FileLocator temp.
- second := client startSessionIn: FileLocator home.
- self assert: first directory ~= second directory.
- self assert: first connection ~~ second connection.
- self assert: client sessions size equals: 2.
- first close.
- self assert: second state equals: #ready.
- second close.
- ^ client
+	<gtExample>
+	| client first second |
+	client := GtLACPCodexClient new
+			transportFactory: [ :config :directory | self transport ];
+			yourself.
+	first := client startSessionIn: FileLocator temp.
+	second := client startSessionIn: FileLocator home.
+	self assert: first directory ~= second directory.
+	self assert: first connection ~~ second connection.
+	self assert: client sessions size equals: 2.
+	first close.
+	self assert: second isReady.
+	second close.
+	^ client
 ]
 
 { #category : #examples }
 GtLACPExamples >> fixtureCancellation [
- <gtExample>
- | session turn |
- session := self fixtureClient startSessionIn: FileLocator temp.
- [ turn := session prompt: 'wait'.
- session cancelTurn.
- turn waitForSeconds: 1.
- self assert: turn state equals: #cancelled.
- self assert: session connection transport agentProcess pendingRequests isEmpty ]
- ensure: [ session close ].
- ^ turn
+	<gtExample>
+	| session turn |
+	session := self fixtureClient startSessionIn: FileLocator temp.
+	[ turn := session prompt: 'wait'.
+	session cancelTurn.
+	turn waitForSeconds: 1.
+	self assert: turn isCancelled.
+	self assert: session connection transport agentProcess pendingRequests isEmpty ]
+		ensure: [ session close ].
+	^ turn
 ]
 
 { #category : #fixtures }
@@ -218,27 +222,29 @@ GtLACPExamples >> fixtureClient [
 
 { #category : #examples }
 GtLACPExamples >> fixtureConversation [
- <gtExample>
- | session turn server reader newSessionRequest |
- session := self fixtureClient startSessionIn: FileLocator temp.
- server := session connection transport agentProcess.
- reader := session connection transport reader.
- [ self assert: server isRunning.
- self assert: server worker ~~ Processor activeProcess.
- turn := session prompt: 'hello'.
- turn waitForSeconds: 5.
- self assert: turn messages last text equals: 'Grüezi 🌍'.
- self assert: turn state equals: #completed.
- newSessionRequest := session connection transcript messages detect: [ :each |
-  each direction = #outgoing and: [
-   (each data at: 'method' ifAbsent: [ '' ]) = 'session/new' ] ].
- self assert: ((newSessionRequest data at: 'params') at: 'cwd') equals: session directory fullName ]
- ensure: [ session close ].
- self assert: server isRunning not.
- self assert: server worker isTerminated.
- self assert: reader isTerminated.
- self assert: server failure isNil.
- ^ session
+	<gtExample>
+	| session turn server reader newSessionRequest |
+	session := self fixtureClient startSessionIn: FileLocator temp.
+	server := session connection transport agentProcess.
+	reader := session connection transport reader.
+	[ self assert: server isRunning.
+	self assert: server worker ~~ Processor activeProcess.
+	turn := session prompt: 'hello'.
+	turn waitForSeconds: 5.
+	self assert: turn messages last text equals: 'Grüezi 🌍'.
+	self assert: turn isCompleted.
+	newSessionRequest := session connection transcript messages
+			detect: [ :each | 
+				each direction = #outgoing
+					and: [ (each data at: 'method' ifAbsent: [ '' ]) = 'session/new' ] ].
+	self
+		assert: ((newSessionRequest data at: 'params') at: 'cwd')
+		equals: session directory fullName ] ensure: [ session close ].
+	self assert: server isRunning not.
+	self assert: server worker isTerminated.
+	self assert: reader isTerminated.
+	self assert: server failure isNil.
+	^ session
 ]
 
 { #category : #examples }
@@ -262,7 +268,7 @@ GtLACPExamples >> fixturePermission [
 	turn permissionRequests first options first select.
 	turn waitForSeconds: 5.
 	self assert: turn toolCalls first status equals: 'completed'.
-	self assert: turn state equals: #completed.
+	self assert: turn isCompleted.
 	self assert: session connection transport agentProcess pendingRequests isEmpty ]
 		ensure: [ session close ].
 	^ turn
@@ -270,39 +276,50 @@ GtLACPExamples >> fixturePermission [
 
 { #category : #examples }
 GtLACPExamples >> fixtureReplay [
- <gtExample>
- | session |
- session := self fixtureClient loadSession: 'saved-session' in: FileLocator temp.
- [ self assert: session turns first messages first text equals: 'Replayed'.
- self assert: session turns first state equals: #replayed ]
- ensure: [ session close ].
- ^ session
+	<gtExample>
+	| session |
+	session := self fixtureClient loadSession: 'saved-session' in: FileLocator temp.
+	[ self assert: session turns first messages first text equals: 'Replayed'.
+	self assert: session turns first isReplayed ] ensure: [ session close ].
+	^ session
 ]
 
 { #category : #examples }
 GtLACPExamples >> fixtureReplayConversation [
- <gtExample>
- | session first second models |
- session := self fixtureClient loadSession: 'saved-conversation' in: FileLocator temp.
- [
- self assert: session turns size equals: 2.
- first := session turns first.
- second := session turns second.
- self assert: first userMessages size equals: 1.
- self assert: first userMessages first text equals: 'First question'.
- self assert: first assistantMessage finalMessages first text equals: 'First answer'.
- self assert: second userMessages first text equals: 'Second question'.
- self assert: second assistantMessage finalMessages first text equals: 'Second answer'.
- self assert: first toolCalls isEmpty.
- self assert: second toolCalls size equals: 1.
- self assert: second assistantMessage activityItems first text equals: 'Let me check'.
- self assert: (session turns allSatisfy: [ :turn | turn state = #replayed ]).
- models := (GtLACPChatViewModel new session: session; yourself) messageViewModels.
- self assert: models size equals: 4.
- self assert: (models collect: [ :model | model message ]) equals:
-  { first userMessages first. first assistantMessage. second userMessages first. second assistantMessage }.
- ] ensure: [ session close ].
- ^ session
+	<gtExample>
+	| session first second models |
+	session := self fixtureClient
+			loadSession: 'saved-conversation'
+			in: FileLocator temp.
+	[ self assert: session turns size equals: 2.
+	first := session turns first.
+	second := session turns second.
+	self assert: first userMessages size equals: 1.
+	self assert: first userMessages first text equals: 'First question'.
+	self
+		assert: first assistantMessage finalMessages first text
+		equals: 'First answer'.
+	self assert: second userMessages first text equals: 'Second question'.
+	self
+		assert: second assistantMessage finalMessages first text
+		equals: 'Second answer'.
+	self assert: first toolCalls isEmpty.
+	self assert: second toolCalls size equals: 1.
+	self
+		assert: second assistantMessage activityItems first text
+		equals: 'Let me check'.
+	self assert: (session turns allSatisfy: [ :turn | turn isReplayed ]).
+	models := (GtLACPChatViewModel new
+			session: session;
+			yourself) messageViewModels.
+	self assert: models size equals: 4.
+	self
+		assert: (models collect: [ :model | model message ])
+		equals: {first userMessages first.
+				first assistantMessage.
+				second userMessages first.
+				second assistantMessage} ] ensure: [ session close ].
+	^ session
 ]
 
 { #category : #examples }
@@ -344,13 +361,15 @@ GtLACPExamples >> fragmentedFrames [
 
 { #category : #examples }
 GtLACPExamples >> loadedSession [
- <gtExample>
- | client session |
- client := GtLACPCodexClient new transportFactory: [ :config :directory | self transport ]; yourself.
- session := client loadSession: 'existing-session' in: FileLocator temp.
- self assert: session state equals: #ready.
- self assert: session remoteSessionId equals: 'existing-session'.
- ^ session
+	<gtExample>
+	| client session |
+	client := GtLACPCodexClient new
+			transportFactory: [ :config :directory | self transport ];
+			yourself.
+	session := client loadSession: 'existing-session' in: FileLocator temp.
+	self assert: session isReady.
+	self assert: session remoteSessionId equals: 'existing-session'.
+	^ session
 ]
 
 { #category : #examples }
@@ -443,15 +462,19 @@ GtLACPExamples >> pendingPermission [
 
 { #category : #examples }
 GtLACPExamples >> protocolError [
- <gtExample>
- | session turn |
- session := self session.
- turn := session prompt: 'Hello'.
- session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
-  'error' -> { 'code' -> -32603. 'message' -> 'Example failure' } asDictionary } asDictionary.
- self assert: turn state equals: #failed.
- self assert: session state equals: #ready.
- ^ turn
+	<gtExample>
+	| session turn |
+	session := self session.
+	turn := session prompt: 'Hello'.
+	session connection transport
+		receive: {'jsonrpc' -> '2.0'.
+				'id' -> turn request id.
+				'error'
+					-> {'code' -> -32603.
+							'message' -> 'Example failure'} asDictionary} asDictionary.
+	self assert: turn isFailed.
+	self assert: session isReady.
+	^ turn
 ]
 
 { #category : #examples }
@@ -495,7 +518,7 @@ GtLACPExamples >> session [
 	notifications := GtNotifications new.
 	session connection
 		notificationPublisher: [ :notification | notifications addNotification: notification ].
-	self assert: session state equals: #ready.
+	self assert: session isReady.
 	self
 		assert: session directory
 		equals: FileLocator temp asFileReference asAbsolute.
@@ -505,21 +528,31 @@ GtLACPExamples >> session [
 
 { #category : #examples }
 GtLACPExamples >> streamedTurn [
- <gtExample>
- | session turn |
- session := self session.
- turn := session prompt: 'Hello'.
- self sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
-  'content' -> { 'type' -> 'text'. 'text' -> 'Hello ' } asDictionary } asDictionary to: session.
- self sendUpdate: { 'sessionUpdate' -> 'agent_message_chunk'.
-  'content' -> { 'type' -> 'text'. 'text' -> 'world' } asDictionary } asDictionary to: session.
- session connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
-  'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary.
- self assert: turn messages last text equals: 'Hello world'.
- self assert: turn state equals: #completed.
- self assert: session state equals: #ready.
- self assert: session connection pendingRequests isEmpty.
- ^ turn
+	<gtExample>
+	| session turn |
+	session := self session.
+	turn := session prompt: 'Hello'.
+	self
+		sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+				'content'
+					-> {'type' -> 'text'.
+							'text' -> 'Hello '} asDictionary} asDictionary
+		to: session.
+	self
+		sendUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+				'content'
+					-> {'type' -> 'text'.
+							'text' -> 'world'} asDictionary} asDictionary
+		to: session.
+	session connection transport
+		receive: {'jsonrpc' -> '2.0'.
+				'id' -> turn request id.
+				'result' -> {'stopReason' -> 'end_turn'} asDictionary} asDictionary.
+	self assert: turn messages last text equals: 'Hello world'.
+	self assert: turn isCompleted.
+	self assert: session isReady.
+	self assert: session connection pendingRequests isEmpty.
+	^ turn
 ]
 
 { #category : #examples }
@@ -626,16 +659,16 @@ GtLACPExamples >> updatedToolCall [
 
 { #category : #examples }
 GtLACPExamples >> waitingTimeoutPreservesTurn [
- <gtExample>
- | session turn |
- session := self session.
- turn := session prompt: 'Hello'.
- self assertRaisesError: [ turn waitForSeconds: 0.01 ] raise: Error.
- self assert: turn state equals: #running.
- self assert: session state equals: #prompting.
- self assert: session connection pendingRequests size equals: 1.
- session cancelTurn.
- self assert: turn state equals: #cancelling.
- session close.
- ^ turn
+	<gtExample>
+	| session turn |
+	session := self session.
+	turn := session prompt: 'Hello'.
+	self assertRaisesError: [ turn waitForSeconds: 0.01 ] raise: Error.
+	self assert: turn isRunning.
+	self assert: session isPrompting.
+	self assert: session connection pendingRequests size equals: 1.
+	session cancelTurn.
+	self assert: turn isCancelling.
+	session close.
+	^ turn
 ]

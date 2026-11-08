@@ -312,13 +312,14 @@ GtLACPAssistantMessageElement >> workContentFor: anAssistantMessage [
 
 { #category : #building }
 GtLACPAssistantMessageElement >> workIndicatorFor: aTurn id: anId [
- ^ BrLabel new
-  id: anId;
-  aptitude: (BrGlamorousLabelAptitude new foreground: BrGlamorousColors disabledButtonTextColor);
-  text: (aTurn state = #cancelling ifTrue: [ 'Stopping…' ] ifFalse: [ 'Working…' ]);
-  margin: (BlInsets left: 8);
-  constraintsDo: [ :c | c linear vertical alignCenter ];
-  yourself
+	^ BrLabel new
+		id: anId;
+		aptitude: (BrGlamorousLabelAptitude new
+				foreground: BrGlamorousColors disabledButtonTextColor);
+		text: (aTurn isCancelling ifTrue: [ 'Stopping…' ] ifFalse: [ 'Working…' ]);
+		margin: (BlInsets left: 8);
+		constraintsDo: [ :c | c linear vertical alignCenter ];
+		yourself
 ]
 
 { #category : #building }

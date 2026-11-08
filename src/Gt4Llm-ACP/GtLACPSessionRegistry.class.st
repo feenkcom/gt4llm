@@ -227,7 +227,7 @@ GtLACPSessionRegistry >> registerSession: aSession [
 
 { #category : #removing }
 GtLACPSessionRegistry >> removeClosedSessions [
-	(self sessions select: [ :each | each state = #closed ])
+	(self sessions select: [ :each | each isClosed ])
 		do: [ :each | self removeSession: each ]
 ]
 

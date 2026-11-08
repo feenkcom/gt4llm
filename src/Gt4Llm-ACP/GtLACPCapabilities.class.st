@@ -48,3 +48,11 @@ GtLACPCapabilities >> supportsPromptType: aString [
   at: ({ 'image' -> 'image'. 'audio' -> 'audio'. 'resource' -> 'embeddedContext'. 'resource_link' -> 'embeddedContext' } asDictionary at: aString ifAbsent: [ ^ false ])
   ifAbsent: [ false ]
 ]
+
+{ #category : #accessing }
+GtLACPCapabilities >> supportsResume [
+	| sessionCapabilities |
+	sessionCapabilities := data at: 'sessionCapabilities' ifAbsent: [ nil ].
+	^ sessionCapabilities isDictionary
+		and: [ (sessionCapabilities at: 'resume' ifAbsent: [ nil ]) isDictionary ]
+]

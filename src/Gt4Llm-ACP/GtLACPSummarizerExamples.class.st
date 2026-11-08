@@ -122,28 +122,34 @@ GtLACPSummarizerExamples >> customRegistry [
 
 { #category : #examples }
 GtLACPSummarizerExamples >> failedAndCancelledSummaries [
- <gtExample>
- | failed cancelled turn |
- failed := self session.
- turn := failed prompt: 'Fail after a tool'.
- failed mcpServer privateAddToolMessage: (self messageWithId: 'before-failure').
- self addCallWithId: 'before-failure' to: failed.
- failed connection transport receive: {
-  'jsonrpc' -> '2.0'. 'id' -> turn request id.
-  'error' -> { 'code' -> -32000. 'message' -> 'Fixture failure' } asDictionary } asDictionary.
- self assert: turn state equals: #failed.
- self assert: failed gtInspectorTargetModels notEmpty.
- cancelled := self session.
- turn := cancelled prompt: 'Cancel after a tool'.
- cancelled mcpServer privateAddToolMessage: (self messageWithId: 'before-cancellation').
- self addCallWithId: 'before-cancellation' to: cancelled.
- cancelled cancelTurn.
- cancelled connection transport receive: {
-  'jsonrpc' -> '2.0'. 'id' -> turn request id.
-  'result' -> { 'stopReason' -> 'cancelled' } asDictionary } asDictionary.
- self assert: turn state equals: #cancelled.
- self assert: cancelled gtInspectorTargetModels notEmpty.
- ^ { failed. cancelled }
+	<gtExample>
+	| failed cancelled turn |
+	failed := self session.
+	turn := failed prompt: 'Fail after a tool'.
+	failed mcpServer privateAddToolMessage: (self messageWithId: 'before-failure').
+	self addCallWithId: 'before-failure' to: failed.
+	failed connection transport
+		receive: {'jsonrpc' -> '2.0'.
+				'id' -> turn request id.
+				'error'
+					-> {'code' -> -32000.
+							'message' -> 'Fixture failure'} asDictionary} asDictionary.
+	self assert: turn isFailed.
+	self assert: failed gtInspectorTargetModels notEmpty.
+	cancelled := self session.
+	turn := cancelled prompt: 'Cancel after a tool'.
+	cancelled mcpServer
+		privateAddToolMessage: (self messageWithId: 'before-cancellation').
+	self addCallWithId: 'before-cancellation' to: cancelled.
+	cancelled cancelTurn.
+	cancelled connection transport
+		receive: {'jsonrpc' -> '2.0'.
+				'id' -> turn request id.
+				'result' -> {'stopReason' -> 'cancelled'} asDictionary} asDictionary.
+	self assert: turn isCancelled.
+	self assert: cancelled gtInspectorTargetModels notEmpty.
+	^ {failed.
+		cancelled}
 ]
 
 { #category : #fixtures }
@@ -391,18 +397,18 @@ GtLACPSummarizerExamples >> scopedAndUniqueMessages [
 { #category : #fixtures }
 GtLACPSummarizerExamples >> session [
 	<gtExample>
- | original session |
- original := GtLACPExamples new session.
- session := GtLACPFixtureSession new
-  client: original client;
-  connection: original connection;
-  directory: original directory;
-  remoteSessionId: original remoteSessionId;
-  state: #ready;
-  mcpServer: GtLMcpServer new;
-  yourself.
- session connection sessions at: session remoteSessionId put: session.
- ^ session
+	| original session |
+	original := GtLACPExamples new session.
+	session := GtLACPFixtureSession new
+			client: original client;
+			connection: original connection;
+			directory: original directory;
+			remoteSessionId: original remoteSessionId;
+			state: GtLACPSessionReadyState new;
+			mcpServer: GtLMcpServer new;
+			yourself.
+	session connection sessions at: session remoteSessionId put: session.
+	^ session
 ]
 
 { #category : #examples }

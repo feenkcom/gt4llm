@@ -456,7 +456,7 @@ GtLACPExternalSessionStoreExamples >> storesLoadSessionsUsingRecordedDirectory [
 							transportFactory: [ :configuration :directory | 
 								self assert: directory equals: recordedDirectory.
 								GtLACPExamples new transport ] ].
-			[ self assert: session state equals: #ready.
+			[ self assert: session isReady.
 			self assert: session remoteSessionId equals: self firstId.
 			self assert: session directory equals: recordedDirectory.
 			self assert: session client class equals: store newClient class.
