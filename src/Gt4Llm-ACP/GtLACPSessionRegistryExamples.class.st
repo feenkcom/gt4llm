@@ -73,7 +73,7 @@ GtLACPSessionRegistryExamples >> closedSessionStaysListed [
 	open := self newSessionIn: registry.
 	changes := self announcementsOf: GtLACPSessionRegistryChanged in: registry.
 	closed close.
-	self assert: closed state equals: #closed.
+	self assert: closed isClosed.
 	self assert: changes notEmpty.
 	self assert: registry sessions size equals: 2.
 	registry removeClosedSessions.
@@ -223,7 +223,7 @@ GtLACPSessionRegistryExamples >> newSessionFromRegistryDropdownWith: aClient [
 	20 timesRepeat: [ registry hasSessions ifFalse: [ 100 milliSeconds wait ] ].
 	self assert: registry sessions size equals: 1.
 	self assert: registry lastSession client == aClient.
-	self assert: registry lastSession state equals: #ready.
+	self assert: registry lastSession isReady.
 	self assert: registry lastSession directory isDirectory.
 	scripter pulseUntilReady.
 	scripter assert
@@ -420,12 +420,12 @@ GtLACPSessionRegistryExamples >> registryToolUpdatesLive [
 	self assertIn: scripter stateLabelExists: 'ready'.
 	self
 		in: scripter
-		do: [ session state: #prompting.
+		do: [ session state: GtLACPSessionPromptingState new.
 			session announceConversationTreeChanged ].
 	self assertIn: scripter stateLabelExists: 'prompting'.
 	self
 		in: scripter
-		do: [ session state: #ready.
+		do: [ session state: GtLACPSessionReadyState new.
 			session close ].
 	self assertIn: scripter stateLabelExists: 'closed'.
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
@@ -438,7 +438,7 @@ GtLACPSessionRegistryExamples >> registryWithClaudeSession [
 	| registry session |
 	registry := self emptyRegistry.
 	session := self newSessionIn: registry.
-	self assert: session state equals: #ready.
+	self assert: session isReady.
 	self assert: session client class equals: GtLACPClaudeCodeClient.
 	self assert: registry hasSessions.
 	self assert: registry sessions size equals: 1.
@@ -490,7 +490,7 @@ GtLACPSessionRegistryExamples >> removeSessionRequiresConfirmation [
 		// #'acp-remove-session-accept';
 		play.
 	self assert: registry hasSessions not.
-	self assert: session state equals: #ready.
+	self assert: session isReady.
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
@@ -504,7 +504,7 @@ GtLACPSessionRegistryExamples >> removedSessionStaysOpen [
 	announcements := self announcementsOf: GtLACPSessionUnregistered in: registry.
 	registry removeSession: session.
 	self assert: registry hasSessions not.
-	self assert: session state equals: #ready.
+	self assert: session isReady.
 	self assert: (session connection announcer hasSubscriber: registry) not.
 	self assert: announcements size equals: 1.
 	self assert: announcements first registry == registry.
@@ -632,16 +632,24 @@ GtLACPSessionRegistryExamples >> sessionMenuItemsHaveIcons [
 { #category : #examples }
 GtLACPSessionRegistryExamples >> sessionStateVisuals [
 	<gtExample>
-	| registry scripter |
+	| registry scripter states |
 	registry := self emptyRegistry.
-	#(new starting loading ready prompting failed closed observing disconnected futureState)
-		do: [ :aState | 
-			| session |
-			session := self newSessionIn: registry.
-			session state: aState ].
+	states := {GtLACPSessionNewState new.
+			GtLACPSessionStartingState new.
+			GtLACPSessionLoadingState new.
+			GtLACPSessionReadyState new.
+			GtLACPSessionPromptingState new.
+			GtLACPSessionFailedState new.
+			GtLACPSessionClosedState new.
+			GtLACPSessionObservingState new.
+			GtLACPSessionDisconnectedState new.
+			GtLACPSessionUnknownState new
+				name: #futureState;
+				yourself}.
+	states do: [ :aState | (self newSessionIn: registry) state: aState ].
 	scripter := self scripterOn: registry view: #gtSessionsFor:.
 	scripter pulseUntilReady.
-	#(new starting loading ready prompting failed closed observing disconnected futureState)
+	states
 		do: [ :aState | self assertIn: scripter stateLabelExists: aState asString ].
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
@@ -705,12 +713,12 @@ GtLACPSessionRegistryExamples >> sessionsViewUpdatesLive [
 	self assertIn: scripter stateLabelExists: 'ready'.
 	self
 		in: scripter
-		do: [ session state: #prompting.
+		do: [ session state: GtLACPSessionPromptingState new.
 			session announceConversationTreeChanged ].
 	self assertIn: scripter stateLabelExists: 'prompting'.
 	self
 		in: scripter
-		do: [ session state: #ready.
+		do: [ session state: GtLACPSessionReadyState new.
 			session close ].
 	self assertIn: scripter stateLabelExists: 'closed'.
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
@@ -782,7 +790,7 @@ GtLACPSessionRegistryExamples >> startSessionDropdownRegistersSession [
 		play.
 	registered := self registeredSessionOf: client.
 	[ self assert: registered notNil.
-	self assert: registered state equals: #ready.
+	self assert: registered isReady.
 	self assert: registered directory isDirectory ]
 		ensure: [ registered
 				ifNotNil: [ GtLACPSessionRegistry current removeSession: registered ] ].

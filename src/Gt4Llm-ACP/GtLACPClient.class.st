@@ -167,6 +167,27 @@ GtLACPClient >> newSessionIn: aDirectory connection: aConnection [
 	^ aSession
 ]
 
+{ #category : #'private - lifecycle' }
+GtLACPClient >> restartConnection: aConnection in: aDirectory [
+	"Keep the connection and its subscribers; replace only the stopped transport."
+
+	aConnection isStopped
+		ifFalse: [ self error: 'Only a stopped connection can be restarted' ].
+	configuration validate.
+	aConnection
+		requestTimeout: configuration requestTimeout;
+		transport: (transportFactory value: configuration value: aDirectory);
+		lastError: nil.
+	[ aConnection start.
+	configuration authenticationMethod
+		ifNotNil: [ :method | aConnection authenticate: method ] ]
+		on: Error
+		do: [ :error | 
+			aConnection stop.
+			error pass ].
+	^ aConnection
+]
+
 { #category : #accessing }
 GtLACPClient >> sessions [
  ^ sessions

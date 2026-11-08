@@ -155,7 +155,7 @@ GtLACPAgentMessageElement >> updateHeader [
 						id: messageViewModel agentWorkIndicatorId;
 						aptitude: (BrGlamorousLabelAptitude new
 								foreground: BrGlamorousColors disabledButtonTextColor);
-						text: (messageViewModel turn state = #cancelling
+						text: (messageViewModel turn isCancelling
 								ifTrue: [ 'Stopping…' ]
 								ifFalse: [ 'Working…' ]);
 						margin: (BlInsets left: 8);

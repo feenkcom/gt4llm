@@ -16,9 +16,9 @@ Class {
 
 { #category : #testing }
 GtLACPSubagent >> canCancel [
- ^ session connection state = #ready and: [
-  (currentCapabilities at: 'cancel' ifAbsent: [ nil ]) isDictionary and: [
-   #(running requires_action) includes: self workState ] ]
+	^ session connection isReady
+		and: [ (currentCapabilities at: 'cancel' ifAbsent: [ nil ]) isDictionary
+				and: [ #(running requires_action) includes: self workState ] ]
 ]
 
 { #category : #accessing }
@@ -102,8 +102,9 @@ GtLACPSubagent >> updateFrom: aDictionary [
 
 { #category : #accessing }
 GtLACPSubagent >> workState [
- session state = #closed ifTrue: [ ^ #closed ].
- session connection state = #ready ifFalse: [ ^ #disconnected ].
- ^ currentWorkState ifNil: [ #unconfirmed ]
-  ifNotNil: [ (currentWorkState at: 'state' ifAbsent: [ 'unknown' ]) asSymbol ]
+	session isClosed ifTrue: [ ^ #closed ].
+	session connection isReady ifFalse: [ ^ #disconnected ].
+	^ currentWorkState
+		ifNil: [ #unconfirmed ]
+		ifNotNil: [ (currentWorkState at: 'state' ifAbsent: [ 'unknown' ]) asSymbol ]
 ]

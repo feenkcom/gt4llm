@@ -1,5 +1,5 @@
 "
-I represent one conversation associated with an absolute directory. I own turns and session updates, and reference my client and connection. Prompts return immediately with an inspectable turn. Closing the last local session stops the connection; v1 has no baseline remote close request. I announce state changes and open an ACP chat tool by default; my regular inspector remains available in the composite tool.
+I represent one conversation associated with an absolute directory. I own turns and session updates, and reference my client and connection. My state is a GtLACPSessionState object, which holds a back-reference to me. I delegate lifecycle decisions and prompt outcomes to its hierarchy. stateName supplies the presentation label. Prompts return immediately with an inspectable turn. Closing the last local session stops the connection. Reopening resumes the existing conversation without replay while preserving its objects. I announce state changes and open an ACP chat tool by default; my regular inspector remains available in the composite tool.
 "
 Class {
 	#name : #GtLACPSession,
@@ -103,29 +103,32 @@ GtLACPSession >> announcer [
 
 { #category : #updating }
 GtLACPSession >> applySubagentWorkState: aSnapshot [
- | work turn reason |
- aSnapshot ifNil: [
-  state := #observing.
-  self currentTurn ifNotNil: [ :current | current isActive ifTrue: [ current state: #observed ] ].
-  ^ self announceChanged ].
- work := aSnapshot at: 'state' ifAbsent: [ 'unknown' ].
- turn := self currentTurn.
- (#('running' 'requires_action') includes: work) ifTrue: [
-  state := #prompting.
-  (turn isNil or: [ turn isActive not and: [ turn state ~= #observed ] ]) ifTrue: [ turn := self newObservedTurn ].
-  turn state: #running ].
- work = 'unknown' ifTrue: [
-  state := #observing.
-  turn ifNotNil: [ turn isActive ifTrue: [ turn state: #observed ] ] ].
- work = 'idle' ifTrue: [
-  state := #ready.
-  (turn notNil and: [ turn isActive or: [ turn state = #observed ] ]) ifTrue: [
-   reason := aSnapshot at: 'stopReason' ifAbsent: [ nil ].
-   reason
-    ifNil: [ turn state: #idle; finishedAt: DateAndTime now. turn permissionRequests do: #cancel ]
-    ifNotNil: [ reason = 'error' ifTrue: [ turn fail: 'Subagent reported an error' ] ifFalse: [ turn complete: reason ] ] ].
-  self updateToolSummarizers ].
- self announceChanged
+	| work turn reason |
+	aSnapshot
+		ifNil: [ self state: GtLACPSessionObservingState new.
+			self currentTurn ifNotNil: #observe.
+			^ self announceChanged ].
+	work := aSnapshot at: 'state' ifAbsent: [ 'unknown' ].
+	turn := self currentTurn.
+	(#('running' 'requires_action') includes: work)
+		ifTrue: [ self state: GtLACPSessionPromptingState new.
+			(turn isNil or: [ turn isActive not and: [ turn isObserved not ] ])
+				ifTrue: [ turn := self newObservedTurn ].
+			turn start ].
+	work = 'unknown'
+		ifTrue: [ self state: GtLACPSessionObservingState new.
+			turn ifNotNil: #observe ].
+	work = 'idle'
+		ifTrue: [ self state: GtLACPSessionReadyState new.
+			(turn notNil and: [ turn isActive or: [ turn isObserved ] ])
+				ifTrue: [ reason := aSnapshot at: 'stopReason' ifAbsent: [ nil ].
+					reason
+						ifNil: [ turn finishIdle ]
+						ifNotNil: [ reason = 'error'
+								ifTrue: [ turn fail: 'Subagent reported an error' ]
+								ifFalse: [ turn complete: reason ] ] ].
+			self updateToolSummarizers ].
+	self announceChanged
 ]
 
 { #category : #ui }
@@ -171,30 +174,26 @@ GtLACPSession >> availableCommands [
 
 { #category : #testing }
 GtLACPSession >> canCancel [
- ^ self isSubagent
-  ifTrue: [ parentSubagent canCancel and: [ self currentTurn isNil or: [ self currentTurn state ~= #cancelling ] ] ]
-  ifFalse: [ state = #prompting and: [ self currentTurn notNil and: [ self currentTurn state = #running ] ] ]
+	^ self isSubagent
+		ifTrue: [ parentSubagent canCancel
+				and: [ self currentTurn isNil or: [ self currentTurn isCancelling not ] ] ]
+		ifFalse: [ self state canCancel ]
 ]
 
 { #category : #testing }
 GtLACPSession >> canClose [
- ^ self isSubagent not and: [ state ~= #closed ]
+	^ self isSubagent not and: [ self state canClose ]
 ]
 
 { #category : #testing }
 GtLACPSession >> canPrompt [
- ^ self isSubagent not and: [ state = #ready ]
+	^ self isSubagent not and: [ self state canPrompt ]
 ]
 
 { #category : #private }
 GtLACPSession >> cancelTurn [
-	| turn |
 	[ self canCancel ifFalse: [ ^ self ].
-	turn := self currentTurn.
-	turn
-		ifNotNil: [ turn state: #cancelling.
-			turn permissionRequests do: #cancel.
-			turn elicitationRequests do: #cancel ].
+	self currentTurn ifNotNil: #cancel.
 	connection
 		notify: 'session/cancel'
 		parameters: {'sessionId' -> remoteSessionId} asDictionary ]
@@ -216,26 +215,18 @@ GtLACPSession >> client: anObject [
  client := anObject
 ]
 
-{ #category : #updating }
+{ #category : #lifecycle }
 GtLACPSession >> close [
- self requireRootSession.
- self closeLocally.
- connection sessions isEmpty ifTrue: [ connection stop ]
+	self requireRootSession.
+	^ self state close
 ]
 
 { #category : #private }
 GtLACPSession >> closeLocally [
-	self currentTurn
-		ifNotNil: [ :turn | 
-			turn permissionRequests do: #cancel.
-			turn elicitationRequests do: #cancel.
-			turn isActive
-				ifTrue: [ turn
-						state: #closed;
-						finishedAt: DateAndTime now ] ].
+	self currentTurn ifNotNil: #close.
 	self childSessions do: #closeLocally.
 	connection sessions removeKey: remoteSessionId ifAbsent: [  ].
-	state := #closed.
+	self state: GtLACPSessionClosedState new.
 	self announceChanged.
 	self announceConversationTreeChanged
 ]
@@ -272,25 +263,14 @@ GtLACPSession >> connection: anObject [
  connection := anObject
 ]
 
-{ #category : #private }
+{ #category : #lifecycle }
 GtLACPSession >> connectionClosed: aReason [
 	[ self isSubagent
 		ifTrue: [ parentSubagent invalidateLiveState.
-			self currentTurn
-				ifNotNil: [ :turn | 
-					turn isActive
-						ifTrue: [ turn
-								state: #disconnected;
-								finishedAt: DateAndTime now ].
-					turn permissionRequests do: #abandon.
-					turn elicitationRequests do: #abandon ].
-			state := #disconnected ]
+			self currentTurn ifNotNil: #disconnect ]
 		ifFalse: [ self currentTurn
-				ifNotNil: [ :turn | 
-					turn isActive ifTrue: [ turn fail: aReason ].
-					turn permissionRequests do: #abandon.
-					turn elicitationRequests do: #abandon ].
-			state = #closed ifFalse: [ state := #failed ] ] ]
+				ifNotNil: [ :turn | turn connectionClosed: aReason ] ].
+	self state connectionClosed ]
 		ensure: [ self updateToolSummarizers.
 			self announceChanged.
 			self announceConversationTreeChanged ]
@@ -303,7 +283,9 @@ GtLACPSession >> contextWindow [
 
 { #category : #accessing }
 GtLACPSession >> conversationState [
- ^ self isSubagent ifTrue: [ parentSubagent workState ] ifFalse: [ state ]
+	^ self isSubagent
+		ifTrue: [ parentSubagent workState ]
+		ifFalse: [ self stateName ]
 ]
 
 { #category : #accessing }
@@ -322,20 +304,8 @@ GtLACPSession >> conversationTitle: aString [
 
 { #category : #lifecycle }
 GtLACPSession >> create [
-	| result |
 	self requireRootSession.
-	[ state := #starting.
-	[ result := connection
-			request: 'session/new'
-			parameters: self creationParameters.
-	remoteSessionId := result at: 'sessionId'.
-	connection registerSession: self.
-	self updateSettingsFrom: result.
-	state := #ready ]
-		on: Error
-		do: [ :ex | 
-			state := #failed.
-			ex pass ] ] ensure: [ self announceChanged ]
+	^ self state create
 ]
 
 { #category : #accessing }
@@ -552,7 +522,7 @@ GtLACPSession >> gtSessionFor: aView [
 		priority: 10;
 		items: [ {'Project directory' -> directory.
 				'Remote session ID' -> remoteSessionId.
-				'Status' -> state.
+				'Status' -> self state.
 				'Context window' -> self contextWindow.
 				'Client' -> client.
 				'Connection' -> connection} ];
@@ -629,15 +599,15 @@ GtLACPSession >> header [
 	^ self conversationTitle
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 GtLACPSession >> initialize [
- super initialize.
- state := #new.
- turns := OrderedCollection new.
- updates := OrderedCollection new.
- modes := Dictionary new.
- configOptions := #().
- promptText := ''
+	super initialize.
+	self state: GtLACPSessionNewState new.
+	turns := OrderedCollection new.
+	updates := OrderedCollection new.
+	modes := Dictionary new.
+	configOptions := #().
+	promptText := ''
 ]
 
 { #category : #accessing }
@@ -647,10 +617,10 @@ GtLACPSession >> interSessionMessages [
 
 { #category : #updating }
 GtLACPSession >> invalidateSubagentLiveState [
- parentSubagent ifNotNil: #invalidateLiveState.
- state := #observing.
- self currentTurn ifNotNil: [ :turn | turn isActive ifTrue: [ turn state: #observed ] ].
- self childSessions do: #invalidateSubagentLiveState
+	parentSubagent ifNotNil: #invalidateLiveState.
+	self state: GtLACPSessionObservingState new.
+	self currentTurn ifNotNil: #observe.
+	self childSessions do: #invalidateSubagentLiveState
 ]
 
 { #category : #commands }
@@ -666,8 +636,58 @@ GtLACPSession >> invokeCommandNamed: aName arguments: arguments [
 ]
 
 { #category : #testing }
+GtLACPSession >> isClosed [
+	^ self state isClosed
+]
+
+{ #category : #testing }
+GtLACPSession >> isDisconnected [
+	^ self state isDisconnected
+]
+
+{ #category : #testing }
+GtLACPSession >> isFailed [
+	^ self state isFailed
+]
+
+{ #category : #testing }
+GtLACPSession >> isLoading [
+	^ self state isLoading
+]
+
+{ #category : #testing }
+GtLACPSession >> isNew [
+	^ self state isNew
+]
+
+{ #category : #testing }
+GtLACPSession >> isObserving [
+	^ self state isObserving
+]
+
+{ #category : #testing }
+GtLACPSession >> isPrompting [
+	^ self state isPrompting
+]
+
+{ #category : #testing }
+GtLACPSession >> isReady [
+	^ self state isReady
+]
+
+{ #category : #testing }
+GtLACPSession >> isReopening [
+	^ self state isReopening
+]
+
+{ #category : #testing }
 GtLACPSession >> isReplaying [
- ^ self rootSession state = #loading
+	^ self rootSession state isLoading
+]
+
+{ #category : #testing }
+GtLACPSession >> isStarting [
+	^ self state isStarting
 ]
 
 { #category : #testing }
@@ -675,28 +695,15 @@ GtLACPSession >> isSubagent [
  ^ parentSubagent notNil
 ]
 
+{ #category : #testing }
+GtLACPSession >> isUnknown [
+	^ self state isUnknown
+]
+
 { #category : #lifecycle }
 GtLACPSession >> load: anId [
-	| params result |
 	self requireRootSession.
-	[ connection capabilities supportsLoad
-		ifFalse: [ self error: 'Agent does not support loading sessions' ].
-	state := #loading.
-	self childSessions do: #invalidateSubagentLiveState.
-	remoteSessionId := anId.
-	connection registerSession: self.
-	params := self creationParameters
-			at: 'sessionId' put: anId;
-			yourself.
-	[ result := connection request: 'session/load' parameters: params.
-	self updateSettingsFrom: result.
-	state := #ready ]
-		on: Error
-		do: [ :ex | 
-			state := #failed.
-			ex pass ] ]
-		ensure: [ self updateConversationSummarizers.
-			self announceChanged ]
+	^ self state load: anId
 ]
 
 { #category : #accessing }
@@ -741,14 +748,19 @@ GtLACPSession >> modes: anObject [
 
 { #category : #updating }
 GtLACPSession >> newObservedTurn [
- | turn |
- turn := GtLACPPromptTurn new session: self;
-  state: (self isReplaying ifTrue: [ #replayed ] ifFalse: [ #observed ]); yourself.
- self isSubagent ifTrue: [ turn parentTurn: parentSubagent parentSession currentTurn ].
- turns add: turn.
- turn parentTurn ifNotNil: [ :parent |
-  parent session announceMessageChanged: parent assistantMessage ].
- ^ turn
+	| turn |
+	turn := GtLACPPromptTurn new
+			session: self;
+			state: (self isReplaying
+					ifTrue: [ GtLACPPromptTurnReplayedState new ]
+					ifFalse: [ GtLACPPromptTurnObservedState new ]);
+			yourself.
+	self isSubagent
+		ifTrue: [ turn parentTurn: parentSubagent parentSession currentTurn ].
+	turns add: turn.
+	turn parentTurn
+		ifNotNil: [ :parent | parent session announceMessageChanged: parent assistantMessage ].
+	^ turn
 ]
 
 { #category : #accessing }
@@ -773,6 +785,111 @@ GtLACPSession >> pendingInteractions [
 	^ self currentTurn ifNil: [ #() ] ifNotNil: #pendingInteractions
 ]
 
+{ #category : #'private - lifecycle' }
+GtLACPSession >> performClose [
+	self closeLocally.
+	connection sessions isEmpty ifTrue: [ connection stop ]
+]
+
+{ #category : #'private - lifecycle' }
+GtLACPSession >> performCreate [
+	| result |
+	[ self state: GtLACPSessionStartingState new.
+	[ result := connection
+			request: 'session/new'
+			parameters: self creationParameters.
+	remoteSessionId := result at: 'sessionId'.
+	connection registerSession: self.
+	self updateSettingsFrom: result.
+	self state operationSucceeded ]
+		on: Error
+		do: [ :ex | 
+			self state operationFailed.
+			ex pass ] ] ensure: [ self announceChanged ]
+]
+
+{ #category : #'private - lifecycle' }
+GtLACPSession >> performLoad: anId [
+	| params result |
+	[ connection capabilities supportsLoad
+		ifFalse: [ self error: 'Agent does not support loading sessions' ].
+	self state: GtLACPSessionLoadingState new.
+	self childSessions do: #invalidateSubagentLiveState.
+	remoteSessionId := anId.
+	connection registerSession: self.
+	params := self creationParameters
+			at: 'sessionId' put: anId;
+			yourself.
+	[ result := connection request: 'session/load' parameters: params.
+	self updateSettingsFrom: result.
+	self state operationSucceeded ]
+		on: Error
+		do: [ :ex | 
+			self state operationFailed.
+			ex pass ] ]
+		ensure: [ self updateConversationSummarizers.
+			self announceChanged ]
+]
+
+{ #category : #'private - prompting' }
+GtLACPSession >> performPromptContent: blocks [
+	| turn rpc |
+	[ blocks
+		do: [ :each | 
+			(connection capabilities supportsPromptType: each type)
+				ifFalse: [ self error: 'Agent does not support this content type' ] ].
+	turn := GtLACPPromptTurn new
+			session: self;
+			yourself.
+	turn addMessageWithRole: #user content: blocks.
+	turns add: turn.
+	self state: GtLACPSessionPromptingState new.
+	rpc := connection
+			newRequest: 'session/prompt'
+			parameters: {'sessionId' -> remoteSessionId.
+					'prompt' -> (blocks collect: #asDictionary) asArray} asDictionary.
+	turn request: rpc.
+	rpc
+		onSuccess: [ :result | self promptSucceeded: result turn: turn ];
+		onFailure: [ :reason | self promptFailed: reason turn: turn ].
+	connection sendRequest: rpc.
+	^ turn ]
+		ensure: [ self announceMessageChanged: (turn ifNotNil: #assistantMessage).
+			self announceConversationTreeChanged ]
+]
+
+{ #category : #'private - lifecycle' }
+GtLACPSession >> performReopen [
+	"Reconnect the same conversation without replaying or replacing its history."
+
+	| result |
+	(client isNil or: [ connection isNil or: [ remoteSessionId isEmptyOrNil ] ])
+		ifTrue: [ self error: 'Reopening requires an existing client, connection and session ID' ].
+	directory isDirectory ifFalse: [ self error: 'Session directory must exist' ].
+	(connection isStopped or: [ connection isReady ])
+		ifFalse: [ self error: 'The session connection must be stopped or ready' ].
+	self state: GtLACPSessionReopeningState new.
+	[ [ connection isStopped
+		ifTrue: [ client restartConnection: connection in: directory ].
+	connection capabilities supportsResume
+		ifFalse: [ self error: 'Agent does not support resuming sessions without replay' ].
+	self registerSessionTreeForResume.
+	result := connection
+			request: 'session/resume'
+			parameters: (self creationParameters
+					at: 'sessionId' put: remoteSessionId;
+					yourself).
+	self updateSettingsFrom: result.
+	self state operationSucceeded ]
+		on: Error
+		do: [ :error | 
+			self close.
+			error pass ] ]
+		ensure: [ self announceChanged.
+			self announceConversationTreeChanged ].
+	^ self
+]
+
 { #category : #views }
 GtLACPSession >> phlowContext [
  ^ GtPhlowContext new objectRegistry: self objectStorage; yourself
@@ -781,14 +898,14 @@ GtLACPSession >> phlowContext [
 { #category : #accessing }
 GtLACPSession >> presentationState [
 	self pendingInteractions ifNotEmpty: [ ^ #inputNeeded ].
-	^ state
+	^ self stateName
 ]
 
 { #category : #printing }
 GtLACPSession >> printOn: aStream [
 	aStream
 		nextPutAll: 'ACP session - ';
-		nextPutAll: state asString;
+		nextPutAll: self state asString;
 		nextPutAll: ' - ';
 		nextPutAll: turns size asString;
 		nextPutAll: ' turns'.
@@ -804,26 +921,26 @@ GtLACPSession >> prompt: aString [
  ^ self promptContent: { GtLACPContentBlock text: aString }
 ]
 
-{ #category : #prompting }
+{ #category : #lifecycle }
 GtLACPSession >> promptContent: blocks [
- | turn rpc |
- self requireRootSession.
- [
- state = #ready ifFalse: [ self error: 'Session must be ready before prompting' ].
- blocks do: [ :each |
-  (connection capabilities supportsPromptType: each type) ifFalse: [ self error: 'Agent does not support this content type' ] ].
- turn := GtLACPPromptTurn new session: self; yourself.
- turn addMessageWithRole: #user content: blocks.
- turns add: turn.
- state := #prompting.
- rpc := connection newRequest: 'session/prompt' parameters: {
-  'sessionId' -> remoteSessionId. 'prompt' -> (blocks collect: #asDictionary) asArray } asDictionary.
- turn request: rpc.
- rpc onSuccess: [ :result | turn complete: (result at: 'stopReason'). state := #ready. self updateToolSummarizers. self announceMessageChanged: turn assistantMessage. self announceConversationTreeChanged ];
-  onFailure: [ :reason | turn fail: reason. state = #closed ifFalse: [ state := (connection state = #ready ifTrue: [ #ready ] ifFalse: [ #failed ]) ]. self updateToolSummarizers. self announceMessageChanged: turn assistantMessage. self announceConversationTreeChanged ].
- connection sendRequest: rpc.
- ^ turn
- ] ensure: [ self announceMessageChanged: (turn ifNotNil: #assistantMessage). self announceConversationTreeChanged ]
+	self requireRootSession.
+	^ self state promptContent: blocks
+]
+
+{ #category : #'private - prompting' }
+GtLACPSession >> promptFailed: aReason turn: aTurn [
+	self state promptFailed: aReason turn: aTurn.
+	self updateToolSummarizers.
+	self announceMessageChanged: aTurn assistantMessage.
+	self announceConversationTreeChanged
+]
+
+{ #category : #'private - prompting' }
+GtLACPSession >> promptSucceeded: result turn: aTurn [
+	self state promptSucceeded: result turn: aTurn.
+	self updateToolSummarizers.
+	self announceMessageChanged: aTurn assistantMessage.
+	self announceConversationTreeChanged
 ]
 
 { #category : #accessing }
@@ -841,10 +958,10 @@ GtLACPSession >> receiveElicitation: params requestId: anId [
 	| turn elicitation toolId |
 	[ turn := self currentTurn.
 	(self isSubagent and: [ self isReplaying not ])
-		ifTrue: [ (turn isNil or: [ turn isActive not and: [ turn state ~= #observed ] ])
+		ifTrue: [ (turn isNil or: [ turn isActive not and: [ turn isObserved not ] ])
 				ifTrue: [ turn := self newObservedTurn ].
-			turn state: #running.
-			state := #prompting ].
+			turn start.
+			self state: GtLACPSessionPromptingState new ].
 	(turn isNil or: [ turn isActive not ])
 		ifTrue: [ ^ connection replyTo: anId result: {'action' -> 'cancel'} asDictionary ].
 	(turn elicitationRequests anySatisfy: [ :each | each requestId = anId ])
@@ -919,10 +1036,10 @@ GtLACPSession >> receivePermission: params requestId: anId [
 	| turn permission call |
 	[ turn := self currentTurn.
 	(self isSubagent and: [ self isReplaying not ])
-		ifTrue: [ (turn isNil or: [ turn isActive not and: [ turn state ~= #observed ] ])
+		ifTrue: [ (turn isNil or: [ turn isActive not and: [ turn isObserved not ] ])
 				ifTrue: [ turn := self newObservedTurn ].
-			turn state: #running.
-			state := #prompting ].
+			turn start.
+			self state: GtLACPSessionPromptingState new ].
 	(turn isNil or: [ turn isActive not ])
 		ifTrue: [ ^ connection
 				replyTo: anId
@@ -967,7 +1084,7 @@ GtLACPSession >> receiveSubagentUpdate: aDictionary [
 			child
 				parentSubagent: association;
 				remoteSessionId: childId;
-				state: #observing.
+				state: GtLACPSessionObservingState new.
 			self subagents add: association.
 			connection registerSession: child ].
 	association updateFrom: aDictionary.
@@ -1013,21 +1130,29 @@ GtLACPSession >> receiveUpdate: aDictionary [
 	turn := self currentTurn.
 	(turn isNil
 		or: [ (self isReplaying
-				and: [ turn state ~= #replayed
+				and: [ turn isReplayed not
 						or: [ kind = 'user_message_chunk' and: [ turn activity notEmpty ] ] ])
 				or: [ self isSubagent
-						and: [ self isReplaying not
-								and: [ turn isActive not and: [ turn state ~= #observed ] ] ] ] ])
+						and: [ self isReplaying not and: [ turn isActive not and: [ turn isObserved not ] ] ] ] ])
 		ifTrue: [ turn := self newObservedTurn.
-			self isSubagent ifFalse: [ turn state: #replayed ] ].
+			self isSubagent ifFalse: [ turn state: GtLACPPromptTurnReplayedState new ] ].
 	(self isSubagent and: [ self isReplaying not ])
-		ifTrue: [ turn state: #running.
-			state := #prompting ].
+		ifTrue: [ turn start.
+			self state: GtLACPSessionPromptingState new ].
 	turn receiveUpdate: aDictionary.
 	changedMessage := kind = 'user_message_chunk'
 			ifTrue: [ turn userMessages ifEmpty: [ nil ] ifNotEmpty: #last ]
 			ifFalse: [ turn assistantMessage ] ]
 		ensure: [ self announceMessageChanged: changedMessage ]
+]
+
+{ #category : #'private - lifecycle' }
+GtLACPSession >> registerSessionTreeForResume [
+	connection registerSession: self.
+	self childSessions
+		do: [ :child | 
+			child invalidateSubagentLiveState.
+			child registerSessionTreeForResume ]
 ]
 
 { #category : #accessing }
@@ -1038,6 +1163,12 @@ GtLACPSession >> remoteSessionId [
 { #category : #accessing }
 GtLACPSession >> remoteSessionId: anObject [
  remoteSessionId := anObject
+]
+
+{ #category : #lifecycle }
+GtLACPSession >> reopen [
+	self requireRootSession.
+	^ self state reopen
 ]
 
 { #category : #private }
@@ -1085,12 +1216,18 @@ GtLACPSession >> skills [
 
 { #category : #accessing }
 GtLACPSession >> state [
- ^ state
+	^ state
 ]
 
 { #category : #accessing }
-GtLACPSession >> state: anObject [
- state := anObject
+GtLACPSession >> state: aState [
+	state := aState.
+	state session: self
+]
+
+{ #category : #accessing }
+GtLACPSession >> stateName [
+	^ self state name
 ]
 
 { #category : #accessing }

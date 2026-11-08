@@ -135,7 +135,7 @@ GtLACPAssistantMessage >> gtWorkSummaryFor: aView [
 
 { #category : #testing }
 GtLACPAssistantMessage >> hasCompletedReply [
- ^ (#(completed replayed idle) includes: turn state) and: [ self finalMessages notEmpty ]
+	^ self finalMessages notEmpty
 ]
 
 { #category : #testing }

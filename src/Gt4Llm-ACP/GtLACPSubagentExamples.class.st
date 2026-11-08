@@ -172,30 +172,55 @@ GtLACPSubagentExamples >> announce: anId title: aTitle in: aParent [
 
 { #category : #examples }
 GtLACPSubagentExamples >> cancelChild [
- <gtExample>
- | root child sibling request |
- root := GtLACPExamples new session.
- child := self announce: 'cancel-child' title: 'Worker' in: root.
- sibling := self announce: 'other-child' title: 'Other worker' in: root.
- self update: { 'sessionUpdate' -> 'subagent_update'. 'sessionId' -> child remoteSessionId.
-  'capabilities' -> { 'cancel' -> Dictionary new } asDictionary } asDictionary for: root.
- root connection transport receive: {
-  'jsonrpc' -> '2.0'. 'id' -> 'child-permission'. 'method' -> 'session/request_permission'.
-  'params' -> { 'sessionId' -> child remoteSessionId.
-   'toolCall' -> { 'toolCallId' -> 'child-tool'. 'title' -> 'Inspect'. 'status' -> 'pending' } asDictionary.
-   'options' -> { { 'optionId' -> 'allow'. 'name' -> 'Allow'. 'kind' -> 'allow_once' } asDictionary } } asDictionary } asDictionary.
- request := child currentTurn permissionRequests first.
- self assert: request state equals: #pending.
- self assert: child canCancel.
- child cancelTurn.
- self assert: request state equals: #cancelled.
- self assert: ((root connection transport sentMessages last at: 'params') at: 'sessionId') equals: child remoteSessionId.
- self assert: sibling currentTurn state equals: #running.
- self update: { 'sessionUpdate' -> 'subagent_update'. 'sessionId' -> child remoteSessionId.
-  'state' -> { 'state' -> 'idle'. 'stopReason' -> 'cancelled' } asDictionary } asDictionary for: root.
- self assert: child currentTurn state equals: #cancelled.
- self assert: child conversationState equals: #idle.
- ^ root
+	<gtExample>
+	| root child sibling request |
+	root := GtLACPExamples new session.
+	child := self
+			announce: 'cancel-child'
+			title: 'Worker'
+			in: root.
+	sibling := self
+			announce: 'other-child'
+			title: 'Other worker'
+			in: root.
+	self
+		update: {'sessionUpdate' -> 'subagent_update'.
+				'sessionId' -> child remoteSessionId.
+				'capabilities' -> {'cancel' -> Dictionary new} asDictionary} asDictionary
+		for: root.
+	root connection transport
+		receive: {'jsonrpc' -> '2.0'.
+				'id' -> 'child-permission'.
+				'method' -> 'session/request_permission'.
+				'params'
+					-> {'sessionId' -> child remoteSessionId.
+							'toolCall'
+								-> {'toolCallId' -> 'child-tool'.
+										'title' -> 'Inspect'.
+										'status' -> 'pending'} asDictionary.
+							'options'
+								-> {{'optionId' -> 'allow'.
+											'name' -> 'Allow'.
+											'kind' -> 'allow_once'} asDictionary}} asDictionary} asDictionary.
+	request := child currentTurn permissionRequests first.
+	self assert: request state equals: #pending.
+	self assert: child canCancel.
+	child cancelTurn.
+	self assert: request state equals: #cancelled.
+	self
+		assert: ((root connection transport sentMessages last at: 'params') at: 'sessionId')
+		equals: child remoteSessionId.
+	self assert: sibling currentTurn isRunning.
+	self
+		update: {'sessionUpdate' -> 'subagent_update'.
+				'sessionId' -> child remoteSessionId.
+				'state'
+					-> {'state' -> 'idle'.
+							'stopReason' -> 'cancelled'} asDictionary} asDictionary
+		for: root.
+	self assert: child currentTurn isCancelled.
+	self assert: child conversationState equals: #idle.
+	^ root
 ]
 
 { #category : #examples }
@@ -348,17 +373,17 @@ GtLACPSubagentExamples >> clearingChildStateAndCapabilities [
 
 { #category : #examples }
 GtLACPSubagentExamples >> closingRootDetachesChildren [
- <gtExample>
- | root child |
- root := self nestedConversations.
- child := root childSessions first.
- root close.
- self assert: root connection sessions isEmpty.
- self assert: root connection state equals: #stopped.
- self assert: child state equals: #closed.
- self assert: child childSessions first state equals: #closed.
- self assert: root childSessions size equals: 2.
- ^ root
+	<gtExample>
+	| root child |
+	root := self nestedConversations.
+	child := root childSessions first.
+	root close.
+	self assert: root connection sessions isEmpty.
+	self assert: root connection state equals: #stopped.
+	self assert: child isClosed.
+	self assert: child childSessions first isClosed.
+	self assert: root childSessions size equals: 2.
+	^ root
 ]
 
 { #category : #examples }
@@ -511,40 +536,66 @@ GtLACPSubagentExamples >> collapsedAgentShowsLatestContentOnExpansion [
 
 { #category : #examples }
 GtLACPSubagentExamples >> conversationTreeAfterPromptResponse: response [
- | root turn element scripter |
- root := GtLACPExamples new session.
- element := (root gtConversationTreeFor: GtPhlowView empty)
-  asElementDo: [ :widget | widget background: Color white; yourself ].
- scripter := BlScripter new extent: 1100 @ 700; model: root; element: element; yourself.
- scripter assertStep: [ :step |
-  step label: 'The conversation initially displays ready';
-   onPhlowCellWithString: 'ready'; exists ].
- scripter doStep: [ :step |
-  step label: 'Start a prompt while the conversation tree is open';
-   block: [ turn := root prompt: 'Hello' ] ].
- scripter pulseUntilReady.
- scripter assertStep: [ :step |
-  step label: 'The conversation displays prompting';
-   onPhlowCellWithString: 'prompting'; exists ].
- scripter doStep: [ :step |
-  step label: 'Stream an assistant reply';
-   block: [ self update: {
-    'sessionUpdate' -> 'agent_message_chunk'.
-    'content' -> { 'type' -> 'text'. 'text' -> 'Hello world' } asDictionary
-   } asDictionary for: root ] ].
- self assert: turn messages last text equals: 'Hello world'.
- scripter doStep: [ :step |
-  step label: 'Receive the final prompt response';
-   block: [
-    root connection transport receive: ({ 'jsonrpc' -> '2.0'. 'id' -> turn request id } asDictionary
-     addAll: response; yourself) ] ].
- scripter pulseUntilReady.
- self assert: root state equals: #ready.
- scripter assertStep: [ :step |
-  step label: 'The conversation returns to ready without a manual refresh';
-   onPhlowCellWithString: 'ready'; exists ].
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	| root turn element scripter |
+	root := GtLACPExamples new session.
+	element := (root gtConversationTreeFor: GtPhlowView empty)
+			asElementDo: [ :widget | 
+				widget
+					background: Color white;
+					yourself ].
+	scripter := BlScripter new
+			extent: 1100 @ 700;
+			model: root;
+			element: element;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'The conversation initially displays ready';
+				onPhlowCellWithString: 'ready';
+				exists ].
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Start a prompt while the conversation tree is open';
+				block: [ turn := root prompt: 'Hello' ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'The conversation displays prompting';
+				onPhlowCellWithString: 'prompting';
+				exists ].
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Stream an assistant reply';
+				block: [ self
+						update: {'sessionUpdate' -> 'agent_message_chunk'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> 'Hello world'} asDictionary} asDictionary
+						for: root ] ].
+	self assert: turn messages last text equals: 'Hello world'.
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Receive the final prompt response';
+				block: [ root connection transport
+						receive: ({'jsonrpc' -> '2.0'.
+								'id' -> turn request id} asDictionary
+								addAll: response;
+								yourself) ] ].
+	scripter pulseUntilReady.
+	self assert: root isReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'The conversation returns to ready without a manual refresh';
+				onPhlowCellWithString: 'ready';
+				exists ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
@@ -932,19 +983,24 @@ GtLACPSubagentExamples >> directedMessagePatches [
 
 { #category : #examples }
 GtLACPSubagentExamples >> disconnectedChildren [
- <gtExample>
- | root child |
- root := GtLACPExamples new session.
- child := self announce: 'lost-child' title: 'Worker' in: root.
- self reply: 'Partial output' in: child.
- root connection failed: 'Fixture disconnect'.
- self assert: child conversationState equals: #disconnected.
- self assert: child currentTurn state equals: #disconnected.
- self assert: child currentTurn stopReason isNil.
- self assert: child currentTurn assistantMessage finalMessages isEmpty.
- self assert: child currentTurn assistantMessage activityItems last text equals: 'Partial output'.
- self assert: child canCancel not.
- ^ root
+	<gtExample>
+	| root child |
+	root := GtLACPExamples new session.
+	child := self
+			announce: 'lost-child'
+			title: 'Worker'
+			in: root.
+	self reply: 'Partial output' in: child.
+	root connection failed: 'Fixture disconnect'.
+	self assert: child conversationState equals: #disconnected.
+	self assert: child currentTurn isDisconnected.
+	self assert: child currentTurn stopReason isNil.
+	self assert: child currentTurn assistantMessage finalMessages isEmpty.
+	self
+		assert: child currentTurn assistantMessage activityItems last text
+		equals: 'Partial output'.
+	self assert: child canCancel not.
+	^ root
 ]
 
 { #category : #examples }
@@ -1120,19 +1176,26 @@ GtLACPSubagentExamples >> lateParentMessagePreservesReply [
 
 { #category : #examples }
 GtLACPSubagentExamples >> legacySubagentUpdates [
- <gtExample>
- | root child |
- root := GtLACPExamples new session.
- self update: { 'sessionUpdate' -> 'subagent_spawned'. 'subagentSessionId' -> 'legacy-child'.
-  'name' -> 'Legacy worker'. 'task' -> 'Recorded task' } asDictionary for: root.
- child := root childSessions first.
- self reply: 'Legacy output' in: child.
- self update: { 'sessionUpdate' -> 'subagent_state_update'. 'subagentSessionId' -> child remoteSessionId.
-  'state' -> 'completed' } asDictionary for: root.
- self assert: child conversationState equals: #idle.
- self assert: child currentTurn state equals: #completed.
- self assert: child conversationTitle equals: 'Legacy worker'.
- ^ root
+	<gtExample>
+	| root child |
+	root := GtLACPExamples new session.
+	self
+		update: {'sessionUpdate' -> 'subagent_spawned'.
+				'subagentSessionId' -> 'legacy-child'.
+				'name' -> 'Legacy worker'.
+				'task' -> 'Recorded task'} asDictionary
+		for: root.
+	child := root childSessions first.
+	self reply: 'Legacy output' in: child.
+	self
+		update: {'sessionUpdate' -> 'subagent_state_update'.
+				'subagentSessionId' -> child remoteSessionId.
+				'state' -> 'completed'} asDictionary
+		for: root.
+	self assert: child conversationState equals: #idle.
+	self assert: child currentTurn isCompleted.
+	self assert: child conversationTitle equals: 'Legacy worker'.
+	^ root
 ]
 
 { #category : #examples }
@@ -1372,26 +1435,41 @@ GtLACPSubagentExamples >> replayClearsLiveControls [
 
 { #category : #examples }
 GtLACPSubagentExamples >> replayedChildren [
- <gtExample>
- | root child |
- root := GtLACPExamples new session.
- root connection transport responder: [ :request :transport |
-  (request at: 'method' ifAbsent: [ '' ]) = 'session/load' ifTrue: [
-   child := self announce: 'replayed-child' title: 'Historical worker' in: root.
-   self update: { 'sessionUpdate' -> 'subagent_update'. 'sessionId' -> child remoteSessionId.
-    'capabilities' -> { 'cancel' -> Dictionary new } asDictionary } asDictionary for: root.
-   self task: 'A recorded assignment' from: root to: child id: 'recorded-message'.
-   self reply: 'A recorded reply' in: child.
-   transport replyTo: request result: Dictionary new ] ].
- root load: root remoteSessionId.
- self assert: child conversationState equals: #unconfirmed.
- self assert: child canCancel not.
- self assert: child currentTurn state equals: #replayed.
- self assert: child currentTurn assistantMessage text equals: 'A recorded reply'.
- self update: { 'sessionUpdate' -> 'subagent_update'. 'sessionId' -> child remoteSessionId.
-  'state' -> { 'state' -> 'idle' } asDictionary } asDictionary for: root.
- self assert: child conversationState equals: #idle.
- ^ root
+	<gtExample>
+	| root child |
+	root := GtLACPExamples new session.
+	root connection transport
+		responder: [ :request :transport | 
+			(request at: 'method' ifAbsent: [ '' ]) = 'session/load'
+				ifTrue: [ child := self
+							announce: 'replayed-child'
+							title: 'Historical worker'
+							in: root.
+					self
+						update: {'sessionUpdate' -> 'subagent_update'.
+								'sessionId' -> child remoteSessionId.
+								'capabilities' -> {'cancel' -> Dictionary new} asDictionary}
+								asDictionary
+						for: root.
+					self
+						task: 'A recorded assignment'
+						from: root
+						to: child
+						id: 'recorded-message'.
+					self reply: 'A recorded reply' in: child.
+					transport replyTo: request result: Dictionary new ] ].
+	root load: root remoteSessionId.
+	self assert: child conversationState equals: #unconfirmed.
+	self assert: child canCancel not.
+	self assert: child currentTurn isReplayed.
+	self assert: child currentTurn assistantMessage text equals: 'A recorded reply'.
+	self
+		update: {'sessionUpdate' -> 'subagent_update'.
+				'sessionId' -> child remoteSessionId.
+				'state' -> {'state' -> 'idle'} asDictionary} asDictionary
+		for: root.
+	self assert: child conversationState equals: #idle.
+	^ root
 ]
 
 { #category : #fixtures }

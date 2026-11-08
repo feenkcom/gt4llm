@@ -66,7 +66,7 @@ GtLACPAdapterExamples >> pythonAdapterConversation [
 		receive: {'jsonrpc' -> '2.0'.
 				'id' -> turn request id.
 				'result' -> {'stopReason' -> 'end_turn'} asDictionary} asDictionary.
-	self assert: turn state equals: #completed.
+	self assert: turn isCompleted.
 	self assert: turn assistantMessage text equals: 'Hello from the ACP fixture'.
 	^ session
 ]
@@ -85,7 +85,7 @@ GtLACPAdapterExamples >> pythonAdapterSession [
 	session := client startSessionIn: FileLocator temp.
 	self assert: configurationUsed == client configuration.
 	self assert: directoryUsed equals: FileLocator temp asFileReference asAbsolute.
-	self assert: session state equals: #ready.
+	self assert: session isReady.
 	self assert: session client == client.
 	self assert: session connection state equals: #ready.
 	^ session
