@@ -124,31 +124,16 @@ GtLACPSessionRegistry >> gtRemoveClosedSessionsFor: anAction [
 
 { #category : #'gt - extensions' }
 GtLACPSessionRegistry >> gtSessionsFor: aView [
-	"Reuse the session actions and confirm registry removal in a submenu."
-
 	<gtView>
 	<gtLlmView>
-	^ aView columnedList
+	^ aView explicit
 		title: 'Sessions';
 		priority: 10;
-		items: [ self sessions ];
-		column: 'Title' text: #conversationTitle;
-		column: 'Client'
-			text: [ :aSession | aSession client displayName ]
-			width: 110;
-		column: 'State'
-			stencil: [ :aSession | GtLACPSessionStateElement new session: aSession ]
-			width: 120;
-		column: 'Turns'
-			text: [ :aSession | aSession turns size ]
-			width: 60;
-		column: 'Context used'
-			text: [ :aSession | aSession contextWindow usagePercentageString ]
-			width: 80;
-		dynamicContextItems: [ :anElement :aSession | GtLACPSessionActionTarget menuItemsForObject: aSession hostElement: anElement ];
-		dynamicContextItems: [ :anElement :aSession | {self removeSessionMenuItemFor: aSession hostElement: anElement} ];
-		updateWhen: GtLACPSessionRegistryAnnouncement in: [ self announcer ];
-		actionUpdateButtonTooltip: 'Refresh sessions'
+		stencil: [ GtLACPSessionRegistrySessionsElement new registry: self ];
+		actionButtonIcon: BrGlamorousVectorIcons refresh
+			id: GtPhlowViewRefreshContentButtonId new
+			tooltip: 'Refresh sessions'
+			action: [ :aButton :aTab | (aTab query // GtLACPSessionRegistrySessionsElement) anyOne refresh ]
 ]
 
 { #category : #testing }
@@ -201,9 +186,38 @@ GtLACPSessionRegistry >> newSessionWithClient: aClient in: aDirectory [
 	^ self registerSession: (aClient startSessionIn: aDirectory)
 ]
 
-{ #category : #private }
+{ #category : #'gt - extensions' }
+GtLACPSessionRegistry >> newSessionWithClient: aClient in: aDirectory onCreated: aBlock [
+	"Publish the pending session before remote creation completes."
+
+	| aSession |
+	[ aClient
+		startSessionIn: aDirectory
+		onCreated: [ :aNewSession | 
+			aSession := self registerSession: aNewSession.
+			aBlock value: aSession ] ]
+		on: Error
+		do: [ :ex | 
+			aSession ifNotNil: [ self removeSession: aSession ].
+			ex pass ].
+	self
+		announce: (GtLACPSessionRegistryChanged new
+				registry: self;
+				connection: aSession connection;
+				sessions: {aSession}).
+	^ aSession
+]
+
+{ #category : #announcing }
 GtLACPSessionRegistry >> onConversationTreeChanged: anAnnouncement [
-	self announce: (GtLACPSessionRegistryChanged new registry: self)
+	self
+		announce: (GtLACPSessionRegistryChanged new
+				registry: self;
+				connection: anAnnouncement connection;
+				sessions: (self sessions
+						select: [ :each | 
+							anAnnouncement connection isNil
+								or: [ each connection == anAnnouncement connection ] ]))
 ]
 
 { #category : #adding }

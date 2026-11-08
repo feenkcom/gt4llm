@@ -1,5 +1,5 @@
 "
-I exercise the session registry: registration rules, announcements, shared connections and the live inspector views. I use private registries and in-memory transports, so I neither change GtLACPSessionRegistry current nor start agent processes.
+I exercise session registry registration rules, announcements, shared connections and session actions. I provide private registry and in-memory client fixtures. GtLACPSessionRegistryScripterExamples covers live views and interactions through BlScripter.
 "
 Class {
 	#name : #GtLACPSessionRegistryExamples,
@@ -16,25 +16,6 @@ GtLACPSessionRegistryExamples >> announcementsOf: anAnnouncementClass in: aRegis
 		send: #add:
 		to: announcements.
 	^ announcements
-]
-
-{ #category : #private }
-GtLACPSessionRegistryExamples >> assertIn: aScripter cellExists: aString [
-	aScripter
-		assertStep: [ :step | 
-			step
-				onPhlowCellWithString: aString;
-				exists ]
-]
-
-{ #category : #private }
-GtLACPSessionRegistryExamples >> assertIn: aScripter stateLabelExists: aString [
-	aScripter
-		assertStep: [ :step | 
-			step
-				// BrLabel;
-				@ [ :aLabel | aLabel text asString = aString ];
-				exists ]
 ]
 
 { #category : #private }
@@ -97,6 +78,24 @@ GtLACPSessionRegistryExamples >> duplicateRegistrationIsIgnored [
 	^ registry
 ]
 
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> earlySessionIsRegisteredBeforeCreation [
+	<gtExample>
+	| registry pending session |
+	registry := self emptyRegistry.
+	session := registry
+			newSessionWithClient: self claudeClient
+			in: FileLocator temp
+			onCreated: [ :aSession | 
+				pending := aSession.
+				self assert: aSession isNew.
+				self assert: aSession remoteSessionId isNil.
+				self assert: registry lastSession == aSession ].
+	self assert: pending == session.
+	self assert: session isReady.
+	^ registry
+]
+
 { #category : #'examples - model' }
 GtLACPSessionRegistryExamples >> emptyRegistry [
 	<gtExample>
@@ -105,6 +104,29 @@ GtLACPSessionRegistryExamples >> emptyRegistry [
 	self assert: registry hasSessions not.
 	self assert: registry sessions isEmpty.
 	self assert: registry lastSession isNil.
+	^ registry
+]
+
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> failedEarlySessionIsRemoved [
+	<gtExample>
+	| registry client pending hasFailed |
+	registry := self emptyRegistry.
+	client := self claudeClient.
+	hasFailed := false.
+	[ registry
+		newSessionWithClient: client
+		in: FileLocator temp
+		onCreated: [ :aSession | 
+			pending := aSession.
+			self assert: registry lastSession == pending.
+			self error: 'Aborted creation' ] ]
+		on: Error
+		do: [ :ex | hasFailed := ex messageText = 'Aborted creation' ].
+	self assert: hasFailed.
+	self assert: pending notNil.
+	self assert: registry hasSessions not.
+	self assert: pending connection isStopped.
 	^ registry
 ]
 
@@ -124,114 +146,6 @@ GtLACPSessionRegistryExamples >> failedStartIsNotRegistered [
 	self assert: registry hasSessions not.
 	self assert: announcements isEmpty.
 	^ registry
-]
-
-{ #category : #private }
-GtLACPSessionRegistryExamples >> in: aScripter do: aBlock [
-	aScripter doStep: [ :step | step block: aBlock ].
-	aScripter pulseUntilReady
-]
-
-{ #category : #'examples - actions' }
-GtLACPSessionRegistryExamples >> newClaudeSessionFromRegistryDropdown [
-	<gtExample>
-	^ self newSessionFromRegistryDropdownWith: self claudeClient
-]
-
-{ #category : #'examples - actions' }
-GtLACPSessionRegistryExamples >> newCodexSessionFromRegistryDropdown [
-	<gtExample>
-	^ self
-		newSessionFromRegistryDropdownWith: (GtLACPCodexClient new
-				transportFactory: [ :aConfiguration :aDirectory | GtLACPExamples new transport ];
-				yourself)
-]
-
-{ #category : #'examples - actions' }
-GtLACPSessionRegistryExamples >> newSessionAction [
-	<gtExample>
-	| registry button scripter |
-	registry := self emptyRegistry.
-	self
-		assert: (registry sessionClients collect: #class)
-		equals: {GtLACPClaudeCodeClient.
-				GtLACPCodexClient}.
-	button := (registry gtNewSessionFor: GtPhlowAction noAction)
-			asElement: [ :anElement | anElement ]
-			withHostElement: nil.
-	scripter := BlScripter new
-			extent: 1000 @ 800;
-			model: registry;
-			element: (BrFrame new
-					matchParent;
-					addChild: button);
-			yourself.
-	scripter click
-		// BrButton;
-		play.
-	{GtLACPClaudeCodeClient.
-		GtLACPCodexClient}
-		do: [ :aClass | 
-			scripter assert
-				onSpaceRoot;
-				// aClass name;
-				exists;
-				play ].
-	^ scripter
-]
-
-{ #category : #private }
-GtLACPSessionRegistryExamples >> newSessionFromRegistryDropdownWith: aClient [
-	| registry button scripter |
-	registry := self emptyRegistry.
-	button := (GtPhlowAction noAction dropdown
-			label: 'New session';
-			menu: [ :aDropdown | registry newSessionDropdownFor: aDropdown clients: {aClient} ])
-			asElement: [ :anElement | anElement ]
-			withHostElement: nil.
-	scripter := BlScripter new
-			extent: 1000 @ 800;
-			model: registry;
-			element: (BrFrame new
-					matchParent;
-					addChild: button);
-			yourself.
-	scripter click
-		// BrButton;
-		play.
-	scripter click
-		onSpaceRoot;
-		// aClient class name;
-		play.
-	scripter assert
-		label: 'The nested picker starts in the image directory';
-		value: [ :aSelector | aSelector folder asFileReference fullName ]
-			equals: FileLocator imageDirectory asFileReference fullName;
-		onSpaceRoot;
-		// BrFileSelector;
-		play.
-	scripter do
-		action: [ :aList | aList selectOne: 1 ];
-		onSpaceRoot;
-		// BrFileSelector;
-		// BrColumnedList;
-		play.
-	scripter click
-		onSpaceRoot;
-		// #'acp-start-session-button';
-		play.
-	20 timesRepeat: [ registry hasSessions ifFalse: [ 100 milliSeconds wait ] ].
-	self assert: registry sessions size equals: 1.
-	self assert: registry lastSession client == aClient.
-	self assert: registry lastSession isReady.
-	self assert: registry lastSession directory isDirectory.
-	scripter pulseUntilReady.
-	scripter assert
-		onSpaceRoot;
-		// BrFileSelector;
-		notExists;
-		play.
-	^ scripter
 ]
 
 { #category : #private }
@@ -256,39 +170,6 @@ GtLACPSessionRegistryExamples >> newSessionMenu [
 	^ menu
 ]
 
-{ #category : #'examples - views' }
-GtLACPSessionRegistryExamples >> overviewDisplaysStates [
-	<gtExample>
-	| registry scripter closed |
-	registry := self emptyRegistry.
-	self newSessionIn: registry.
-	closed := self newSessionIn: registry.
-	closed close.
-	self
-		assert: (registry sessionsByState collect: #key) asArray
-		equals: {'All'.
-				#closed.
-				#ready}.
-	self assert: registry sessionsByState first value size equals: 2.
-	scripter := self scripterOn: registry view: #gtOverviewFor:.
-	#('All' 'closed' 'ready')
-		do: [ :aLabel | self assertIn: scripter cellExists: aLabel ].
-	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
-	^ scripter
-]
-
-{ #category : #private }
-GtLACPSessionRegistryExamples >> registeredSessionOf: aClient [
-	"The dropdown starts sessions in a separate process and in the shared registry, so wait for the session to appear there."
-
-	20
-		timesRepeat: [ GtLACPSessionRegistry current sessions
-				detect: [ :each | each client == aClient ]
-				ifFound: [ :aSession | ^ aSession ]
-				ifNone: [ 100 milliSeconds wait ] ].
-	^ nil
-]
-
 { #category : #'examples - model' }
 GtLACPSessionRegistryExamples >> registrationIsAnnounced [
 	<gtExample>
@@ -299,6 +180,24 @@ GtLACPSessionRegistryExamples >> registrationIsAnnounced [
 	self assert: announcements size equals: 1.
 	self assert: announcements first registry == registry.
 	self assert: announcements first session == session.
+	^ registry
+]
+
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> registryChangeIdentifiesAffectedSessions [
+	<gtExample>
+	| registry first second changes change |
+	registry := self emptyRegistry.
+	first := self newSessionIn: registry.
+	second := self newSessionIn: registry.
+	changes := self announcementsOf: GtLACPSessionRegistryChanged in: registry.
+	first announceConversationTreeChanged.
+	self assert: changes size equals: 1.
+	change := changes first.
+	self assert: change registry == registry.
+	self assert: change connection == first connection.
+	self assert: change sessions asArray equals: {first}.
+	self assert: (change sessions identityIncludes: second) not.
 	^ registry
 ]
 
@@ -334,104 +233,6 @@ GtLACPSessionRegistryExamples >> registryInspectorTool [
 	^ tool
 ]
 
-{ #category : #examples }
-GtLACPSessionRegistryExamples >> registryToolActionsMenu [
-	<gtExample>
-	| registry element scripter |
-	registry := self emptyRegistry.
-	self
-		assert: (GtLACPSessionRegistryActionTarget actionsForObject: registry) size
-		equals: 2.
-	element := (GtLACPSessionRegistryTool forRegistry: registry)
-			asElementDo: [ :widget | widget ].
-	scripter := BlScripter new
-			extent: 1100 @ 700;
-			model: registry;
-			element: element;
-			yourself.
-	scripter menuStep
-		openDropdownWithId: #'acp-registry-actions';
-		assertMenuContainerExist;
-		play.
-	#(#'acp-registry-new-session' #'acp-registry-remove-closed-sessions')
-		do: [ :anId | 
-			scripter assert
-				onSpaceRoot;
-				// anId;
-				exists;
-				play ].
-	scripter menuStep
-		hoverMenuItemWithId: #'acp-registry-new-session';
-		onPopover;
-		play.
-	{GtLACPClaudeCodeClient.
-		GtLACPCodexClient}
-		do: [ :aClass | 
-			scripter assert
-				onSpaceRoot;
-				// aClass name;
-				exists;
-				play ].
-	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
-	^ scripter
-]
-
-{ #category : #examples }
-GtLACPSessionRegistryExamples >> registryToolMenuWithoutLabel [
-	<gtExample>
-	| registry element header toolbar scripter |
-	registry := self emptyRegistry.
-	element := (GtLACPSessionRegistryTool forRegistry: registry)
-			asElementDo: [ :widget | widget ].
-	header := element childNamed: #header.
-	header removeChild: (header childNamed: #toolLabel).
-	toolbar := header childNamed: #toolbar.
-	scripter := BlScripter new
-			extent: 1100 @ 700;
-			model: registry;
-			element: element;
-			yourself.
-	scripter pulseUntilReady.
-	self assert: (toolbar bounds inParent right - header width) abs < 1.
-	self assert: toolbar bounds inParent top < 1.
-	scripter menuStep
-		openDropdownWithId: #'acp-registry-actions';
-		assertMenuContainerExist;
-		play.
-	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
-	^ scripter
-]
-
-{ #category : #examples }
-GtLACPSessionRegistryExamples >> registryToolUpdatesLive [
-	<gtExample>
-	| registry element scripter session |
-	registry := self emptyRegistry.
-	element := (GtLACPSessionRegistryTool forRegistry: registry)
-			asElementDo: [ :widget | widget ].
-	scripter := BlScripter new
-			extent: 1100 @ 700;
-			model: registry;
-			element: element;
-			yourself.
-	scripter pulseUntilReady.
-	self in: scripter do: [ session := self newSessionIn: registry ].
-	self assertIn: scripter cellExists: 'Claude Code'.
-	self assertIn: scripter stateLabelExists: 'ready'.
-	self
-		in: scripter
-		do: [ session state: GtLACPSessionPromptingState new.
-			session announceConversationTreeChanged ].
-	self assertIn: scripter stateLabelExists: 'prompting'.
-	self
-		in: scripter
-		do: [ session state: GtLACPSessionReadyState new.
-			session close ].
-	self assertIn: scripter stateLabelExists: 'closed'.
-	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
-	^ scripter
-]
-
 { #category : #'examples - model' }
 GtLACPSessionRegistryExamples >> registryWithClaudeSession [
 	<gtExample>
@@ -444,55 +245,6 @@ GtLACPSessionRegistryExamples >> registryWithClaudeSession [
 	self assert: registry sessions size equals: 1.
 	self assert: registry lastSession == session.
 	^ registry
-]
-
-{ #category : #examples }
-GtLACPSessionRegistryExamples >> removeSessionRequiresConfirmation [
-	<gtExample>
-	| registry session view button scripter |
-	registry := self registryWithClaudeSession.
-	session := registry lastSession.
-	view := registry gtSessionsFor: GtPhlowView empty.
-	button := (GtPhlowAction noAction dropdown
-			id: #'acp-test-session-context-menu';
-			label: 'Session menu';
-			menu: [ :anActionElement :aTargetElement | 
-				view contextMenuItemsStencilFromActions
-					value: aTargetElement
-					value: session
-					value: 1 ])
-			asElement: [ :anElement | anElement ]
-			withHostElement: BlElement new.
-	scripter := BlScripter new
-			extent: 1100 @ 700;
-			model: registry;
-			element: (BrVerticalPane new
-					matchParent;
-					addChild: button;
-					yourself);
-			yourself.
-	scripter menuStep
-		openDropdownWithId: #'acp-test-session-context-menu';
-		assertMenuContainerExist;
-		play.
-	scripter menuStep
-		hoverMenuItemWithId: #'acp-remove-session';
-		onPopover;
-		play.
-	self assert: registry hasSessions.
-	scripter assert
-		onSpaceRoot;
-		// #'acp-remove-session-confirmation';
-		exists;
-		play.
-	scripter click
-		onSpaceRoot;
-		// #'acp-remove-session-accept';
-		play.
-	self assert: registry hasSessions not.
-	self assert: session isReady.
-	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
-	^ scripter
 ]
 
 { #category : #'examples - model' }
@@ -514,68 +266,32 @@ GtLACPSessionRegistryExamples >> removedSessionStaysOpen [
 	^ registry
 ]
 
-{ #category : #'examples - actions' }
-GtLACPSessionRegistryExamples >> resizableDirectoryPickerSubmenu [
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> reopenActionForClosedSession [
 	<gtExample>
-	| scripter initialExtent |
-	scripter := self newSessionAction.
-	scripter click
-		onSpaceRoot;
-		// #GtLACPClaudeCodeClient;
-		play.
-	scripter do
-		label: 'Resize the directory submenu horizontally';
-		action: [ :aPicker | 
-			| aResizer |
-			initialExtent := aPicker extent.
-			aResizer := aPicker children
-					detect: [ :each | 
-						(each isKindOf: BrResizer)
-							and: [ each location isKindOf: BrResizerRightLocation ] ].
-			BlSpace simulateDragOn: aResizer by: (BlVector x: 80 y: 0) ];
-		onSpaceRoot;
-		// BrFileSelector;
-		play.
-	scripter pulseUntilReady.
-	scripter assert
-		value: [ :aPicker | aPicker extent ] equals: [ initialExtent + (80 @ 0) ];
-		onSpaceRoot;
-		// BrFileSelector;
-		play.
-	scripter do
-		label: 'Resize the directory submenu vertically';
-		action: [ :aPicker | 
-			| aResizer |
-			aResizer := aPicker children
-					detect: [ :each | 
-						(each isKindOf: BrResizer)
-							and: [ each location isKindOf: BrResizerBottomLocation ] ].
-			BlSpace simulateDragOn: aResizer by: (BlVector x: 0 y: 60) ];
-		onSpaceRoot;
-		// BrFileSelector;
-		play.
-	scripter pulseUntilReady.
-	scripter assert
-		value: [ :aPicker | aPicker extent ] equals: [ initialExtent + (80 @ 60) ];
-		onSpaceRoot;
-		// BrFileSelector;
-		play.
-	^ scripter
-]
-
-{ #category : #private }
-GtLACPSessionRegistryExamples >> scripterOn: aRegistry view: aViewSelector [
-	| element |
-	element := (aRegistry perform: aViewSelector with: GtPhlowView empty)
-			asElementDo: [ :widget | 
-				widget
-					background: Color white;
-					yourself ].
-	^ BlScripter new
-		extent: 1100 @ 700;
-		model: aRegistry;
-		element: element;
-		yourself
+	| client registry session menu item |
+	client := GtLACPReopenExamples new client.
+	registry := self emptyRegistry.
+	session := registry newSessionWithClient: client in: FileLocator temp.
+	[ menu := GtLACPSessionActionTarget
+			menuItemsForObject: session
+			hostElement: BlElement new.
+	self
+		assert: (menu items noneSatisfy: [ :each | each id = #'acp-reopen-session' ]).
+	session close.
+	menu := (GtLACPSessionRegistrySessionsElement new registry: registry)
+			contextMenuFor: session
+			hostElement: BlElement new.
+	item := menu items detect: [ :each | each id = #'acp-reopen-session' ].
+	self assert: (item labelModel isKindOf: BrMenuIconTextLabelModel).
+	session reopen.
+	menu := GtLACPSessionActionTarget
+			menuItemsForObject: session
+			hostElement: BlElement new.
+	self
+		assert: (menu items noneSatisfy: [ :each | each id = #'acp-reopen-session' ]) ]
+		ensure: [ client stop ].
+	^ registry
 ]
 
 { #category : #'examples - actions' }
@@ -600,61 +316,6 @@ GtLACPSessionRegistryExamples >> sessionActionIcons [
 		yourself
 ]
 
-{ #category : #examples }
-GtLACPSessionRegistryExamples >> sessionMenuItemsHaveIcons [
-	<gtExample>
-	| registry session menu scripter |
-	registry := self registryWithClaudeSession.
-	session := registry lastSession.
-	menu := (registry gtSessionsFor: GtPhlowView empty)
-			contextMenuItemsStencilFromActions
-			value: BlElement new
-			value: session
-			value: 1.
-	#(#'acp-copy-session-id' #'acp-inspect-directory' #'acp-rename-session' #'acp-close-session' #'acp-remove-session')
-		do: [ :anId | 
-			| item |
-			item := menu items detect: [ :each | each id = anId ].
-			self assert: (item labelModel isKindOf: BrMenuIconTextLabelModel) ].
-	scripter := BlScripter new
-			extent: 1100 @ 700;
-			model: registry;
-			element: ((GtLACPSessionTool forSession: session) asElementDo: [ :widget | widget ]);
-			yourself.
-	scripter menuStep
-		openDropdownWithId: #'acp-session-actions';
-		assertMenuContainerExist;
-		play.
-	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
-	^ scripter
-]
-
-{ #category : #examples }
-GtLACPSessionRegistryExamples >> sessionStateVisuals [
-	<gtExample>
-	| registry scripter states |
-	registry := self emptyRegistry.
-	states := {GtLACPSessionNewState new.
-			GtLACPSessionStartingState new.
-			GtLACPSessionLoadingState new.
-			GtLACPSessionReadyState new.
-			GtLACPSessionPromptingState new.
-			GtLACPSessionFailedState new.
-			GtLACPSessionClosedState new.
-			GtLACPSessionObservingState new.
-			GtLACPSessionDisconnectedState new.
-			GtLACPSessionUnknownState new
-				name: #futureState;
-				yourself}.
-	states do: [ :aState | (self newSessionIn: registry) state: aState ].
-	scripter := self scripterOn: registry view: #gtSessionsFor:.
-	scripter pulseUntilReady.
-	states
-		do: [ :aState | self assertIn: scripter stateLabelExists: aState asString ].
-	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
-	^ scripter
-]
-
 { #category : #'examples - model' }
 GtLACPSessionRegistryExamples >> sessionsAnswersACopy [
 	<gtExample>
@@ -671,7 +332,7 @@ GtLACPSessionRegistryExamples >> sessionsViewReusesSessionActions [
 	| registry session view menu sessionItems |
 	registry := self registryWithClaudeSession.
 	session := registry lastSession.
-	view := registry gtSessionsFor: GtPhlowView empty.
+	view := GtLACPSessionRegistrySessionsElement new registry: registry.
 	sessionItems := GtLACPSessionActionTarget
 			menuItemsForObject: session
 			hostElement: BlElement new.
@@ -679,10 +340,7 @@ GtLACPSessionRegistryExamples >> sessionsViewReusesSessionActions [
 		assert: (sessionItems items anySatisfy: [ :each | each id = #'acp-rename-session' ]).
 	self
 		assert: (sessionItems items anySatisfy: [ :each | each id = #'acp-close-session' ]).
-	menu := view contextMenuItemsStencilFromActions
-			value: BlElement new
-			value: session
-			value: 1.
+	menu := view contextMenuFor: session hostElement: BlElement new.
 	self assert: menu items size equals: sessionItems items size + 1.
 	self
 		assert: ((menu items first: sessionItems items size) collect: #id)
@@ -691,10 +349,7 @@ GtLACPSessionRegistryExamples >> sessionsViewReusesSessionActions [
 	sessionItems := GtLACPSessionActionTarget
 			menuItemsForObject: session
 			hostElement: BlElement new.
-	menu := view contextMenuItemsStencilFromActions
-			value: BlElement new
-			value: session
-			value: 1.
+	menu := view contextMenuFor: session hostElement: BlElement new.
 	self assert: menu items size equals: sessionItems items size + 1.
 	self
 		assert: (menu items noneSatisfy: [ :each | each id = #'acp-close-session' ]).
@@ -702,30 +357,6 @@ GtLACPSessionRegistryExamples >> sessionsViewReusesSessionActions [
 ]
 
 { #category : #examples }
-GtLACPSessionRegistryExamples >> sessionsViewUpdatesLive [
-	<gtExample>
-	| registry session scripter |
-	registry := self emptyRegistry.
-	scripter := self scripterOn: registry view: #gtSessionsFor:.
-	scripter pulseUntilReady.
-	self in: scripter do: [ session := self newSessionIn: registry ].
-	self assertIn: scripter cellExists: 'Claude Code'.
-	self assertIn: scripter stateLabelExists: 'ready'.
-	self
-		in: scripter
-		do: [ session state: GtLACPSessionPromptingState new.
-			session announceConversationTreeChanged ].
-	self assertIn: scripter stateLabelExists: 'prompting'.
-	self
-		in: scripter
-		do: [ session state: GtLACPSessionReadyState new.
-			session close ].
-	self assertIn: scripter stateLabelExists: 'closed'.
-	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
-	^ scripter
-]
-
-{ #category : #'examples - model' }
 GtLACPSessionRegistryExamples >> sharedConnectionKeepsForwarding [
 	<gtExample>
 	| registry first second changes |
@@ -739,69 +370,21 @@ GtLACPSessionRegistryExamples >> sharedConnectionKeepsForwarding [
 	changes := self announcementsOf: GtLACPSessionRegistryChanged in: registry.
 	second announceChanged.
 	self assert: changes size equals: 1.
+	self assert: changes last connection == first connection.
+	self
+		assert: changes last sessions asArray
+		equals: {first.
+				second}.
 	registry removeSession: first.
 	self assert: (first connection announcer hasSubscriber: registry).
 	second announceChanged.
 	self assert: changes size equals: 2.
+	self assert: changes last sessions asArray equals: {second}.
 	registry removeSession: second.
 	self assert: (first connection announcer hasSubscriber: registry) not.
 	second announceChanged.
 	self assert: changes size equals: 2.
 	^ registry
-]
-
-{ #category : #'examples - actions' }
-GtLACPSessionRegistryExamples >> startSessionDropdownRegistersSession [
-	<gtExample>
-	| client button scripter registered |
-	client := self claudeClient.
-	button := (client gtStartSessionFor: GtPhlowAction noAction)
-			asElement: [ :anElement | anElement ]
-			withHostElement: nil.
-	scripter := BlScripter new
-			extent: 800 @ 600;
-			model: client;
-			element: (BrFrame new
-					matchParent;
-					addChild: button);
-			yourself.
-	scripter click
-		label: 'Open the directory dropdown';
-		// BrButton;
-		play.
-	scripter assert
-		label: 'The picker starts in the image directory';
-		value: [ :aSelector | aSelector folder asFileReference fullName ]
-			equals: FileLocator imageDirectory asFileReference fullName;
-		onSpaceRoot;
-		// BrFileSelector;
-		play.
-	scripter do
-		label: 'Select the first directory';
-		action: [ :aList | aList selectOne: 1 ];
-		onSpaceRoot;
-		// BrFileSelector;
-		// BrColumnedList;
-		play.
-	scripter click
-		label: 'Start the session';
-		onSpaceRoot;
-		// #'acp-start-session-button';
-		play.
-	registered := self registeredSessionOf: client.
-	[ self assert: registered notNil.
-	self assert: registered isReady.
-	self assert: registered directory isDirectory ]
-		ensure: [ registered
-				ifNotNil: [ GtLACPSessionRegistry current removeSession: registered ] ].
-	scripter pulseUntilReady.
-	scripter assert
-		label: 'The dropdown is closed';
-		onSpaceRoot;
-		// BrFileSelector;
-		notExists;
-		play.
-	^ scripter
 ]
 
 { #category : #'examples - model' }

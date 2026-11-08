@@ -36,7 +36,7 @@ GtLACPConnection >> agentInfo: anObject [
 
 { #category : #announcing }
 GtLACPConnection >> announceConversationTreeChanged [
- self announcer announce: GtLACPConversationTreeChanged new
+	self announcer announce: (GtLACPConversationTreeChanged new connection: self)
 ]
 
 { #category : #announcing }

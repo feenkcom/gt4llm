@@ -133,7 +133,7 @@ GtLACPClient >> loadSession: anId in: aDirectory [
  ^ aSession
 ]
 
-{ #category : #'private - interface' }
+{ #category : #'gt - actions' }
 GtLACPClient >> newSessionDirectorySelectorFor: aDropdown registry: aRegistry [
 	"Share the resizable directory picker between the client and registry actions."
 
@@ -149,9 +149,13 @@ GtLACPClient >> newSessionDirectorySelectorFor: aDropdown registry: aRegistry [
 		okAction: [ :aDirectory :anOkButton | 
 			anOkButton fireEvent: BrDropdownHideWish new.
 			[ | aSession |
-			aSession := aRegistry newSessionWithClient: self in: aDirectory.
-			aDropdown
-				enqueueTask: (BlTaskAction new action: [ aDropdown phlow spawnObject: aSession ]) ]
+			aRegistry
+				newSessionWithClient: self
+				in: aDirectory
+				onCreated: [ :aNewSession | 
+					aSession := aNewSession.
+					aDropdown
+						enqueueTask: (BlTaskAction new action: [ aDropdown phlow spawnObject: aSession ]) ] ]
 				fork ]
 ]
 
@@ -200,15 +204,26 @@ GtLACPClient >> sessions: anObject [
 
 { #category : #sessions }
 GtLACPClient >> startSessionIn: aDirectory [
- | aReference aConnection aSession |
- aReference := aDirectory asFileReference asAbsolute.
- aReference isDirectory ifFalse: [ self error: 'Session directory must exist' ].
- aConnection := self connectionIn: aReference.
- [ aSession := self newSessionIn: aReference connection: aConnection.
- aSession create.
- self applyPreferencesTo: aSession ]
- on: Error do: [ :ex | aConnection stop. ex pass ].
- ^ aSession
+	^ self startSessionIn: aDirectory onCreated: [ :aSession |  ]
+]
+
+{ #category : #sessions }
+GtLACPClient >> startSessionIn: aDirectory onCreated: aBlock [
+	"Expose the local session before waiting for session/new and preferences."
+
+	| aReference aConnection aSession |
+	aReference := aDirectory asFileReference asAbsolute.
+	aReference isDirectory ifFalse: [ self error: 'Session directory must exist' ].
+	aConnection := self connectionIn: aReference.
+	[ aSession := self newSessionIn: aReference connection: aConnection.
+	aBlock value: aSession.
+	aSession create.
+	self applyPreferencesTo: aSession ]
+		on: Error
+		do: [ :ex | 
+			aConnection stop.
+			ex pass ].
+	^ aSession
 ]
 
 { #category : #lifecycle }

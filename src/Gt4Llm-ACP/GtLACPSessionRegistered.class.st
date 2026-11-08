@@ -10,6 +10,11 @@ Class {
 	#category : #'Gt4Llm-ACP-Announcements'
 }
 
+{ #category : #testing }
+GtLACPSessionRegistered >> isSessionRegistration [
+	^ true
+]
+
 { #category : #accessing }
 GtLACPSessionRegistered >> session [
 	^ session

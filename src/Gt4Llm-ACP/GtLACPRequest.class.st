@@ -160,9 +160,9 @@ GtLACPRequest >> state: anObject [
 
 { #category : #waiting }
 GtLACPRequest >> waitForSeconds: seconds [
- state = #pending ifTrue: [
-  (semaphore waitTimeoutMilliseconds: (seconds * 1000) ceiling) ifTrue: [
-   self error: 'Timed out waiting for ACP request: ', method ] ].
- error ifNotNil: [ self error: error printString ].
- ^ result
+	state = #pending
+		ifTrue: [ (semaphore waitTimeoutMilliseconds: (seconds * 1000) ceiling)
+				ifTrue: [ self error: 'Timed out waiting for ACP request: ' , method ] ].
+	error ifNotNil: [ self error: error printString ].
+	^ result
 ]

@@ -501,6 +501,20 @@ GtLACPSession >> gtRenameFor: anAction [
 ]
 
 { #category : #actions }
+GtLACPSession >> gtReopenFor: anAction [
+	<gtAction>
+	self isClosed ifFalse: [ ^ anAction noAction ].
+	^ anAction button
+		id: #'acp-reopen-session';
+		label: 'Reopen session';
+		icon: BrGlamorousVectorIcons refresh;
+		priority: 50;
+		target: GtPhlowObjectActionTarget;
+		addTarget: GtLACPSessionActionTarget;
+		action: [ [ self reopen ] fork ]
+]
+
+{ #category : #actions }
 GtLACPSession >> gtSessionActionsDropdownFor: anAction [
 	<gtToolAction>
 	(GtLACPSessionActionTarget actionsForObject: self)
@@ -858,7 +872,7 @@ GtLACPSession >> performPromptContent: blocks [
 			self announceConversationTreeChanged ]
 ]
 
-{ #category : #'private - lifecycle' }
+{ #category : #sessions }
 GtLACPSession >> performReopen [
 	"Reconnect the same conversation without replaying or replacing its history."
 
