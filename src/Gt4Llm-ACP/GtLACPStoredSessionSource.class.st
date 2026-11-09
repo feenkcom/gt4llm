@@ -33,6 +33,15 @@ GtLACPStoredSessionSource >> format: anObject [
 ]
 
 { #category : #views }
+GtLACPStoredSessionSource >> gtFileJsonFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'File';
+		object: [ file ];
+		view: #gtContentsFor:
+]
+
+{ #category : #views }
 GtLACPStoredSessionSource >> gtMetadataFor: aView [
  <gtView>
  ^ aView columnedList title: 'Metadata'; priority: 0;

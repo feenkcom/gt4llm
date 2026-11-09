@@ -201,12 +201,15 @@ GtLACPMessagePresentationExamples >> interSessionInputViewModel [
 { #category : #examples }
 GtLACPMessagePresentationExamples >> interSessionWorkElements [
 	<gtExample>
-	| model assistant elements comment |
+	| model assistant work elements comment |
 	model := self interSessionInputViewModel.
 	assistant := GtLACPAssistantMessageElement new.
 	assistant viewModel: model.
+	work := GtLACPAssistantWorkElement new
+			commentElementProvider: [ :message | assistant commentElementFor: message ];
+			yourself.
 	elements := OrderedCollection new.
-	model message addWorkElementsTo: elements in: assistant.
+	model message addWorkElementsTo: elements in: work.
 	comment := elements last.
 	self assert: elements size equals: 2.
 	self assert: elements first text asString equals: model message chatLabel.
