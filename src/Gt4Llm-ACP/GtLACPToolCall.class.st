@@ -13,8 +13,8 @@ Class {
 }
 
 { #category : #converting }
-GtLACPToolCall >> addWorkElementsTo: elements in: anAssistantElement [
-	elements add: (anAssistantElement toolElementFor: self)
+GtLACPToolCall >> addWorkElementsTo: elements in: aWorkElement [
+	elements add: (aWorkElement toolElementFor: self)
 ]
 
 { #category : #converting }

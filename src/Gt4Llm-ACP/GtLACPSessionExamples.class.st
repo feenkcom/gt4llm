@@ -2443,6 +2443,50 @@ GtLACPSessionExamples >> toolCallsShownAsLines [
 ]
 
 { #category : #examples }
+GtLACPSessionExamples >> typedAssistantWorkElement [
+	<gtExample>
+	| scripter row work content |
+	scripter := self secondCommentaryKeepsWorkContent.
+	row := (scripter element query // #'acp-message-2') anyOne.
+	work := row workElement.
+	content := (work query // #'acp-work-content') anyOne.
+	self assert: work class equals: GtLACPAssistantWorkElement.
+	self assert: GtLACPAssistantWorkElement superclass equals: BlElement.
+	self assert: work parent == row.
+	self assert: work children size equals: 1.
+	self assert: work children first == work expander.
+	self assert: (work query // #'acp-work-section') anyOne == work expander.
+	self assert: work messageViewModel == row viewModel.
+	self assert: content children size equals: 2.
+	self assert: content children first class equals: GtLACPAssistantCommentElement.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPSessionExamples >> typedFinalMessageElement [
+	<gtExample>
+	| scripter row final section |
+	scripter := self finalReplyRetainsStreamedEditor.
+	row := (scripter element query // #'acp-message-2') anyOne.
+	final := (row query // GtLACPAssistantFinalMessageElement) anyOne.
+	section := (row query // #'acp-final-section') anyOne.
+	self assert: GtLACPAssistantFinalMessageElement superclass equals: BlElement.
+	self assert: final parent == row.
+	self assert: final children size equals: 1.
+	self assert: final children first == final expander.
+	self assert: section == final expander.
+	self assert: final messageViewModel == row viewModel.
+	self
+		assert: final commentElement
+				== (row commentElementFor: row viewModel replyMessages first).
+	self
+		assert: final commentElement editor == (final query // #'acp-final-text') anyOne.
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
 GtLACPSessionExamples >> typedMessage [
  <gtExample>
  | element scripter |

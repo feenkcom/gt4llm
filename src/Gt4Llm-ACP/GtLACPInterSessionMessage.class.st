@@ -13,9 +13,9 @@ Class {
 }
 
 { #category : #converting }
-GtLACPInterSessionMessage >> addWorkElementsTo: elements in: anAssistantElement [
-	anAssistantElement addInterSessionLabelFor: self to: elements.
-	super addWorkElementsTo: elements in: anAssistantElement
+GtLACPInterSessionMessage >> addWorkElementsTo: elements in: aWorkElement [
+	aWorkElement addInterSessionLabelFor: self to: elements.
+	super addWorkElementsTo: elements in: aWorkElement
 ]
 
 { #category : #converting }
