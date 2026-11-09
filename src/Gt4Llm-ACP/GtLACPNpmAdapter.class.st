@@ -32,9 +32,7 @@ GtLACPNpmAdapter >> displayName [
 
 { #category : #accessing }
 GtLACPNpmAdapter >> executable [
-	^OSPlatform current isWindows 
-		ifTrue: ['npx.cmd'] 
-		ifFalse: ['npx']
+	^OSPlatform current isWindows ifTrue: ['npx.cmd'] ifFalse: ['npx']
 ]
 
 { #category : #accessing }
