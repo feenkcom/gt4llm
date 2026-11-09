@@ -58,16 +58,34 @@ GtLACPStoredSession >> directory: anObject [
  directory := anObject
 ]
 
-{ #category : #views }
-GtLACPStoredSession >> gtIdentityFor: aView [
- <gtView>
- ^ aView columnedList title: 'Identity'; priority: 5;
-  items: [ { 'Agent' -> self agentName. 'Session ID' -> sessionId.
-   'Project directory' -> directory. 'Title' -> title.
-   'Created' -> createdAt. 'Updated' -> updatedAt } ];
-  column: 'Identity' text: #key;
-  column: 'Value' text: [ :entry | entry value ifNil: [ '(unknown)' ] ifNotNil: #printString ];
-  send: #value
+{ #category : #'gt - extensions' }
+GtLACPStoredSession >> gtDetailsFor: aView [
+	"Which identity and project metadata describe this stored session?"
+
+	<gtView>
+	| valueText |
+	valueText := [ :value | value ifNil: [ '(unknown)' ] ifNotNil: #asString ].
+	^ aView details
+		title: 'Details';
+		priority: 5;
+		row: 'Agent'
+			value: [ self agentName ]
+			text: valueText;
+		row: 'Session ID'
+			value: [ sessionId ]
+			text: valueText;
+		row: 'Project directory'
+			value: [ directory ]
+			text: valueText;
+		row: 'Title'
+			value: [ title ]
+			text: valueText;
+		row: 'Created'
+			value: [ createdAt ]
+			text: valueText;
+		row: 'Updated'
+			value: [ updatedAt ]
+			text: valueText
 ]
 
 { #category : #'gt - actions' }
