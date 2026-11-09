@@ -114,12 +114,12 @@ GtLDataSourceMessageConstructor >> requestHistory: aGtLRequestHistory [
 	requestHistory := aGtLRequestHistory
 ]
 
-{ #category : #parsing }
+{ #category : #private }
 GtLDataSourceMessageConstructor >> restoreRecordedOutput: rawOutput to: aMessage [
+	"Later requests can record a newer representation of a mutable tool result.
+	Restore the latest recorded output without executing the historical tool."
+
 	| recorded |
-	aMessage toolCall result ifNotNil: [ :existing |
-		self assert: existing serializeToOpenAIResponseOutput equals: rawOutput.
-		^ self ].
 	recorded := GtLRecordedToolOutput new model: rawOutput.
 	aMessage toolCall result: recorded.
 	aMessage output: recorded.

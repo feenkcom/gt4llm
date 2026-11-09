@@ -760,19 +760,12 @@ GtLChat >> resetMessages [
 	self signalRunIsDone
 ]
 
-{ #category : #convenience }
+{ #category : #persistence }
 GtLChat >> saveToTimestampFile [
-	"Convenience method to save the chat to a timestamped file"
-	| filename now |
-	
-	now := DateAndTime now.
-	filename := (String streamContents: [ :stream |
-		stream
-			<< now asDate iso8601;
-			<< '_';
-			<< now asTime hhmmss24;
-			<< '_chat.jsonl' ])
-				asFileReference.
+	"Convenience method to save the chat to a timestamped file including its uid."
+
+	| filename |
+	filename := GtLChatSessionWriter defaultFileReferenceForUid: self uid.
 	GtLDataSourceEncoderDecoder
 		saveClientHistory: provider client history
 		to: filename.
@@ -836,6 +829,15 @@ GtLChat >> sendWith: aBlock [
 	self sendMessage: newMessage
 ]
 
+{ #category : #convenience }
+GtLChat >> sessionWriters [
+
+	^ self announcer subscriptions subscriptions 
+		select: [ :each | 
+			each subscriber class name = #GtLChatSessionWriter ]
+		thenCollect: [ :each | each subscriber ]
+]
+
 { #category : #announcing }
 GtLChat >> signalExecutionStateChanged [
 	self announcer
@@ -864,6 +866,13 @@ GtLChat >> signalRunIsDone [
 	self announcer announce: GtLThreadRunIsDoneAnnouncement new
 ]
 
+{ #category : #convenience }
+GtLChat >> startSessionWriter [
+	"Start a writer that saves each message to disk as the provider goes idle."
+
+	^ GtLChatSessionWriter forChat: self.
+]
+
 { #category : #'api - execution' }
 GtLChat >> state [
 	<return: #GtLProviderState>
@@ -877,6 +886,16 @@ GtLChat >> status [
 		transformWith: '`@receiver status' -> '`@receiver state'.
 
 	^ self state
+]
+
+{ #category : #convenience }
+GtLChat >> stopAllSessionWriters [
+	| writers |
+	
+	writers := self sessionWriters.
+	writers do: [ :sessionWriter |
+		sessionWriter unsubscribe ].
+	^ writers.
 ]
 
 { #category : #'api - execution' }
@@ -908,6 +927,13 @@ GtLChat >> tools [
 { #category : #accessing }
 GtLChat >> tools: anObject [
 	tools := anObject
+]
+
+{ #category : #accessing }
+GtLChat >> uid [
+	"Answer the id of the first message, or nil for an empty chat."
+
+	^ self firstMessage ifNotNil: [ :aMessage | aMessage id ]
 ]
 
 { #category : #accessing }

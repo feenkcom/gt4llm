@@ -4,6 +4,15 @@ Class {
 	#category : #'Gt4LlmCore-Provider - Support'
 }
 
+{ #category : #'api - testing' }
+GtLProviderIdleState >> ifCanStop: aCanBlock ifStopping: aStoppingBlock ifIdle: anIdleBlock [
+	"Evaluate aCanBlock if provider can be stopped.
+	Evaluate aStoppingBlock if provider is already stopping existing execution.
+	Evaluate anIdleBlock otherwise."
+	
+	^ anIdleBlock value
+]
+
 { #category : #'api - accessing' }
 GtLProviderIdleState >> label [
 	"Return a simple short string identifying the state"
