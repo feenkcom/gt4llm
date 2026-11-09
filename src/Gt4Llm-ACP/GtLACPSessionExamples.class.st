@@ -148,6 +148,42 @@ GtLACPSessionExamples >> assistantSectionChoicesSurviveMessageUpdates [
 ]
 
 { #category : #examples }
+GtLACPSessionExamples >> assistantSectionSpacing [
+	<gtExample>
+	| scripter |
+	scripter := GtLACPMessagePresentationExamples new claudeWorkDisplayed.
+	#(expanded workCollapsed bothCollapsed finalExpanded)
+		do: [ :state | 
+			state = #workCollapsed
+				ifTrue: [ scripter click
+						id: #'acp-work-toggle';
+						play ].
+			state = #bothCollapsed
+				ifTrue: [ scripter click
+						id: #'acp-final-toggle';
+						play ].
+			state = #finalExpanded
+				ifTrue: [ scripter click
+						id: #'acp-final-toggle';
+						play ].
+			scripter
+				assertStep: [ :step | 
+					step
+						id: #'acp-message-2';
+						satisfies: [ :row | 
+							| header work final headerGap finalGap |
+							header := row childNamed: #'acp-message-header'.
+							work := row workElement.
+							final := (row query // GtLACPAssistantFinalMessageElement) anyOne.
+							headerGap := work bounds inSpace top - header bounds inSpace bottom.
+							finalGap := final bounds inSpace top - work bounds inSpace bottom.
+							(headerGap - 2) abs < 0.01
+								and: [ finalGap abs < 0.01 and: [ work margin isEmpty and: [ final margin isEmpty ] ] ] ] ] ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
 GtLACPSessionExamples >> assistantSectionsCollapseIndependently [
  <gtExample>
  | element scripter |
@@ -566,35 +602,6 @@ GtLACPSessionExamples >> copySessionIdActionAvailability [
 ]
 
 { #category : #examples }
-GtLACPSessionExamples >> disclosuresAlignWithText [
-	<gtExample>
-	| element scripter |
-	element := self reasoningBetweenToolCalls.
-	element viewModel messageViewModels last finalReplyExpanded: false.
-	scripter := BlScripter new
-			model: element viewModel session;
-			element: element;
-			yourself.
-	{#prompt -> #'acp-user-preview'.
-		#work -> #'acp-work-summary'.
-		#final -> #'acp-final-preview'}
-		do: [ :pair | 
-			scripter
-				assertStep: [ :step | 
-					step
-						id: ('acp-' , pair key asString , '-section') asSymbol;
-						satisfies: [ :section | 
-							| toggle preview |
-							toggle := (section childNamed: #sidebar)
-									childNamed: ('acp-' , pair key asString , '-toggle') asSymbol.
-							section
-								withAllChildrenBreadthFirstDo: [ :child | child id asSymbol = pair value ifTrue: [ preview := child ] ].
-							(toggle bounds inSpace center y - preview bounds inSpace center y) abs
-								<= 2 ] ] ].
-	^ scripter
-]
-
-{ #category : #examples }
 GtLACPSessionExamples >> draftSurvivesFailure [
  <gtExample>
  | element session transport |
@@ -645,6 +652,48 @@ GtLACPSessionExamples >> explicitMessageObjects [
  self assert: turn assistantMessage finalMessages size equals: 1.
  self assert: turn assistantMessage text equals: 'Finished. The project configuration is consistent.'.
  ^ turn assistantMessage
+]
+
+{ #category : #examples }
+GtLACPSessionExamples >> finalDisclosureAlignsWithTabsAndPreview [
+	<gtExample>
+	| scripter |
+	scripter := GtLACPMessagePresentationExamples new claudeWorkDisplayed.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-section';
+				satisfies: [ :section | 
+					| toggle label |
+					toggle := (section childNamed: #sidebar) childNamed: #'acp-final-toggle'.
+					label := (section query // BrTab) anyOne childNamed: #label.
+					(toggle bounds inSpace center y - label bounds inSpace center y) abs <= 2 ] ].
+	scripter click
+		id: #'acp-final-toggle';
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-section';
+				satisfies: [ :section | 
+					| toggle preview |
+					toggle := (section childNamed: #sidebar) childNamed: #'acp-final-toggle'.
+					preview := (section query // #'acp-final-preview') anyOne.
+					(toggle bounds inSpace center y - preview bounds inSpace center y) abs <= 2 ] ].
+	scripter click
+		id: #'acp-final-toggle';
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-section';
+				satisfies: [ :section | 
+					| toggle label |
+					toggle := (section childNamed: #sidebar) childNamed: #'acp-final-toggle'.
+					label := (section query // BrTab) anyOne childNamed: #label.
+					(toggle bounds inSpace center y - label bounds inSpace center y) abs <= 2 ] ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }

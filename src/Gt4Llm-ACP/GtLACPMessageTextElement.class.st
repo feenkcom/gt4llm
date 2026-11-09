@@ -25,6 +25,11 @@ GtLACPMessageTextElement >> initialize [
 		vFitContentLimited.
 	editor := BrEditor new
 			aptitude: BrGlamorousRegularEditorAptitude;
+			padding: (BlInsets
+					top: 5
+					left: 5
+					bottom: 0
+					right: 5);
 			beReadOnlyWithSelection;
 			hMatchParent;
 			vFitContentLimited;
