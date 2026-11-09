@@ -72,7 +72,10 @@ GtLACPExternalSessionStore >> gtSessionsFor: aView [
 		contextItemIcon: BrGlamorousVectorIcons play
 		label: 'Load session'
 		id: #'acp-load-stored-session'
-		action: [ :anElement :aStoredSession | aStoredSession loadAndSpawnFrom: anElement ]
+		action: [ :anElement :aStoredSession | 
+			| session |
+			session := aStoredSession load.
+			anElement phlow spawnObject: session ]
 ]
 
 { #category : #initialization }

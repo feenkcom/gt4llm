@@ -96,15 +96,23 @@ GtLACPStoredSession >> gtLoadFor: anAction [
 		label: 'Load session';
 		icon: BrGlamorousVectorIcons play;
 		priority: 10;
-		action: [ :anElement | self loadAndSpawnFrom: anElement ]
+		action: [ :anElement | 
+			| session |
+			session := self load.
+			anElement phlow spawnObject: session ]
 ]
 
 { #category : #views }
 GtLACPStoredSession >> gtSourcesFor: aView [
- <gtView>
- ^ aView columnedList title: 'Sources'; priority: 0; items: [ sources ];
-  column: 'Format' text: #format width: 130;
-  column: 'File' text: [ :source | source file fullName ]
+	<gtView>
+	^ aView columnedList
+		title: 'Sources';
+		priority: 0;
+		items: [ sources ];
+		column: 'Format'
+			text: #format
+			width: 130;
+		column: 'File' text: [ :source | source file fullName ]
 ]
 
 { #category : #initialization }
@@ -117,15 +125,6 @@ GtLACPStoredSession >> initialize [
 { #category : #loading }
 GtLACPStoredSession >> load [
 	^ self loadConfigureClient: [ :client |  ]
-]
-
-{ #category : #loading }
-GtLACPStoredSession >> loadAndSpawnFrom: anElement [
-	[ | session |
-	session := self load.
-	anElement
-		enqueueTask: (BlTaskAction new action: [ anElement phlow spawnObject: session ]) ]
-		fork
 ]
 
 { #category : #loading }
