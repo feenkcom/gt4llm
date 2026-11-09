@@ -78,13 +78,22 @@ GtLACPChatMessageElement >> initialize [
 		addAptitude: BlGlamorousExpanderShadowAptitude new
 ]
 
-{ #category : #ui }
+{ #category : #building }
+GtLACPChatMessageElement >> previewTextLimit [
+	^ 180
+]
+
+{ #category : #building }
 GtLACPChatMessageElement >> replyPreviewText [
- | text |
- text := String streamContents: [ :stream |
-  viewModel replyMessages do: [ :message | stream nextPutAll: message text ] ].
- text := (text copyReplaceAll: String cr with: ' ') copyReplaceAll: String lf with: ' '.
- ^ text size > 180 ifTrue: [ (text first: 180), '…' ] ifFalse: [ text ]
+	| text |
+	text := String
+			streamContents: [ :stream | viewModel replyMessages do: [ :message | stream nextPutAll: message text ] ].
+	text := (text copyReplaceAll: String cr with: ' ')
+			copyReplaceAll: String lf
+			with: ' '.
+	^ text size > self previewTextLimit
+		ifTrue: [ (text first: self previewTextLimit) , '…' ]
+		ifFalse: [ text ]
 ]
 
 { #category : #ui }

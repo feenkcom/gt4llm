@@ -1,5 +1,5 @@
 "
-I am a plain element containing the expander for an assistant's final reply. I own the preview and reply tabs, retain expansion and tab choices in the message view model, and use the existing assistant comment element so its editor survives the move from work.
+I am a plain element containing the expander for an assistant's final reply. I own the preview and reply tabs, retain expansion and tab choices in the message view model, and reuse the assistant comment editor. My disclosure sidebar shares the work element's top-padding baseline; the collapsed preview has no additional outer margin.
 "
 Class {
 	#name : #GtLACPAssistantFinalMessageElement,
@@ -62,11 +62,16 @@ GtLACPAssistantFinalMessageElement >> buildContent [
 	^ pane
 ]
 
-{ #category : #building }
+{ #category : #initialization }
 GtLACPAssistantFinalMessageElement >> buildPreview [
 	previewElement := BrEditor new
 			id: messageViewModel finalPreviewId;
 			aptitude: BrGlamorousRegularEditorAptitude;
+			padding: (BlInsets
+					top: 4
+					left: 5
+					bottom: 0
+					right: 5);
 			beReadOnlyWithSelection;
 			hMatchParent;
 			vFitContent;
@@ -97,11 +102,15 @@ GtLACPAssistantFinalMessageElement >> initialize [
 		layout: BlLinearLayout vertical;
 		constraintsDo: [ :c | 
 			c horizontal matchParent.
-			c vertical fitContent ];
-		margin: (BlInsets top: 4 bottom: 4).
+			c vertical fitContent ].
 	expander := BrExpander new
 			aptitude: (BrGlamorousExpanderSubtleAptitude new
-					sidebarExtraPadding: (BlInsets top: 9);
+					padding: (BlInsets
+							top: 0
+							left: 4
+							bottom: 0
+							right: 4);
+					sidebarExtraPadding: (BlInsets top: 10);
 					yourself);
 			hMatchParent;
 			vFitContent;

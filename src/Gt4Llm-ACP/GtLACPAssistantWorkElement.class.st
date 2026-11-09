@@ -108,10 +108,14 @@ GtLACPAssistantWorkElement >> initialize [
 		layout: BlLinearLayout vertical;
 		constraintsDo: [ :c | 
 			c horizontal matchParent.
-			c vertical fitContent ];
-		margin: (BlInsets top: 4 bottom: 4).
+			c vertical fitContent ].
 	expander := BrExpander new
 			aptitude: (BrGlamorousExpanderSubtleAptitude new
+					padding: (BlInsets
+							top: 4
+							left: 4
+							bottom: 0
+							right: 4);
 					sidebarExtraPadding: (BlInsets top: 6);
 					yourself);
 			hMatchParent;
