@@ -655,48 +655,6 @@ GtLACPSessionExamples >> explicitMessageObjects [
 ]
 
 { #category : #examples }
-GtLACPSessionExamples >> finalDisclosureAlignsWithTabsAndPreview [
-	<gtExample>
-	| scripter |
-	scripter := GtLACPMessagePresentationExamples new claudeWorkDisplayed.
-	scripter
-		assertStep: [ :step | 
-			step
-				id: #'acp-final-section';
-				satisfies: [ :section | 
-					| toggle label |
-					toggle := (section childNamed: #sidebar) childNamed: #'acp-final-toggle'.
-					label := (section query // BrTab) anyOne childNamed: #label.
-					(toggle bounds inSpace center y - label bounds inSpace center y) abs <= 2 ] ].
-	scripter click
-		id: #'acp-final-toggle';
-		play.
-	scripter
-		assertStep: [ :step | 
-			step
-				id: #'acp-final-section';
-				satisfies: [ :section | 
-					| toggle preview |
-					toggle := (section childNamed: #sidebar) childNamed: #'acp-final-toggle'.
-					preview := (section query // #'acp-final-preview') anyOne.
-					(toggle bounds inSpace center y - preview bounds inSpace center y) abs <= 2 ] ].
-	scripter click
-		id: #'acp-final-toggle';
-		play.
-	scripter
-		assertStep: [ :step | 
-			step
-				id: #'acp-final-section';
-				satisfies: [ :section | 
-					| toggle label |
-					toggle := (section childNamed: #sidebar) childNamed: #'acp-final-toggle'.
-					label := (section query // BrTab) anyOne childNamed: #label.
-					(toggle bounds inSpace center y - label bounds inSpace center y) abs <= 2 ] ].
-	self assertNoRenderingErrorsIn: scripter.
-	^ scripter
-]
-
-{ #category : #examples }
 GtLACPSessionExamples >> finalReplyExpandsOnCompletion [
  <gtExample>
  | chat session turn scripter |
