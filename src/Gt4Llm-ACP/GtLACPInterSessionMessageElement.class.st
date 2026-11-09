@@ -9,5 +9,9 @@ Class {
 
 { #category : #building }
 GtLACPInterSessionMessageElement >> buildContent [
- self addChild: (self textElementFor: viewModel message text)
+	self
+		addChild: (GtLACPMessageTextElement new
+				phlowContext: viewModel phlowContext;
+				message: viewModel message;
+				yourself)
 ]

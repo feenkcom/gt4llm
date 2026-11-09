@@ -1,5 +1,5 @@
 "
-I render an assistant response with work and reply disclosures, ordered reasoning, clickable tool-call summaries and explicit permissions. A message view model creates and builds me.
+I render an assistant response with work and final-reply disclosures. I retain one assistant comment element per message identity. Each comment element owns its editor and refreshes streamed text. Text-only updates retain the row and its structure; structural changes rebuild the presentation while reusing comment elements, including when the final reply moves out of work.
 "
 Class {
 	#name : #GtLACPAssistantMessageElement,
@@ -7,16 +7,55 @@ Class {
 	#instVars : [
 		'workSummaryElement',
 		'workSummaryUpdater',
-		'workExpander'
+		'workExpander',
+		'commentElements',
+		'structuralSnapshot',
+		'renderedVersion',
+		'workContents',
+		'finalExpander',
+		'agentElements'
 	],
 	#category : #'Gt4Llm-ACP-UI'
 }
 
 { #category : #building }
+GtLACPAssistantMessageElement >> addCommentElementFor: aMessage to: elements [
+	| comment |
+	comment := self commentElementFor: aMessage.
+	comment id: ('acp-text-' , aMessage identityHash asString) asSymbol.
+	elements add: comment.
+	^ comment
+]
+
+{ #category : #building }
+GtLACPAssistantMessageElement >> addInterSessionLabelFor: aMessage to: elements [
+	elements
+		add: (BrLabel new
+				aptitude: BrGlamorousLabelAptitude;
+				text: aMessage chatLabel;
+				yourself)
+]
+
+{ #category : #accessing }
+GtLACPAssistantMessageElement >> agentElements [
+	^ agentElements ifNil: [ agentElements := OrderedCollection new ]
+]
+
+{ #category : #building }
 GtLACPAssistantMessageElement >> agentWorkElementFor: anAssistantMessage [
-	^ GtLACPAgentMessageElement new
-		messageViewModel: (viewModel delegatedViewModelFor: anAssistantMessage);
-		yourself
+	| element |
+	element := GtLACPAgentMessageElement new
+			messageViewModel: (viewModel delegatedViewModelFor: anAssistantMessage);
+			yourself.
+	self agentElements add: element.
+	^ element
+]
+
+{ #category : #updating }
+GtLACPAssistantMessageElement >> build [
+	super build.
+	structuralSnapshot := self presentationStructure.
+	renderedVersion := viewModel renderingVersion
 ]
 
 { #category : #building }
@@ -34,9 +73,8 @@ GtLACPAssistantMessageElement >> buildErrorContent [
 
 { #category : #building }
 GtLACPAssistantMessageElement >> buildFinalReplySection [
-	| expander |
 	viewModel replyMessages ifEmpty: [ ^ self ].
-	expander := BrExpander new
+	finalExpander := BrExpander new
 			id: viewModel finalSectionId;
 			aptitude: (BrGlamorousExpanderSubtleAptitude new
 					sidebarExtraPadding: (BlInsets top: 9);
@@ -47,12 +85,12 @@ GtLACPAssistantMessageElement >> buildFinalReplySection [
 			header: [ self finalReplyPreview ];
 			content: [ self finalContent ];
 			yourself.
-	((expander childNamed: #sidebar) childNamed: #'expander--toggle')
+	((finalExpander childNamed: #sidebar) childNamed: #'expander--toggle')
 		id: viewModel finalToggleId.
-	expander expanded: viewModel isFinalReplyExpanded.
-	expander whenExpandedDo: [ viewModel finalReplyExpanded: true ].
-	expander whenCollapsedDo: [ viewModel finalReplyExpanded: false ].
-	self addChild: expander
+	finalExpander expanded: viewModel isFinalReplyExpanded.
+	finalExpander whenExpandedDo: [ viewModel finalReplyExpanded: true ].
+	finalExpander whenCollapsedDo: [ viewModel finalReplyExpanded: false ].
+	self addChild: finalExpander
 ]
 
 { #category : #building }
@@ -96,15 +134,45 @@ GtLACPAssistantMessageElement >> buildWorkSection [
 ]
 
 { #category : #building }
+GtLACPAssistantMessageElement >> commentElementFor: aMessage [
+	| element |
+	element := self commentElements
+			at: aMessage
+			ifAbsentPut: [ GtLACPAssistantCommentElement new
+					phlowContext: viewModel phlowContext;
+					message: aMessage;
+					yourself ].
+	element refresh.
+	^ element
+]
+
+{ #category : #accessing }
+GtLACPAssistantMessageElement >> commentElements [
+	^ commentElements ifNil: [ commentElements := IdentityDictionary new ]
+]
+
+{ #category : #building }
 GtLACPAssistantMessageElement >> finalContent [
  ^ self finalContentFor: viewModel
 ]
 
 { #category : #building }
 GtLACPAssistantMessageElement >> finalContentFor: model [
-	| pane tabs |
+	| pane tabs views |
+	views := model message finalReplyViewsInContext: model phlowContext.
+	views := views
+			collect: [ :view | 
+				view title = 'Markdown'
+					ifTrue: [ view
+							stencil: [ | element |
+								element := self commentElementFor: model replyMessages first.
+								element removeFromParent.
+								element id: #'acp-final-message'.
+								element editor id: #'acp-final-text'.
+								element ] ]
+					ifFalse: [ view ] ].
 	tabs := GtPhlowCompositeView new
-			views: (model message finalReplyViewsInContext: model phlowContext);
+			views: views;
 			asElementDo: [ :element | 
 				element
 					hMatchParent;
@@ -166,83 +234,80 @@ GtLACPAssistantMessageElement >> onSessionChanged: anAnnouncement [
 ]
 
 { #category : #building }
-GtLACPAssistantMessageElement >> permissionElementFor: permission [
-	^ permission asElement
+GtLACPAssistantMessageElement >> presentationStructure [
+	| turn |
+	turn := viewModel turn.
+	^ {turn stateName.
+		viewModel message localActivityItems asArray.
+		viewModel replyMessages asArray.
+		viewModel message delegatedMessages asArray.
+		(viewModel toolCalls
+			collect: [ :tool | 
+				{tool summary.
+					(tool permissionRequests
+						collect: [ :request | 
+							{request.
+								request state} ]) asArray.
+					(tool elicitationRequests
+						collect: [ :request | 
+							{request.
+								request state} ]) asArray} ]) asArray.
+		(turn permissionRequests
+			collect: [ :request | 
+				{request.
+					request state} ]) asArray.
+		(turn elicitationRequests
+			collect: [ :request | 
+				{request.
+					request state} ]) asArray.
+		turn error}
 ]
 
-{ #category : #building }
-GtLACPAssistantMessageElement >> questionsElementFor: aTool [
-	| pane |
-	pane := BrVerticalPane new
-			id: ('acp-tool-' , aTool id asString) asSymbol;
-			hMatchParent;
-			vFitContent;
-			yourself.
-	aTool elicitationRequests
-		do: [ :question | 
-			pane
-				addChild: (question asElement
-						padding: BlInsets empty;
-						margin: (BlInsets
-								top: 2
-								left: 5
-								bottom: 2
-								right: 5);
-						yourself) ].
-	^ pane
+{ #category : #updating }
+GtLACPAssistantMessageElement >> refresh [
+	| snapshot version |
+	version := viewModel renderingVersion.
+	renderedVersion = version ifTrue: [ ^ self ].
+	self commentElements valuesDo: [ :element | element refresh ].
+	snapshot := self presentationStructure.
+	snapshot = structuralSnapshot
+		ifFalse: [ self removeChildren.
+			workSummaryElement := nil.
+			workExpander := nil.
+			finalExpander := nil.
+			self agentElements removeAll.
+			self addChild: self buildHeader as: #'acp-message-header'.
+			self buildContent.
+			structuralSnapshot := snapshot ].
+	self updateExpansion.
+	self updateWorkSummary.
+	renderedVersion := version
 ]
 
 { #category : #building }
 GtLACPAssistantMessageElement >> toolElementFor: aTool [
-	| pane line kind summary |
-	aTool elicitationRequests ifNotEmpty: [ ^ self questionsElementFor: aTool ].
-	kind := self
-			workBadge: 'tool'
-			id: ('acp-tool-kind-' , aTool id asString) asSymbol.
-	summary := BrButton new
-			id: ('acp-tool-summary-' , aTool id asString) asSymbol;
-			aptitude: BrGlamorousButtonWithLabelAptitude - BrGlamorousButtonExteriorAptitude;
-			hMatchParent;
-			alignCenterLeft;
-			padding: BlInsets empty;
-			label: aTool summary;
-			action: [ :button | button phlow spawnObject: aTool ];
-			yourself.
-	line := BrHorizontalPane new
-			id: ('acp-tool-line-' , aTool id asString) asSymbol;
-			hMatchParent;
-			vFitContent;
-			addChild: kind;
-			addChild: summary;
-			yourself.
-	aTool permissionRequests
-		ifNotEmpty: [ line
-				addChild: (GtLACPInputNeededElement new
-						id: ('acp-tool-input-needed-' , aTool id asString) asSymbol;
-						margin: (BlInsets right: 6);
-						constraintsDo: [ :constraints | constraints linear vertical alignCenter ];
-						forTool: aTool;
-						yourself)
-				at: 2 ].
-	line
-		when: BlClickEvent
-		do: [ :event | 
-			event consumed: true.
-			line phlow spawnObject: aTool ].
-	pane := BrVerticalPane new
-			id: ('acp-tool-' , aTool id asString) asSymbol;
-			hMatchParent;
-			vFitContent;
-			margin: (BlInsets
-					top: 2
-					left: 5
-					bottom: 2
-					right: 5);
-			addChild: line;
-			yourself.
-	aTool permissionRequests
-		do: [ :permission | pane addChild: (self permissionElementFor: permission) ].
-	^ pane
+	^ GtLACPToolCallElement new
+		toolCall: aTool;
+		yourself
+]
+
+{ #category : #private }
+GtLACPAssistantMessageElement >> updateContentChildren: elements in: content [
+	content children asArray
+		do: [ :child | (elements identityIncludes: child) ifFalse: [ child removeFromParent ] ].
+	elements
+		withIndexDo: [ :child :index | 
+			(content children asArray identityIndexOf: child) = index
+				ifFalse: [ child hasParent ifTrue: [ child removeFromParent ].
+					content addChild: child at: index ] ]
+]
+
+{ #category : #updating }
+GtLACPAssistantMessageElement >> updateExpansion [
+	workExpander ifNotNil: [ workExpander expanded: viewModel isWorkExpanded ].
+	finalExpander
+		ifNotNil: [ finalExpander expanded: viewModel isFinalReplyExpanded ].
+	self agentElements do: [ :element | element refresh ]
 ]
 
 { #category : #building }
@@ -284,30 +349,31 @@ GtLACPAssistantMessageElement >> workContent [
 
 { #category : #building }
 GtLACPAssistantMessageElement >> workContentFor: anAssistantMessage [
-	| pane |
-	pane := BrVerticalPane new
-			hMatchParent;
-			vFitContent;
-			yourself.
-	anAssistantMessage == viewModel message
-		ifTrue: [ pane id: viewModel workContentId ].
+	| elements content |
+	elements := OrderedCollection new.
 	anAssistantMessage localActivityItems
-		do: [ :item | 
-			(item isKindOf: GtLACPToolCall)
-				ifTrue: [ pane addChild: (self toolElementFor: item) ]
-				ifFalse: [ item isInterSessionMessage
-						ifTrue: [ pane
-								addChild: (BrLabel new
-										aptitude: BrGlamorousLabelAptitude;
-										text: item chatLabel;
-										yourself) ].
-					pane addChild: (self textElementFor: item text) ] ].
+		do: [ :item | item addWorkElementsTo: elements in: self ].
 	anAssistantMessage turn elicitationRequests
 		select: [ :each | each toolCall isNil ]
-		thenDo: [ :each | pane addChild: each asElement ].
+		thenDo: [ :each | elements add: each asElement ].
+	self agentElements removeAll.
 	anAssistantMessage delegatedMessages
-		do: [ :delegated | pane addChild: (self agentWorkElementFor: delegated) ].
-	^ pane
+		do: [ :delegated | elements add: (self agentWorkElementFor: delegated) ].
+	content := self workContents
+			at: anAssistantMessage
+			ifAbsentPut: [ BrVerticalPane new
+					hMatchParent;
+					vFitContent;
+					yourself ].
+	self updateContentChildren: elements in: content.
+	anAssistantMessage == viewModel message
+		ifTrue: [ content id: viewModel workContentId ].
+	^ content
+]
+
+{ #category : #private }
+GtLACPAssistantMessageElement >> workContents [
+	^ workContents ifNil: [ workContents := IdentityDictionary new ]
 ]
 
 { #category : #building }

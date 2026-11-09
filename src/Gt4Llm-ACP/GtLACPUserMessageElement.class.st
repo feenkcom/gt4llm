@@ -36,10 +36,9 @@ GtLACPUserMessageElement >> buildPromptSection [
 
 { #category : #building }
 GtLACPUserMessageElement >> promptContent [
-	^ BrVerticalPane new
-		hMatchParent;
-		vFitContent;
-		addChild: (self textElementFor: viewModel message text);
+	^ GtLACPMessageTextElement new
+		phlowContext: viewModel phlowContext;
+		message: viewModel message;
 		yourself
 ]
 

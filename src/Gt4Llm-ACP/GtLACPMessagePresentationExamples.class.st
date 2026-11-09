@@ -199,6 +199,26 @@ GtLACPMessagePresentationExamples >> interSessionInputViewModel [
 ]
 
 { #category : #examples }
+GtLACPMessagePresentationExamples >> interSessionWorkElements [
+	<gtExample>
+	| model assistant elements comment |
+	model := self interSessionInputViewModel.
+	assistant := GtLACPAssistantMessageElement new.
+	assistant viewModel: model.
+	elements := OrderedCollection new.
+	model message addWorkElementsTo: elements in: assistant.
+	comment := elements last.
+	self assert: elements size equals: 2.
+	self assert: elements first text asString equals: model message chatLabel.
+	self assert: elements last == comment.
+	self assert: comment class equals: GtLACPAssistantCommentElement.
+	self assert: comment message == model message.
+	self assert: comment editor text asString equals: model message text.
+	self assert: (assistant commentElementFor: model message) == comment.
+	^ comment
+]
+
+{ #category : #examples }
 GtLACPMessagePresentationExamples >> interleavedMessageIdentity [
 	<gtExample>
 	| root turn message |
@@ -235,6 +255,27 @@ GtLACPMessagePresentationExamples >> interleavedMessageIdentity [
 		assert: (turn messages select: [ :each | each role = #agent ]) size
 		equals: 2.
 	^ root
+]
+
+{ #category : #examples }
+GtLACPMessagePresentationExamples >> messageTextElementRoles [
+	<gtExample>
+	| chat prompt assistant comment interSession |
+	chat := self specializedMessageViewModels.
+	prompt := chat messageViewModels first asElement promptContent.
+	self assert: prompt class equals: GtLACPMessageTextElement.
+	self assert: prompt message == chat messageViewModels first message.
+	self assert: prompt children first == prompt editor.
+	assistant := chat messageViewModels last asElement.
+	comment := assistant commentElementFor: assistant viewModel messages first.
+	self assert: comment class equals: GtLACPAssistantCommentElement.
+	self assert: comment children first == comment editor.
+	self assert: (assistant commentElementFor: comment message) == comment.
+	interSession := self interSessionInputViewModel asElement.
+	self assert: interSession children last class equals: GtLACPMessageTextElement.
+	self
+		assert: interSession children last message == interSession viewModel message.
+	^ assistant
 ]
 
 { #category : #examples }

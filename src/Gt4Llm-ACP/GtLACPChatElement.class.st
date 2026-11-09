@@ -1,5 +1,5 @@
 "
-I display an ACP conversation and persistent input area. I append new message rows and notify only changed rows of the virtualized list. Unchanged elements retain hover and selection. Session announcements identify affected messages; updates are coalesced onto the UI thread. Message view models retain expansion choices when a changed row is recreated.
+I display an ACP conversation and persistent input area. I append new message rows and notify only changed rows of the virtualized list. Assistant rows refresh in place and retain their message editors during streaming. Unchanged elements retain hover and selection. Session announcements identify affected messages; updates are coalesced onto the UI thread, and rendering versions are captured together so concurrent changes remain pending for a later update.
 "
 Class {
 	#name : #GtLACPChatElement,
@@ -80,15 +80,16 @@ GtLACPChatElement >> buildComposer [
 	^ composer
 ]
 
-{ #category : #initialization }
+{ #category : #updating }
 GtLACPChatElement >> configureMessageList [
- listElement padding: (BlInsets all: 5).
- listElement
-  itemId: [ :item :index | item id ];
-  itemType: [ :factory :item :index | factory named: item renderingKey ];
-  itemStencil: [ :type | type name first asElement ];
-  itemDataBinder: [ :element :item :index |
-   element id: (item elementIdAt: index) ]
+	listElement padding: (BlInsets all: 5).
+	listElement
+		itemId: [ :item :index | item id ];
+		itemType: [ :factory :item :index | factory named: item renderingKey ];
+		itemStencil: [ :type | type name first asElement ];
+		itemDataBinder: [ :element :item :index | 
+			(element isKindOf: GtLACPAssistantMessageElement) ifTrue: [ element refresh ].
+			element id: (item elementIdAt: index) ]
 ]
 
 { #category : #accessing }
@@ -317,39 +318,46 @@ GtLACPChatElement >> updateInputStyler [
 
 { #category : #updating }
 GtLACPChatElement >> updateMessages [
- | items previous follow source oldCount changed |
- viewModel ifNil: [ ^ self ].
- follow := followEndRequested or: [ self isAtStreamEnd ].
- items := viewModel messageViewModels.
- previous := listElement items.
- oldCount := previous size - 1.
- (oldCount >= 0 and: [
-  previous last == self endMarker and: [
-   oldCount <= items size and: [
-    (1 to: oldCount) allSatisfy: [ :index | (previous at: index) == (items at: index) ] ] ] ])
-  ifFalse: [
-   followEndRequested := follow and: [ items notEmpty ].
-   listElement items: (items asOrderedCollection add: self endMarker; yourself).
-   renderedVersions removeAll.
-   items do: [ :item | renderedVersions at: item put: item renderingVersion ].
-   self updateControls.
-   self followStreamAfterLayout.
-   ^ self ].
- changed := (1 to: oldCount) select: [ :index |
-  | item |
-  item := items at: index.
-  (renderedVersions at: item) ~= item renderingVersion ].
- followEndRequested := follow and: [ items notEmpty ].
- items do: [ :item | renderedVersions at: item put: item renderingVersion ].
- source := self messageViewport dataSource.
- items size > oldCount ifTrue: [
-  previous removeLast.
-  previous addAll: (items copyFrom: oldCount + 1 to: items size).
-  previous add: self endMarker.
-  source notifyItemsInserted: (oldCount + 1 to: items size) ].
- changed do: [ :index | source notifyItemsChanged: (index to: index) ].
- self updateControls.
- self followStreamAfterLayout
+	| items previous follow source oldCount changed versions |
+	viewModel ifNil: [ ^ self ].
+	follow := followEndRequested or: [ self isAtStreamEnd ].
+	items := viewModel messageViewModels.
+	versions := items collect: #renderingVersion.
+	previous := listElement items.
+	oldCount := previous size - 1.
+	(oldCount >= 0
+		and: [ previous last == self endMarker
+				and: [ oldCount <= items size
+						and: [ (1 to: oldCount)
+								allSatisfy: [ :index | (previous at: index) == (items at: index) ] ] ] ])
+		ifFalse: [ followEndRequested := follow and: [ items notEmpty ].
+			listElement
+				items: (items asOrderedCollection
+						add: self endMarker;
+						yourself).
+			renderedVersions removeAll.
+			items
+				withIndexDo: [ :item :index | renderedVersions at: item put: (versions at: index) ].
+			self updateControls.
+			self followStreamAfterLayout.
+			^ self ].
+	changed := (1 to: oldCount)
+			select: [ :index | 
+				| item |
+				item := items at: index.
+				(renderedVersions at: item) ~= (versions at: index) ].
+	followEndRequested := follow and: [ items notEmpty ].
+	items
+		withIndexDo: [ :item :index | renderedVersions at: item put: (versions at: index) ].
+	source := self messageViewport dataSource.
+	items size > oldCount
+		ifTrue: [ previous removeLast.
+			previous addAll: (items copyFrom: oldCount + 1 to: items size).
+			previous add: self endMarker.
+			source notifyItemsInserted: (oldCount + 1 to: items size) ].
+	changed do: [ :index | source notifyItemsChanged: (index to: index) ].
+	self updateControls.
+	self followStreamAfterLayout
 ]
 
 { #category : #accessing }

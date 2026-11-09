@@ -13,6 +13,12 @@ Class {
 }
 
 { #category : #converting }
+GtLACPInterSessionMessage >> addWorkElementsTo: elements in: anAssistantElement [
+	anAssistantElement addInterSessionLabelFor: self to: elements.
+	super addWorkElementsTo: elements in: anAssistantElement
+]
+
+{ #category : #converting }
 GtLACPInterSessionMessage >> asChatMessageViewModel [
 	^ GtLACPInterSessionMessageViewModel new
 		turn: turn;

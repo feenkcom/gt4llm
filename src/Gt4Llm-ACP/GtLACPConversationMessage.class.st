@@ -14,6 +14,11 @@ Class {
 }
 
 { #category : #converting }
+GtLACPConversationMessage >> addWorkElementsTo: elements in: anAssistantElement [
+	anAssistantElement addCommentElementFor: self to: elements
+]
+
+{ #category : #converting }
 GtLACPConversationMessage >> asConversationTreeNode [
  ^ GtLACPMessageTreeNode new object: self; yourself
 ]
