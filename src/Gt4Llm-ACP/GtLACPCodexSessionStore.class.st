@@ -95,3 +95,8 @@ GtLACPCodexSessionStore >> readSessions [
    self issueFor: file line: nil
     description: 'SQLite index not read; discovery uses rollout files and session_index.jsonl' ] ]
 ]
+
+{ #category : #private }
+GtLACPCodexSessionStore >> storedSessionClass [
+	^ GtLACPCodexStoredSession
+]

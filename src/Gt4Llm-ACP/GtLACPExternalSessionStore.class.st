@@ -65,10 +65,14 @@ GtLACPExternalSessionStore >> gtIssuesFor: aView [
   column: 'Reason' text: #description
 ]
 
-{ #category : #views }
+{ #category : #'gt - views' }
 GtLACPExternalSessionStore >> gtSessionsFor: aView [
- <gtView>
- ^ GtLACPStoredSession sessionsView: aView items: [ self sessions ]
+	<gtView>
+	^ (GtLACPStoredSession sessionsView: aView items: [ self sessions ])
+		contextItemIcon: BrGlamorousVectorIcons play
+		label: 'Load session'
+		id: #'acp-load-stored-session'
+		action: [ :anElement :aStoredSession | aStoredSession loadAndSpawnFrom: anElement ]
 ]
 
 { #category : #initialization }
@@ -95,20 +99,9 @@ GtLACPExternalSessionStore >> loadSession: anId [
 	^ self loadSession: anId configureClient: [ :client |  ]
 ]
 
-{ #category : #sessions }
+{ #category : #loading }
 GtLACPExternalSessionStore >> loadSession: anId configureClient: aBlock [
-	| storedSession directory client |
-	storedSession := self sessionWithId: anId.
-	directory := storedSession directory.
-	directory
-		ifNil: [ self
-				error: 'Session found, but its project directory is unknown: ' , anId asString ].
-	directory isDirectory
-		ifFalse: [ self
-				error: 'The recorded project directory no longer exists: ' , directory fullName ].
-	client := self newClient.
-	aBlock value: client.
-	^ client loadSession: storedSession sessionId in: directory
+	^ (self sessionWithId: anId) loadConfigureClient: aBlock
 ]
 
 { #category : #reading }
@@ -178,11 +171,16 @@ GtLACPExternalSessionStore >> rootDirectory: aDirectory [
  rootDirectory := aDirectory asFileReference
 ]
 
-{ #category : #reading }
+{ #category : #private }
 GtLACPExternalSessionStore >> sessionAt: anId [
- (anId isString and: [ anId notEmpty ]) ifFalse: [ self error: 'Session ID must be a nonempty string' ].
- ^ sessions at: anId ifAbsentPut: [
-  GtLACPStoredSession new store: self; sessionId: anId; yourself ]
+	(anId isString and: [ anId notEmpty ])
+		ifFalse: [ self error: 'Session ID must be a nonempty string' ].
+	^ sessions
+		at: anId
+		ifAbsentPut: [ self storedSessionClass new
+				store: self;
+				sessionId: anId;
+				yourself ]
 ]
 
 { #category : #querying }
@@ -228,4 +226,9 @@ GtLACPExternalSessionStore >> sessions [
 { #category : #reading }
 GtLACPExternalSessionStore >> sourceFile: aFile format: aSymbol metadata: aDictionary [
  ^ GtLACPStoredSessionSource new file: aFile; format: aSymbol; metadata: aDictionary; yourself
+]
+
+{ #category : #private }
+GtLACPExternalSessionStore >> storedSessionClass [
+	^ self subclassResponsibility
 ]

@@ -70,6 +70,17 @@ GtLACPStoredSession >> gtIdentityFor: aView [
   send: #value
 ]
 
+{ #category : #'gt - actions' }
+GtLACPStoredSession >> gtLoadFor: anAction [
+	<gtAction>
+	^ anAction button
+		id: #'acp-load-stored-session';
+		label: 'Load session';
+		icon: BrGlamorousVectorIcons play;
+		priority: 10;
+		action: [ :anElement | self loadAndSpawnFrom: anElement ]
+]
+
 { #category : #views }
 GtLACPStoredSession >> gtSourcesFor: aView [
  <gtView>
@@ -83,6 +94,39 @@ GtLACPStoredSession >> initialize [
  super initialize.
  sources := OrderedCollection new.
  title := ''
+]
+
+{ #category : #loading }
+GtLACPStoredSession >> load [
+	^ self loadConfigureClient: [ :client |  ]
+]
+
+{ #category : #loading }
+GtLACPStoredSession >> loadAndSpawnFrom: anElement [
+	[ | session |
+	session := self load.
+	anElement
+		enqueueTask: (BlTaskAction new action: [ anElement phlow spawnObject: session ]) ]
+		fork
+]
+
+{ #category : #loading }
+GtLACPStoredSession >> loadConfigureClient: aBlock [
+	| client |
+	directory
+		ifNil: [ self
+				error: 'Session found, but its project directory is unknown: ' , sessionId asString ].
+	directory isDirectory
+		ifFalse: [ self
+				error: 'The recorded project directory no longer exists: ' , directory fullName ].
+	client := self newClient.
+	aBlock value: client.
+	^ client loadSession: sessionId in: directory
+]
+
+{ #category : #loading }
+GtLACPStoredSession >> newClient [
+	^ self subclassResponsibility
 ]
 
 { #category : #printing }

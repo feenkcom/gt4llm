@@ -95,7 +95,7 @@ GtLACPAssistantMessageElement >> commentElements [
 { #category : #initialization }
 GtLACPAssistantMessageElement >> initialize [
 	super initialize.
-	self layout cellSpacing: 0
+	self layout cellSpacing: 0.
 ]
 
 { #category : #building }
