@@ -16,6 +16,22 @@ GtLCodeTransformationSpecification class >> jsonSchemaLabel [
 		withoutSuffix: 'Specification'
 ]
 
+{ #category : #accessing }
+GtLCodeTransformationSpecification class >> refactoringName [
+	"Return a short human readable name of the transformation, derived from its JSON schema label,
+	for example 'Push up instance variable' for 'PushUpInstanceVariable'"
+
+	^ String
+		streamContents: [ :aStream | 
+			self jsonSchemaLabel
+				doWithIndex: [ :eachCharacter :anIndex | 
+					(anIndex > 1 and: [ eachCharacter isUppercase ])
+						ifTrue: [ aStream
+								space;
+								nextPut: eachCharacter asLowercase ]
+						ifFalse: [ aStream nextPut: eachCharacter ] ] ]
+]
+
 { #category : #'api - ui' }
 GtLCodeTransformationSpecification >> addContentOneLineSummaryTo: aWriteStream [
 	self gtDisplayOn: aWriteStream
@@ -81,4 +97,18 @@ GtLCodeTransformationSpecification >> namespaceWithAppliedRefactoring [
 	composite := self asRefactoringIn: namespace.
 	composite primitiveExecute.
 	^ namespace
+]
+
+{ #category : #accessing }
+GtLCodeTransformationSpecification >> refactoringDescription [
+	"Return a description of the transformation with its parameters, such as 'Push up method foo from MySubclass to MySuperclass'"
+
+	^ self gtDisplayString
+]
+
+{ #category : #accessing }
+GtLCodeTransformationSpecification >> refactoringName [
+	"Return a short human readable name of the transformation, such as 'Push up method'"
+
+	^ self class refactoringName
 ]

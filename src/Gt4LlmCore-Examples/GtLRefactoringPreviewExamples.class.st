@@ -4,6 +4,66 @@ Class {
 	#category : #'Gt4LlmCore-Examples'
 }
 
+{ #category : #'examples - basic' }
+GtLRefactoringPreviewExamples >> namedRefactoringPreview [
+	"A preview created by the previewRefactoring tool knows the name and the description of the refactoring"
+
+	<gtExample>
+	<return: #GtLRefactoringPreview>
+	| specification transformations preview |
+	specification := GtLAddMethodSpecification new
+			methodClassName: 'GtLRefactoringPreviewExamples';
+			protocolName: 'examples';
+			sourceCode: 'previewedMethod ^ 42';
+			yourself.
+	transformations := GtLCodeTransformations new
+			transformations: (Array with: specification).
+	self assert: transformations refactoringName equals: 'Add method'.
+	preview := (GtLRefactoringPreview
+			namespace: transformations applyRefactoring
+			refactoringName: transformations refactoringName
+			refactoringDescription: transformations refactoringDescription)
+			objectId: 'example-object-id';
+			yourself.
+	self assert: preview refactoringName equals: 'Add method'.
+	self
+		assert: preview refactoringDescription
+		equals: 'Add method previewedMethod ^ 42 in class GtLRefactoringPreviewExamples protocol examples'.
+	self assert: preview changes size equals: 1.
+	self assert: preview isApplied not.
+	^ preview
+]
+
+{ #category : #examples }
+GtLRefactoringPreviewExamples >> namedRefactoringPreviewSerialization [
+	<gtExample>
+	<return: #GtLPrimitiveMessageDataBlock>
+	| dataBlock |
+	dataBlock := (self namedRefactoringPreview llmDataViewsFor: GtLDataView new)
+			serializeToLlmPrimiteData.
+	self assertDataBlockHasOnlyJsonData: dataBlock.
+	self
+		assertDataBlock: dataBlock
+		hasLlmJsonData: (Dictionary new
+				at: #changes
+					put: (NeoJSONArray
+							with: (NeoJSONObject new
+									at: #changeDescription
+										put: 'Add GtLRefactoringPreviewExamples>>#previewedMethod';
+									at: #kind put: 'added method';
+									at: #target put: 'GtLRefactoringPreviewExamples>>#previewedMethod';
+									at: #newSource put: 'previewedMethod ^ 42';
+									yourself));
+				at: #changesCount put: 1;
+				at: #objectId put: 'example-object-id';
+				at: #applied put: false;
+				at: #refactoringName put: 'Add method';
+				at: #refactoringDescription
+					put: 'Add method previewedMethod ^ 42 in class GtLRefactoringPreviewExamples protocol examples';
+				yourself).
+	^ dataBlock
+]
+
 { #category : #examples }
 GtLRefactoringPreviewExamples >> pushUpMethodPreview [
 	"A push up previews slot and method changes. Each change keeps its RB change,
@@ -80,7 +140,26 @@ GtLRefactoringPreviewExamples >> refactoringPreviewMainDataView [
 ]
 
 { #category : #examples }
+GtLRefactoringPreviewExamples >> refactoringPreviewPrintString [
+	"A preview prints its refactoring name, its number of changes and whether it was applied"
+
+	<gtExample>
+	<return: #GtLRefactoringPreview>
+	| preview |
+	preview := self namedRefactoringPreview.
+	self
+		assert: preview printString
+		equals: 'a GtLRefactoringPreview(Add method: 1 change, not applied)'.
+	self
+		assert: self refactoringPreview printString
+		equals: 'a GtLRefactoringPreview(1 change, not applied)'.
+	^ preview
+]
+
+{ #category : #examples }
 GtLRefactoringPreviewExamples >> refactoringPreviewSerialization [
+	"A preview created without a refactoring name and description serializes them as null"
+
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
 	| dataBlock expected |
@@ -99,6 +178,8 @@ GtLRefactoringPreviewExamples >> refactoringPreviewSerialization [
 			at: #changesCount put: 1;
 			at: #objectId put: 'example-object-id';
 			at: #applied put: false;
+			at: #refactoringName put: nil;
+			at: #refactoringDescription put: nil;
 			yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	^ dataBlock

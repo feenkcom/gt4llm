@@ -16,6 +16,52 @@ GtLRefactoringCodeChangesExamples >> applyNamespace: aNamespace [
 		apply
 ]
 
+{ #category : #examples }
+GtLRefactoringCodeChangesExamples >> classChangesShareTheCodeChangeOfTheirClass [
+	"Several class-level changes of one class lead to a single code change result for the class:
+	a modification when the definition changes (it includes the comment), and a comment change otherwise.
+	Each class-level change, including a comment change, is linked to that result"
+
+	<gtExample>
+	^ self
+		withDummyHierarchyDo: [ :aRootClass :aLeafClass | 
+			| aNamespace aPreview anAppliedRefactoring aCommentPreview aCommentApplied |
+			"A comment change and a slot addition on the same class"
+			aNamespace := GtRBNamespace new.
+			(aNamespace classFor: aRootClass) comment: 'A changed comment'.
+			(aNamespace classFor: aRootClass) addInstanceVariable: 'addedSlot'.
+			aPreview := (GtLRefactoringPreview namespace: aNamespace)
+					objectId: 'example-object-id';
+					yourself.
+			anAppliedRefactoring := aPreview apply.
+			self assert: anAppliedRefactoring status equals: 'applied'.
+			self assert: anAppliedRefactoring codeChangeResults size equals: 1.
+			self
+				assert: anAppliedRefactoring codeChangeResults first class
+				equals: GtLClassModificationResult.
+			self
+				assert: (aPreview changes collect: [ :each | each kind ]) asSet
+				equals: #('changed class comment' 'added slot') asSet.
+			self
+				assert: (aPreview changes
+						allSatisfy: [ :each | each codeChangeResult == anAppliedRefactoring codeChangeResults first ]).	"A comment change alone"
+			aNamespace := GtRBNamespace new.
+			(aNamespace classFor: aLeafClass) comment: 'Another changed comment'.
+			aCommentPreview := (GtLRefactoringPreview namespace: aNamespace)
+					objectId: 'example-object-id';
+					yourself.
+			aCommentApplied := aCommentPreview apply.
+			self assert: aCommentApplied codeChangeResults size equals: 1.
+			self
+				assert: aCommentApplied codeChangeResults first class
+				equals: GtLClassCommentChangeResult.
+			self assert: aCommentPreview changes size equals: 1.
+			self
+				assert: aCommentPreview changes first codeChangeResult
+						== aCommentApplied codeChangeResults first.
+			aPreview ]
+]
+
 { #category : #'examples - refactorings' }
 GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 	"When a change fails, the applied refactoring is marked as failed,
@@ -138,8 +184,9 @@ GtLRefactoringCodeChangesExamples >> pushUpMethod [
 
 { #category : #examples }
 GtLRefactoringCodeChangesExamples >> refactoringChangesAreLinkedToCodeChanges [
-	"Once applied, each refactoring change is linked to the code change result it led to,
-	and shows its diff instead of the RB diff that would be computed against the changed image"
+	"Once applied, each refactoring change is linked to the code change result it led to.
+	Before applying, its diff is the one of the RB change against the current image;
+	once applied, that view is replaced by the applied diff of the code change result, which says so explicitly"
 
 	<gtExample>
 	^ self
@@ -155,13 +202,26 @@ GtLRefactoringCodeChangesExamples >> refactoringChangesAreLinkedToCodeChanges [
 			self assert: (aPreview changes allSatisfy: [ :each | each isApplied not ]).
 			self
 				assert: (aPreview changes allSatisfy: [ :each | each codeChangeResult isNil ]).
+			self
+				assert: aPreview printString
+				equals: 'a GtLRefactoringPreview(' , aPreview changesCount printString
+						, ' changes, not applied)'.
+			aSlotRemoval := aPreview changes
+					detect: [ :each | each kind = 'removed slot' ].	"Before applying: only the diff with the current image"
+			self
+				assert: (aSlotRemoval gtDiffFor: GtPhlowEmptyView new) title asString
+				equals: 'Diff (with current image)'.
+			self
+				assert: ((aSlotRemoval gtAppliedDiffFor: GtPhlowEmptyView new)
+						isKindOf: GtPhlowEmptyView).
 
 			anAppliedRefactoring := aPreview apply.
 			self assert: anAppliedRefactoring status equals: 'applied'.
+			self
+				assert: aPreview printString
+				equals: 'a GtLRefactoringPreview(' , aPreview changesCount printString
+						, ' changes, applied)'.
 			self assert: (aPreview changes allSatisfy: [ :each | each isApplied ]).
-
-			aSlotRemoval := aPreview changes
-					detect: [ :each | each kind = 'removed slot' ].
 			self assert: aSlotRemoval target equals: aLeafClass name asString.
 			self
 				assert: (anAppliedRefactoring codeChangeResults
@@ -169,16 +229,25 @@ GtLRefactoringCodeChangesExamples >> refactoringChangesAreLinkedToCodeChanges [
 			self
 				assert: aSlotRemoval codeChangeResult targetClassName
 				equals: aLeafClass name.
-
 			aSlotAddition := aPreview changes
 					detect: [ :each | each kind = 'added slot' ].
 			self
 				assert: aSlotAddition codeChangeResult targetClassName
-				equals: aRootClass name.	"The diff view uses the code change result and does not fail on the removed slot"
+				equals: aRootClass name.	"After applying: only the applied diff, which says it shows the whole code change of the class"
 			self
-				assert: (aSlotRemoval gtDiffFor: GtPhlowEmptyView new) title asString
-				equals: 'Diff'.
-			self assert: aSlotRemoval codeChangeResult asDiffElement notNil.
+				assert: ((aSlotRemoval gtDiffFor: GtPhlowEmptyView new) isKindOf: GtPhlowEmptyView).
+			self
+				assert: (aSlotRemoval gtAppliedDiffFor: GtPhlowEmptyView new) title asString
+				equals: 'Applied diff'.
+			self
+				assert: aSlotRemoval appliedDiffNote
+				equals: 'Applied: the code change recorded for ' , aLeafClass name
+						, ' when the refactoring was applied. It shows everything the refactoring changed in '
+						, aLeafClass name , ', which can be more than this change.'.
+			self
+				assert: (aSlotRemoval
+						diffElementWithNote: aSlotRemoval appliedDiffNote
+						diffElement: aSlotRemoval codeChangeResult asDiffElement) notNil.
 			aPreview ]
 ]
 

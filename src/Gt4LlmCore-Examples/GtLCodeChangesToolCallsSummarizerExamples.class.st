@@ -430,7 +430,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedAddClassRefact
 	<gtExample>
 	^ self
 		withRefactoringContextDo: [ :aRootClass :aLeafClass :aContext | 
-			| aClassName toolCalls summarizer aResult aClassHistory |
+			| aClassName toolCalls aPreview summarizer aResult aClassHistory |
 			aClassName := aRootClass name , 'Added'.
 			[ toolCalls := OrderedCollection new.
 			toolCalls
@@ -440,6 +440,12 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedAddClassRefact
 									superclass: aRootClass
 									slotNames: 'first'}
 						inContext: aContext).
+			aPreview := toolCalls last result model.
+			self assert: aPreview refactoringName equals: 'Add class'.
+			self
+				assert: aPreview refactoringDescription
+				equals: 'Add class ' , aClassName , ' as subclass of ' , aRootClass name
+						, ' with slots first'.
 			toolCalls
 				add: (self performApplyRefactoringOf: toolCalls last inContext: aContext).
 			self assert: (Smalltalk globals includesKey: aClassName asSymbol).
@@ -448,7 +454,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedAddClassRefact
 			self assert: summarizer relevantToolCalls size equals: 1.
 			self
 				assert: (self labelsOf: summarizer)
-				equals: #('Refactoring: added class').
+				equals: #('Refactoring (Add class): added class').
 			aResult := summarizer codeChanges first changeResult.
 			self assert: aResult class equals: GtLClassModificationResult.
 			self assert: aResult isClassAdditionResult.
@@ -474,26 +480,32 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedAddClassRefact
 
 { #category : #'examples - refactorings' }
 GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedAddMethodRefactoring [
-	"An applied AddMethod refactoring is summarized as a method addition"
+	"An applied AddMethod refactoring is summarized as a method addition, labelled with the name of the refactoring"
 
 	<gtExample>
 	^ self
 		withRefactoringContextDo: [ :aRootClass :aLeafClass :aContext | 
-			| toolCalls summarizer aResult aMethodHistory |
+			| toolCalls aPreview summarizer aResult aMethodHistory |
 			toolCalls := OrderedCollection new.
 			toolCalls
 				add: (self
 						performPreviewRefactoring: {self addMethodTransformationIn: aLeafClass source: 'summarizedMethod ^ 42'}
 						inContext: aContext).
+			aPreview := toolCalls last result model.
+			self assert: aPreview refactoringName equals: 'Add method'.
+			self
+				assert: (aPreview refactoringDescription
+						beginsWith: 'Add method summarizedMethod ^ 42 in class ' , aLeafClass name).
 			toolCalls
 				add: (self performApplyRefactoringOf: toolCalls last inContext: aContext).
 			self assert: (aLeafClass includesSelector: #summarizedMethod).
+			self assert: toolCalls last result model refactoringName equals: 'Add method'.
 
 			summarizer := self codeChangesSummarizerForToolCalls: toolCalls.
 			self assert: summarizer relevantToolCalls size equals: 1.
 			self
 				assert: (self labelsOf: summarizer)
-				equals: #('Refactoring: added method').
+				equals: #('Refactoring (Add method): added method').
 			aResult := summarizer codeChanges first changeResult.
 			self assert: aResult class equals: GtLMethodCompilationResult.
 			self assert: aResult isMethodAdditionResult.
@@ -524,12 +536,17 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedPushUpInstance
 	<gtExample>
 	^ self
 		withRefactoringContextDo: [ :aRootClass :aLeafClass :aContext | 
-			| toolCalls summarizer aRootResult aLeafResult |
+			| toolCalls aPreview summarizer aRootResult aLeafResult |
 			toolCalls := OrderedCollection new.
 			toolCalls
 				add: (self
 						performPreviewRefactoring: {self pushUpInstanceVariableTransformationOf: #instVar3 to: aRootClass}
 						inContext: aContext).
+			aPreview := toolCalls last result model.
+			self assert: aPreview refactoringName equals: 'Push up instance variable'.
+			self
+				assert: aPreview refactoringDescription
+				equals: 'Push up slot instVar3 to ' , aRootClass name.
 			toolCalls
 				add: (self performApplyRefactoringOf: toolCalls last inContext: aContext).
 			self assert: (aRootClass instVarNames includes: #instVar3).
@@ -539,7 +556,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedPushUpInstance
 			self assert: summarizer relevantToolCalls size equals: 1.
 			self
 				assert: (self labelsOf: summarizer)
-				equals: #('Refactoring: changed class' 'Refactoring: changed class').
+				equals: #('Refactoring (Push up instance variable): changed class' 'Refactoring (Push up instance variable): changed class').
 			self
 				assert: (summarizer codeChanges
 						allSatisfy: [ :each | 
@@ -584,7 +601,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedPushUpMethodRe
 	<gtExample>
 	^ self
 		withRefactoringContextDo: [ :aRootClass :aLeafClass :aContext | 
-			| toolCalls summarizer |
+			| toolCalls aPreview summarizer |
 			aLeafClass compile: 'summarizedMethod ^ 42' classified: #examples.
 			toolCalls := OrderedCollection new.
 			toolCalls
@@ -594,6 +611,12 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedPushUpMethodRe
 									from: aLeafClass
 									to: aRootClass}
 						inContext: aContext).
+			aPreview := toolCalls last result model.
+			self assert: aPreview refactoringName equals: 'Push up method'.
+			self
+				assert: aPreview refactoringDescription
+				equals: 'Push up method summarizedMethod from ' , aLeafClass name , ' to '
+						, aRootClass name.
 			toolCalls
 				add: (self performApplyRefactoringOf: toolCalls last inContext: aContext).
 			self assert: (aRootClass includesSelector: #summarizedMethod).
@@ -603,7 +626,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedPushUpMethodRe
 			self assert: summarizer relevantToolCalls size equals: 1.
 			self
 				assert: (self labelsOf: summarizer)
-				equals: #('Refactoring: added method' 'Refactoring: removed method').
+				equals: #('Refactoring (Push up method): added method' 'Refactoring (Push up method): removed method').
 			self
 				assert: (summarizer codeChanges collect: [ :each | each changeResult class ]) asArray
 				equals: {GtLMethodCompilationResult.
@@ -638,13 +661,18 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedRemoveMethodRe
 	<gtExample>
 	^ self
 		withRefactoringContextDo: [ :aRootClass :aLeafClass :aContext | 
-			| toolCalls summarizer aResult aMethodHistory |
+			| toolCalls aPreview summarizer aResult aMethodHistory |
 			aLeafClass compile: 'summarizedMethod ^ 42' classified: #examples.
 			toolCalls := OrderedCollection new.
 			toolCalls
 				add: (self
 						performPreviewRefactoring: {self removeMethodTransformationOf: #summarizedMethod in: aLeafClass}
 						inContext: aContext).
+			aPreview := toolCalls last result model.
+			self assert: aPreview refactoringName equals: 'Remove method'.
+			self
+				assert: aPreview refactoringDescription
+				equals: 'Remove method summarizedMethod from class ' , aLeafClass name.
 			toolCalls
 				add: (self performApplyRefactoringOf: toolCalls last inContext: aContext).
 			self assert: (aLeafClass includesSelector: #summarizedMethod) not.
@@ -653,7 +681,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedRemoveMethodRe
 			self assert: summarizer relevantToolCalls size equals: 1.
 			self
 				assert: (self labelsOf: summarizer)
-				equals: #('Refactoring: removed method').
+				equals: #('Refactoring (Remove method): removed method').
 			aResult := summarizer codeChanges first changeResult.
 			self assert: aResult class equals: GtLMethodRemovalResult.
 			self assert: aResult removedMethod sourceCode equals: 'summarizedMethod ^ 42'.
@@ -682,7 +710,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedRewrite [
 	<gtExample>
 	^ self
 		withRefactoringContextDo: [ :aRootClass :aLeafClass :aContext | 
-			| toolCalls summarizer aResult aMethodHistory |
+			| toolCalls aPreview summarizer aResult aMethodHistory |
 			aRootClass compile: 'summarizedRewrite ^ self method1' classified: #examples.
 			toolCalls := OrderedCollection new.
 			toolCalls
@@ -691,6 +719,11 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedRewrite [
 						to: '`@receiver method2'
 						inClass: aRootClass
 						inContext: aContext).
+			aPreview := toolCalls last result model.
+			self assert: aPreview refactoringName equals: 'Rewrite'.
+			self
+				assert: aPreview refactoringDescription
+				equals: 'Rewrite `@receiver method1 → `@receiver method2 in class ' , aRootClass name.
 			toolCalls
 				add: (self performApplyRefactoringOf: toolCalls last inContext: aContext).
 			self
@@ -700,7 +733,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedRewrite [
 			self assert: summarizer relevantToolCalls size equals: 1.
 			self
 				assert: (self labelsOf: summarizer)
-				equals: #('Refactoring: modified method').
+				equals: #('Refactoring (Rewrite): modified method').
 			aResult := summarizer codeChanges first changeResult.
 			self assert: aResult class equals: GtLMethodCompilationResult.
 			self assert: aResult isMethodModificationResult.
@@ -770,7 +803,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithMethodChangesAndAppli
 						GtLMagritteToolForMethodRemoval new name}.
 			self
 				assert: (self labelsOf: summarizer)
-				equals: #('Compiled method' 'Refactoring: added method' 'Refactoring: removed method' 'Compiled method' 'Removed method').
+				equals: #('Compiled method' 'Refactoring (Push up method): added method' 'Refactoring (Push up method): removed method' 'Compiled method' 'Removed method').
 			self
 				assert: (summarizer codeChanges collect: [ :each | each changeResult class ]) asArray
 				equals: {GtLMethodCompilationResult.
@@ -798,7 +831,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithMethodChangesAndAppli
 					selector: #summarizedMethod.
 			self
 				assert: (aRootHistory changes collect: [ :each | each label ]) asArray
-				equals: #('Refactoring: added method' 'Compiled method' 'Removed method').
+				equals: #('Refactoring (Push up method): added method' 'Compiled method' 'Removed method').
 			self
 				assert: (aRootHistory changes at: 2) changeResult isMethodModificationResult.
 			self assert: aRootHistory hasNoEffect.
@@ -808,7 +841,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithMethodChangesAndAppli
 					selector: #summarizedMethod.
 			self
 				assert: (aLeafHistory changes collect: [ :each | each label ]) asArray
-				equals: #('Compiled method' 'Refactoring: removed method').
+				equals: #('Compiled method' 'Refactoring (Push up method): removed method').
 			self assert: aLeafHistory hasNoEffect.
 
 			self assert: summarizer classChangeHistories size equals: 2.
@@ -855,7 +888,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithPartiallyAppliedRefac
 			self assert: summarizer relevantToolCalls size equals: 1.
 			self
 				assert: (self labelsOf: summarizer)
-				equals: #('Refactoring: added method').
+				equals: #('Refactoring (Add method): added method').
 			aResult := summarizer codeChanges first changeResult.
 			self assert: aResult class equals: GtLMethodCompilationResult.
 			self
@@ -880,12 +913,14 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithPartiallyAppliedRefac
 { #category : #'examples - refactorings' }
 GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithSeveralAppliedRefactorings [
 	"Several applied refactorings, one of them with several transformations, are summarized together.
+	Each code change is labelled with the name of the refactoring that did it.
 	The histories of a method merge the changes done by different refactorings, in order"
 
 	<gtExample>
 	^ self
 		withRefactoringContextDo: [ :aRootClass :aLeafClass :aContext | 
-			| toolCalls pushUpApplyCall summarizer aRootHistory aLeafHistory |
+			| toolCalls pushUpApplyCall summarizer aRootHistory aLeafHistory pushUpName |
+			pushUpName := 'Push up instance variable, Push up method'.
 			toolCalls := OrderedCollection new.	"1. Add a method that uses a slot of the leaf class"
 			toolCalls
 				add: (self
@@ -903,6 +938,12 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithSeveralAppliedRefacto
 									from: aLeafClass
 									to: aRootClass}
 						inContext: aContext).
+			self assert: toolCalls last result model refactoringName equals: pushUpName.
+			self
+				assert: toolCalls last result model refactoringDescription
+				equals: 'Push up slot instVar3 to ' , aRootClass name
+						, '; Push up method summarizedMethod from ' , aLeafClass name , ' to '
+						, aRootClass name.
 			pushUpApplyCall := self
 					performApplyRefactoringOf: toolCalls last
 					inContext: aContext.
@@ -927,7 +968,12 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithSeveralAppliedRefacto
 						allSatisfy: [ :each | each name = GtLToolForApplyRefactoring new name ]).
 			self
 				assert: (self labelsOf: summarizer)
-				equals: #('Refactoring: added method' 'Refactoring: changed class' 'Refactoring: changed class' 'Refactoring: added method' 'Refactoring: removed method' 'Refactoring: modified method').
+				equals: {'Refactoring (Add method): added method'.
+						'Refactoring (' , pushUpName , '): changed class'.
+						'Refactoring (' , pushUpName , '): changed class'.
+						'Refactoring (' , pushUpName , '): added method'.
+						'Refactoring (' , pushUpName , '): removed method'.
+						'Refactoring (Rewrite): modified method'}.
 
 			self assert: summarizer methodChangeHistories size equals: 2.
 			aRootHistory := self
@@ -936,7 +982,8 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithSeveralAppliedRefacto
 					selector: #summarizedMethod.
 			self
 				assert: (aRootHistory changes collect: [ :each | each label ]) asArray
-				equals: #('Refactoring: added method' 'Refactoring: modified method').
+				equals: {'Refactoring (' , pushUpName , '): added method'.
+						'Refactoring (Rewrite): modified method'}.
 			self assert: aRootHistory isInitialChangeAddition.
 			self assert: aRootHistory isLatestChangeRemoval not.
 			aLeafHistory := self
@@ -945,7 +992,8 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithSeveralAppliedRefacto
 					selector: #summarizedMethod.
 			self
 				assert: (aLeafHistory changes collect: [ :each | each label ]) asArray
-				equals: #('Refactoring: added method' 'Refactoring: removed method').
+				equals: {'Refactoring (Add method): added method'.
+						'Refactoring (' , pushUpName , '): removed method'}.
 			self assert: aLeafHistory hasNoEffect.
 
 			self assert: summarizer classChangeHistories size equals: 2.

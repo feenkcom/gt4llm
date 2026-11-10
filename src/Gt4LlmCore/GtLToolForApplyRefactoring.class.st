@@ -16,13 +16,15 @@ GtLToolForApplyRefactoring >> applyPreview: aPreview [
 
 { #category : #accessing }
 GtLToolForApplyRefactoring >> description [
-	^'Applies a refactoring previewed with previewRefactoring or previewRewrite. Takes the objectId returned by the preview and executes the previewed changes on the live system. A preview can be applied only once.
+	^ 'Applies a refactoring previewed with previewRefactoring or previewRewrite. Takes the objectId returned by the preview and executes the previewed changes on the live system. A preview can be applied only once.
+
+The result has the status (applied or failed), the refactoringName and refactoringDescription of the preview, the number of previewed changes, the codeChanges that were made in the image (each as a kind followed by a target) and an errorMessage, which is null unless applying failed. When applying fails partway, codeChanges lists the changes that were made before the error.
 
 Example JSON arguments:
 {"objectId": "abc123"}
 
 Example JSON response:
-{"status": "applied", "changesCount": 1}'
+{"status": "applied", "refactoringName": "Push up method", "refactoringDescription": "Push up method foo from MySubclass to MySuperclass", "changesCount": 2, "codeChanges": ["added method MySuperclass>>#foo", "removed method MySubclass>>#foo"], "errorMessage": null}'
 ]
 
 { #category : #accessing }

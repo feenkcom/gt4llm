@@ -11,13 +11,15 @@ GtLToolForPreviewRefactoring >> description [
 Arguments:
 - transformations: a JSON array of transformation specs. Each element is an object with a single key naming the transformation (e.g. PushUpMethod) whose value holds the parameters of that transformation. Call listTransformations to get the JSON schema of the available transformations.
 
-Each change in the result has a changeDescription, a kind (e.g. added method, removed method, added slot, removed slot), a target (e.g. MyClass>>#foo) and a newSource. newSource holds the method source, class definition or class comment introduced by the change, and is null for changes that carry no code, such as removals.
+The result has a refactoringName (e.g. Push up method; the distinct names of several transformations are separated by commas) and a refactoringDescription with the parameters of the transformations (separated by semicolons).
+
+Each change in the result has a changeDescription, a kind (e.g. added method, removed method, added slot, removed slot), a target (e.g. MyClass>>#foo for methods, MyClass for class-level changes such as slots) and a newSource. newSource holds the method source, class definition or class comment introduced by the change, and is null for changes that carry no code, such as removals.
 
 Example JSON arguments:
 {"transformations": [{"PushUpMethod": {"methodClassName": "MySubclass", "methodNameToPushUp": "foo", "targetClassName": "MySuperclass"}}]}
 
 Example JSON response:
-{"changes": [{"changeDescription": "Add MySuperclass>>#foo", "kind": "added method", "target": "MySuperclass>>#foo", "newSource": "foo ^ 42"}, {"changeDescription": "Remove MySubclass>>#foo", "kind": "removed method", "target": "MySubclass>>#foo", "newSource": null}], "changesCount": 2, "objectId": "abc123", "applied": false}'
+{"refactoringName": "Push up method", "refactoringDescription": "Push up method foo from MySubclass to MySuperclass", "changes": [{"changeDescription": "Add MySuperclass>>#foo", "kind": "added method", "target": "MySuperclass>>#foo", "newSource": "foo ^ 42"}, {"changeDescription": "Remove MySubclass>>#foo", "kind": "removed method", "target": "MySubclass>>#foo", "newSource": null}], "changesCount": 2, "objectId": "abc123", "applied": false}'
 ]
 
 { #category : #accessing }
@@ -28,13 +30,17 @@ GtLToolForPreviewRefactoring >> name [
 { #category : #private }
 GtLToolForPreviewRefactoring >> previewTransformations: aTransformations inContext: anExecutionContext [
 	| preview |
-	preview := 
-			[GtLRefactoringPreview namespace: aTransformations applyRefactoring]
-					on: Error
-					do: [:anError | ^GtLExceptionDomainObject freeze: anError].
-	preview objectId: (anExecutionContext objectStorage addNewObject: preview
+	preview := [ GtLRefactoringPreview
+			namespace: aTransformations applyRefactoring
+			refactoringName: aTransformations refactoringName
+			refactoringDescription: aTransformations refactoringDescription ]
+			on: Error
+			do: [ :anError | ^ GtLExceptionDomainObject freeze: anError ].
+	preview
+		objectId: (anExecutionContext objectStorage
+				addNewObject: preview
 				reason: (GtLStoredObjectStringReason text: 'Refactoring preview')).
-	^preview
+	^ preview
 ]
 
 { #category : #execution }

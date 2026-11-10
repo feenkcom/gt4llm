@@ -86,8 +86,9 @@ GtLCodeChangesToolCallsSummarizer >> addCodeChangesFromModel: aModel toolCall: a
 				toolCall: aToolCall ].
 
 	(aModel isKindOf: GtLAppliedRefactoring)
-		ifTrue: [  "Also covers failed refactorings: they report the changes applied before the error"^ self
-				addCodeChanges: (aModel codeChangeResults
+		ifTrue: [  
+				"Also covers failed refactorings: they report the changes applied before the error"
+				^ self addCodeChanges: (aModel codeChangeResults
 						collect: [ :each | 
 							self
 								codeChangeEntryLabel: (self refactoringLabelFor: each in: aModel)
@@ -315,9 +316,17 @@ GtLCodeChangesToolCallsSummarizer >> rebuildCodeChanges [
 
 { #category : #private }
 GtLCodeChangesToolCallsSummarizer >> refactoringLabelFor: aCodeChangeResult in: anAppliedRefactoring [
-	"Return the label of a code change done by a refactoring, such as 'Refactoring: added method'"
+	"Return the label of a code change done by a refactoring, such as 'Refactoring (Push up method): added method',
+	or 'Refactoring: added method' when the name of the refactoring is unknown"
 
-	^ 'Refactoring: ' , (anAppliedRefactoring kindOfCodeChange: aCodeChangeResult)
+	| aKind |
+	aKind := anAppliedRefactoring kindOfCodeChange: aCodeChangeResult.
+	^ anAppliedRefactoring refactoringName
+		ifNil: [ 'Refactoring: ' , aKind ]
+		ifNotNil: [ :aName | 
+			aName isEmpty
+				ifTrue: [ 'Refactoring: ' , aKind ]
+				ifFalse: [ 'Refactoring (' , aName , '): ' , aKind ] ]
 ]
 
 { #category : #accessing }

@@ -39,6 +39,20 @@ GtLRefactoringChange class >> fromChange: aRefactoryChange [
 ]
 
 { #category : #accessing }
+GtLRefactoringChange >> appliedDiffNote [
+	"Explain that the applied diff is the one of the code change result, which can contain more than my change"
+
+	| aTarget |
+	codeChangeResult ifNil: [ ^ '' ].
+	aTarget := codeChangeResult isMethodChangeResult
+			ifTrue: [ codeChangeResult targetMethodReference methodSignature ]
+			ifFalse: [ codeChangeResult targetClassName asString ].
+	^ 'Applied: the code change recorded for ' , aTarget
+		, ' when the refactoring was applied. It shows everything the refactoring changed in '
+		, aTarget , ', which can be more than this change.'
+]
+
+{ #category : #accessing }
 GtLRefactoringChange >> change [
 	"Return the RB change described by me, or nil if I was created from strings"
 
@@ -69,6 +83,48 @@ GtLRefactoringChange >> codeChangeResult [
 	^ codeChangeResult
 ]
 
+{ #category : #accessing }
+GtLRefactoringChange >> currentImageDiffNote [
+	^ 'Not applied yet: what this change would do, compared to the current image.'
+]
+
+{ #category : #'gt views' }
+GtLRefactoringChange >> diffElementWithNote: aString diffElement: aDiffElement [
+	^ BrVerticalPane new
+		matchParent;
+		addChild: (BrLabel new
+				aptitude: (BrGlamorousLabelAptitude new
+						foreground: BrGlamorousColors disabledHeaderTextColor);
+				text: aString;
+				hMatchParent;
+				margin: (BlInsets
+						top: 5
+						left: 10
+						bottom: 5
+						right: 10));
+		addChild: aDiffElement;
+		yourself
+]
+
+{ #category : #'gt views' }
+GtLRefactoringChange >> gtAppliedDiffFor: aView [
+	"Once the preview is applied, show the diff of the code change result recorded for the method or class I changed.
+	That code change covers everything the refactoring did to that method or class, so it can contain more than my change
+	(for example all the slots of a class that a push up removed)"
+
+	<gtView>
+	codeChangeResult ifNil: [ ^ aView empty ].
+	^ aView explicit
+		title: 'Applied diff';
+		priority: 10;
+		stencil: [ self
+				diffElementWithNote: self appliedDiffNote
+				diffElement: codeChangeResult asDiffElement ];
+		actionButtonIcon: BrGlamorousVectorIcons inspect
+			tooltip: 'Inspect the code change'
+			action: [ :aButton | aButton phlow spawnObject: codeChangeResult ]
+]
+
 { #category : #'gt views' }
 GtLRefactoringChange >> gtDetailsFor: aView [
 	<gtView>
@@ -94,32 +150,25 @@ GtLRefactoringChange >> gtDetailsFor: aView [
 
 { #category : #'gt views' }
 GtLRefactoringChange >> gtDiffFor: aView [
-	"Before the preview is applied, the RB change computes its diff against the current image.
-	Once applied, the image already contains the change, so that diff is wrong (removed slots are not found, added slots are duplicated);
-	the diff is then the one of the code change result recorded when applying"
+	"Before the preview is applied, show what my RB change would do, computed against the current image.
+	Once applied, the image already contains the change and that diff is wrong (removed slots are not found,
+	added slots are duplicated), so the view is replaced by #gtAppliedDiffFor:"
 
 	<gtView>
-	codeChangeResult
-		ifNotNil: [ :aCodeChangeResult | 
-			^ aView explicit
-				title: 'Diff';
-				priority: 10;
-				stencil: [ aCodeChangeResult asDiffElement ];
-				actionButtonIcon: BrGlamorousVectorIcons inspect
-					tooltip: 'Inspect the code change'
-					action: [ :aButton | aButton phlow spawnObject: aCodeChangeResult ] ].
 	self isApplied ifTrue: [ ^ aView empty ].
 	(self change notNil and: [ self change respondsTo: #gtDiffChange ])
 		ifFalse: [ ^ aView empty ].
 	^ aView explicit
 		title: 'Diff (with current image)';
 		priority: 10;
-		stencil: [ GtDiffElementWithLabelStencil new
-				fromLabelText: 'Current image:';
-				toLabelText: 'Change:';
-				change: self change gtDiffChange;
-				styler: GtCodeDiffRBTextStyler new;
-				asElement ];
+		stencil: [ self
+				diffElementWithNote: self currentImageDiffNote
+				diffElement: (GtDiffElementWithLabelStencil new
+						fromLabelText: 'Current image:';
+						toLabelText: 'After this change:';
+						change: self change gtDiffChange;
+						styler: GtCodeDiffRBTextStyler new;
+						asElement) ];
 		actionButtonIcon: BrGlamorousVectorIcons inspect
 			tooltip: 'Inspect the RB change'
 			action: [ :aButton | aButton phlow spawnObject: self change ]

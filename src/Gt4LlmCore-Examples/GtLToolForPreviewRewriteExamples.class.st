@@ -47,13 +47,19 @@ GtLToolForPreviewRewriteExamples >> previewRewriteInClass [
 			inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLRefactoringPreview.
+	self assert: targetObject refactoringName equals: 'Rewrite'.
+	self assert: (targetObject refactoringDescription beginsWith: 'Rewrite ').
+	self
+		assert: (targetObject refactoringDescription endsWith: ' in class GtLRewriteFixture').
 	self assert: targetObject changes size equals: 1.
 	self
 		assert: targetObject changes first changeDescription
-		equals: 'Add GtLRewriteFixture>>#valueOf:'.
+		equals: 'Add GtLRewriteFixture>>#valueOf:'.	"The formatter output varies (for example '^anObject' or '^ anObject'), so only the rewritten message is checked"
 	self
-		assert: targetObject changes first newSource lines asArray
-		equals: #('valueOf: anObject' '	^ anObject rewrittenFixtureMessage').
+		assert: (targetObject changes first newSource
+				includesSubstring: 'rewrittenFixtureMessage').
+	self
+		assert: (targetObject changes first newSource beginsWith: 'valueOf: anObject').
 	self assert: targetObject isApplied not.
 	self assert: (objectStorage objectAt: targetObject objectId) == targetObject.
 	self

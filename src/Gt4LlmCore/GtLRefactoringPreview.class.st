@@ -11,7 +11,9 @@ Class {
 		'objectId',
 		'changes',
 		'applied',
-		'appliedRefactoring'
+		'appliedRefactoring',
+		'refactoringName',
+		'refactoringDescription'
 	],
 	#category : #Gt4LlmCore
 }
@@ -19,6 +21,23 @@ Class {
 { #category : #'instance creation' }
 GtLRefactoringPreview class >> namespace: aNamespace [
 	^self new initializeNamespace: aNamespace
+]
+
+{ #category : #'instance creation' }
+GtLRefactoringPreview class >> namespace: aNamespace refactoringName: aNameString refactoringDescription: aDescriptionString [
+	^ self new
+		initializeNamespace: aNamespace
+		refactoringName: aNameString
+		refactoringDescription: aDescriptionString
+]
+
+{ #category : #accessing }
+GtLRefactoringPreview >> applicationStatus [
+	"Return 'not applied', 'applied' or 'failed' (when applying raised an error after applying some of the changes)"
+
+	^ appliedRefactoring
+		ifNil: [ 'not applied' ]
+		ifNotNil: [ :anAppliedRefactoring | anAppliedRefactoring status ]
 ]
 
 { #category : #accessing }
@@ -173,6 +192,13 @@ GtLRefactoringPreview >> initializeNamespace: aNamespace [
 				collect: [:each | GtLRefactoringChange fromChange: each]) asArray
 ]
 
+{ #category : #initialization }
+GtLRefactoringPreview >> initializeNamespace: aNamespace refactoringName: aNameString refactoringDescription: aDescriptionString [
+	self initializeNamespace: aNamespace.
+	refactoringName := aNameString.
+	refactoringDescription := aDescriptionString
+]
+
 { #category : #testing }
 GtLRefactoringPreview >> isApplied [
 	^applied
@@ -206,4 +232,52 @@ GtLRefactoringPreview >> objectIdDescription [
 		label: 'Object id';
 		accessor: #objectId;
 		beRequired
+]
+
+{ #category : #printing }
+GtLRefactoringPreview >> printOn: aStream [
+	super printOn: aStream.
+	aStream
+		parenthesize: [ refactoringName
+				ifNotNil: [ :aName | 
+					aStream
+						nextPutAll: aName;
+						nextPutAll: ': ' ].
+			aStream
+				print: self changesCount;
+				nextPutAll: (self changesCount = 1 ifTrue: [ ' change' ] ifFalse: [ ' changes' ]);
+				nextPutAll: ', ';
+				nextPutAll: self applicationStatus ]
+]
+
+{ #category : #accessing }
+GtLRefactoringPreview >> refactoringDescription [
+	"Return a description of the previewed refactoring with its parameters, such as 'Push up method foo from MySubclass to MySuperclass', or nil if unknown"
+
+	^ refactoringDescription
+]
+
+{ #category : #descriptions }
+GtLRefactoringPreview >> refactoringDescriptionDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Refactoring description';
+		accessor: #refactoringDescription;
+		yourself
+]
+
+{ #category : #accessing }
+GtLRefactoringPreview >> refactoringName [
+	"Return a short name of the previewed refactoring, such as 'Push up method' or 'Rewrite', or nil if unknown"
+
+	^ refactoringName
+]
+
+{ #category : #descriptions }
+GtLRefactoringPreview >> refactoringNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Refactoring name';
+		accessor: #refactoringName;
+		yourself
 ]

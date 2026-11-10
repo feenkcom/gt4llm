@@ -42,7 +42,7 @@ GtLAppliedRefactoringExamples >> appliedRefactoringMainDataView [
 	^mainDataView
 ]
 
-{ #category : #'examples - basic' }
+{ #category : #examples }
 GtLAppliedRefactoringExamples >> appliedRefactoringSerialization [
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
@@ -54,6 +54,8 @@ GtLAppliedRefactoringExamples >> appliedRefactoringSerialization [
 			at: #changesCount put: 1;
 			at: #codeChanges put: NeoJSONArray new;
 			at: #errorMessage put: nil;
+			at: #refactoringName put: nil;
+			at: #refactoringDescription put: nil;
 			yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	^ dataBlock

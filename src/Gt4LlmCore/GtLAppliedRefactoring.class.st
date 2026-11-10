@@ -161,6 +161,9 @@ GtLAppliedRefactoring >> gtStatusFor: aView [
 		priority: 3;
 		items: [ | items |
 			items := OrderedCollection new.
+			self refactoringName ifNotNil: [ :aName | items add: 'Refactoring' -> aName ].
+			self refactoringDescription
+				ifNotNil: [ :aDescription | items add: 'Description' -> aDescription ].
 			items
 				add: 'Status' -> self status;
 				add: 'Changes count' -> self changesCount;
@@ -240,7 +243,12 @@ GtLAppliedRefactoring >> preview [
 GtLAppliedRefactoring >> printOn: aStream [
 	super printOn: aStream.
 	aStream
-		parenthesize: [ aStream
+		parenthesize: [ self refactoringName
+				ifNotNil: [ :aName | 
+					aStream
+						nextPutAll: aName;
+						nextPutAll: ', ' ].
+			aStream
 				nextPutAll: self status;
 				nextPutAll: ', ';
 				print: self codeChangeResults size;
@@ -254,6 +262,38 @@ GtLAppliedRefactoring >> refactoringChanges [
 	^ preview
 		ifNil: [ #() ]
 		ifNotNil: [ :aPreview | aPreview changes ifNil: [ #() ] ]
+]
+
+{ #category : #accessing }
+GtLAppliedRefactoring >> refactoringDescription [
+	"Return the description of the applied refactoring with its parameters, or nil if unknown"
+
+	^ preview ifNotNil: [ :aPreview | aPreview refactoringDescription ]
+]
+
+{ #category : #descriptions }
+GtLAppliedRefactoring >> refactoringDescriptionDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Refactoring description';
+		accessor: #refactoringDescription;
+		yourself
+]
+
+{ #category : #accessing }
+GtLAppliedRefactoring >> refactoringName [
+	"Return the short name of the applied refactoring, such as 'Push up method', or nil if unknown"
+
+	^ preview ifNotNil: [ :aPreview | aPreview refactoringName ]
+]
+
+{ #category : #descriptions }
+GtLAppliedRefactoring >> refactoringNameDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Refactoring name';
+		accessor: #refactoringName;
+		yourself
 ]
 
 { #category : #accessing }
