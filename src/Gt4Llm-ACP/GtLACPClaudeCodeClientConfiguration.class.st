@@ -15,8 +15,21 @@ Class {
 		'authenticationMethod',
 		'adapter'
 	],
+	#classVars : [
+		'DefaultEnvironment'
+	],
 	#category : #'Gt4Llm-ACP-Core'
 }
+
+{ #category : #accessing }
+GtLACPClaudeCodeClientConfiguration class >> defaultEnvironment [
+	^DefaultEnvironment ifNil: [Dictionary new]
+]
+
+{ #category : #accessing }
+GtLACPClaudeCodeClientConfiguration class >> defaultEnvironment: aDictionary [
+	DefaultEnvironment := aDictionary
+]
 
 { #category : #accessing }
 GtLACPClaudeCodeClientConfiguration >> adapter [
@@ -53,6 +66,11 @@ GtLACPClaudeCodeClientConfiguration >> authenticationMethod: anObject [
 { #category : #accessing }
 GtLACPClaudeCodeClientConfiguration >> defaultAdapter [
 	^ GtLACPNpmAdapter package: '@agentclientprotocol/claude-agent-acp'
+]
+
+{ #category : #initialization }
+GtLACPClaudeCodeClientConfiguration >> defaultEnvironment [
+	^self class defaultEnvironment copy
 ]
 
 { #category : #accessing }
@@ -129,7 +147,7 @@ GtLACPClaudeCodeClientConfiguration >> gtPreferencesFor: aView [
 GtLACPClaudeCodeClientConfiguration >> initialize [
 	super initialize.
 	adapter := self defaultAdapter.
-	environment := Dictionary new.
+	environment := self defaultEnvironment.
 	requestTimeout := 30.
 	mcpServers := #()
 ]

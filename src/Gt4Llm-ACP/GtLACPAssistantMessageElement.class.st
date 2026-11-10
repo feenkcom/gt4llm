@@ -48,6 +48,7 @@ GtLACPAssistantMessageElement >> buildFinalReplySection [
 GtLACPAssistantMessageElement >> buildHeader [
 	| header |
 	header := super buildHeader.
+	header margin: (BlInsets bottom: 2).
 	viewModel turn isActive
 		ifTrue: [ header
 				addChild: (self workIndicatorFor: viewModel turn id: #'acp-work-indicator')
@@ -89,6 +90,12 @@ GtLACPAssistantMessageElement >> commentElementFor: aMessage [
 { #category : #accessing }
 GtLACPAssistantMessageElement >> commentElements [
 	^ commentElements ifNil: [ commentElements := IdentityDictionary new ]
+]
+
+{ #category : #initialization }
+GtLACPAssistantMessageElement >> initialize [
+	super initialize.
+	self layout cellSpacing: 0.
 ]
 
 { #category : #building }

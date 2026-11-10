@@ -28,9 +28,9 @@ GtLACPToolCallElement >> buildQuestions [
 				addChild: (question asElement
 						padding: BlInsets empty;
 						margin: (BlInsets
-								top: 2
+								top: 4
 								left: 5
-								bottom: 2
+								bottom: 4
 								right: 5);
 						yourself) ]
 ]
@@ -62,8 +62,8 @@ GtLACPToolCallElement >> buildToolContent [
 		ifNotEmpty: [ line
 				addChild: (GtLACPInputNeededElement new
 						id: ('acp-tool-input-needed-' , toolCall id asString) asSymbol;
-						margin: (BlInsets right: 6);
-						constraintsDo: [ :constraints | constraints linear vertical alignCenter ];
+						margin: (BlInsets right: 4);
+						constraintsDo: [ :c | c linear vertical alignCenter ];
 						forTool: toolCall;
 						yourself)
 				at: 2 ].

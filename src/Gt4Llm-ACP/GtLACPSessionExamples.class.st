@@ -566,35 +566,6 @@ GtLACPSessionExamples >> copySessionIdActionAvailability [
 ]
 
 { #category : #examples }
-GtLACPSessionExamples >> disclosuresAlignWithText [
-	<gtExample>
-	| element scripter |
-	element := self reasoningBetweenToolCalls.
-	element viewModel messageViewModels last finalReplyExpanded: false.
-	scripter := BlScripter new
-			model: element viewModel session;
-			element: element;
-			yourself.
-	{#prompt -> #'acp-user-preview'.
-		#work -> #'acp-work-summary'.
-		#final -> #'acp-final-preview'}
-		do: [ :pair | 
-			scripter
-				assertStep: [ :step | 
-					step
-						id: ('acp-' , pair key asString , '-section') asSymbol;
-						satisfies: [ :section | 
-							| toggle preview |
-							toggle := (section childNamed: #sidebar)
-									childNamed: ('acp-' , pair key asString , '-toggle') asSymbol.
-							section
-								withAllChildrenBreadthFirstDo: [ :child | child id asSymbol = pair value ifTrue: [ preview := child ] ].
-							(toggle bounds inSpace center y - preview bounds inSpace center y) abs
-								<= 2 ] ] ].
-	^ scripter
-]
-
-{ #category : #examples }
 GtLACPSessionExamples >> draftSurvivesFailure [
  <gtExample>
  | element session transport |

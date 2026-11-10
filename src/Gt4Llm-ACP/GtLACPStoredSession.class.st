@@ -58,24 +58,61 @@ GtLACPStoredSession >> directory: anObject [
  directory := anObject
 ]
 
-{ #category : #views }
-GtLACPStoredSession >> gtIdentityFor: aView [
- <gtView>
- ^ aView columnedList title: 'Identity'; priority: 5;
-  items: [ { 'Agent' -> self agentName. 'Session ID' -> sessionId.
-   'Project directory' -> directory. 'Title' -> title.
-   'Created' -> createdAt. 'Updated' -> updatedAt } ];
-  column: 'Identity' text: #key;
-  column: 'Value' text: [ :entry | entry value ifNil: [ '(unknown)' ] ifNotNil: #printString ];
-  send: #value
+{ #category : #'gt - extensions' }
+GtLACPStoredSession >> gtDetailsFor: aView [
+	"Which identity and project metadata describe this stored session?"
+
+	<gtView>
+	| valueText |
+	valueText := [ :value | value ifNil: [ '(unknown)' ] ifNotNil: #asString ].
+	^ aView details
+		title: 'Details';
+		priority: 5;
+		row: 'Agent'
+			value: [ self agentName ]
+			text: valueText;
+		row: 'Session ID'
+			value: [ sessionId ]
+			text: valueText;
+		row: 'Project directory'
+			value: [ directory ]
+			text: valueText;
+		row: 'Title'
+			value: [ title ]
+			text: valueText;
+		row: 'Created'
+			value: [ createdAt ]
+			text: valueText;
+		row: 'Updated'
+			value: [ updatedAt ]
+			text: valueText
+]
+
+{ #category : #'gt - actions' }
+GtLACPStoredSession >> gtLoadFor: anAction [
+	<gtAction>
+	^ anAction button
+		id: #'acp-load-stored-session';
+		label: 'Load session';
+		icon: BrGlamorousVectorIcons play;
+		priority: 10;
+		action: [ :anElement | 
+			| session |
+			session := self load.
+			anElement phlow spawnObject: session ]
 ]
 
 { #category : #views }
 GtLACPStoredSession >> gtSourcesFor: aView [
- <gtView>
- ^ aView columnedList title: 'Sources'; priority: 0; items: [ sources ];
-  column: 'Format' text: #format width: 130;
-  column: 'File' text: [ :source | source file fullName ]
+	<gtView>
+	^ aView columnedList
+		title: 'Sources';
+		priority: 0;
+		items: [ sources ];
+		column: 'Format'
+			text: #format
+			width: 130;
+		column: 'File' text: [ :source | source file fullName ]
 ]
 
 { #category : #initialization }
@@ -83,6 +120,30 @@ GtLACPStoredSession >> initialize [
  super initialize.
  sources := OrderedCollection new.
  title := ''
+]
+
+{ #category : #loading }
+GtLACPStoredSession >> load [
+	^ self loadConfigureClient: [ :client |  ]
+]
+
+{ #category : #loading }
+GtLACPStoredSession >> loadConfigureClient: aBlock [
+	| client |
+	directory
+		ifNil: [ self
+				error: 'Session found, but its project directory is unknown: ' , sessionId asString ].
+	directory isDirectory
+		ifFalse: [ self
+				error: 'The recorded project directory no longer exists: ' , directory fullName ].
+	client := self newClient.
+	aBlock value: client.
+	^ client loadSession: sessionId in: directory
+]
+
+{ #category : #loading }
+GtLACPStoredSession >> newClient [
+	^ self subclassResponsibility
 ]
 
 { #category : #printing }

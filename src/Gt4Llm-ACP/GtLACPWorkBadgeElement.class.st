@@ -16,6 +16,6 @@ GtLACPWorkBadgeElement >> initialize [
 		background: self theme default backdropBackground;
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 		padding: (BlInsets left: 2 right: 2);
-		margin: (BlInsets right: 6);
+		margin: (BlInsets right: 4);
 		constraintsDo: [ :c | c linear vertical alignCenter ]
 ]

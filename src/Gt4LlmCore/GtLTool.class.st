@@ -10,6 +10,7 @@ GtLTool class >> gtToolsFor: aView [
 	<gtClassView>
 	^ aView columnedList
 		title: 'Tools';
+		priority: 25;
 		items: [ ((self withAllSubclasses reject: #isAbstract)
 				sort: [ :a :b | a name < b name ]) collect: #new ];
 		column: 'Name' text: [ :aTool | aTool name ];

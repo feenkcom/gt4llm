@@ -12,17 +12,22 @@ GtLACPUserMessageElement >> buildContent [
 	self buildPromptSection
 ]
 
-{ #category : #building }
+{ #category : #initialization }
 GtLACPUserMessageElement >> buildPromptSection [
 	| expander |
 	expander := BrExpander new
 			id: viewModel promptSectionId;
 			aptitude: (BrGlamorousExpanderSubtleAptitude new
-					sidebarExtraPadding: (BlInsets top: 9);
+					padding: (BlInsets
+							top: 0
+							left: 4
+							bottom: 0
+							right: 4);
+					sidebarExtraPadding: (BlInsets top: 10);
 					yourself);
 			hMatchParent;
 			vFitContent;
-			margin: (BlInsets top: 4 bottom: 4);
+			margin: (BlInsets top: 4);
 			header: [ self promptPreview ];
 			content: [ self promptContent ];
 			yourself.
@@ -35,6 +40,11 @@ GtLACPUserMessageElement >> buildPromptSection [
 ]
 
 { #category : #building }
+GtLACPUserMessageElement >> previewTextLimit [
+	^ 100
+]
+
+{ #category : #building }
 GtLACPUserMessageElement >> promptContent [
 	^ GtLACPMessageTextElement new
 		phlowContext: viewModel phlowContext;
@@ -42,10 +52,15 @@ GtLACPUserMessageElement >> promptContent [
 		yourself
 ]
 
-{ #category : #building }
+{ #category : #initialization }
 GtLACPUserMessageElement >> promptPreview [
 	^ (self textElementFor: self replyPreviewText)
 		id: viewModel promptPreviewId;
-		vExact: 24;
+		padding: (BlInsets
+				top: 4
+				left: 5
+				bottom: 0
+				right: 5);
+		vFitContent;
 		yourself
 ]
