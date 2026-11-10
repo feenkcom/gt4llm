@@ -26,6 +26,40 @@ GtLChatSessionWriterExamples >> addRequestText: aString to: aGtLChat [
 	^ aGtLChat provider client history addRequest: request response: response
 ]
 
+{ #category : #examples }
+GtLChatSessionWriterExamples >> automaticSessionWriterDisabled [
+	<gtExample>
+	| previous chat |
+	previous := GtLChat startSessionWriter.
+	[ GtLChat startSessionWriter: false.
+	chat := GtLChat new.
+	self assert: chat sessionWriters isEmpty ]
+		ensure: [ GtLChat startSessionWriter: previous ].
+	^ chat
+]
+
+{ #category : #examples }
+GtLChatSessionWriterExamples >> automaticSessionWriterEnabled [
+	<gtExample>
+	| previous chat writer file |
+	previous := GtLChat startSessionWriter.
+	[ GtLChat startSessionWriter: true.
+	chat := GtLChat new provider: GtLOpenAiResponsesProvider new.
+	self assert: chat sessionWriters size equals: 1.
+	writer := chat sessionWriters anyOne.
+	file := self memoryFile.
+	writer file: file.
+	self assert: file exists not.
+	self addRequestText: 'one' to: chat.
+	chat signalExecutionStateChanged.
+	self assert: (self requestTextsIn: file) equals: #('one').
+	chat signalExecutionStateChanged.
+	self assert: (self requestTextsIn: file) equals: #('one') ]
+		ensure: [ chat ifNotNil: [ chat stopAllSessionWriters ].
+			GtLChat startSessionWriter: previous ].
+	^ writer
+]
+
 { #category : #'examples - setup' }
 GtLChatSessionWriterExamples >> chatWithTwoRequests [
 	<gtExample>
@@ -347,6 +381,54 @@ GtLChatSessionWriterExamples >> partialWriteRollback [
 		retryAfter: #write
 		on: self memoryFile
 		withExistingRecord: true
+]
+
+{ #category : #examples }
+GtLChatSessionWriterExamples >> reconstructionWithAutomaticSessionWriter [
+	"Replaying a file must not write historical messages or duplicate writers."
+
+	<gtExample>
+	| previous source file chat writer output original result |
+	previous := GtLChat startSessionWriter.
+	[ GtLChat startSessionWriter: false.
+	source := self chatWithTwoRequests.
+	source provider client history
+		do: [ :record | 
+			record request
+				entity: (ZnStringEntity
+						json: (record request entity contents
+								copyReplaceAll: '{"model"'
+								with: '{"tools":[],"model"')).
+			record result: record response asGtJson jsonObject ].
+	file := self memoryFile.
+	file
+		writeStreamDo: [ :stream | 
+			GtLDataSourceEncoderDecoder
+				saveClientHistory: source provider client history
+				toStream: stream ].
+	original := file contents.
+	GtLChat startSessionWriter: true.
+	chat := GtLChat new provider: GtLOpenAiResponsesProvider new.
+	self assert: chat sessionWriters size equals: 1.
+	writer := chat sessionWriters anyOne.
+	output := FileSystem memory root / 'continued.jsonl'.
+	writer file: output.
+	result := GtLDataSourceEncoderDecoder recreateChatFrom: file chat: chat.
+	self assert: result == chat.
+	self assert: chat messages isEmpty not.
+	self assert: chat sessionWriters size equals: 1.
+	self assert: chat sessionWriters anyOne == writer.
+	self assert: file contents equals: original.
+	self assert: output exists not.
+	chat signalExecutionStateChanged.
+	self assert: output exists not.
+	self addRequestText: 'continued' to: chat.
+	chat signalExecutionStateChanged.
+	self assert: (self requestTextsIn: output) equals: #('continued').
+	self assert: file contents equals: original ]
+		ensure: [ chat ifNotNil: [ chat stopAllSessionWriters ].
+			GtLChat startSessionWriter: previous ].
+	^ chat
 ]
 
 { #category : #private }

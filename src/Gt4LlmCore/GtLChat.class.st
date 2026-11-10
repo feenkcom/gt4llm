@@ -16,6 +16,9 @@ Class {
 		'reasoningEffort',
 		'summarizersRegistry'
 	],
+	#classVars : [
+		'StartSessionWriter'
+	],
 	#category : #'Gt4LlmCore-Core'
 }
 
@@ -30,6 +33,19 @@ GtLChat class >> leJsonV4AttributeMapping [
 		#tools -> #tools.
 		#instructions -> #instructions.
 		#format -> #format }"
+]
+
+{ #category : #accessing }
+GtLChat class >> startSessionWriter [
+	"Whether newly created chats automatically attach a session writer."
+
+	^ StartSessionWriter ifNil: [ StartSessionWriter := false ]
+]
+
+{ #category : #accessing }
+GtLChat class >> startSessionWriter: aBoolean [
+	self assert: (aBoolean == true or: [ aBoolean == false ]).
+	StartSessionWriter := aBoolean
 ]
 
 { #category : #visiting }
@@ -548,16 +564,17 @@ GtLChat >> gtViewsInContext: aPhlowContext [
 { #category : #initialization }
 GtLChat >> initialize [
 	super initialize.
-	
+
 	self initializeMessages.
 	self initializeTools.
-	
+
 	responseFormat := GtLResponseCompositeFormat new.
 	objectStorage := GtLObjectStorage new.
 	instructions := GtLInstructionComposite new.
 	summarizersRegistry := GtLToolCallSummarizersRegistry new.
-	
+
 	self updateLastUpdate.
+	self class startSessionWriter ifTrue: [ self startSessionWriter ]
 ]
 
 { #category : #accessing }
