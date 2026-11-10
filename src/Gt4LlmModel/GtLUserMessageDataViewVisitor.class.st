@@ -18,6 +18,12 @@ GtLUserMessageDataViewVisitor >> visitGtLCompositeDataView: aView [
 ]
 
 { #category : #visitor }
+GtLUserMessageDataViewVisitor >> visitGtLDocumentDataView: aView [
+
+	stream nextPut: 'pdf' -> aView encodedBytes
+]
+
+{ #category : #visitor }
 GtLUserMessageDataViewVisitor >> visitGtLForwardObjectDataView: aView [
 
 	stack add: aView dataKey -> aView.
