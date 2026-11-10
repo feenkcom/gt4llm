@@ -101,6 +101,16 @@ GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveCompositeJsonGenericDataBlo
 ]
 
 { #category : #'as yet unclassified' }
+GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveDocumentDataBlock: aDataBlock [
+
+	^ {NeoJSONObject new
+			at: 'file_data' put: ('data:application/'
+				, aDataBlock documentFormat,';base64,' , aDataBlock encodedBytes);
+			at: 'type' put: 'input_file';
+			yourself}
+]
+
+{ #category : #'as yet unclassified' }
 GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveImageDataBlock: aDataBlock [
 
 	^ {NeoJSONObject new

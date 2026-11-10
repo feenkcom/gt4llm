@@ -25,7 +25,9 @@ GtLACPAdapterExamples >> defaultAdapters [
 	| claude codex |
 	claude := GtLACPClaudeCodeClient new configuration.
 	codex := GtLACPCodexClient new configuration.
-	self assert: claude executable equals: 'npx'.
+	self
+		assert: claude executable
+		equals: (OSPlatform current isWindows ifTrue: [ 'npx.cmd' ] ifFalse: [ 'npx' ]).
 	self
 		assert: claude arguments
 		equals: #('--yes' '@agentclientprotocol/claude-agent-acp').

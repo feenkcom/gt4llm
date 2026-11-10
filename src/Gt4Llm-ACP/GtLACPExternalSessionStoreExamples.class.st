@@ -253,6 +253,31 @@ GtLACPExternalSessionStoreExamples >> firstId [
 ]
 
 { #category : #examples }
+GtLACPExternalSessionStoreExamples >> invalidStoredSessionsCannotLoad [
+	<gtExample>
+	| stores |
+	stores := {self claudeStore.
+			self codexStore}.
+	stores
+		do: [ :store | 
+			| stored |
+			stored := store sessionWithId: self firstId.
+			stored directory: nil.
+			self
+				assert: ([ stored load.
+					false ]
+						on: Error
+						do: [ :error | error messageText includesSubstring: 'directory is unknown' ]).
+			stored directory: FileSystem memory root / 'missing'.
+			self
+				assert: ([ stored load.
+					false ]
+						on: Error
+						do: [ :error | error messageText includesSubstring: 'directory no longer exists' ]) ].
+	^ stores
+]
+
+{ #category : #examples }
 GtLACPExternalSessionStoreExamples >> invalidStoredSessionsDoNotLaunchClients [
 	<gtExample>
 	| store configured |
@@ -283,6 +308,24 @@ GtLACPExternalSessionStoreExamples >> invalidStoredSessionsDoNotLaunchClients [
 				do: [ :error | error messageText includesSubstring: 'directory no longer exists' ]).
 	self assert: configured not.
 	^ store
+]
+
+{ #category : #examples }
+GtLACPExternalSessionStoreExamples >> loadableStoredSession [
+	<gtExample>
+	| store stored client |
+	store := self codexStore.
+	stored := store sessionWithId: self firstId.
+	client := stored newClient.
+	client
+		transportFactory: [ :configuration :directory | GtLACPExamples new transport ].
+	^ GtLACPFixtureStoredSession new
+		store: store;
+		sessionId: stored sessionId;
+		title: stored title;
+		directory: FileLocator temp asFileReference asAbsolute;
+		client: client;
+		yourself
 ]
 
 { #category : #examples }
@@ -419,6 +462,105 @@ GtLACPExternalSessionStoreExamples >> sessionLookupDoesNotCreateEntries [
 ]
 
 { #category : #examples }
+GtLACPExternalSessionStoreExamples >> storedSessionContextMenu [
+	<gtExample>
+	| store scripter |
+	store := self codexStore.
+	scripter := BlScripter new
+			extent: 1200 @ 650;
+			model: store;
+			element: (GtInspector forObject: store);
+			yourself.
+	scripter menuStep
+		onPhlowCellWithString: self firstId;
+		openContextMenu;
+		play.
+	scripter menuStep
+		onSpaceRoot;
+		assertMenuItemWithLabelExists: 'Load session';
+		play.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPExternalSessionStoreExamples >> storedSessionLoad [
+	<gtExample>
+	| stored session |
+	stored := self loadableStoredSession.
+	session := stored load.
+	[ self assert: session isReady.
+	self assert: session remoteSessionId equals: stored sessionId.
+	self assert: session directory equals: stored directory ]
+		ensure: [ session client stop ].
+	^ session
+]
+
+{ #category : #examples }
+GtLACPExternalSessionStoreExamples >> storedSessionLoadActionOpensChat [
+	<gtExample>
+	| stored pager scripter tool deadline |
+	stored := self loadableStoredSession.
+	pager := GtPager createWrappedOn: (GtInspector forObject: stored).
+	scripter := BlScripter new
+			extent: 1600 @ 1000;
+			model: stored;
+			element: pager;
+			yourself.
+	[ scripter pulseUntilReady.
+	scripter click
+		// #'acp-load-stored-session';
+		play.
+	deadline := Time millisecondClockValue + 5000.
+	[ pager pages size < 2 and: [ Time millisecondClockValue < deadline ] ]
+		whileTrue: [ (Delay forMilliseconds: 10) wait.
+			scripter pulseUntilReady ].
+	self assert: pager pages size equals: 2.
+	tool := (pager query // GtLACPSessionToolElement) anyOne.
+	self assert: tool chat remoteSessionId equals: stored sessionId.
+	self assert: tool chat isReady.
+	self assert: tool chat client == stored newClient.
+	self
+		assert: (tool query // GtLACPChatElement) anyOne viewModel session == tool chat.
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter ]
+		ensure: [ stored newClient stop ].
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPExternalSessionStoreExamples >> storedSessionsLoadUsingRecordedDirectory [
+	<gtExample>
+	| loaded |
+	loaded := OrderedCollection new.
+	{self claudeStore.
+		self codexStore}
+		do: [ :store | 
+			| stored session request |
+			stored := store sessionWithId: self firstId.
+			stored directory: FileLocator temp asFileReference asAbsolute.
+			session := stored
+					loadConfigureClient: [ :client | 
+						client
+							transportFactory: [ :configuration :directory | 
+								self assert: directory equals: stored directory.
+								GtLACPExamples new transport ] ].
+			[ self assert: session isReady.
+			self assert: session client class equals: stored newClient class.
+			self assert: session remoteSessionId equals: stored sessionId.
+			self assert: session directory equals: stored directory.
+			request := session connection transport sentMessages
+					detect: [ :message | (message at: 'method' ifAbsent: [ '' ]) = 'session/load' ].
+			self
+				assert: ((request at: 'params') at: 'sessionId')
+				equals: stored sessionId.
+			self
+				assert: ((request at: 'params') at: 'cwd')
+				equals: stored directory fullName.
+			loaded add: session ] ensure: [ session client stop ] ].
+	^ loaded
+]
+
+{ #category : #examples }
 GtLACPExternalSessionStoreExamples >> storesCreateAppropriateClients [
 	<gtExample>
 	| claude codex claudeClient codexClient |
@@ -478,6 +620,26 @@ GtLACPExternalSessionStoreExamples >> tabNamed: aString in: anElement [
   ((each isKindOf: BrTab) and: [ each label asString = aString ])
    ifTrue: [ found ifNil: [ found := each ] ] ].
  ^ found ifNil: [ self error: 'Tab not found: ', aString ]
+]
+
+{ #category : #examples }
+GtLACPExternalSessionStoreExamples >> typedStoredSessions [
+	<gtExample>
+	| claude codex |
+	claude := self claudeStore.
+	codex := self codexStore.
+	claude sessions
+		do: [ :session | 
+			self assert: session class equals: GtLACPClaudeCodeStoredSession.
+			self assert: session store == claude.
+			self assert: session newClient class equals: GtLACPClaudeCodeClient ].
+	codex sessions
+		do: [ :session | 
+			self assert: session class equals: GtLACPCodexStoredSession.
+			self assert: session store == codex.
+			self assert: session newClient class equals: GtLACPCodexClient ].
+	^ {claude.
+		codex}
 ]
 
 { #category : #fixtures }

@@ -129,8 +129,8 @@ GtLACPElicitationElement >> fillMultipleChoices: pane options: options key: aKey
 					id: ('acp-question-' , aKey , '-option-' , index asString) asSymbol;
 					aptitude: BrGlamorousCheckboxAptitude;
 					checked: selected;
-					margin: (BlInsets right: 6);
-					constraintsDo: [ :constraints | constraints linear vertical alignCenter ];
+					margin: (BlInsets right: 4);
+					constraintsDo: [ :c | c linear vertical alignCenter ];
 					whenCheckedDo: [ self performAction: toggle ];
 					whenUncheckedDo: [ self performAction: toggle ];
 					yourself.
@@ -179,17 +179,17 @@ GtLACPElicitationElement >> questionHeader [
 			action: [ :button | button phlow spawnObject: (request toolCall ifNil: [ request ]) ];
 			yourself.
 	line := BrHorizontalPane new
-			id: #'acp-question-header';
+			id: #'acp-elicitation-header';
 			hMatchParent;
 			vFitContent;
 			addChild: (GtLACPWorkBadgeElement new
-					id: #'acp-question-kind';
-					text: 'question';
+					id: #'acp-elicitation-kind';
+					text: 'elicitation';
 					yourself);
 			addChild: (GtLACPInputNeededElement new
-					id: #'acp-question-input-needed';
-					margin: (BlInsets right: 6);
-					constraintsDo: [ :constraints | constraints linear vertical alignCenter ];
+					id: #'acp-elicication-input-needed';
+					margin: (BlInsets right: 4);
+					constraintsDo: [ :c | c linear vertical alignCenter ];
 					forRequest: request;
 					yourself);
 			addChild: question;

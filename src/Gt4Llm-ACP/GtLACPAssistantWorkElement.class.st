@@ -104,6 +104,7 @@ GtLACPAssistantWorkElement >> expander [
 { #category : #initialization }
 GtLACPAssistantWorkElement >> initialize [
 	super initialize.
+	self margin: (BlInsets top: 5 bottom: 5).
 	self
 		layout: BlLinearLayout vertical;
 		constraintsDo: [ :c | 

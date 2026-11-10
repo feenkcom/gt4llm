@@ -180,6 +180,55 @@ GtLDataSourceEncoderDecoderExamples >> reconstructedToolCallsPreserveRecordedOut
 ]
 
 { #category : #examples }
+GtLDataSourceEncoderDecoderExamples >> reconstructedToolCallsUseLatestRecordedOutput [
+	"Repeated history can contain a newer snapshot of a mutable preview."
+
+	<gtExample>
+	| history request response stream chat messages definitions |
+	history := GtLRequestHistory new.
+	definitions := '"tools":[{"type":"function","name":"recorded","description":"Historical tool","strict":true,"parameters":{"type":"object","properties":{},"required":[],"additionalProperties":false}}],'.
+	request := ZnRequest post: 'https://api.openai.com/v1/responses'.
+	request
+		entity: (ZnStringEntity
+				json: '{"model":"gpt-4.1",' , definitions
+						, '"input":[{"role":"user","content":[{"type":"input_text","text":"hello"}]}]}').
+	response := ZnResponse
+			ok: (ZnStringEntity
+					json: '{"output":[{"type":"function_call","call_id":"preview","name":"recorded","arguments":"{}"}]}').
+	(history addRequest: request response: response)
+		result: response asGtJson jsonObject.
+	#('false' 'false' 'true')
+		do: [ :applied | 
+			request := ZnRequest post: 'https://api.openai.com/v1/responses'.
+			request
+				entity: (ZnStringEntity
+						json: '{"model":"gpt-4.1",' , definitions
+								, '"input":[{"type":"function_call_output","call_id":"preview","output":[{"type":"input_text","text":"{\"applied\":'
+								, applied , '}"}]}]}').
+			response := ZnResponse
+					ok: (ZnStringEntity
+							json: '{"output":[{"type":"message","role":"assistant","content":[{"type":"output_text","text":"done"}]}]}').
+			(history addRequest: request response: response)
+				result: response asGtJson jsonObject ].
+	stream := String new writeStream.
+	GtLDataSourceEncoderDecoder saveClientHistory: history toStream: stream.
+	chat := GtLChat new provider: GtLOpenAiResponsesProvider new.
+	GtLDataSourceEncoderDecoder
+		recreateChatFromStream: stream contents readStream
+		chat: chat.
+	messages := chat messages messagesSelect: [ :each | each isToolMessage ].
+	self assert: messages size equals: 1.
+	self
+		assert: messages first output serializeToOpenAIResponseOutput
+		equals: ((history last request asGtJson jsonObject at: 'input') first at: 'output').
+	self assert: (messages first toolCall tool isKindOf: GtLJsonPlaceholderTool).
+	self assert: messages first toolCall result == messages first output.
+	self assert: messages first isExecutionStateFinished.
+	self assert: messages first toolCall executionEndTime isNil.
+	^ chat
+]
+
+{ #category : #examples }
 GtLDataSourceEncoderDecoderExamples >> reconstructionIntoConfiguredChat [
 	<gtExample>
 	^ self assertConfiguredChatReconstructionUsingCompletions: false
@@ -199,18 +248,23 @@ GtLDataSourceEncoderDecoderExamples >> recordedToolOutputPreservesPayloads [
 ]
 
 { #category : #examples }
-GtLDataSourceEncoderDecoderExamples >> recordedToolOutputRejectsConflicts [
+GtLDataSourceEncoderDecoderExamples >> recordedToolOutputUsesLatestRecordedValue [
 	<gtExample>
-	| constructor message rejected |
+	| constructor message firstOutput |
 	constructor := GtLDataSourceMessageConstructor new.
 	message := GtLToolMessage new toolCall: GtLFunctionToolCall new.
 	self assert: message toolCall isFinished not.
 	constructor restoreRecordedOutput: 'first' to: message.
+	firstOutput := message output.
 	constructor restoreRecordedOutput: 'first' to: message.
-	rejected := false.
-	[ constructor restoreRecordedOutput: 'different' to: message ] on: AssertionFailure do: [ :error | rejected := true ].
-	self assert: rejected.
 	self assert: message output serializeToOpenAIResponseOutput equals: 'first'.
+	self assert: message toolCall result == message output.
+	constructor restoreRecordedOutput: 'different' to: message.
+	self assert: firstOutput serializeToOpenAIResponseOutput equals: 'first'.
+	self assert: message output serializeToOpenAIResponseOutput equals: 'different'.
+	self assert: message toolCall result == message output.
+	self assert: message isExecutionStateFinished.
+	self assert: message toolCall executionEndTime isNil.
 	^ message
 ]
 

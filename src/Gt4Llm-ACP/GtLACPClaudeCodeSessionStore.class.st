@@ -68,3 +68,8 @@ GtLACPClaudeCodeSessionStore >> readTranscript: aFile [
  found ifFalse: [
   self issueFor: aFile line: nil description: 'Project directory is unknown after scanning up to 50 records' ]
 ]
+
+{ #category : #private }
+GtLACPClaudeCodeSessionStore >> storedSessionClass [
+	^ GtLACPClaudeCodeStoredSession
+]

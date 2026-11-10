@@ -68,7 +68,11 @@ GtLACPChatMessageElement >> initialize [
 	self
 		hMatchParent;
 		vFitContent;
-		padding: (BlInsets all: 5);
+		padding: (BlInsets
+				top: 10
+				bottom: 10
+				left: 10
+				right: 10);
 		margin: (BlInsets
 				top: 5
 				bottom: 10
