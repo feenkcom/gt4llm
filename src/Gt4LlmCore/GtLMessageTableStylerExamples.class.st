@@ -30,6 +30,31 @@ GtLMessageTableStylerExamples >> annotationCellPreservesTree [
 ]
 
 { #category : #examples }
+GtLMessageTableStylerExamples >> annotationInTableHeader [
+	<gtExample>
+	| text preview list scripter |
+	text := ('| Something | {{gtClass:Object}} |' , String lf , '| :-- | :-- |'
+			, String lf , '| aValue | anotherValue |') asRopedText.
+	GtLMessageStyler new privateStyle: text.
+	text
+		findAttributesSuchThat: [ :each | (each isKindOf: BrTextAdornmentDynamicAttribute) and: [ each shouldAppend ] ]
+		indicesDo: [ :start :end :each | preview := each ].
+	list := preview stencil build.
+	list hExact: 800.
+	scripter := BlScripter new element: list.
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'Class annotation in the header materializes its link button';
+				satisfies: [ :element | 
+					| header button |
+					header := (element query // #columnHeader2) anyOne.
+					button := (header query // BrButton) anyOne.
+					button label asString = 'Object' ] ].
+	^ scripter
+]
+
+{ #category : #examples }
 GtLMessageTableStylerExamples >> boldCellPreservesTree [
 	<gtExample>
 	| table cell source start styled |
