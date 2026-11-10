@@ -16,6 +16,21 @@ GtLClassRemovalResult >> affectedBehaviour [
 	^removedClass
 ]
 
+{ #category : #accessing }
+GtLClassRemovalResult >> asDiffElement [
+	"Used by GtLSummarizerCodeChangesGroup>>#gtCodeChangesFor:"
+
+	^ GtDiffElementWithLabelStencil new
+		fromLabelText: 'Old content:';
+		toLabelText: 'New content:';
+		change: (GtDiffBuilder
+				computeDifferencesFrom: self originalDefinitionWithCommentString
+				to: ''
+				using: GtSmaCCDiffSplitter forPharo);
+		styler: GtCodeDiffRBTextStyler new;
+		asElement
+]
+
 { #category : #views }
 GtLClassRemovalResult >> gtDetailsFor: aView [
 	<gtView>

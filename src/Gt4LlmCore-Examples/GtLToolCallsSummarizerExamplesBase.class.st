@@ -7,6 +7,45 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Summarizers'
 }
 
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> addClassTransformationNamed: aClassName superclass: aSuperclass slotNames: aString [
+	"An AddClass transformation that adds the class to the package of aSuperclass"
+
+	^ Dictionary new
+		at: 'AddClass'
+			put: (Dictionary new
+					at: 'newClassName' put: aClassName asString;
+					at: 'superclassName' put: aSuperclass name asString;
+					at: 'packageName' put: aSuperclass package name asString;
+					at: 'slotNames' put: aString;
+					at: 'tagName' put: '';
+					yourself);
+		yourself
+]
+
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> addMethodTransformationIn: aClass source: aSourceString [
+	^ Dictionary new
+		at: 'AddMethod'
+			put: (Dictionary new
+					at: 'methodClassName' put: aClass name asString;
+					at: 'protocolName' put: 'examples';
+					at: 'sourceCodeOfMethodToAdd' put: aSourceString;
+					yourself);
+		yourself
+]
+
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> codeChangesSummarizerForToolCalls: aCollectionOfToolCalls [
+	"Put the messages of aCollectionOfToolCalls in a messages group and return its code changes summarizer"
+
+	| aGroup |
+	aGroup := GtLMessagesGroup new.
+	aCollectionOfToolCalls do: [ :each | aGroup add: (self toolMessageFrom: each) ].
+	^ aGroup toolCallsSummarizers
+		detect: [ :each | each class = GtLCodeChangesToolCallsSummarizer ]
+]
+
 { #category : #private }
 GtLToolCallsSummarizerExamplesBase >> fixedExecutionDetailsFrom: aStartDateAndTime to: anEndDateAndTime [
 	| details |
@@ -15,6 +54,25 @@ GtLToolCallsSummarizerExamplesBase >> fixedExecutionDetailsFrom: aStartDateAndTi
 		startTime: aStartDateAndTime;
 		endTime: anEndDateAndTime.
 	^ details
+]
+
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> performApplyRefactoringOf: aPreviewToolCall inContext: anExecutionContext [
+	"Apply the refactoring previewed by aPreviewToolCall (a previewRefactoring or previewRewrite tool call)"
+
+	^ self
+		performApplyRefactoringWithObjectId: aPreviewToolCall result targetObject objectId
+		inContext: anExecutionContext
+]
+
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> performApplyRefactoringWithObjectId: anObjectId inContext: anExecutionContext [
+	^ self
+		performTool: GtLToolForApplyRefactoring new
+		withArguments: (Dictionary new
+				at: 'objectId' put: anObjectId;
+				yourself)
+		inContext: anExecutionContext
 ]
 
 { #category : #utilities }
@@ -83,6 +141,30 @@ GtLToolCallsSummarizerExamplesBase >> performMethodRemovalFor: aClass selector: 
 		yourself)
 ]
 
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> performPreviewRefactoring: aCollectionOfTransformations inContext: anExecutionContext [
+	^ self
+		performTool: GtLToolForPreviewRefactoring new
+		withArguments: (Dictionary new
+				at: 'transformations' put: aCollectionOfTransformations asArray;
+				yourself)
+		inContext: anExecutionContext
+]
+
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> performPreviewRewriteFrom: aFromPattern to: aToPattern inClass: aClass inContext: anExecutionContext [
+	^ self
+		performTool: GtLToolForPreviewRewrite new
+		withArguments: (Dictionary new
+				at: 'from' put: aFromPattern;
+				at: 'to' put: aToPattern;
+				at: 'isMethodPattern' put: false;
+				at: 'className' put: aClass name asString;
+				at: 'packageName' put: '';
+				yourself)
+		inContext: anExecutionContext
+]
+
 { #category : #utilities }
 GtLToolCallsSummarizerExamplesBase >> performTool: aTool withArguments: aDictionary [
 	| toolCall |
@@ -92,6 +174,53 @@ GtLToolCallsSummarizerExamplesBase >> performTool: aTool withArguments: aDiction
 		yourself.
 	aTool performToolCall: toolCall inContext: nil.
 	^ toolCall
+]
+
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> performTool: aTool withArguments: aDictionary inContext: anExecutionContext [
+	| toolCall |
+	toolCall := GtLFunctionToolCall new
+			name: aTool name;
+			rawArguments: aDictionary;
+			yourself.
+	aTool performToolCall: toolCall inContext: anExecutionContext.
+	^ toolCall
+]
+
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> pushUpInstanceVariableTransformationOf: aVariableName to: aSuperclass [
+	"A PushUpInstanceVariable transformation that pushes the variable up from the subclasses of aSuperclass"
+
+	^ Dictionary new
+		at: 'PushUpInstanceVariable'
+			put: (Dictionary new
+					at: 'variableClassName' put: aSuperclass name asString;
+					at: 'variableNameToPushUp' put: aVariableName asString;
+					yourself);
+		yourself
+]
+
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> pushUpMethodTransformationOf: aSelector from: aClass to: aSuperclass [
+	^ Dictionary new
+		at: 'PushUpMethod'
+			put: (Dictionary new
+					at: 'methodClassName' put: aClass name asString;
+					at: 'methodNameToPushUp' put: aSelector asString;
+					at: 'targetClassName' put: aSuperclass name asString;
+					yourself);
+		yourself
+]
+
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> removeMethodTransformationOf: aSelector in: aClass [
+	^ Dictionary new
+		at: 'RemoveMethod'
+			put: (Dictionary new
+					at: 'methodClassName' put: aClass name asString;
+					at: 'methodNameToRemove' put: aSelector asString;
+					yourself);
+		yourself
 ]
 
 { #category : #utilities }
@@ -120,4 +249,31 @@ GtLToolCallsSummarizerExamplesBase >> toolMessageFrom: aToolCall [
 		toolCall: aToolCall;
 		output: aToolCall result;
 		yourself
+]
+
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> withDummyHierarchyDo: aBlock [
+	"Evaluate aBlock with the root and the leaf class of a temporary hierarchy of two classes,
+	in an isolated change manager, and remove the temporary classes afterwards"
+
+	^ GtRefactoryChangeManager
+		isolatedInstanceDuring: [ | anEnvironment aLeafClass |
+			anEnvironment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 2.
+			[ aLeafClass := anEnvironment anyDummyLeafClass realClass.
+			aBlock value: aLeafClass superclass value: aLeafClass ]
+				ensure: [ anEnvironment removeFromSystem ] ]
+]
+
+{ #category : #'utilities - refactorings' }
+GtLToolCallsSummarizerExamplesBase >> withRefactoringContextDo: aBlock [
+	"Evaluate aBlock with the root and the leaf class of a temporary hierarchy (see #withDummyHierarchyDo:)
+	and with a tool execution context whose object storage keeps the refactoring previews,
+	so that previews and applies of refactorings can be performed as tool calls"
+
+	^ self
+		withDummyHierarchyDo: [ :aRootClass :aLeafClass | 
+			aBlock
+				value: aRootClass
+				value: aLeafClass
+				value: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new) ]
 ]

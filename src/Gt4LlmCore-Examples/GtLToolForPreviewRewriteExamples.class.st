@@ -40,38 +40,43 @@ GtLToolForPreviewRewriteExamples >> previewRewriteInClass [
 	| objectStorage call targetObject |
 	objectStorage := GtLObjectStorage new.
 	call := self
-				executeTool: GtLToolForPreviewRewrite new
-				withArguments: (self fixtureMessageArgumentsClassName: 'GtLRewriteFixture'
-						packageName: '')
-				inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+			executeTool: GtLToolForPreviewRewrite new
+			withArguments: (self
+					fixtureMessageArgumentsClassName: 'GtLRewriteFixture'
+					packageName: '')
+			inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self assert: targetObject changes size equals: 1.
-	self assert: targetObject changes first changeDescription
-		equals: 'GtLRewriteFixture>>valueOf:'.
-	self assert: targetObject changes first newSource lines asArray
-		equals: #('valueOf: anObject' '	^anObject rewrittenFixtureMessage').
-	self assert: targetObject isApplied not.
 	self
-		assert: (objectStorage objectAt: targetObject objectId) == targetObject.
-	self assert: ((GtLRewriteFixture >> #valueOf:) sourceCode
+		assert: targetObject changes first changeDescription
+		equals: 'Add GtLRewriteFixture>>#valueOf:'.
+	self
+		assert: targetObject changes first newSource lines asArray
+		equals: #('valueOf: anObject' '	^ anObject rewrittenFixtureMessage').
+	self assert: targetObject isApplied not.
+	self assert: (objectStorage objectAt: targetObject objectId) == targetObject.
+	self
+		assert: ((GtLRewriteFixture >> #valueOf:) sourceCode
 				includesSubstring: 'rewriteFixtureMessage').
-	^call
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForPreviewRewriteExamples >> previewRewriteInClassAndPackage [
 	<gtExample>
 	| call targetObject |
-	call := self executeRewriteWith: (self
-						fixtureMessageArgumentsClassName: 'GtLRewriteFixture'
-						packageName: 'Gt4LlmCore-Examples').
+	call := self
+			executeRewriteWith: (self
+					fixtureMessageArgumentsClassName: 'GtLRewriteFixture'
+					packageName: 'Gt4LlmCore-Examples').
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self assert: targetObject changes size equals: 1.
-	self assert: targetObject changes first changeDescription
-		equals: 'GtLRewriteFixture>>valueOf:'.
-	^call
+	self
+		assert: targetObject changes first changeDescription
+		equals: 'Add GtLRewriteFixture>>#valueOf:'.
+	^ call
 ]
 
 { #category : #examples }
@@ -79,14 +84,14 @@ GtLToolForPreviewRewriteExamples >> previewRewriteInPackage [
 	<gtExample>
 	| call targetObject |
 	call := self
-				executeRewriteWith: (self fixtureMessageArgumentsClassName: ''
-						packageName: 'Gt4LlmCore-Examples').
+			executeRewriteWith: (self fixtureMessageArgumentsClassName: '' packageName: 'Gt4LlmCore-Examples').
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self assert: targetObject changes size equals: 1.
-	self assert: targetObject changes first changeDescription
-		equals: 'GtLRewriteFixture>>valueOf:'.
-	^call
+	self
+		assert: targetObject changes first changeDescription
+		equals: 'Add GtLRewriteFixture>>#valueOf:'.
+	^ call
 ]
 
 { #category : #examples }
@@ -140,20 +145,22 @@ GtLToolForPreviewRewriteExamples >> previewRewriteWithMethodPattern [
 	<gtExample>
 	| arguments call targetObject |
 	arguments := self
-				argumentsFrom: 'sizeOf: `arg ^ `arg size'
-				to: 'sizeOf: `arg ^ 0'
-				className: 'GtLRewriteFixture'
-				packageName: ''.
+			argumentsFrom: 'sizeOf: `arg ^ `arg size'
+			to: 'sizeOf: `arg ^ 0'
+			className: 'GtLRewriteFixture'
+			packageName: ''.
 	arguments at: 'isMethodPattern' put: true.
 	call := self executeRewriteWith: arguments.
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self assert: targetObject changes size equals: 1.
-	self assert: targetObject changes first changeDescription
-		equals: 'GtLRewriteFixture>>sizeOf:'.
-	self assert: targetObject changes first newSource lines asArray
+	self
+		assert: targetObject changes first changeDescription
+		equals: 'Add GtLRewriteFixture>>#sizeOf:'.
+	self
+		assert: targetObject changes first newSource lines asArray
 		equals: #('sizeOf: aCollection' '	^ 0').
-	^call
+	^ call
 ]
 
 { #category : #examples }

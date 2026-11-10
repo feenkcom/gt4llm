@@ -6,9 +6,12 @@ Class {
 
 { #category : #private }
 GtLToolForApplyRefactoring >> applyPreview: aPreview [
-	[aPreview apply] on: Error
-		do: [:anError | ^GtLExceptionDomainObject freeze: anError].
-	^GtLAppliedRefactoring preview: aPreview
+	"Errors raised while executing the changes are reported by the applied refactoring itself;
+	this handler only covers errors raised while collecting or snapshotting the affected code"
+
+	^ [ aPreview apply ]
+		on: Error
+		do: [ :anError | GtLExceptionDomainObject freeze: anError ]
 ]
 
 { #category : #accessing }

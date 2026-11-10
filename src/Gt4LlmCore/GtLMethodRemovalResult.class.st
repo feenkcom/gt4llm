@@ -12,6 +12,21 @@ Class {
 }
 
 { #category : #accessing }
+GtLMethodRemovalResult >> asDiffElement [
+	"Used by GtLSummarizerCodeChangesGroup>>#gtCodeChangesFor:"
+
+	^ GtDiffElementWithLabelStencil new
+		fromLabelText: 'Old content:';
+		toLabelText: 'New content:';
+		change: (GtDiffBuilder
+				computeDifferencesFrom: self oldStateMethodSourceCode
+				to: self newStateMethodSourceCode
+				using: GtSmaCCDiffSplitter forPharo);
+		styler: GtCodeDiffRBTextStyler new;
+		asElement
+]
+
+{ #category : #accessing }
 GtLMethodRemovalResult >> currentMethodSourceCode [
 	^self existsInImage
 		ifTrue: [ 

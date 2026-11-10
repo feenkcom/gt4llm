@@ -44,51 +44,49 @@ GtLToolForPreviewRefactoringExamples >> previewAddClass [
 	<gtExample>
 	| call targetObject |
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self
-						argumentsWithTransformations: (Array with: self addClassTransformation))
-				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self
+					argumentsWithTransformations: (Array with: self addClassTransformation))
+			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self assert: targetObject changes size equals: 1.
-	self assert: targetObject changes first changeDescription
-		equals: 'GtLPreviewedExampleClass'.
-	self assert: targetObject changes first newSource
-		equals: 'Object subclass: #GtLPreviewedExampleClass instanceVariableNames: ''first second'' classVariableNames: '''' poolDictionaries: '''' category: ''Gt4LlmCore-Examples'''.
 	self
-		assert: (Smalltalk globals includesKey: #GtLPreviewedExampleClass) not.
-	^call
+		assert: targetObject changes first changeDescription
+		equals: 'Define GtLPreviewedExampleClass'.
+	self
+		assert: targetObject changes first newSource
+		equals: 'Object subclass: #GtLPreviewedExampleClass instanceVariableNames: ''first second'' classVariableNames: '''' poolDictionaries: '''' category: ''Gt4LlmCore-Examples'''.
+	self assert: (Smalltalk globals includesKey: #GtLPreviewedExampleClass) not.
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForPreviewRefactoringExamples >> previewAddClassWithMethod [
 	<gtExample>
 	| methodTransformation call targetObject |
-	methodTransformation := (Dictionary new)
-				at: 'AddMethod'
-					put: ((Dictionary new)
-							at: 'methodClassName' put: 'GtLPreviewedExampleClass';
-							at: 'protocolName' put: 'accessing';
-							at: 'sourceCodeOfMethodToAdd' put: 'first ^ first';
-							yourself);
-				yourself.
+	methodTransformation := Dictionary new
+			at: 'AddMethod'
+				put: (Dictionary new
+						at: 'methodClassName' put: 'GtLPreviewedExampleClass';
+						at: 'protocolName' put: 'accessing';
+						at: 'sourceCodeOfMethodToAdd' put: 'first ^ first';
+						yourself);
+			yourself.
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self
-						argumentsWithTransformations: (Array with: self addClassTransformation
-								with: methodTransformation))
-				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self
+					argumentsWithTransformations: (Array with: self addClassTransformation with: methodTransformation))
+			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self
-		assert: (targetObject changes collect: [:each | each changeDescription])
-				asArray
-		equals: #('GtLPreviewedExampleClass' 'GtLPreviewedExampleClass>>first').
+		assert: (targetObject changes collect: [ :each | each changeDescription ]) asArray
+		equals: #('Define GtLPreviewedExampleClass' 'Add GtLPreviewedExampleClass>>#first').
 	self assert: targetObject changesCount equals: 2.
 	self assert: targetObject changes last newSource equals: 'first ^ first'.
-	self
-		assert: (Smalltalk globals includesKey: #GtLPreviewedExampleClass) not.
-	^call
+	self assert: (Smalltalk globals includesKey: #GtLPreviewedExampleClass) not.
+	^ call
 ]
 
 { #category : #examples }
@@ -97,22 +95,23 @@ GtLToolForPreviewRefactoringExamples >> previewAddMethod [
 	| objectStorage call targetObject |
 	objectStorage := GtLObjectStorage new.
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self
-						argumentsWithTransformations: (Array with: self addMethodTransformation))
-				inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self
+					argumentsWithTransformations: (Array with: self addMethodTransformation))
+			inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self assert: targetObject changes size equals: 1.
-	self assert: targetObject changes first changeDescription
-		equals: 'GtLToolForPreviewRefactoringExamples>>previewedMethod'.
-	self assert: targetObject changes first newSource
+	self
+		assert: targetObject changes first changeDescription
+		equals: 'Add GtLToolForPreviewRefactoringExamples>>#previewedMethod'.
+	self
+		assert: targetObject changes first newSource
 		equals: 'previewedMethod ^ 42'.
 	self assert: targetObject isApplied not.
-	self
-		assert: (objectStorage objectAt: targetObject objectId) == targetObject.
+	self assert: (objectStorage objectAt: targetObject objectId) == targetObject.
 	self assert: (self class includesSelector: #previewedMethod) not.
-	^call
+	^ call
 ]
 
 { #category : #examples }

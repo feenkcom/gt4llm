@@ -20,6 +20,31 @@ GtLAbstractMagritteFunctionTool >> gtMagritteFor: aView [
 	^ aView	empty
 ]
 
+{ #category : #'gt - extensions' }
+GtLAbstractMagritteFunctionTool >> gtParameterDescriptionsFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Parameter descriptions';
+		priority: 8;
+		items: [ self magritteDescription children ];
+		column: 'Accessor' text: [ :aDescription | aDescription accessor selector ];
+		column: 'Kind'
+			text: [ :aDescription | (aDescription class name withoutPrefix: 'MA') withoutSuffix: 'Description' ];
+		column: 'Label' text: [ :aDescription | aDescription label ifNil: [ '' ] ];
+		column: 'Required'
+			text: [ :aDescription | aDescription isRequired ifTrue: [ 'yes' ] ifFalse: [ '' ] ]
+			width: 70;
+		column: 'Defined in'
+			text: [ :aDescription | 
+				(aDescription propertyAt: #definingContext ifAbsent: [ nil ])
+					ifNil: [ '' ]
+					ifNotNil: [ :aContext | aContext methodSelector ] ];
+		send: [ :aDescription | 
+			(aDescription propertyAt: #definingContext ifAbsent: [ nil ])
+				ifNil: [ aDescription ]
+				ifNotNil: [ :aContext | aContext compiledMethod ] ]
+]
+
 { #category : #utils }
 GtLAbstractMagritteFunctionTool >> jsonSchemaArgumentValidationErrorsFor: aToolCall [
 	| parameters schema validator |

@@ -16,13 +16,15 @@ GtLToolForPreviewRewrite >> classNameDescription [
 
 { #category : #accessing }
 GtLToolForPreviewRewrite >> description [
-	^'Previews an AST rewrite (search and replace) on the methods of a class and/or a package using RBParseTreeRewriter pattern syntax, without applying it. Patterns use a backquote for variables (`var), `@ for any expression (`@expr), `# for literals and `. for statements. Set isMethodPattern to true when from and to are whole method patterns. Pass className, packageName or both; leave the other one empty. Pass the objectId from the result to applyRefactoring to execute the changes.
+	^ 'Previews an AST rewrite (search and replace) on the methods of a class and/or a package using RBParseTreeRewriter pattern syntax, without applying it. Patterns use a backquote for variables (`var), `@ for any expression (`@expr), `# for literals and `. for statements. Set isMethodPattern to true when from and to are whole method patterns. Pass className, packageName or both; leave the other one empty. Pass the objectId from the result to applyRefactoring to execute the changes.
+
+Each change in the result has a changeDescription, a kind (modified method for rewritten methods), a target (e.g. MyClass>>#baz) and the newSource of the rewritten method.
 
 Example JSON arguments:
 {"from": "`@receiver foo", "to": "`@receiver bar", "isMethodPattern": false, "className": "MyClass", "packageName": ""}
 
 Example JSON response:
-{"changes": [{"changeDescription": "MyClass>>baz", "newSource": "baz ^ self bar"}], "changesCount": 1, "objectId": "abc123", "applied": false}'
+{"changes": [{"changeDescription": "Add MyClass>>#baz", "kind": "modified method", "target": "MyClass>>#baz", "newSource": "baz ^ self bar"}], "changesCount": 1, "objectId": "abc123", "applied": false}'
 ]
 
 { #category : #descriptions }
