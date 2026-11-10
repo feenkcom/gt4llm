@@ -70,14 +70,17 @@ GtLChatSessionWriter >> chat [
 
 { #category : #accessing }
 GtLChatSessionWriter >> chat: aGtLChat [
+
 	chat ifNotNil: [ self unsubscribe ].
 	chat := aGtLChat.
 	lastRequestResponse := nil.
 	self subscribe.
-	chat state
-		ifCanStop: [  ]
-		ifStopping: [  ]
-		ifIdle: [ self writeLatest ]
+	"A writer can be attached during chat initialization, before a provider exists."
+	chat provider ifNotNil: [ :provider | 
+		provider state
+				ifCanStop: [  ]
+				ifStopping: [  ]
+				ifIdle: [ self writeLatest ] ].
 ]
 
 { #category : #accessing }
