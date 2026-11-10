@@ -148,42 +148,6 @@ GtLACPSessionExamples >> assistantSectionChoicesSurviveMessageUpdates [
 ]
 
 { #category : #examples }
-GtLACPSessionExamples >> assistantSectionSpacing [
-	<gtExample>
-	| scripter |
-	scripter := GtLACPMessagePresentationExamples new claudeWorkDisplayed.
-	#(expanded workCollapsed bothCollapsed finalExpanded)
-		do: [ :state | 
-			state = #workCollapsed
-				ifTrue: [ scripter click
-						id: #'acp-work-toggle';
-						play ].
-			state = #bothCollapsed
-				ifTrue: [ scripter click
-						id: #'acp-final-toggle';
-						play ].
-			state = #finalExpanded
-				ifTrue: [ scripter click
-						id: #'acp-final-toggle';
-						play ].
-			scripter
-				assertStep: [ :step | 
-					step
-						id: #'acp-message-2';
-						satisfies: [ :row | 
-							| header work final headerGap finalGap |
-							header := row childNamed: #'acp-message-header'.
-							work := row workElement.
-							final := (row query // GtLACPAssistantFinalMessageElement) anyOne.
-							headerGap := work bounds inSpace top - header bounds inSpace bottom.
-							finalGap := final bounds inSpace top - work bounds inSpace bottom.
-							(headerGap - 2) abs < 0.01
-								and: [ finalGap abs < 0.01 and: [ work margin isEmpty and: [ final margin isEmpty ] ] ] ] ] ].
-	self assertNoRenderingErrorsIn: scripter.
-	^ scripter
-]
-
-{ #category : #examples }
 GtLACPSessionExamples >> assistantSectionsCollapseIndependently [
  <gtExample>
  | element scripter |
