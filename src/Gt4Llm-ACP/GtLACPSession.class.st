@@ -1195,13 +1195,21 @@ GtLACPSession >> rootSession [
  ^ self isSubagent ifTrue: [ parentSubagent parentSession rootSession ] ifFalse: [ self ]
 ]
 
-{ #category : #updating }
+{ #category : #configuration }
 GtLACPSession >> setConfigOption: anId value: aValue [
- | option |
- self requireRootSession.
- option := configOptions detect: [ :each | (each at: 'id') = anId ] ifNone: [ self error: 'Unknown session configuration option' ].
- self updateSettingsFrom: (connection request: 'session/set_config_option' parameters: {
-  'sessionId' -> remoteSessionId. 'configId' -> (option at: 'id'). 'value' -> aValue } asDictionary)
+	| option parameters |
+	self requireRootSession.
+	option := configOptions
+			detect: [ :each | (each at: 'id') = anId ]
+			ifNone: [ self error: 'Unknown session configuration option' ].
+	parameters := {'sessionId' -> remoteSessionId.
+			'configId' -> (option at: 'id').
+			'value' -> aValue} asDictionary.
+	(option at: 'type' ifAbsent: [ 'select' ]) = 'boolean'
+		ifTrue: [ parameters at: 'type' put: 'boolean' ].
+	self
+		updateSettingsFrom: (connection request: 'session/set_config_option' parameters: parameters).
+	self announceChanged
 ]
 
 { #category : #updating }
