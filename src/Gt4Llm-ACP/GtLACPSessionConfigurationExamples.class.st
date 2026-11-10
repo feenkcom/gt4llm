@@ -304,6 +304,23 @@ GtLACPSessionConfigurationExamples >> fieldId: anId in: scripter [
 	^ fieldId
 ]
 
+{ #category : #examples }
+GtLACPSessionConfigurationExamples >> modelAndEffortComeFirst [
+	<gtExample>
+	| options form descriptions |
+	options := self codexOptions.
+	form := GtLACPSessionConfigurationForm new
+			configOptions: {options third.
+					options second.
+					options first};
+			yourself.
+	descriptions := form magritteDescription children.
+	self
+		assert: (descriptions collect: [ :each | each propertyAt: #acpConfigId ]) asArray
+		equals: #('model' 'reasoning_effort' 'mode').
+	^ form
+]
+
 { #category : #fixtures }
 GtLACPSessionConfigurationExamples >> option: anId name: aName category: aCategory value: aValue choices: choices [
 	^ {'id' -> anId.

@@ -53,7 +53,7 @@ GtLACPSessionConfigurationElement >> buildSummary [
 		addChild: ((self buildValueLabelFor: (self optionForCategory: 'model' ids: #('model')))
 				id: #'acp-configuration-model';
 				yourself).
-	pane addChild: (self buildSectionLabel: 'Effort').
+	pane addChild: (self buildSectionLabel: 'Reasoning effort').
 	pane
 		addChild: ((self
 				buildValueLabelFor: (self optionForCategory: 'thought_level' ids: #('reasoning_effort' 'effort')))

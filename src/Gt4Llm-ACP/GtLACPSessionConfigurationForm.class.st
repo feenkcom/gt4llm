@@ -47,9 +47,18 @@ GtLACPSessionConfigurationForm >> asElement [
 
 { #category : #magritte }
 GtLACPSessionConfigurationForm >> basicMagritteDescription [
-	| container |
+	| container models efforts ordered |
 	container := MAContainer new.
-	configOptions
+	models := configOptions
+			select: [ :option | 
+				(option at: 'category' ifAbsent: [ '' ]) = 'model'
+					or: [ (option at: 'id') = 'model' ] ].
+	efforts := (configOptions copyWithoutAll: models)
+			select: [ :option | 
+				(option at: 'category' ifAbsent: [ '' ]) = 'thought_level'
+					or: [ #('effort' 'reasoning_effort') includes: (option at: 'id') ] ].
+	ordered := models , efforts , (configOptions copyWithoutAll: models , efforts).
+	ordered
 		withIndexDo: [ :option :index | 
 			container
 				add: ((self descriptionFor: option)
@@ -98,6 +107,9 @@ GtLACPSessionConfigurationForm >> descriptionFor: option [
 							yourself ] ].
 	description
 		propertyAt: #acpConfigId put: anId;
+		labelAptitude: [ BrGlamorousLabelAptitude new
+				foreground: Color gray;
+				fontSize: 12 ];
 		label: (option at: 'name' ifAbsent: [ anId ]);
 		comment: (option at: 'description' ifAbsent: [ '' ]);
 		accessor: (MAPluggableAccessor
@@ -112,7 +124,7 @@ GtLACPSessionConfigurationForm >> descriptionFor: option [
 GtLACPSessionConfigurationForm >> magritteAcceptAction [
 	<magritteActionDescription>
 	^ super magritteAcceptAction
-		isLabelVisible: true;
+		isLabelVisible: false;
 		action: (GtMagritteAction new
 				beInFutureProcess;
 				beWithFutureResponse;

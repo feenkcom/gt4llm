@@ -1,5 +1,5 @@
 "
-I adapt one ACP object to a conversation-tree row. My subclasses define agent, message and tool-call rows, and selection exposes the underlying object.
+I adapt one ACP object to a conversation-tree row. My subclasses define agent, turn, message and tool-call rows, and selection exposes the underlying object.
 "
 Class {
 	#name : #GtLACPConversationTreeNode,

@@ -12,8 +12,10 @@ Class {
 	#category : #'Gt4Llm-ACP-Core'
 }
 
-{ #category : #'gt - extensions' }
+{ #category : #'gt - views' }
 GtLACPSessionGroup >> gtConversationTreeFor: aView [
+	"Which sessions and turns contain each message and tool call?"
+
 	<gtView>
 	| tree cache |
 	cache := IdentityDictionary new.
@@ -35,7 +37,7 @@ GtLACPSessionGroup >> gtConversationTreeFor: aView [
 				width: 75;
 			column: 'Directory' text: #directory;
 			send: #object;
-			expandAll;
+			expandUpTo: 1;
 			actionUpdateButtonTooltip: 'Refresh conversation tree'.
 	self items
 		ifNotEmpty: [ tree

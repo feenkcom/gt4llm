@@ -71,6 +71,13 @@ GtLACPPromptTurn >> allToolCalls [
  ^ toolCalls copy , (self delegatedTurns flatCollect: #allToolCalls)
 ]
 
+{ #category : #converting }
+GtLACPPromptTurn >> asConversationTreeNode [
+	^ GtLACPTurnTreeNode new
+		object: self;
+		yourself
+]
+
 { #category : #accessing }
 GtLACPPromptTurn >> assistantMessage [
  ^ assistantMessage ifNil: [
