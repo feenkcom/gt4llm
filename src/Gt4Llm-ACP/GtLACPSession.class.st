@@ -1257,18 +1257,18 @@ GtLACPSession >> subagents [
  ^ subagents ifNil: [ subagents := OrderedCollection new ]
 ]
 
-{ #category : #views }
+{ #category : #private }
 GtLACPSession >> summarizerViewsFor: summarizers inContext: aContext [
- | views |
- views := Array streamContents: [ :stream |
-  summarizers do: [ :model |
-   stream nextPutAll: ((GtPhlowViewsCollector new
-    fromObject: model;
-    context: aContext;
-    collect) select: [ :view |
-     view definingMethod methodClass inheritsFrom: GtLToolCallsSummarizer ]) ] ].
- GtPhlowUtility sortByPriority: views.
- ^ views
+	| views |
+	views := summarizers
+			flatCollect: [ :model | 
+				GtPhlowViewsCollector new
+					fromObject: model;
+					pragmaNames: GtLSettings messageViewPragmaNames;
+					context: aContext;
+					collect ].
+	GtPhlowUtility sortByPriority: views.
+	^ views
 ]
 
 { #category : #summaries }

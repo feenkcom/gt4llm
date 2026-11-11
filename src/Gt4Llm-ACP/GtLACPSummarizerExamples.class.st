@@ -347,6 +347,13 @@ GtLACPSummarizerExamples >> refreshPreservesChat [
 			step
 				onPhlowCellWithString: '3';
 				exists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				// BrTabGroup;
+				satisfies: [ :tabs | 
+					tabs viewModel tabs
+						noneSatisfy: [ :tab | tab tabLabel text asString = 'Grouped tools (detailed)' ] ] ].
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
@@ -457,6 +464,13 @@ GtLACPSummarizerExamples >> summariesDisplayed [
 			step
 				onPhlowCellWithString: 'lookupClass';
 				exists ].
+	scripter
+		assertStep: [ :step | 
+			step
+				// BrTabGroup;
+				satisfies: [ :tabs | 
+					tabs viewModel tabs
+						noneSatisfy: [ :tab | tab tabLabel text asString = 'Grouped tools (detailed)' ] ] ].
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]

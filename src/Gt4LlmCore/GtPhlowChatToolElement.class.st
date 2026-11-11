@@ -106,16 +106,15 @@ GtPhlowChatToolElement >> playgroundElement [
 
 { #category : #private }
 GtPhlowChatToolElement >> updateContainedViews [
-	| compositeView tabGroup summarizersChangedListener |
-	self chat ifNil: [
-		self viewsContainerElement removeChildren.
-		^ self ].
-	compositeView := GtPhlowCompositeView new
-		views: self collectToolViews.
-	tabGroup := compositeView asElementDo: [ :anElement | anElement ].
-	summarizersChangedListener := GtLPhlowSummarizersChangedListener
-			installOnCompositeElement: tabGroup forRegistry: self chat summarizersRegistry.
-			
+	| compositeView tabGroup |
+	self chat
+		ifNil: [ self viewsContainerElement removeChildren.
+			^ self ].
+	compositeView := GtPhlowCompositeView new views: self collectToolViews.
+	tabGroup := compositeView asElementDo: [ :element | element ].
+	GtLPhlowSummarizersChangedListener
+		installOnCompositeElement: tabGroup
+		forRegistry: self chat summarizersRegistry.
 	self viewsContainerElement
 		removeChildren;
 		addChild: tabGroup
