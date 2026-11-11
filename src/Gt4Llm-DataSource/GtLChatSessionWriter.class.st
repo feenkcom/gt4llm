@@ -126,6 +126,12 @@ GtLChatSessionWriter >> onExecutionStateChanged: aGtLChatExecutionStateChanged [
 		ifIdle: [ self writeLatest ]
 ]
 
+{ #category : #'announcement handling' }
+GtLChatSessionWriter >> onToolCalled: aGtLToolCalledAnnouncement [
+
+	self writeLatest
+]
+
 { #category : #printing }
 GtLChatSessionWriter >> printOn: aStream [
 	super printOn: aStream.
@@ -155,8 +161,11 @@ GtLChatSessionWriter >> rollbackTo: bytePosition [
 GtLChatSessionWriter >> subscribe [
 	chat
 		when: GtLChatExecutionStateChanged
-		send: #onExecutionStateChanged:
-		to: self
+			send: #onExecutionStateChanged:
+			to: self;
+		when: GtLToolCalledAnnouncement
+			send: #onToolCalled:
+			to: self.
 ]
 
 { #category : #subscriptions }

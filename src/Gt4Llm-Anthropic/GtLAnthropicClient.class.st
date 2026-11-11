@@ -180,6 +180,12 @@ GtLAnthropicClient >> gtViewCallsWithTokensFor: aView [
 		send: #key
 ]
 
+{ #category : #accessing }
+GtLAnthropicClient >> history [
+
+	^ history
+]
+
 { #category : #'as yet unclassified' }
 GtLAnthropicClient >> initialize [
 	super initialize.
