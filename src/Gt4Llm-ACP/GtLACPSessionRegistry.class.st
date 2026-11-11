@@ -149,10 +149,7 @@ GtLACPSessionRegistry >> gtSessionsFor: aView [
 		title: 'Sessions';
 		priority: 10;
 		stencil: [ GtLACPSessionRegistrySessionsElement new registry: self ];
-		actionButtonIcon: BrGlamorousVectorIcons refresh
-			id: GtPhlowViewRefreshContentButtonId new
-			tooltip: 'Refresh sessions'
-			action: [ :aButton :aTab | (aTab query // GtLACPSessionRegistrySessionsElement) anyOne refresh ]
+		actionUpdateButton
 ]
 
 { #category : #testing }
