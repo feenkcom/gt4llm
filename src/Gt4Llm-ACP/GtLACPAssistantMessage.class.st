@@ -203,9 +203,10 @@ GtLACPAssistantMessage >> toolCalls [
  ^ turn allToolCalls
 ]
 
-{ #category : #summaries }
+{ #category : #accessing }
 GtLACPAssistantMessage >> toolCallsSummarizers [
- ^ turn session summarizersRegistry summarizersForMessages: self mcpToolMessages
+	^ turn session summarizersRegistry copy
+		summarizersForMessages: self mcpToolMessages
 ]
 
 { #category : #accessing }

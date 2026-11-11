@@ -419,6 +419,81 @@ GtLACPSummarizerExamples >> session [
 ]
 
 { #category : #examples }
+GtLACPSummarizerExamples >> sessionSummariesSurviveReplyRendering [
+	<gtExample>
+	| scripter session tabs tabbar |
+	scripter := self summariesDisplayed.
+	session := scripter model.
+	tabs := scripter element viewsContainerElement children first.
+	tabbar := tabs query
+			// #tabbar;
+			anyOne.
+	scripter
+		doStep: [ :step | 
+			step
+				label: 'Complete a reply without tool calls while the summary is selected';
+				block: [ | turn |
+					turn := session prompt: 'Reply without tools'.
+					session
+						receiveUpdate: {'sessionUpdate' -> 'agent_message_chunk'.
+								'content'
+									-> {'type' -> 'text'.
+											'text' -> 'No tools needed'} asDictionary} asDictionary.
+					self finish: turn in: session ] ].
+	scripter pulseUntilReady.
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'The session summary still contains the earlier tool call';
+				onElement: tabs;
+				onPhlowCellWithString: 'lookupClass';
+				exists ].
+	scripter
+		clickStep: [ :step | 
+			step
+				label: 'Render the reply by switching back to Chat';
+				onElement: (tabbar children detect: [ :tab | tab label asString = 'Chat' ]) ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-text';
+				value: [ :editor | editor text asString ] equals: [ 'No tools needed' ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'Rendering a reply must preserve the session summary tab';
+				onElement: tabbar;
+				satisfies: [ :bar | bar children anySatisfy: [ :tab | tab label asString = 'Grouped tools' ] ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPSummarizerExamples >> sessionToolWithoutToolCalls [
+	<gtExample>
+	| session element scripter tabs |
+	session := self session.
+	element := (GtLACPSessionTool forSession: session)
+			asElementDo: [ :widget | widget ].
+	scripter := BlScripter new
+			extent: 1100 @ 800;
+			model: session;
+			element: element;
+			yourself.
+	tabs := element viewsContainerElement children first.
+	self assert: session allToolCalls isEmpty.
+	scripter
+		assertStep: [ :step | 
+			step
+				onElement: tabs;
+				satisfies: [ :group | 
+					group viewModel tabs
+						noneSatisfy: [ :tab | tab tabLabel text asString = 'Grouped tools' ] ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
 GtLACPSummarizerExamples >> sessionWithSummaries [
  <gtExample>
  | session turn message |
@@ -471,6 +546,45 @@ GtLACPSummarizerExamples >> summariesDisplayed [
 				satisfies: [ :tabs | 
 					tabs viewModel tabs
 						noneSatisfy: [ :tab | tab tabLabel text asString = 'Grouped tools (detailed)' ] ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLACPSummarizerExamples >> summarizerTabAppearsAfterToolCalls [
+	<gtExample>
+	| session scripter tabs |
+	scripter := self sessionToolWithoutToolCalls.
+	session := scripter model.
+	tabs := scripter element viewsContainerElement children first.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ | turn message |
+					turn := session prompt: 'Inspect Object'.
+					message := self messageWithId: 'appearing-summary'.
+					session mcpServer privateAddToolMessage: message.
+					self addCallWithId: message toolCall id to: session.
+					self finish: turn in: session ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onElement: tabs;
+				satisfies: [ :group | 
+					group viewModel tabs
+						anySatisfy: [ :tab | tab tabLabel text asString = 'Grouped tools' ] ] ].
+	scripter
+		clickStep: [ :step | 
+			step
+				onElement: tabs;
+				// #tabbar;
+				onChildFromBlock: [ :bar | bar children detect: [ :tab | tab label asString = 'Grouped tools' ] ] ].
+	scripter
+		assertStep: [ :step | 
+			step
+				onElement: tabs;
+				onPhlowCellWithString: 'lookupClass';
+				exists ].
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
 ]
