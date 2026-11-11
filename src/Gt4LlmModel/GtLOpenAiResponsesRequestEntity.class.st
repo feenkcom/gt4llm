@@ -51,5 +51,9 @@ GtLOpenAiResponsesRequestEntity >> stream [
 
 { #category : #accessing }
 GtLOpenAiResponsesRequestEntity >> tools [
-	^ (self rawData at: 'tools') collect: [ :each | GtLOpenAiToolEntity new rawData: each ]
+
+	^ self rawData at: 'tools'
+		ifPresent: [ :toolRawData |
+			toolRawData collect: [ :each | GtLOpenAiToolEntity new rawData: each ] ]
+		ifAbsent: [ nil ]
 ]

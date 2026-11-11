@@ -272,7 +272,9 @@ GtLOpenAIProvider >> performToolCallsIn: result with: activeTools [
 					ifDisabled: [ toolMessage beSkippedExecutionState ].
 				
 				toolMessage ].
-	self chat signalRunHasUpdated.
+	self chat 
+		signalToolCalled;
+		signalRunHasUpdated.
 	
 	"We send all chat messages, so it is enough to process just the last tool message.
 	See: `GtLOpenAIGenerateResponseAPICommand>>#buildEntity`."

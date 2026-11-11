@@ -140,6 +140,7 @@ GtLChatLiveExamples >> createChat [
 
 	provider := self createProvider.
 	newChat provider: provider.
+	newChat stopAllSessionWriters.
 	semaphore := Semaphore new.
 	newChat announcer weak
 		when: GtLThreadRunIsDoneAnnouncement

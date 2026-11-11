@@ -883,6 +883,13 @@ GtLChat >> signalRunIsDone [
 	self announcer announce: GtLThreadRunIsDoneAnnouncement new
 ]
 
+{ #category : #announcing }
+GtLChat >> signalToolCalled [
+	"Announce that a tool call has been processed"
+	
+	self announcer announce: GtLToolCalledAnnouncement new
+]
+
 { #category : #convenience }
 GtLChat >> startSessionWriter [
 	"Start a writer that saves each message to disk as the provider goes idle."
