@@ -156,8 +156,9 @@ GtLChatRegistry >> newGtChatWithProvider: aProviderOrNil [
 	aProviderOrNil ifNotNil: [ chat provider: aProviderOrNil ].
 	chat
 		tools: GtLTools gt;
-		markdownResponse;
+		"markdownResponse;"
 		gtPageExplanation: 'Rules for Moldable Development for Glamorous Toolkit';
+		gtPageExplanation: 'Rules for styling replies';
 		gtPageExplanation: 'Examples by example'.	";
 		gtPageExplanation: 'Inspector phlow views by example'"
 	^ self registerChat: chat
