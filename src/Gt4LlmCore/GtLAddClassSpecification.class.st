@@ -40,15 +40,17 @@ GtLAddClassSpecification >> descriptionContainer [
 		comment: 'The "Add class" transformation adds a class into the system. The transformation must provide the className, packageName, and slotNames.'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 GtLAddClassSpecification >> gtDisplayOn: aStream [
 	aStream
 		nextPutAll: 'Add class ';
-		nextPutAll: (newClassName);
+		nextPutAll: newClassName asString;
 		nextPutAll: ' as subclass of ';
-		nextPutAll: superclassName;
-		nextPutAll: ' with slots ';
-		nextPutAll: slotNames
+		nextPutAll: superclassName asString.
+	(slotNames isNil or: [ slotNames isEmpty ])
+		ifFalse: [ aStream
+				nextPutAll: ' with slots ';
+				nextPutAll: slotNames asString ]
 ]
 
 { #category : #accessing }

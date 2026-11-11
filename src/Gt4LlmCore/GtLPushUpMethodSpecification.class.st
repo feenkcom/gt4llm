@@ -33,13 +33,18 @@ GtLPushUpMethodSpecification >> descriptionContainer [
 		comment: 'The "Push up method" transformation pushes up a method from a subclass to a direct or indirect superclass. If the method exists in other sibling subclasses of the superclass and is equivalently defined, the method will be removed from the sibling subclasses too. The transformation must provide the methodClassName, methodNameToPushUp and targetClassName. The methodClassName is the name of a subclass that implements the methodNameToPushUp. The methodNameToPushUp is the version of the method that is being pushed up to the superclass. The targetClassName is the name of the superclass to which to push.'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #printing }
 GtLPushUpMethodSpecification >> gtDisplayOn: aStream [
 	aStream
 		nextPutAll: 'Push up method ';
-		nextPutAll: self selector;
+		nextPutAll: (', ' join: (self selectors collect: [ :each | each asString ]));
 		nextPutAll: ' from ';
-		nextPutAll: methodClassName
+		nextPutAll: methodClassName asString.
+	targetClassName
+		ifNotNil: [ :aClassName | 
+			aStream
+				nextPutAll: ' to ';
+				nextPutAll: aClassName asString ]
 ]
 
 { #category : #validation }

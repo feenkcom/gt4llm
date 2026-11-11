@@ -29,7 +29,7 @@ GtLACPRemoveSessionConfirmationStencil >> create [
 				id: #'acp-remove-session-accept';
 				aptitude: BrGlamorousButtonWithLabelAptitude;
 				beSmallSize;
-				label: 'Accept';
+				label: 'Remove session';
 				action: [ menuModel ifNotNil: #hideAll.
 					registry removeSession: session ]);
 		yourself

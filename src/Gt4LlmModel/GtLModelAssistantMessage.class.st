@@ -62,14 +62,17 @@ GtLModelAssistantMessage >> contentText [
 ]
 
 { #category : #ui }
-GtLModelAssistantMessage >> gtContentFor: aView [
+GtLModelAssistantMessage >> gtContentFor: aView inContext: aPhlowContext [
 	<gtView>
 	<gtLlmView>
-	(self hasContent not or: [ self responseModels isNotEmpty ]) ifTrue: [ ^ aView empty ].
+	(self hasContent not or: [ self responseModels isNotEmpty ])
+		ifTrue: [ ^ aView empty ].
 	^ aView textEditor
 		title: 'Content';
 		priority: 7;
-		text: [ self contentText ]
+		text: [ GtLMessageStyler new
+				objectRegistry: aPhlowContext objectRegistry;
+				privateStyle: self contentText asRopedText ]
 ]
 
 { #category : #accessing }

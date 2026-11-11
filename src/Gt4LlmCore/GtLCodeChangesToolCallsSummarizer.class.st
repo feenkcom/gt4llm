@@ -32,53 +32,68 @@ GtLCodeChangesToolCallsSummarizer >> addCodeChangesFrom: aToolCall [
 
 { #category : #private }
 GtLCodeChangesToolCallsSummarizer >> addCodeChangesFromModel: aModel toolCall: aToolCall [
-	(aModel isKindOf: GtLClassesCreationResult) ifTrue: [
-		^ self 
-			addCodeChangesLabeled: 'Created class/trait' 
-			from: aModel successfulClassCreationResults 
-			toolCall: aToolCall ].
-		
-	(aModel isKindOf: GtLClassModificationResult) ifTrue: [
-		^ self addCodeChanges: { self 
-				codeChangeEntryLabel: 'Changed class signature' 
-				object: aModel 
-				toolCall: aToolCall } ].
-		
-	(aModel isKindOf: GtLClassCommentChangeResult) ifTrue: [
-		^ self addCodeChanges: { self 
-				codeChangeEntryLabel: 'Changed class comment' 
-				object: aModel 
-				toolCall: aToolCall } ].
-		
-	(aModel isKindOf: GtLClassRemovalResult) ifTrue: [
-		^ self addCodeChanges: { self 
-				codeChangeEntryLabel: 'Removed class' 
-				object: aModel 
-				toolCall: aToolCall } ].
-		
-	(aModel isKindOf: GtLMethodCompilationResult) ifTrue: [
-		^ self addCodeChanges: { self 
-				codeChangeEntryLabel: 'Compiled method' 
-				object: aModel 
-				toolCall: aToolCall } ].
-		
-	(aModel isKindOf: GtLMethodsCompilationResult) ifTrue: [
-		^ self 
-				addCodeChangesLabeled: 'Compiled method' 
-				from: aModel successfulMethodCompilationResults 
+	(aModel isKindOf: GtLClassesCreationResult)
+		ifTrue: [ ^ self
+				addCodeChangesLabeled: 'Created class/trait'
+				from: aModel successfulClassCreationResults
 				toolCall: aToolCall ].
-		
-	(aModel isKindOf: GtLMethodRemovalResult) ifTrue: [
-		^ self 
-			addCodeChanges: { self codeChangeEntryLabel: 'Removed method' 
-			object: aModel 
-			toolCall: aToolCall } ].
-		
-	(aModel isKindOf: GtLMethodsRemovalResult) ifTrue: [
-		^ self 
-				addCodeChangesLabeled: 'Removed method' 
-				from: aModel successfulMethodsRemovalResult 
-				toolCall: aToolCall ]
+
+	(aModel isKindOf: GtLClassModificationResult)
+		ifTrue: [ ^ self
+				addCodeChanges: {self
+							codeChangeEntryLabel: 'Changed class signature'
+							object: aModel
+							toolCall: aToolCall} ].
+
+	(aModel isKindOf: GtLClassCommentChangeResult)
+		ifTrue: [ ^ self
+				addCodeChanges: {self
+							codeChangeEntryLabel: 'Changed class comment'
+							object: aModel
+							toolCall: aToolCall} ].
+
+	(aModel isKindOf: GtLClassRemovalResult)
+		ifTrue: [ ^ self
+				addCodeChanges: {self
+							codeChangeEntryLabel: 'Removed class'
+							object: aModel
+							toolCall: aToolCall} ].
+
+	(aModel isKindOf: GtLMethodCompilationResult)
+		ifTrue: [ ^ self
+				addCodeChanges: {self
+							codeChangeEntryLabel: 'Compiled method'
+							object: aModel
+							toolCall: aToolCall} ].
+
+	(aModel isKindOf: GtLMethodsCompilationResult)
+		ifTrue: [ ^ self
+				addCodeChangesLabeled: 'Compiled method'
+				from: aModel successfulMethodCompilationResults
+				toolCall: aToolCall ].
+
+	(aModel isKindOf: GtLMethodRemovalResult)
+		ifTrue: [ ^ self
+				addCodeChanges: {self
+							codeChangeEntryLabel: 'Removed method'
+							object: aModel
+							toolCall: aToolCall} ].
+
+	(aModel isKindOf: GtLMethodsRemovalResult)
+		ifTrue: [ ^ self
+				addCodeChangesLabeled: 'Removed method'
+				from: aModel successfulMethodsRemovalResult
+				toolCall: aToolCall ].
+
+	(aModel isKindOf: GtLAppliedRefactoring)
+		ifTrue: [  
+				"Also covers failed refactorings: they report the changes applied before the error"
+				^ self addCodeChanges: (aModel codeChangeResults
+						collect: [ :each | 
+							self
+								codeChangeEntryLabel: (self refactoringLabelFor: each in: aModel)
+								object: each
+								toolCall: aToolCall ]) ]
 ]
 
 { #category : #private }
@@ -257,7 +272,7 @@ GtLCodeChangesToolCallsSummarizer >> initializeWithToolCalls: aToolCallGroup [
 
 { #category : #testing }
 GtLCodeChangesToolCallsSummarizer >> isCodeChangeToolCall: aToolCall [
-	^ #(createClass createClassesAndTraits changeClassOrTraitSignature changeClassOrTraitComment removeClass compileMethod compileMethods removeMethod removeMethods)
+	^ #(createClass createClassesAndTraits changeClassOrTraitSignature changeClassOrTraitComment removeClass compileMethod compileMethods removeMethod removeMethods applyRefactoring)
 		includes: aToolCall name asSymbol
 ]
 
@@ -297,6 +312,21 @@ GtLCodeChangesToolCallsSummarizer >> rebuildCodeChanges [
 	codeChanges := GtLSummarizerCodeChangesGroup new.
 	self relevantToolCalls do: [ :each | 
 		self addCodeChangesFrom: each ]
+]
+
+{ #category : #private }
+GtLCodeChangesToolCallsSummarizer >> refactoringLabelFor: aCodeChangeResult in: anAppliedRefactoring [
+	"Return the label of a code change done by a refactoring, such as 'Refactoring (Push up method): added method',
+	or 'Refactoring: added method' when the name of the refactoring is unknown"
+
+	| aKind |
+	aKind := anAppliedRefactoring kindOfCodeChange: aCodeChangeResult.
+	^ anAppliedRefactoring refactoringName
+		ifNil: [ 'Refactoring: ' , aKind ]
+		ifNotNil: [ :aName | 
+			aName isEmpty
+				ifTrue: [ 'Refactoring: ' , aKind ]
+				ifFalse: [ 'Refactoring (' , aName , '): ' , aKind ] ]
 ]
 
 { #category : #accessing }

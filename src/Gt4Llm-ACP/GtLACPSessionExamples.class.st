@@ -1785,7 +1785,7 @@ GtLACPSessionExamples >> sessionToolViewSwitching [
 	scripter
 		assertStep: [ :step | 
 			step
-				onPhlowCellWithString: scripter model currentTurn userMessages first text;
+				onPhlowCellWithString: scripter model currentTurn asConversationTreeNode label;
 				exists ].
 	scripter
 		clickStep: [ :step | 

@@ -67,28 +67,29 @@ GtLToolCallsByTypeSummarizer >> gtGroupedToolsDetailedGroupingFor: aView [
 		actionUpdateButton
 ]
 
-{ #category : #'gt-extensions' }
+{ #category : #'gt - views' }
 GtLToolCallsByTypeSummarizer >> gtGroupedToolsFor: aView [
 	<gtView>
-
+	<gtLlmView>
 	^ aView columnedList
 		title: 'Grouped tools';
 		priority: 21;
 		items: [ self groupedToolCalls associations
-			sorted: [ :each | each value size ] descending ];
+				sorted: [ :each | each value size ] descending ];
 		column: 'Tool' text: [ :assoc | assoc key name ];
-		column: 'Count' text: [ :assoc | assoc value size ] width: 100;
-		column: 'Total duration' text: [ :assoc | 
-			self durationTextFor: assoc value totalExecutionDuration ];
-		column: 'Aveage duration' text: [ :assoc | 
-			self durationTextFor: assoc value averageExecutionDuration ];
-		column: 'Longest run' text: [ :assoc | 
-			self durationTextFor: assoc value longestExecutionDuration ];
+		column: 'Count'
+			text: [ :assoc | assoc value size ]
+			width: 100;
+		column: 'Total duration'
+			text: [ :assoc | self durationTextFor: assoc value totalExecutionDuration ];
+		column: 'Aveage duration'
+			text: [ :assoc | self durationTextFor: assoc value averageExecutionDuration ];
+		column: 'Longest run'
+			text: [ :assoc | self durationTextFor: assoc value longestExecutionDuration ];
 		send: [ :assoc | assoc value ];
-		actionButtonIcon: BrGlamorousVectorIcons inspect 
+		actionButtonIcon: BrGlamorousVectorIcons inspect
 			tooltip: 'Inspect summarizer'
-			action: [ :aButton |
-				aButton phlow spawnObject: self ];
+			action: [ :aButton | aButton phlow spawnObject: self ];
 		actionUpdateButton
 ]
 

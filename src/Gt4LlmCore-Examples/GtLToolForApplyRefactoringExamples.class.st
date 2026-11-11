@@ -94,25 +94,37 @@ GtLToolForApplyRefactoringExamples >> applyAddMethod [
 
 { #category : #examples }
 GtLToolForApplyRefactoringExamples >> applyAfterClassRemoval [
+	"Applying fails when the class of a previewed method was removed in the meantime.
+	The applied refactoring is then marked as failed and holds the frozen exception."
+
 	<gtExample>
-	| environment objectStorage objectId call |
+	| environment objectStorage objectId call targetObject |
 	environment := GtPharoDummyEnvironment withPackages: 1 classes: 1.
 	objectStorage := GtLObjectStorage new.
-	
-	[objectId := self previewTransformation: (self
-						addMethodTransformationTo: environment anyDummyClass className asString)
-				in: objectStorage]
-			ensure: [environment removeFromSystem].
-	call := self
-				executeTool: GtLToolForApplyRefactoring new
-				withArguments: (self argumentsWithObjectId: objectId)
-				inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+
+	[ objectId := self
+			previewTransformation: (self addMethodTransformationTo: environment anyDummyClass className asString)
+			in: objectStorage ] ensure: [ environment removeFromSystem ].
+	call := GtRefactoryChangeManager
+			isolatedInstanceDuring: [ self
+					executeTool: GtLToolForApplyRefactoring new
+					withArguments: (self argumentsWithObjectId: objectId)
+					inContext: (GtLToolExecutionContext new objectStorage: objectStorage) ].
+	targetObject := call result targetObject.
+	self assert: targetObject class equals: GtLAppliedRefactoring.
+	self assert: targetObject status equals: 'failed'.
+	self assert: targetObject hasFailed.
+	self assert: targetObject undoChange isNil.
+	self assert: targetObject codeChangeResults isEmpty.
 	self
-		assertExceptionDomainObject: call result targetObject
+		assertExceptionDomainObject: targetObject exception
 		withExceptionClass: MessageNotUnderstood
 		messageSubstring: '#includesSelector: was sent to nil'.
+	self
+		assert: (targetObject errorMessage
+				includesSubstring: '#includesSelector: was sent to nil').
 	self assert: (objectStorage objectAt: objectId) isApplied not.
-	^call
+	^ call
 ]
 
 { #category : #examples }

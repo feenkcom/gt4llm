@@ -9,17 +9,18 @@ Class {
 	#category : #'Gt4LlmCore-UI'
 }
 
-{ #category : #'api - actions' }
+{ #category : #private }
 GtLPhlowChangeTabGroupModifySummarizersTabAction >> collectSummarizedViewsFor: aCollectionOfSummarizers [
 	| collectedViews |
 	collectedViews := Array
-		streamContents: [ :aStream |
-
-		aCollectionOfSummarizers do: [ :aSummarizer |
-				aStream nextPutAll: (GtPhlowViewsCollector new
-					fromObject: aSummarizer;
-					pragmaNames: GtLSettings messageViewPragmaNames;
-					collect) ] ].
+			streamContents: [ :aStream | 
+				aCollectionOfSummarizers
+					do: [ :aSummarizer | 
+						aStream
+							nextPutAll: (GtPhlowViewsCollector new
+									fromObject: aSummarizer;
+									pragmaNames: GtLSettings messageViewPragmaNames;
+									collect) ] ].
 
 	GtPhlowUtility sortByPriority: collectedViews.
 

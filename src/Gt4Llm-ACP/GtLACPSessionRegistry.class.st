@@ -26,6 +26,25 @@ GtLACPSessionRegistry class >> current [
 	^ Current
 ]
 
+{ #category : #'as yet unclassified' }
+GtLACPSessionRegistry class >> gtDefaultInspectorTool [
+	^ GtPhlowCompositeTool new
+		addTool: (GtClassCoderTool forClass: self);
+		addTool: (GtPhlowTool default object: self);
+		addTool: (GtLACPSessionRegistryTool forRegistry: self current)
+]
+
+{ #category : #views }
+GtLACPSessionRegistry class >> gtSessionsFor: aView [
+	<gtView>
+	<gtClassView>
+	^ aView forward
+		title: 'Sessions';
+		priority: 10;
+		object: [ self current ];
+		view: #gtSessionsFor:
+]
+
 { #category : #accessing }
 GtLACPSessionRegistry class >> resetCurrent [
 	Current := nil
@@ -130,10 +149,7 @@ GtLACPSessionRegistry >> gtSessionsFor: aView [
 		title: 'Sessions';
 		priority: 10;
 		stencil: [ GtLACPSessionRegistrySessionsElement new registry: self ];
-		actionButtonIcon: BrGlamorousVectorIcons refresh
-			id: GtPhlowViewRefreshContentButtonId new
-			tooltip: 'Refresh sessions'
-			action: [ :aButton :aTab | (aTab query // GtLACPSessionRegistrySessionsElement) anyOne refresh ]
+		actionUpdateButton
 ]
 
 { #category : #testing }

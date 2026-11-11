@@ -600,31 +600,60 @@ GtLACPSubagentExamples >> conversationTreeAfterPromptResponse: response [
 
 { #category : #examples }
 GtLACPSubagentExamples >> conversationTreeContentsDisplayed [
- <gtExample>
- | root element scripter |
- root := self conversationTreeWithMessagesAndTools.
- element := (root gtConversationTreeFor: GtPhlowView empty)
-  asElementDo: [ :widget | widget background: Color white; yourself ].
- scripter := BlScripter new extent: 1400 @ 900; model: root; element: element; yourself.
- #('Tree worker' 'Inspect project' 'Inspect class' 'Checking the class protocol'
-  'Class inspection complete' 'Project inspection complete' 'Agent' 'Tool' 'Reasoning') do: [ :text |
-  scripter assertStep: [ :step | step onPhlowCellWithString: text; exists ] ].
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| root element scripter |
+	root := self conversationTreeWithMessagesAndTools.
+	element := (((GtLACPSessionGroup withAll: {root})
+			gtConversationTreeFor: GtPhlowView empty)
+			expandAll;
+			yourself)
+			asElementDo: [ :widget | 
+				widget
+					background: Color white;
+					yourself ].
+	scripter := BlScripter new
+			extent: 1400 @ 900;
+			model: root;
+			element: element;
+			yourself.
+	#('Turn 1: Inspect the project' 'Turn' 'Tree worker' 'Inspect project' 'Inspect class' 'Checking the class protocol' 'Class inspection complete' 'Project inspection complete' 'Agent' 'Tool' 'Reasoning')
+		do: [ :text | 
+			scripter
+				assertStep: [ :step | 
+					step
+						onPhlowCellWithString: text;
+						exists ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
 GtLACPSubagentExamples >> conversationTreeDisplayed [
- <gtExample>
- | root element scripter |
- root := self nestedConversations.
- element := (root gtConversationTreeFor: GtPhlowView empty)
-  asElementDo: [ :widget | widget background: Color white; yourself ].
- scripter := BlScripter new extent: 1100 @ 700; model: root; element: element; yourself.
- #('Codex' 'Code reviewer' 'Test investigator' 'API researcher') do: [ :title |
-  scripter assertStep: [ :step | step onPhlowCellWithString: title; exists ] ].
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| root element scripter |
+	root := self nestedConversations.
+	element := (((GtLACPSessionGroup withAll: {root})
+			gtConversationTreeFor: GtPhlowView empty)
+			expandAll;
+			yourself)
+			asElementDo: [ :widget | 
+				widget
+					background: Color white;
+					yourself ].
+	scripter := BlScripter new
+			extent: 1100 @ 700;
+			model: root;
+			element: element;
+			yourself.
+	#('Codex' 'Code reviewer' 'Test investigator' 'API researcher')
+		do: [ :title | 
+			scripter
+				assertStep: [ :step | 
+					step
+						onPhlowCellWithString: title;
+						exists ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
@@ -658,68 +687,151 @@ GtLACPSubagentExamples >> conversationTreeUpdatesAfterPromptFailure [
 
 { #category : #examples }
 GtLACPSubagentExamples >> conversationTreeUpdatesForMessagesAndTools [
- <gtExample>
- | root child element scripter |
- root := GtLACPExamples new session.
- child := self announce: 'live-tree-worker' title: 'Live tree worker' in: root.
- self assert: child currentTurn parentTurn isNil.
- element := (root gtConversationTreeFor: GtPhlowView empty)
-  asElementDo: [ :widget | widget background: Color white; yourself ].
- scripter := BlScripter new extent: 1400 @ 900; model: root; element: element; yourself.
- scripter doStep: [ :step | step block: [
-  self update: { 'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'live-tree-tool'.
-   'title' -> 'Read live class'. 'status' -> 'in_progress' } asDictionary for: child.
-  GtLACPMessagePresentationExamples new text: 'Inspecting' id: 'live-tree-progress' in: child ] ].
- scripter pulseUntilReady.
- #('Read live class' 'Inspecting' 'in_progress') do: [ :text |
-  scripter assertStep: [ :step | step onPhlowCellWithString: text; exists ] ].
- scripter doStep: [ :step | step block: [
-  self update: { 'sessionUpdate' -> 'tool_call_update'. 'toolCallId' -> 'live-tree-tool'.
-   'status' -> 'completed' } asDictionary for: child.
-  GtLACPMessagePresentationExamples new text: ' the protocol' id: 'live-tree-progress' in: child.
-  GtLACPMessagePresentationExamples new text: 'Live class checked' id: 'live-tree-answer' in: child.
-  self idle: child ] ].
- scripter pulseUntilReady.
- #('Inspecting the protocol' 'Live class checked' 'completed' 'final') do: [ :text |
-  scripter assertStep: [ :step | step onPhlowCellWithString: text; exists ] ].
- GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
- ^ scripter
+	<gtExample>
+	| root child element scripter |
+	root := GtLACPExamples new session.
+	child := self
+			announce: 'live-tree-worker'
+			title: 'Live tree worker'
+			in: root.
+	self assert: child currentTurn parentTurn isNil.
+	element := (((GtLACPSessionGroup withAll: {root})
+			gtConversationTreeFor: GtPhlowView empty)
+			expandAll;
+			yourself)
+			asElementDo: [ :widget | 
+				widget
+					background: Color white;
+					yourself ].
+	scripter := BlScripter new
+			extent: 1400 @ 900;
+			model: root;
+			element: element;
+			yourself.
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ self
+						update: {'sessionUpdate' -> 'tool_call'.
+								'toolCallId' -> 'live-tree-tool'.
+								'title' -> 'Read live class'.
+								'status' -> 'in_progress'} asDictionary
+						for: child.
+					GtLACPMessagePresentationExamples new
+						text: 'Inspecting'
+						id: 'live-tree-progress'
+						in: child ] ].
+	scripter pulseUntilReady.
+	#('Read live class' 'Inspecting' 'in_progress')
+		do: [ :text | 
+			scripter
+				assertStep: [ :step | 
+					step
+						onPhlowCellWithString: text;
+						exists ] ].
+	scripter
+		doStep: [ :step | 
+			step
+				block: [ self
+						update: {'sessionUpdate' -> 'tool_call_update'.
+								'toolCallId' -> 'live-tree-tool'.
+								'status' -> 'completed'} asDictionary
+						for: child.
+					GtLACPMessagePresentationExamples new
+						text: ' the protocol'
+						id: 'live-tree-progress'
+						in: child.
+					GtLACPMessagePresentationExamples new
+						text: 'Live class checked'
+						id: 'live-tree-answer'
+						in: child.
+					self idle: child ] ].
+	scripter pulseUntilReady.
+	#('Inspecting the protocol' 'Live class checked' 'completed' 'final')
+		do: [ :text | 
+			scripter
+				assertStep: [ :step | 
+					step
+						onPhlowCellWithString: text;
+						exists ] ].
+	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
+	^ scripter
 ]
 
 { #category : #examples }
 GtLACPSubagentExamples >> conversationTreeWithMessagesAndTools [
- <gtExample>
- | root child turn cache rootNode childNode objects |
- root := GtLACPExamples new session.
- turn := root prompt: 'Inspect the project'.
- child := self announce: 'tree-worker' title: 'Tree worker' in: root.
- self task: 'Inspect the class' from: root to: child id: 'tree-assignment'.
- self update: { 'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'tree-parent-tool'.
-  'title' -> 'Inspect project'. 'status' -> 'completed' } asDictionary for: root.
- self update: { 'sessionUpdate' -> 'tool_call'. 'toolCallId' -> 'tree-child-tool'.
-  'title' -> 'Inspect class'. 'status' -> 'completed' } asDictionary for: child.
- self update: { 'sessionUpdate' -> 'agent_thought_chunk'. 'messageId' -> 'tree-reasoning'.
-  'content' -> { 'type' -> 'text'. 'text' -> 'Checking the class protocol' } asDictionary
- } asDictionary for: child.
- GtLACPMessagePresentationExamples new text: 'Class inspection complete' id: 'tree-child-answer' in: child.
- self idle: child.
- GtLACPMessagePresentationExamples new text: 'Project inspection complete' id: 'tree-parent-answer' in: root.
- root connection transport receive: { 'jsonrpc' -> '2.0'. 'id' -> turn request id.
-  'result' -> { 'stopReason' -> 'end_turn' } asDictionary } asDictionary.
- cache := IdentityDictionary new.
- rootNode := root asConversationTreeNode.
- objects := (rootNode childrenIn: cache) collect: #object.
- self assert: objects size equals: root childSessions size + turn messages size + turn toolCalls size.
- self assert: (objects includes: turn messages first).
- self assert: (objects includes: turn toolCalls first).
- self assert: (objects includes: turn finalMessage).
- childNode := (rootNode childrenIn: cache) detect: [ :node | node object == child ].
- objects := (childNode childrenIn: cache) collect: #object.
- self assert: (objects includes: child currentTurn toolCalls first).
- self assert: (objects includes: child currentTurn finalMessage).
- self assert: ((childNode childrenIn: cache) detect: [ :node | node object == child currentTurn finalMessage ]) state equals: #final.
- self assert: (rootNode childrenIn: cache) first == childNode.
- ^ root
+	<gtExample>
+	| root child turn cache rootNode childNode turnNode childTurnNode objects |
+	root := GtLACPExamples new session.
+	turn := root prompt: 'Inspect the project'.
+	child := self
+			announce: 'tree-worker'
+			title: 'Tree worker'
+			in: root.
+	self
+		task: 'Inspect the class'
+		from: root
+		to: child
+		id: 'tree-assignment'.
+	self
+		update: {'sessionUpdate' -> 'tool_call'.
+				'toolCallId' -> 'tree-parent-tool'.
+				'title' -> 'Inspect project'.
+				'status' -> 'completed'} asDictionary
+		for: root.
+	self
+		update: {'sessionUpdate' -> 'tool_call'.
+				'toolCallId' -> 'tree-child-tool'.
+				'title' -> 'Inspect class'.
+				'status' -> 'completed'} asDictionary
+		for: child.
+	self
+		update: {'sessionUpdate' -> 'agent_thought_chunk'.
+				'messageId' -> 'tree-reasoning'.
+				'content'
+					-> {'type' -> 'text'.
+							'text' -> 'Checking the class protocol'} asDictionary} asDictionary
+		for: child.
+	GtLACPMessagePresentationExamples new
+		text: 'Class inspection complete'
+		id: 'tree-child-answer'
+		in: child.
+	self idle: child.
+	GtLACPMessagePresentationExamples new
+		text: 'Project inspection complete'
+		id: 'tree-parent-answer'
+		in: root.
+	root connection transport
+		receive: {'jsonrpc' -> '2.0'.
+				'id' -> turn request id.
+				'result' -> {'stopReason' -> 'end_turn'} asDictionary} asDictionary.
+	cache := IdentityDictionary new.
+	rootNode := root asConversationTreeNode.
+	objects := (rootNode childrenIn: cache) collect: #object.
+	self assert: objects size equals: root childSessions size + root turns size.
+	self assert: (objects includes: turn).
+	turnNode := (rootNode childrenIn: cache)
+			detect: [ :node | node object == turn ].
+	objects := (turnNode childrenIn: cache) collect: #object.
+	self assert: objects equals: turn conversationTreeItems.
+	self assert: (objects includes: turn messages first).
+	self assert: (objects includes: turn toolCalls first).
+	self assert: (objects includes: turn finalMessage).
+	childNode := (rootNode childrenIn: cache)
+			detect: [ :node | node object == child ].
+	self
+		assert: ((childNode childrenIn: cache) collect: #object)
+		equals: child turns.
+	childTurnNode := (childNode childrenIn: cache) first.
+	objects := (childTurnNode childrenIn: cache) collect: #object.
+	self assert: (objects includes: child currentTurn toolCalls first).
+	self assert: (objects includes: child currentTurn finalMessage).
+	self
+		assert: ((childTurnNode childrenIn: cache)
+				detect: [ :node | node object == child currentTurn finalMessage ]) state
+		equals: #final.
+	self assert: (rootNode childrenIn: cache) first == childNode.
+	^ root
 ]
 
 { #category : #examples }

@@ -1,5 +1,5 @@
 "
-I expose an agent session, its nested sessions and its own messages and tool calls in a conversation tree.
+I expose an agent session, its nested sessions and its chronologically ordered prompt turns in a conversation tree.
 "
 Class {
 	#name : #GtLACPSessionTreeNode,
@@ -9,11 +9,10 @@ Class {
 
 { #category : #accessing }
 GtLACPSessionTreeNode >> childrenIn: aCache [
- ^ (object childSessions collect: [ :session |
-   aCache at: session ifAbsentPut: [ session asConversationTreeNode ] ]),
-  (object turns copy flatCollect: [ :aTurn |
-   aTurn conversationTreeItems collect: [ :item |
-    aCache at: item ifAbsentPut: [ item asConversationTreeNode turn: aTurn; yourself ] ] ])
+	^ (object childSessions
+		collect: [ :session | aCache at: session ifAbsentPut: [ session asConversationTreeNode ] ])
+		, (object turns copy
+				collect: [ :aTurn | aCache at: aTurn ifAbsentPut: [ aTurn asConversationTreeNode ] ])
 ]
 
 { #category : #accessing }

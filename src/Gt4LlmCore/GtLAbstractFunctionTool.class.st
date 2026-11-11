@@ -55,6 +55,73 @@ GtLAbstractFunctionTool >> functionOpenAI [
 		'parameters' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
+{ #category : #'gt - extensions' }
+GtLAbstractFunctionTool >> gtParameterRowsOfSchema: aSchemaDictionary [
+	"Answer the rows {name. schema. isRequired} directly nested in a JSON schema.
+	Arrays are transparent (their item rows are answered), and anyOf answers the rows of all variants."
+
+	| required |
+	aSchemaDictionary isDictionary ifFalse: [ ^ #() ].
+	aSchemaDictionary
+		at: 'items'
+		ifPresent: [ :anItemsSchema | ^ self gtParameterRowsOfSchema: anItemsSchema ].
+	aSchemaDictionary
+		at: 'anyOf'
+		ifPresent: [ :theVariants | ^ theVariants flatCollect: [ :each | self gtParameterRowsOfSchema: each ] ].
+	required := aSchemaDictionary at: 'required' ifAbsent: [ #() ].
+	^ (aSchemaDictionary at: 'properties' ifAbsent: [ ^ #() ]) associations
+		collect: [ :each | 
+			{each key.
+				each value.
+				required includes: each key} ]
+]
+
+{ #category : #'gt - extensions' }
+GtLAbstractFunctionTool >> gtParameterTypeOfSchema: aSchemaDictionary [
+	| type |
+	aSchemaDictionary isDictionary ifFalse: [ ^ '' ].
+	aSchemaDictionary
+		at: 'anyOf'
+		ifPresent: [ :theVariants | ^ 'any of ' , theVariants size printString ].
+	type := (aSchemaDictionary at: 'type' ifAbsent: [ '' ]) asString.
+	type = 'array' ifFalse: [ ^ type ].
+	^ 'array of '
+		, (self gtParameterTypeOfSchema: (aSchemaDictionary at: 'items' ifAbsent: [ nil ]))
+]
+
+{ #category : #'gt - extensions' }
+GtLAbstractFunctionTool >> gtParametersFor: aView [
+	<gtView>
+	^ aView columnedTree
+		title: 'Parameters';
+		priority: 6;
+		items: [ self gtParameterRowsOfSchema: self parametersJsonSchemaDictionary ];
+		children: [ :aRow | self gtParameterRowsOfSchema: aRow second ];
+		expandUpTo: 2;
+		column: 'Name' text: [ :aRow | aRow first ];
+		column: 'Type' text: [ :aRow | self gtParameterTypeOfSchema: aRow second ];
+		column: 'Required'
+			text: [ :aRow | aRow third ifTrue: [ 'yes' ] ifFalse: [ '' ] ]
+			width: 70;
+		column: 'Description'
+			text: [ :aRow | 
+				(aRow second at: 'description' ifAbsent: [ '' ]) asString lines
+					ifEmpty: [ '' ]
+					ifNotEmpty: [ :theLines | theLines first ] ]
+			weight: 3;
+		send: [ :aRow | aRow second ]
+]
+
+{ #category : #'gt - extensions' }
+GtLAbstractFunctionTool >> gtParametersJsonFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Parameters schema';
+		priority: 7;
+		object: [ self parametersJsonSchemaDictionary ];
+		view: #gtJsonFor:
+]
+
 { #category : #views }
 GtLAbstractFunctionTool >> gtViewDescriptionFor: aView [
 	<gtView>

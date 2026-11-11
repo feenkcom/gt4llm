@@ -49,7 +49,9 @@ GtLACPSessionGroupExamples >> conversationTreeDisplayed [
 	<gtExample>
 	| group element scripter |
 	group := self nestedSessions.
-	element := (group gtConversationTreeFor: GtPhlowView empty)
+	element := ((group gtConversationTreeFor: GtPhlowView empty)
+			expandAll;
+			yourself)
 			asElementDo: [ :widget | 
 				widget
 					background: Color white;
@@ -68,6 +70,31 @@ GtLACPSessionGroupExamples >> conversationTreeDisplayed [
 						exists ] ].
 	GtLACPSessionExamples new assertNoRenderingErrorsIn: scripter.
 	^ scripter
+]
+
+{ #category : #examples }
+GtLACPSessionGroupExamples >> conversationTreeWithMultipleTurns [
+	<gtExample>
+	| group root secondTurn cache node turnNodes |
+	group := self nestedSessions.
+	root := group first.
+	secondTurn := root prompt: 'Check the follow-up'.
+	cache := IdentityDictionary new.
+	node := root asConversationTreeNode.
+	turnNodes := (node childrenIn: cache) select: [ :each | each kind = 'Turn' ].
+	self assert: (turnNodes collect: #object) equals: root turns.
+	self assert: turnNodes last label equals: 'Turn 2: Check the follow-up'.
+	self assert: turnNodes last state equals: secondTurn stateName.
+	self assert: turnNodes last messageCount equals: secondTurn messages size.
+	turnNodes
+		do: [ :each | 
+			self
+				assert: ((each childrenIn: cache) collect: #object)
+				equals: each object conversationTreeItems ].
+	self
+		assert: ((node childrenIn: cache) select: [ :each | each kind = 'Turn' ]) first
+				== turnNodes first.
+	^ group
 ]
 
 { #category : #examples }

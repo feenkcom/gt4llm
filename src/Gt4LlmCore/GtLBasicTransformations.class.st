@@ -86,6 +86,26 @@ GtLBasicTransformations >> printOn: aStream [
 ]
 
 { #category : #accessing }
+GtLBasicTransformations >> refactoringDescription [
+	"Return the descriptions of my transformations separated by semicolons"
+
+	^ '; '
+		join: ((self transformations ifNil: [ #() ])
+				collect: [ :each | each refactoringDescription ])
+]
+
+{ #category : #accessing }
+GtLBasicTransformations >> refactoringName [
+	"Return the distinct names of my transformations, in order, separated by commas, for example 'Push up instance variable, Push up method'"
+
+	| names |
+	names := OrderedCollection new.
+	(self transformations ifNil: [ #() ])
+		do: [ :each | names addIfNotPresent: each refactoringName ].
+	^ ', ' join: names
+]
+
+{ #category : #accessing }
 GtLBasicTransformations >> transformations [
 	^ transformations
 ]

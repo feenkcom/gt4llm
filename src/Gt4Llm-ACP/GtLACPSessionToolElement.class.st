@@ -1,5 +1,5 @@
 "
-I present an ACP session with a vertical layout, a header with the session title and actions, collected object views in tabs, and a collapsed playground. I manage session announcements and summarizer tab updates directly.
+I present an ACP session with a vertical layout, a header with the session title and actions, a configuration expander with a Magritte form, collected object views in tabs, and a collapsed playground. I manage session announcements and summarizer tab updates directly.
 "
 Class {
 	#name : #GtLACPSessionToolElement,
@@ -22,6 +22,7 @@ GtLACPSessionToolElement >> buildHeaderElement [
 		hMatchParent;
 		addChild: self buildToolLabel as: #toolLabel;
 		addChild: self buildTitleContainer as: #titleContainer;
+		addChild: GtLACPSessionConfigurationElement new as: #'acp-configuration';
 		yourself
 ]
 
@@ -120,22 +121,26 @@ GtLACPSessionToolElement >> collectToolActions [
 		collect
 ]
 
-{ #category : #building }
+{ #category : #private }
 GtLACPSessionToolElement >> collectToolViews [
 	| views context |
 	context := self chat phlowContext.
-	views := (GtPhlowViewsCollector new
-			fromObject: self chat;
-			pragmaNames: GtLSettings messageViewPragmaNames;
-			context: context;
-			collect)
-			, (self chat
-					summarizerViewsFor: self chat gtInspectorTargetModels
-					inContext: context).
+	views := self gtInspectorTargetModels
+			flatCollect: [ :model | 
+				GtPhlowViewsCollector new
+					fromObject: model;
+					pragmaNames: GtLSettings messageViewPragmaNames;
+					context: context;
+					collect ].
 	views := views
 			collect: [ :view | view title = 'Chat' ifTrue: [ self interactionChatView ] ifFalse: [ view ] ].
 	GtPhlowUtility sortByPriority: views.
 	^ views
+]
+
+{ #category : #accessing }
+GtLACPSessionToolElement >> configurationElement [
+	^ (self childWithId: #header) childWithId: #'acp-configuration'
 ]
 
 { #category : #views }
@@ -223,27 +228,29 @@ GtLACPSessionToolElement >> stateElement [
 	^ self childNamed: #sessionState
 ]
 
-{ #category : #updating }
+{ #category : #private }
 GtLACPSessionToolElement >> updateContainedViews [
- | compositeView tabGroup listener |
- self chat ifNil: [
-  self viewsContainerElement removeChildren.
-  ^ self ].
- compositeView := GtPhlowCompositeView new views: self collectToolViews.
- tabGroup := compositeView asElementDo: [ :element | element ].
- listener := GtLPhlowSummarizersChangedListener
-  installOnCompositeElement: tabGroup forRegistry: self chat summarizersRegistry.
- listener onSummarizersChangedAction: (GtLACPChangeSummarizersTabAction new
-  tabGroup: tabGroup;
-  session: self chat;
-  yourself).
- self viewsContainerElement removeChildren; addChild: tabGroup
+	| compositeView tabGroup |
+	self chat
+		ifNil: [ self viewsContainerElement removeChildren.
+			^ self ].
+	compositeView := GtPhlowCompositeView new views: self collectToolViews.
+	tabGroup := compositeView asElementDo: [ :element | element ].
+	GtLPhlowSummarizersChangedListener
+		installOnCompositeElement: tabGroup
+		forRegistry: self chat summarizersRegistry.
+	self viewsContainerElement
+		removeChildren;
+		addChild: tabGroup
 ]
 
 { #category : #updating }
 GtLACPSessionToolElement >> updateHeader [
 	self updateTitle.
-	self updateToolbarActions
+	self updateToolbarActions.
+	self configurationElement
+		session: chat;
+		configOptions: (chat ifNil: [ #() ] ifNotNil: #configOptions)
 ]
 
 { #category : #updating }
