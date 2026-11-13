@@ -33,7 +33,9 @@ GtLACPWorkGraphRow >> description [
 	kind = #spawn ifTrue: [ ^ 'Started by ' , sourceLane label ].
 	kind = #reply ifTrue: [ ^ object text trimBoth firstLineWithEllipsis ].
 	kind = #stop
-		ifTrue: [ ^ turn error ifNil: [ turn state asString ] ifNotNil: #asString ].
+		ifTrue: [ ^ turn error
+				ifNil: [ turn state asString ]
+				ifNotNil: [ :anError | anError asString ] ].
 	^ turn inputMessages
 		ifEmpty: [ 'Observed conversation' ]
 		ifNotEmpty: [ :messages | messages first text trimBoth firstLineWithEllipsis ]

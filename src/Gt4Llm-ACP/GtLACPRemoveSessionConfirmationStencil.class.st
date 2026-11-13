@@ -30,7 +30,7 @@ GtLACPRemoveSessionConfirmationStencil >> create [
 				aptitude: BrGlamorousButtonWithLabelAptitude;
 				beSmallSize;
 				label: 'Remove session';
-				action: [ menuModel ifNotNil: #hideAll.
+				action: [ menuModel ifNotNil: [ :aMenuModel | aMenuModel hideAll ].
 					registry removeSession: session ]);
 		yourself
 ]

@@ -17,7 +17,9 @@ GtLACPSessionTreeNode >> childrenIn: aCache [
 
 { #category : #accessing }
 GtLACPSessionTreeNode >> directory [
- ^ object directory ifNil: [ '' ] ifNotNil: #fullName
+	^ object directory
+		ifNil: [ '' ]
+		ifNotNil: [ :aDirectory | aDirectory fullName ]
 ]
 
 { #category : #accessing }

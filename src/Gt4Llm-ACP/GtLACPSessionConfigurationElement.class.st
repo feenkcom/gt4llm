@@ -147,7 +147,9 @@ GtLACPSessionConfigurationElement >> optionForCategory: aCategory ids: fallbackI
 GtLACPSessionConfigurationElement >> session: aSession [
 	session == aSession ifTrue: [ ^ self ].
 	session := aSession.
-	configOptions := (session ifNil: [ #() ] ifNotNil: #configOptions) deepCopy.
+	configOptions := (session
+			ifNil: [ #() ]
+			ifNotNil: [ :aCurrentSession | aCurrentSession configOptions ]) deepCopy.
 	self updateElements
 ]
 

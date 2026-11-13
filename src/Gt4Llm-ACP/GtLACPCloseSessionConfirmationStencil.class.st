@@ -39,7 +39,7 @@ GtLACPCloseSessionConfirmationStencil >> newCloseButton [
 		beSmallSize;
 		margin: (BlInsets all: 10);
 		label: 'Close session';
-		action: [ menuModel ifNotNil: #hideAll.
+		action: [ menuModel ifNotNil: [ :aMenuModel | aMenuModel hideAll ].
 			session close ]
 ]
 
