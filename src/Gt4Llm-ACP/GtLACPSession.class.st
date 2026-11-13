@@ -50,7 +50,8 @@ GtLACPSession >> allToolCalls [
 
 { #category : #announcing }
 GtLACPSession >> announceChanged [
- self announceMessageChanged: (self currentTurn ifNotNil: #assistantMessage)
+	self
+		announceMessageChanged: (self currentTurn ifNotNil: [ :aTurn | aTurn assistantMessage ])
 ]
 
 { #category : #updating }
@@ -78,7 +79,8 @@ GtLACPSession >> announceChatMessageChanged: aMessage from: anOriginSession [
 
 { #category : #announcing }
 GtLACPSession >> announceConversationTreeChanged [
- connection ifNotNil: #announceConversationTreeChanged
+	connection
+		ifNotNil: [ :aConnection | aConnection announceConversationTreeChanged ]
 ]
 
 { #category : #announcing }
@@ -90,10 +92,12 @@ GtLACPSession >> announceMessageChanged: aMessage [
 
 { #category : #announcing }
 GtLACPSession >> announcePermissionChanged: aPermission [
- | turn |
- turn := turns detect: [ :each | each permissionRequests includes: aPermission ]
-  ifNone: [ nil ].
- self announceMessageChanged: (turn ifNotNil: #assistantMessage)
+	| turn |
+	turn := turns
+			detect: [ :each | each permissionRequests includes: aPermission ]
+			ifNone: [ nil ].
+	self
+		announceMessageChanged: (turn ifNotNil: [ :aTurn | aTurn assistantMessage ])
 ]
 
 { #category : #accessing }
@@ -106,7 +110,7 @@ GtLACPSession >> applySubagentWorkState: aSnapshot [
 	| work turn reason |
 	aSnapshot
 		ifNil: [ self state: GtLACPSessionObservingState new.
-			self currentTurn ifNotNil: #observe.
+			self currentTurn ifNotNil: [ :aTurn | aTurn observe ].
 			^ self announceChanged ].
 	work := aSnapshot at: 'state' ifAbsent: [ 'unknown' ].
 	turn := self currentTurn.
@@ -117,7 +121,7 @@ GtLACPSession >> applySubagentWorkState: aSnapshot [
 			turn start ].
 	work = 'unknown'
 		ifTrue: [ self state: GtLACPSessionObservingState new.
-			turn ifNotNil: #observe ].
+			turn ifNotNil: [ :aTurn | aTurn observe ] ].
 	work = 'idle'
 		ifTrue: [ self state: GtLACPSessionReadyState new.
 			(turn notNil and: [ turn isActive or: [ turn isObserved ] ])
@@ -193,7 +197,7 @@ GtLACPSession >> canPrompt [
 { #category : #private }
 GtLACPSession >> cancelTurn [
 	[ self canCancel ifFalse: [ ^ self ].
-	self currentTurn ifNotNil: #cancel.
+	self currentTurn ifNotNil: [ :aTurn | aTurn cancel ].
 	connection
 		notify: 'session/cancel'
 		parameters: {'sessionId' -> remoteSessionId} asDictionary ]
@@ -223,7 +227,7 @@ GtLACPSession >> close [
 
 { #category : #private }
 GtLACPSession >> closeLocally [
-	self currentTurn ifNotNil: #close.
+	self currentTurn ifNotNil: [ :aTurn | aTurn close ].
 	self childSessions do: #closeLocally.
 	connection sessions removeKey: remoteSessionId ifAbsent: [  ].
 	self state: GtLACPSessionClosedState new.
@@ -267,7 +271,7 @@ GtLACPSession >> connection: anObject [
 GtLACPSession >> connectionClosed: aReason [
 	[ self isSubagent
 		ifTrue: [ parentSubagent invalidateLiveState.
-			self currentTurn ifNotNil: #disconnect ]
+			self currentTurn ifNotNil: [ :aTurn | aTurn disconnect ] ]
 		ifFalse: [ self currentTurn
 				ifNotNil: [ :turn | turn connectionClosed: aReason ] ].
 	self state connectionClosed ]
@@ -631,9 +635,9 @@ GtLACPSession >> interSessionMessages [
 
 { #category : #updating }
 GtLACPSession >> invalidateSubagentLiveState [
-	parentSubagent ifNotNil: #invalidateLiveState.
+	parentSubagent ifNotNil: [ :aSubagent | aSubagent invalidateLiveState ].
 	self state: GtLACPSessionObservingState new.
-	self currentTurn ifNotNil: #observe.
+	self currentTurn ifNotNil: [ :aTurn | aTurn observe ].
 	self childSessions do: #invalidateSubagentLiveState
 ]
 
@@ -781,7 +785,7 @@ GtLACPSession >> newObservedTurn [
 GtLACPSession >> objectStorage [
 	^ self isSubagent
 		ifTrue: [ parentSubagent parentSession objectStorage ]
-		ifFalse: [ self class mcpServer ifNotNil: #objectStorage ]
+		ifFalse: [ self class mcpServer ifNotNil: [ :aServer | aServer objectStorage ] ]
 ]
 
 { #category : #accessing }
@@ -796,7 +800,9 @@ GtLACPSession >> parentSubagent: anAssociation [
 
 { #category : #accessing }
 GtLACPSession >> pendingInteractions [
-	^ self currentTurn ifNil: [ #() ] ifNotNil: #pendingInteractions
+	^ self currentTurn
+		ifNil: [ #() ]
+		ifNotNil: [ :aTurn | aTurn pendingInteractions ]
 ]
 
 { #category : #'private - lifecycle' }
@@ -868,7 +874,8 @@ GtLACPSession >> performPromptContent: blocks [
 		onFailure: [ :reason | self promptFailed: reason turn: turn ].
 	connection sendRequest: rpc.
 	^ turn ]
-		ensure: [ self announceMessageChanged: (turn ifNotNil: #assistantMessage).
+		ensure: [ self
+				announceMessageChanged: (turn ifNotNil: [ :aTurn | aTurn assistantMessage ]).
 			self announceConversationTreeChanged ]
 ]
 

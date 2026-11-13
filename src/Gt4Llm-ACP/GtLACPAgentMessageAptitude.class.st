@@ -9,7 +9,7 @@ Class {
 
 { #category : #updating }
 GtLACPAgentMessageAptitude >> refreshContent [
-	contentElement ifNotNil: #removeFromParent.
+	contentElement ifNotNil: [ :anElement | anElement removeFromParent ].
 	self initializeContentElement.
 	self addContentElement: contentElement
 ]
