@@ -5,7 +5,8 @@ Class {
 		'icon',
 		'selectedModel',
 		'anchor',
-		'selectorElement'
+		'selectorElement',
+		'object'
 	],
 	#category : #Gt4LlmCore
 }
@@ -40,7 +41,7 @@ GtLChatWithObjectDropdownContentStencil >> doAction [
 	| aProvider chat storedObjectId storeObject |
 	aProvider := selectedModel buildProvider.
 	chat := GtLChatRegistry current newGtChatWithProvider: aProvider.
-	storedObjectId := chat addNewObject: self reasonString: 'Initial object'.
+	storedObjectId := chat addNewObject: object reasonString: 'Initial object'.
 	storeObject := chat objectStorage objectAt: storedObjectId.
 	chat
 		pageObjectExplanation: (LePage new
@@ -154,6 +155,16 @@ GtLChatWithObjectDropdownContentStencil >> newSelectorMenu [
 					menu: menu);
 			label: label.
 	^ selectorElement
+]
+
+{ #category : #accessing }
+GtLChatWithObjectDropdownContentStencil >> object [
+	^ object
+]
+
+{ #category : #accessing }
+GtLChatWithObjectDropdownContentStencil >> object: anObject [
+	object := anObject
 ]
 
 { #category : #'as yet unclassified' }

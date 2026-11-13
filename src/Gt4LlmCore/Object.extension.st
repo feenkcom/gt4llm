@@ -24,7 +24,8 @@ Object >> gtActionObjectChatFor: anAction [
 		addTarget: GtCoderClassTarget;
 		menuItemGroup: BrMenuItemGroupConfiguration default;
 		content: [:aButton | (GtLChatWithObjectDropdownContentStencil new
-						anchor: aButton)]
+						anchor: aButton;
+						object: self)]
 ]
 
 { #category : #'*Gt4LlmCore' }
