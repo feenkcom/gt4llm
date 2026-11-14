@@ -58,11 +58,16 @@ GtLACPExternalSessionStore >> forDirectory: aDirectory [
 
 { #category : #views }
 GtLACPExternalSessionStore >> gtIssuesFor: aView [
- <gtView>
- ^ aView columnedList title: 'Read problems'; priority: 10; items: [ issues ];
-  column: 'File' text: [ :issue | issue file fullName ];
-  column: 'Line' text: [ :issue | issue lineNumber ifNil: [ '' ] ifNotNil: #asString ] width: 50;
-  column: 'Reason' text: #description
+	<gtView>
+	^ aView columnedList
+		title: 'Read problems';
+		priority: 10;
+		items: [ issues ];
+		column: 'File' text: [ :issue | issue file fullName ];
+		column: 'Line'
+			text: [ :issue | issue lineNumber ifNil: [ '' ] ifNotNil: [ :aLineNumber | aLineNumber asString ] ]
+			width: 50;
+		column: 'Reason' text: #description
 ]
 
 { #category : #'gt - views' }

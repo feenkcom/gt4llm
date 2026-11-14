@@ -250,7 +250,7 @@ GtLACPSessionToolElement >> updateHeader [
 	self updateToolbarActions.
 	self configurationElement
 		session: chat;
-		configOptions: (chat ifNil: [ #() ] ifNotNil: #configOptions)
+		configOptions: (chat ifNil: [ #() ] ifNotNil: [ :aChat | aChat configOptions ])
 ]
 
 { #category : #updating }
@@ -261,7 +261,8 @@ GtLACPSessionToolElement >> updatePlayground [
 
 { #category : #updating }
 GtLACPSessionToolElement >> updateTitle [
-	titleLabel text: (chat ifNil: [ '' ] ifNotNil: #header) asRopedText
+	titleLabel
+		text: (chat ifNil: [ '' ] ifNotNil: [ :aChat | aChat header ]) asRopedText
 ]
 
 { #category : #updating }

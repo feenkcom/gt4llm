@@ -88,7 +88,7 @@ GtLACPSessionStateElement >> stateColor [
 { #category : #updating }
 GtLACPSessionStateElement >> updateState [
 	| newState count color text |
-	newState := session ifNotNil: #presentationState.
+	newState := session ifNotNil: [ :aSession | aSession presentationState ].
 	count := session ifNil: [ 0 ] ifNotNil: [ session pendingInteractions size ].
 	(newState = state and: [ count = pendingCount ]) ifTrue: [ ^ self ].
 	state := newState.

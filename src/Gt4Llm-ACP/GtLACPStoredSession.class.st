@@ -18,14 +18,26 @@ Class {
 
 { #category : #views }
 GtLACPStoredSession class >> sessionsView: aView items: aBlock [
- ^ aView columnedList title: 'Sessions'; priority: 0; items: aBlock;
-  column: 'Agent' text: #agentName width: 95;
-  column: 'Title' text: #title;
-  column: 'Project directory' text: [ :each | each directory ifNil: [ '(unknown)' ] ifNotNil: #fullName ];
-  column: 'Session ID' text: #sessionId;
-  column: 'Metadata time' text: [ :each |
-   (each updatedAt ifNil: [ each createdAt ]) ifNil: [ '(unknown)' ] ifNotNil: #asString ];
-  actionUpdateButtonTooltip: 'Refresh session list'
+	^ aView columnedList
+		title: 'Sessions';
+		priority: 0;
+		items: aBlock;
+		column: 'Agent'
+			text: #agentName
+			width: 95;
+		column: 'Title' text: #title;
+		column: 'Project directory'
+			text: [ :each | 
+				each directory
+					ifNil: [ '(unknown)' ]
+					ifNotNil: [ :aDirectory | aDirectory fullName ] ];
+		column: 'Session ID' text: #sessionId;
+		column: 'Metadata time'
+			text: [ :each | 
+				(each updatedAt ifNil: [ each createdAt ])
+					ifNil: [ '(unknown)' ]
+					ifNotNil: [ :aTime | aTime asString ] ];
+		actionUpdateButtonTooltip: 'Refresh session list'
 ]
 
 { #category : #reading }
@@ -64,7 +76,7 @@ GtLACPStoredSession >> gtDetailsFor: aView [
 
 	<gtView>
 	| valueText |
-	valueText := [ :value | value ifNil: [ '(unknown)' ] ifNotNil: #asString ].
+	valueText := [ :value | value ifNil: [ '(unknown)' ] ifNotNil: [ :aValue | aValue asString ] ].
 	^ aView details
 		title: 'Details';
 		priority: 5;

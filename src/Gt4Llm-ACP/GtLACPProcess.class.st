@@ -48,18 +48,20 @@ GtLACPProcess >> exitStatus: anObject [
 
 { #category : #views }
 GtLACPProcess >> gtProcessFor: aView [
- <gtView>
- ^ aView columnedList title: 'Process'; priority: 0;
-  items: [ {
-   'Executable' -> (configuration ifNotNil: #executable).
-   'Launch directory' -> directory.
-   'Process ID' -> self processId.
-   'Running' -> self isRunning.
-   'Exit status' -> exitStatus } ];
-  column: 'Process' text: #key;
-  column: 'Value' text: [ :entry | entry value printString ];
-  send: #value;
-  actionUpdateButtonTooltip: 'Refresh process diagnostics'
+	<gtView>
+	^ aView columnedList
+		title: 'Process';
+		priority: 0;
+		items: [ {'Executable'
+					-> (configuration ifNotNil: [ :aConfiguration | aConfiguration executable ]).
+				'Launch directory' -> directory.
+				'Process ID' -> self processId.
+				'Running' -> self isRunning.
+				'Exit status' -> exitStatus} ];
+		column: 'Process' text: #key;
+		column: 'Value' text: [ :entry | entry value printString ];
+		send: #value;
+		actionUpdateButtonTooltip: 'Refresh process diagnostics'
 ]
 
 { #category : #views }
@@ -103,7 +105,7 @@ GtLACPProcess >> pollStdout [
 
 { #category : #accessing }
 GtLACPProcess >> processId [
- ^ nativeProcess ifNotNil: #id
+	^ nativeProcess ifNotNil: [ :aProcess | aProcess id ]
 ]
 
 { #category : #lifecycle }

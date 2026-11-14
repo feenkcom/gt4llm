@@ -96,7 +96,9 @@ GtLACPConversationMessage >> protocolMetadata [
 
 { #category : #accessing }
 GtLACPConversationMessage >> protocolMetadata: aDictionary [
- protocolMetadata := aDictionary ifNil: [ Dictionary new ] ifNotNil: #deepCopy
+	protocolMetadata := aDictionary
+			ifNil: [ Dictionary new ]
+			ifNotNil: [ :aMetadata | aMetadata deepCopy ]
 ]
 
 { #category : #accessing }

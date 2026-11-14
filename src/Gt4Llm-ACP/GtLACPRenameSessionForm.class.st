@@ -30,7 +30,7 @@ GtLACPRenameSessionForm >> magritteAcceptAction [
 					session conversationTitle: title trimBoth.
 					BlTaskAction
 						enqueueElement: aButton
-						action: [ menuModel ifNotNil: #hideAll ] ])
+						action: [ menuModel ifNotNil: [ :aMenuModel | aMenuModel hideAll ] ] ])
 ]
 
 { #category : #magritte }

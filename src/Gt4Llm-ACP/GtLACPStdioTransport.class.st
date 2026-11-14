@@ -45,9 +45,10 @@ GtLACPStdioTransport >> buffer: anObject [
 
 { #category : #lifecycle }
 GtLACPStdioTransport >> close [
- state := #stopped.
- reader ifNotNil: [ reader == Processor activeProcess ifFalse: [ reader terminate ] ].
- agentProcess ifNotNil: #stop
+	state := #stopped.
+	reader
+		ifNotNil: [ reader == Processor activeProcess ifFalse: [ reader terminate ] ].
+	agentProcess ifNotNil: [ :aProcess | aProcess stop ]
 ]
 
 { #category : #views }
