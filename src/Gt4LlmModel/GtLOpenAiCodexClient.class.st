@@ -2,9 +2,10 @@ Class {
 	#name : #GtLOpenAiCodexClient,
 	#superclass : #GtLModelClient,
 	#instVars : [
-		'credential'
+		'credential',
+		'retryPolicy'
 	],
-	#category : #Gt4LlmModel
+	#category : #'Gt4LlmModel-Codex'
 }
 
 { #category : #defaults }
@@ -53,30 +54,47 @@ GtLOpenAiCodexClient >> newStreamingHttpClient [
 
 { #category : #requests }
 GtLOpenAiCodexClient >> post: aPath withEntity: anEntity [
-	^ [ self postOnce: aPath withEntity: anEntity ]
+	| refreshed |
+	refreshed := false.
+	^ self retryPolicy
+		execute: [ [ self postOnce: aPath withEntity: anEntity ]
+				on: ZnHttpUnsuccessful
+				do: [ :error | 
+					(error response status = 401 and: [ refreshed not ]) ifFalse: [ error pass ].
+					refreshed := true.
+					self refreshCredential.
+					self postOnce: aPath withEntity: anEntity ] ]
 		on: ZnHttpUnsuccessful
-		do: [ :error |
-			error response status = 401 ifFalse: [ error pass ].
-			credential := self currentCredential refresh.
-			self postOnce: aPath withEntity: anEntity ]
+		retryIf: [ :error | error response status = 429 ]
+		minimumDelay: [ :error | self retryDelayForResponse: error response ]
+]
+
+{ #category : #requests }
+GtLOpenAiCodexClient >> postOnce: aPath withEntity: anEntity [
+	| http responseBody accumulator requestResponse |
+	http := self newStreamingHttpClient.
+	^ [  "Materialize streaming errors before closing, including non-JSON bodies."http
+		enforceHttpSuccess: false.
+	http url: self baseUrl / aPath.
+	http entity: (ZnEntity json: (NeoJSONWriter toString: anEntity)).
+	responseBody := self responseStringFrom: http post.
+	http response isSuccess
+		ifFalse: [ http response entity: (ZnStringEntity text: responseBody).
+			self addHistoryRequestResponse: http.	"Handlers run before ensure unwinds. Close now, before a retry sleeps."
+			http close.
+			(ZnHttpUnsuccessful response: http response) signal ].
+	accumulator := GtLOpenAiCodexSseAccumulator new.
+	accumulator consume: responseBody.
+	http response
+		entity: (ZnStringEntity json: (NeoJSONWriter toString: accumulator result)).
+	requestResponse := self addHistoryRequestResponse: http.
+	requestResponse result: accumulator result.
+	requestResponse ] ensure: [ http close ]
 ]
 
 { #category : #private }
-GtLOpenAiCodexClient >> postOnce: aPath withEntity: anEntity [
-	| http responseBody accumulator requestResponse znStringEntity |
-	http := self newStreamingHttpClient.
-	http url: self baseUrl / aPath.
-	http entity: (ZnEntity json: (NeoJSONWriter toString: anEntity)).
-	responseBody := http post.
-	accumulator := GtLOpenAiCodexSseAccumulator new.
-	accumulator consume: (self responseStringFrom: responseBody).
-	"Replace the streaming entity with a string entity containing the response for this post."
-	znStringEntity := ZnStringEntity json: (NeoJSONWriter toString: accumulator result).
-	http response entity: znStringEntity.
-	requestResponse := self addHistoryRequestResponse: http.
-	requestResponse result: accumulator result.
-	http close.
-	^ requestResponse
+GtLOpenAiCodexClient >> refreshCredential [
+	credential := self currentCredential refresh
 ]
 
 { #category : #private }
@@ -86,4 +104,62 @@ GtLOpenAiCodexClient >> responseStringFrom: aResponseBody [
 	(aResponseBody respondsTo: #upToEnd) ifTrue:
 		[ ^ self responseStringFrom: aResponseBody upToEnd ].
 	self error: 'Unexpected Codex response body: ', aResponseBody class name
+]
+
+{ #category : #'private - retrying' }
+GtLOpenAiCodexClient >> retryCurrentUnixTime [
+	^ DateAndTime now asUnixTime
+]
+
+{ #category : #'private - retrying' }
+GtLOpenAiCodexClient >> retryDelayForResponse: aResponse [
+	"Use explicit reset information, not limit_window_minutes (a window length,
+	not a remaining wait). Keep the full error including its type in history.
+	Malformed or absent metadata falls back to exponential backoff."
+
+	| minimum body details seconds reset header |
+	minimum := 0.
+	header := aResponse headers at: 'Retry-After' ifAbsent: [ nil ].
+	seconds := self retrySecondsFrom: header.
+	seconds ifNotNil: [ minimum := minimum max: seconds ].
+	body := [ NeoJSONReader fromString: aResponse entity contents ]
+			on: Error
+			do: [ :error | nil ].
+	(body isKindOf: Dictionary) ifFalse: [ ^ minimum ].
+	details := body at: 'error' ifAbsent: [ nil ].
+	(details isKindOf: Dictionary) ifFalse: [ ^ minimum ].
+	seconds := self
+			retrySecondsFrom: (details at: 'resets_in_seconds' ifAbsent: [ nil ]).
+	seconds ifNotNil: [ ^ minimum max: seconds ].
+	reset := self retrySecondsFrom: (details at: 'resets_at' ifAbsent: [ nil ]).
+	reset ifNotNil: [ minimum := minimum max: reset - self retryCurrentUnixTime ].
+	^ minimum max: 0
+]
+
+{ #category : #accessing }
+GtLOpenAiCodexClient >> retryPolicy [
+	^ retryPolicy ifNil: [ retryPolicy := GtLExponentialBackoff new ]
+]
+
+{ #category : #accessing }
+GtLOpenAiCodexClient >> retryPolicy: aPolicy [
+	retryPolicy := aPolicy
+]
+
+{ #category : #'private - retrying' }
+GtLOpenAiCodexClient >> retrySecondsFrom: aValue [
+	| number stream |
+	aValue ifNil: [ ^ nil ].
+	number := aValue isNumber
+			ifTrue: [ aValue ]
+			ifFalse: [ aValue isString
+					ifTrue: [ [ stream := aValue trimBoth readStream.
+						number := Number readFrom: stream.
+						stream atEnd ifTrue: [ number ] ifFalse: [ nil ] ]
+							on: Error
+							do: [ :error | nil ] ]
+					ifFalse: [ nil ] ].
+	(number isNumber and: [ number >= 0 and: [ number isInfinite not ] ])
+		ifFalse: [ ^ nil ].
+	^ number
 ]

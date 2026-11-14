@@ -24,7 +24,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod
 		equals: (Collection class>>#withAll:) sourceCode.
 	self
 		assert: targetObject methodReference methodClassName
-		equals: #Collection.
+		sameContentAs: #Collection.
 	self
 		assert: targetObject methodReference methodName
 		equals: 'withAll:'.
@@ -54,7 +54,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMet
 		equals: (GtLMagritteToolForMethodSourceExamples>>#methodSourceForExistingInstanceSideMethod) sourceCode.
 	self
 		assert: targetObject methodReference methodClassName
-		equals: #GtLMagritteToolForMethodSourceExamples.
+		sameContentAs: #GtLMagritteToolForMethodSourceExamples.
 	self
 		assert: targetObject methodReference methodName
 		equals: 'methodSourceForExistingInstanceSideMethod'.
