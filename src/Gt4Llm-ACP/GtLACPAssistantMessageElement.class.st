@@ -96,7 +96,6 @@ GtLACPAssistantMessageElement >> commentElements [
 GtLACPAssistantMessageElement >> initialize [
 	super initialize.
 	self layout cellSpacing: 0.
-	self geometry: (BlRoundedRectangleGeometry cornerRadius: 4)
 ]
 
 { #category : #building }

@@ -79,7 +79,8 @@ GtLACPChatMessageElement >> initialize [
 				left: 5
 				right: 5);
 		background: self theme default contentBackground;
-		addAptitude: BlGlamorousExpanderShadowAptitude new
+		addAptitude: BlGlamorousExpanderShadowAptitude new.
+	self geometry: (BlRoundedRectangleGeometry cornerRadius: 4)
 ]
 
 { #category : #building }
