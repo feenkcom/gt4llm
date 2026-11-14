@@ -65,6 +65,7 @@ GtLACPChatElement >> buildComposer [
 	composer := BrVerticalPane new
 			hMatchParent;
 			vFitContent;
+			geometry: (BlRoundedRectangleGeometry cornerRadius: 4);
 			padding: (BlInsets all: 5);
 			margin: (BlInsets
 					top: 8
@@ -137,7 +138,7 @@ GtLACPChatElement >> initialize [
 			yourself.
 	self addChild: listElement as: #'acp-messages'.
 	self addChild: errorLabel as: #'acp-error'.
-	self addChild: self buildComposer as: #'acp-composer'
+	self addChild: self buildComposer as: #'acp-composer'.
 ]
 
 { #category : #building }
