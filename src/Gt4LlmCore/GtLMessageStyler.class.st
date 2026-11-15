@@ -55,6 +55,15 @@ GtLMessageStyler >> elements [
 	^ elements
 ]
 
+{ #category : #private }
+GtLMessageStyler >> exampleFor: aMethodDefinition [
+	"Use the compiled method cache so restyling retains results and a changed method resolves a new example."
+
+	^ aMethodDefinition
+		ifNotNil: [ aMethodDefinition compiledMethod
+				ifNotNil: [ :aMethod | aMethod gtExample ifNotNil: #asCachedExampleWithResult ] ]
+]
+
 { #category : #accessing }
 GtLMessageStyler >> executionResults [
 	"Keys are {{gtClass:SmaCCToken}} that defines a text that was evaluated.
@@ -405,6 +414,69 @@ GtLMessageStyler >> styleButton: anAnnotation for: object withTool: aBlock [
 		withTool: aBlock
 ]
 
+{ #category : #styling }
+GtLMessageStyler >> styleButton: anAnnotation forValuable: aValuable defaultLabel: aLabelBlock withTool: aBlock [
+	"Style the buttons for gtClass and gtMethod annotations"
+
+	| attribute anId |
+	anAnnotation isDefined ifFalse: [ ^ self ].
+
+	anId := LeTextSnippetAttributeLabelElementId indexed: self nextUniqueId.
+
+	attribute := GtButtonAttribute new
+			beAppend;
+			stencil: [ | button |
+				button := LeSnippetStylerVisitor
+						textLinkButtonPadding: (BlInsets top: 2)
+						margin: BlInsets empty.
+				button aptitude glamorousCodeFont.
+				button
+					id: anId;
+					beSmallSize;
+					label: '?';
+					enabled: false.
+
+				button
+					withAsyncFutureDo: [ :anElementFuture | 
+						anElementFuture
+							whenPending: [ :theButton | 
+								button
+									label: '?';
+									enabled: false ];
+							whenError: [ :theButton :anError | 
+								| aLabel |
+								aLabel := (anError messageText ifEmpty: [ anError printString ])
+										asRopedText.
+								aLabel foreground: BrGlamorousColors errorBackgroundColor.
+								theButton label: aLabel.
+								theButton action: [ :aButton | aButton phlow spawnObject: anError ].
+								theButton enabled: true ];
+							whenSuccess: [ :theButton :anObject | 
+								| aLabel |
+								aLabel := anObject
+										ifNil: [ anAnnotation nameNode
+												ifNil: [ '' ]
+												ifNotNil: [ :aName | (aName value ifNil: [ aName ]) source ] ]
+										ifNotNil: [ :theObject | 
+											anAnnotation labelNode
+												ifNil: [ aLabelBlock value: theObject ]
+												ifNotNil: [ :node | node labelFor: theObject ] ].
+								theButton label: aLabel.
+
+								theButton
+									action: [ :aButton | aButton phlow spawnTool: (aBlock cull: aButton) ].
+								theButton enabled: true ].
+
+						anElementFuture future: aValuable asAsyncFuture flatten ].
+
+				button ].
+
+	self text
+		attribute: attribute
+		from: anAnnotation parent startPosition
+		to: anAnnotation parent stopPosition
+]
+
 { #category : #accessing }
 GtLMessageStyler >> styleButton: anAnnotation withTool: aBlock [
 	self
@@ -455,6 +527,39 @@ GtLMessageStyler >> styleCodeBlockWithSmalltalkSnippet: aCodeNode [
 									to: aCodeNode end startPosition - 1) asString trim;
 							subscribeToSystem;
 							asExpandedOnlyElement ]}
+]
+
+{ #category : #styling }
+GtLMessageStyler >> styleExpandingExample: anExampleAnnotation [
+	| attribute anExample anId |
+	anExampleAnnotation isDefined ifFalse: [ ^ self ].
+
+	anExample := anExampleAnnotation imageObject
+			ifNotNil: [ :aMethodDefinition | 
+				aMethodDefinition compiledMethod
+					ifNotNil: [ :aCompiledMethod | aCompiledMethod gtExample ifNotNil: #asCachedExampleWithResult ] ].
+
+	anId := LeTextSnippetAttributeExampleElementId indexed: self nextUniqueId.
+
+	attribute := GtExamplePreviewAttribute new
+			withCache: self elements
+				key: {anExampleAnnotation source.
+						anExample example method};
+			beAppend;
+			elementId: anId;
+			example: anExample;
+			codeExpanded: anExampleAnnotation codeExpanded;
+			noCode: anExampleAnnotation noCode;
+			previewExpanded: anExampleAnnotation previewExpanded;
+			previewShowSelector: (anExampleAnnotation previewShowSelector
+					ifNil: [ LepiterConstants defaultShowSelector ]);
+			previewSelectSelector: anExampleAnnotation previewSelectSelector;
+			previewHeight: (anExampleAnnotation previewHeight
+					ifNil: [ LepiterConstants defaultPreviewHeight ]).
+
+	(self text
+		from: anExampleAnnotation parent startPosition
+		to: anExampleAnnotation parent stopPosition) attribute: attribute
 ]
 
 { #category : #accessing }
@@ -808,6 +913,25 @@ GtLMessageStyler >> visitCodeBlock: aCodeNode [
 	aCodeNode language value = 'smalltalk-method'
 		ifTrue: [ self styleCodeBlockWithSmalltalkMethod: aCodeNode ].
 	^ self visitContent: aCodeNode
+]
+
+{ #category : #visiting }
+GtLMessageStyler >> visitExampleAnnotation: anExampleAnnotation [
+	| anExample |
+	self visitAnnotation: anExampleAnnotation.
+	self styleName: anExampleAnnotation.
+	anExample := self exampleFor: anExampleAnnotation imageObject.
+	anExample ifNil: [ ^ self ].
+	self styleAutoHidingAnnotation: anExampleAnnotation.
+	anExampleAnnotation hasLabel
+		ifTrue: [
+			self
+				styleButton: anExampleAnnotation
+				forValuable: (MessageSend receiver: anExample selector: #returnValue)
+				defaultLabel: #printString
+				withTool: [ GtInspectorTool new
+						valuable: (MessageSend receiver: anExample selector: #returnValue) ] ]
+		ifFalse: [ self styleExpandingExample: anExampleAnnotation ]
 ]
 
 { #category : #generated }
