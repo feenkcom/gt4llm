@@ -145,6 +145,26 @@ GtLMessageStyler >> objectRegistry: anObjectStorage [
 	objectRegistry := anObjectStorage
 ]
 
+{ #category : #private }
+GtLMessageStyler >> pageForAnnotation: aPageAnnotation [
+	| database uid |
+	database := LeDatabasesRegistry uniqueInstance defaultLogicalDatabase.
+	aPageAnnotation dbUuidString
+		ifNotNil: [ :databaseId | database := database databaseWithID: databaseId ifNone: [ nil ] ].
+	database ifNil: [ ^ nil ].
+	aPageAnnotation pageUidString
+		ifNotNil: [ :pageId | 
+			uid := [ UUID fromString36: pageId ] on: Error do: [ :error | ^ nil ].
+			^ database
+				pageWithID: uid
+				ifPresent: [ :page | page ]
+				ifAbsent: [ nil ] ].
+	^ database
+		pageNamed: aPageAnnotation pageName
+		ifPresent: [ :page | page ]
+		ifAbsent: [ nil ]
+]
+
 { #category : #accessing }
 GtLMessageStyler >> privateStyle: aText [ 
 	<return: #BlText>
@@ -562,10 +582,10 @@ GtLMessageStyler >> styleExpandingExample: anExampleAnnotation [
 		to: anExampleAnnotation parent stopPosition) attribute: attribute
 ]
 
-{ #category : #accessing }
-GtLMessageStyler >> styleExpandingObject: anAnnotation withDefault: aSymbol [
+{ #category : #styling }
+GtLMessageStyler >> styleExpandingObject: anAnnotation for: anObject withDefault: aSymbol [
 	| cacheKey attribute |
-	anAnnotation isDefined ifFalse: [ ^ self ].
+	anObject ifNil: [ ^ self ].
 
 	cacheKey := anAnnotation source.
 
@@ -573,7 +593,7 @@ GtLMessageStyler >> styleExpandingObject: anAnnotation withDefault: aSymbol [
 			isExpanded: (self expanded at: cacheKey ifAbsentPut: [ anAnnotation expanded ]);
 			attributesCreatingBlock: [ GtResizablePreviewAttribute new
 					withCache: self elements key: cacheKey;
-					result: anAnnotation imageObject;
+					result: anObject;
 					showSelector: (anAnnotation showSelector ifNil: [ aSymbol ]);
 					height: (anAnnotation height ifNil: [ LepiterConstants defaultPreviewHeight ]) ];
 			onCachingDo: [ :aBoolean :theAttribute | self expanded at: cacheKey put: aBoolean ].
@@ -582,6 +602,15 @@ GtLMessageStyler >> styleExpandingObject: anAnnotation withDefault: aSymbol [
 		attribute: attribute
 		from: anAnnotation parent startPosition
 		to: anAnnotation parent stopPosition
+]
+
+{ #category : #styling }
+GtLMessageStyler >> styleExpandingObject: anAnnotation withDefault: aSymbol [
+	anAnnotation isDefined ifFalse: [ ^ self ].
+	self
+		styleExpandingObject: anAnnotation
+		for: anAnnotation imageObject
+		withDefault: aSymbol
 ]
 
 { #category : #generated }
@@ -1047,16 +1076,44 @@ GtLMessageStyler >> visitPackageAnnotation: aMethodAnnotation [
 		withDefault: LepiterConstants defaultPackageShowSelector
 ]
 
-{ #category : #generated }
+{ #category : #visiting }
 GtLMessageStyler >> visitPageAnnotation: aPageAnnotation [
-	| linkText |
+	| page label attribute anId |
 	self visitAnnotation: aPageAnnotation.
+	page := self pageForAnnotation: aPageAnnotation.
+	label := aPageAnnotation isLinkByLabel
+			ifTrue: [ aPageAnnotation labelName ]
+			ifFalse: [ page
+					ifNotNil: [ page title ]
+					ifNil: [ aPageAnnotation pageName
+							ifEmpty: [ aPageAnnotation pageUidString ifNil: [ '' ] ] ] ].
+	label ifEmpty: [ ^ self ].
 	self styleAutoHidingAnnotation: aPageAnnotation.
-	linkText := self text
+	anId := LeTextSnippetAttributeLabelElementId indexed: self nextUniqueId.
+	attribute := GtButtonAttribute new
+			beAppend;
+			stencil: [ | button |
+				button := LeSnippetStylerVisitor
+						textLinkButtonPadding: (BlInsets top: 2)
+						margin: BlInsets empty
+						valid: page isNotNil.
+				button
+					id: anId;
+					beSmallSize;
+					label: label;
+					enabled: page isNotNil.
+				page
+					ifNotNil: [ button
+							action: [ :aButton | aButton phlow spawnTool: (LePagePhlowTool page: page) ] ].
+				button ].
+	self text
+		attribute: attribute
 		from: aPageAnnotation parent startPosition
 		to: aPageAnnotation parent stopPosition.
-	
-	self styleButton: aPageAnnotation withTool: [ LePagePhlowTool page: aPageAnnotation asPageInDefaultLogicalDatabase ].
+	self
+		styleExpandingObject: aPageAnnotation
+		for: page
+		withDefault: #gtLiveFor:
 ]
 
 { #category : #accessing }

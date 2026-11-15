@@ -140,6 +140,31 @@ GtLACPMessagePresentationExamples >> codexCommentaryAndReasoning [
  ^ root
 ]
 
+{ #category : #'examples - expansion' }
+GtLACPMessagePresentationExamples >> delegatedExpansionSurvivesChatRefresh [
+	<gtExample>
+	| session viewModel model delegated child refreshed |
+	session := self claudeCompletedConversation.
+	viewModel := session asChatViewModel.
+	model := viewModel messageViewModels last.
+	delegated := model message delegatedMessages first.
+	child := model delegatedViewModelFor: delegated.
+	model workExpanded: true.
+	child
+		agentExpanded: true;
+		workExpanded: true;
+		finalReplyExpanded: false.
+	refreshed := session asElement viewModel.
+	self assert: refreshed == viewModel.
+	self assert: refreshed messageViewModels last == model.
+	self
+		assert: (refreshed messageViewModels last delegatedViewModelFor: delegated) == child.
+	self assert: child isAgentExpanded.
+	self assert: child isWorkExpanded.
+	self assert: child isFinalReplyExpanded not.
+	^ refreshed
+]
+
 { #category : #examples }
 GtLACPMessagePresentationExamples >> explicitAssistantElementIds [
 	<gtExample>

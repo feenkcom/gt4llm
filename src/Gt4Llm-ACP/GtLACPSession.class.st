@@ -22,7 +22,8 @@ Class {
 		'interSessionMessages',
 		'conversationTitle',
 		'availableCommands',
-		'contextWindow'
+		'contextWindow',
+		'chatViewModel'
 	],
 	#classVars : [
 		'McpServer'
@@ -135,9 +136,14 @@ GtLACPSession >> applySubagentWorkState: aSnapshot [
 	self announceChanged
 ]
 
-{ #category : #ui }
+{ #category : #converting }
 GtLACPSession >> asChatViewModel [
- ^ GtLACPChatViewModel new session: self; yourself
+	"Retain presentation choices when the chat element or inspector view is rebuilt."
+
+	^ chatViewModel
+		ifNil: [ chatViewModel := GtLACPChatViewModel new
+					session: self;
+					yourself ]
 ]
 
 { #category : #converting }

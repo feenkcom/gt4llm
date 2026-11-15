@@ -544,6 +544,201 @@ GtLMessageStylerExamples >> gtObjectStylingWithSingleObject [
 ]
 
 { #category : #examples }
+GtLMessageStylerExamples >> gtPageMessagePreview [
+	<gtExample>
+	| page |
+	page := LeDatabase gtBook pageNamed: 'Rules for styling replies'.
+	^ GtLMarkdown
+		content: 'By name: {{gtPage:Rules for styling replies}}' , String lf , String lf
+				, 'By ID: {{gtPage:id=' , page uid asString36 , '|db='
+				, page database uuidString , '}}' , String lf , String lf
+				, 'With label: {{gtPage:Rules for styling replies|label=Styling rules}}'
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> gtPageRenderedExpander [
+	<gtExample>
+	| page text styler editor scripter |
+	page := LeDatabase gtBook pageNamed: 'Rules for styling replies'.
+	text := '{{gtPage:Rules for styling replies}}' asRopedText.
+	styler := GtLMessageStyler new.
+	styler style: text.
+	editor := BrEditor new
+			aptitude: BrGlamorousRegularEditorAptitude;
+			hExact: 800;
+			vFitContent;
+			text: text;
+			yourself.
+	scripter := BlScripter new element: editor.
+	(editor query // BrInlineExpanderElement) all first id: #pageAnnotationExpander.
+	scripter
+		clickStep: [ :step | 
+			step
+				label: 'Expand the linked page';
+				// BrInlineExpanderElement ].
+	scripter wait
+		forElementCondition: [ :element | (element query // LePageToolContentTreeElement) all isNotEmpty ]
+			timeout: 5 seconds;
+		play.
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'The preview displays the linked page';
+				satisfies: [ :element | 
+					(element query // LePageToolContentTreeElement) all
+						anySatisfy: [ :each | each pageViewModel pageModel == page ] ] ].
+	^ scripter
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> gtPageRenderedExpanderCollapses [
+	<gtExample>
+	| scripter |
+	scripter := self gtPageRenderedExpander.
+	scripter
+		clickStep: [ :step | 
+			step
+				label: 'Collapse the linked page';
+				// #pageAnnotationExpander ].
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'The page content is removed when collapsed';
+				satisfies: [ :element | (element query // LePageToolContentTreeElement) all isEmpty ] ].
+	^ scripter
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> gtPageStylingById [
+	<gtExample>
+	| page source text attribute button scripter tool |
+	page := LeDatabase gtBook pageNamed: 'Rules for styling replies'.
+	source := '{{gtPage:id=' , page uid asString36 , '|db='
+			, page database uuidString , '}}'.
+	text := source asRopedText.
+	GtLMessageStyler new style: text.
+	attribute := (text attributesAt: 1)
+			detect: [ :each | each isKindOf: GtButtonAttribute ].
+	button := attribute stencil build.
+	scripter := BlScripter new element: button.
+	scripter
+		assertStep: [ :step | 
+			step
+				label: 'Page ID annotations render the page title';
+				satisfies: [ :element | element label asString = page title ] ].
+	button
+		when: GtPhlowObjectToSpawn
+		do: [ :event | 
+			tool := event tool.
+			event consumed: true ].
+	scripter clickStep: [ :step | step label: 'Open the referenced page' ].
+	self assert: (tool isKindOf: LePagePhlowTool).
+	self assert: tool page == page.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> gtPageStylingByName [
+	<gtExample>
+	| page button scripter tool |
+	page := LeDatabasesRegistry uniqueInstance defaultLogicalDatabase
+			pageNamed: 'Rules for styling replies'.
+	button := self pageButtonFor: '{{gtPage:Rules for styling replies}}'.
+	scripter := BlScripter new element: button.
+	self assert: button label asString equals: page title.
+	self assert: button isEnabled.
+	button
+		when: GtPhlowObjectToSpawn
+		do: [ :event | 
+			tool := event tool.
+			event consumed: true ].
+	scripter
+		clickStep: [ :step | step label: 'Open a page without an explicit database' ].
+	self assert: tool page == page.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> gtPageStylingMalformedAnnotation [
+	<gtExample>
+	| source text |
+	source := '{{gtPage:id=not-a-uuid}}'.
+	text := source asRopedText.
+	GtLMessageStyler new style: text.
+	self assert: text asString equals: source.
+	self
+		assert: ((text attributesAt: 1)
+				noneSatisfy: [ :each | each isKindOf: GtButtonAttribute ]).
+	^ text
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> gtPageStylingMissingTargetHasNoExpander [
+	<gtExample>
+	| text |
+	text := '{{gtPage:GtLMessageStyler missing page 748d68}}' asRopedText.
+	GtLMessageStyler new style: text.
+	self
+		assert: ((text attributesAt: 1)
+				noneSatisfy: [ :each | each isKindOf: GtCachedTextExpandButtonAttribute ]).
+	^ text
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> gtPageStylingMissingTargets [
+	<gtExample>
+	| buttons |
+	buttons := {'{{gtPage:GtLMessageStyler missing page 748d68}}'.
+			'{{gtPage:Rules for styling replies|db=0000000000000000000000000}}'.
+			'{{gtPage:id=0000000000000000000000000}}'}
+			collect: [ :source | 
+				| button |
+				button := self pageButtonFor: source.
+				self assert: button label asString isNotEmpty.
+				self assert: button isEnabled not.
+				button ].
+	^ buttons
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> gtPageStylingWithExpander [
+	<gtExample>
+	| page text attribute preview |
+	page := LeDatabase gtBook pageNamed: 'Rules for styling replies'.
+	text := ('{{gtPage:id=' , page uid asString36 , '|db='
+			, page database uuidString , '}}') asRopedText.
+	GtLMessageStyler new style: text.
+	attribute := (text attributesAt: 1)
+			detect: [ :each | each isKindOf: GtCachedTextExpandButtonAttribute ]
+			ifNone: [ nil ].
+	self assert: attribute notNil description: 'Page annotations offer an expander'.
+	self assert: attribute isExpanded not.
+	preview := attribute attributesCreatingBlock value.
+	self assert: preview result == page.
+	self assert: preview showSelector equals: #gtLiveFor:.
+	self assert: preview height equals: LepiterConstants defaultPreviewHeight.
+	^ text
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> gtPageStylingWithLabel [
+	<gtExample>
+	| page buttons |
+	page := LeDatabase gtBook pageNamed: 'Rules for styling replies'.
+	buttons := {'{{gtPage:Rules for styling replies|label=Styling rules|db='
+				, page database uuidString , '}}'.
+			'{{gtPage:id=' , page uid asString36 , '|label=Styling rules|db='
+				, page database uuidString , '}}'}
+			collect: [ :source | 
+				| button |
+				button := self pageButtonFor: source.
+				self assert: button label asString equals: 'Styling rules'.
+				self assert: button isEnabled.
+				button ].
+	^ buttons
+]
+
+{ #category : #examples }
 GtLMessageStylerExamples >> gtViewPragmaStyling [
 	<gtExample>
 	<return: #BlText>
@@ -657,4 +852,14 @@ GtLMessageStylerExamples >> italicDelimitersAreHiddenInitially [
 						anySatisfy: [ :attribute | attribute isKindOf: BrTextAdornmentDynamicAttribute ])
 						not ].
 	^ text
+]
+
+{ #category : #private }
+GtLMessageStylerExamples >> pageButtonFor: source [
+	| text attribute |
+	text := source asRopedText.
+	GtLMessageStyler new style: text.
+	attribute := (text attributesAt: 1)
+			detect: [ :each | each isKindOf: GtButtonAttribute ].
+	^ attribute stencil build
 ]
