@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLACPToolCallTreeNode >> contextPercentage [
+	^ nil
+]
+
+{ #category : #accessing }
 GtLACPToolCallTreeNode >> kind [
  ^ 'Tool'
 ]

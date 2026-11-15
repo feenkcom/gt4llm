@@ -1,6 +1,3 @@
-"
-Agent Client Protocol v1 integration for Glamorous Toolkit. See GtLACPExamples for executable usage.
-"
 Class {
 	#name : #GtLACPConversationMessage,
 	#superclass : #GtLACPObject,
@@ -8,7 +5,8 @@ Class {
 		'role',
 		'messageId',
 		'content',
-		'protocolMetadata'
+		'protocolMetadata',
+		'lastReceivedUpdate'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -33,10 +31,38 @@ GtLACPConversationMessage >> content: anObject [
  content := anObject
 ]
 
+{ #category : #accessing }
+GtLACPConversationMessage >> contextUsageUpdate [
+	^ lastReceivedUpdate ifNotNil: [ lastReceivedUpdate contextUsageUpdate ]
+]
+
+{ #category : #accessing }
+GtLACPConversationMessage >> contextWindow [
+	^ self hasContextUsageUpdate
+		ifTrue: [ self contextUsageUpdate contextWindow ]
+		ifFalse: [ GtLACPContextWindow new ]
+]
+
 { #category : #views }
 GtLACPConversationMessage >> gtContentFor: aView [
  <gtView>
  ^ aView list title: 'Content blocks'; priority: 20; items: [ content copy ]; itemText: #yourself; actionUpdateButtonTooltip: 'Refresh content blocks'
+]
+
+{ #category : #'gt - views' }
+GtLACPConversationMessage >> gtContextUsageFor: aView [
+	"What raw usage report was known when this message's last chunk arrived?"
+
+	<gtView>
+	^ aView columnedList
+		title: 'Context evidence';
+		priority: 15;
+		items: [ self hasContextUsageUpdate
+				ifFalse: [ {'Context' -> 'Not reported'} ]
+				ifTrue: [ self contextUsageUpdate data associations ] ];
+		column: 'Property' text: #key;
+		column: 'Value' text: [ :entry | entry value asString ];
+		send: #value
 ]
 
 { #category : #views }
@@ -63,6 +89,11 @@ GtLACPConversationMessage >> gtTextFor: aView [
 		actionUpdateButtonTooltip: 'Refresh text'
 ]
 
+{ #category : #testing }
+GtLACPConversationMessage >> hasContextUsageUpdate [
+	^ self contextUsageUpdate notNil
+]
+
 { #category : #accessing }
 GtLACPConversationMessage >> initialize [
  super initialize.
@@ -72,6 +103,18 @@ GtLACPConversationMessage >> initialize [
 { #category : #testing }
 GtLACPConversationMessage >> isInterSessionMessage [
  ^ false
+]
+
+{ #category : #accessing }
+GtLACPConversationMessage >> lastReceivedUpdate [
+	^ lastReceivedUpdate
+]
+
+{ #category : #accessing }
+GtLACPConversationMessage >> lastReceivedUpdate: anUpdate [
+	"Retain raw reception evidence, never an interpreted context window."
+
+	lastReceivedUpdate := anUpdate
 ]
 
 { #category : #accessing }

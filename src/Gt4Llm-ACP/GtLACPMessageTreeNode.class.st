@@ -8,6 +8,15 @@ Class {
 }
 
 { #category : #accessing }
+GtLACPMessageTreeNode >> contextPercentage [
+	| window |
+	window := object contextWindow.
+	^ (window isReported and: [ window totalTokens > 0 ])
+		ifTrue: [ window usagePercentage ]
+		ifFalse: [ nil ]
+]
+
+{ #category : #accessing }
 GtLACPMessageTreeNode >> kind [
  ^ { #user -> 'User'. #agent -> 'Assistant'. #thought -> 'Reasoning'. #session -> 'Agent message' }
   asDictionary at: object role ifAbsent: [ object role asString ]

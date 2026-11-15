@@ -1,5 +1,5 @@
 "
-I own one prompt's execution and protocol timeline. My state is a GtLACPPromptTurnState object, which holds a back-reference to me. I delegate activity, cancellation, completion, failure, observation, connection loss, closing and final-reply selection to its hierarchy. stateName supplies the presentation label. User prompts are GtLACPUserMessage objects, and my GtLACPAssistantMessage exposes the assistant's work separately from its final reply.
+I own one prompt's execution and protocol timeline. My state is a GtLACPPromptTurnState object, which holds a back-reference to me. I delegate activity, cancellation, completion, failure, observation, connection loss, closing and final-reply selection to its hierarchy. stateName supplies the presentation label. User prompts are GtLACPUserMessage objects, and my GtLACPAssistantMessage exposes the assistant's work separately from its final reply. My lastReceivedUpdate references raw reception evidence. I derive contextWindow on demand from the usage report known at that update, including tool-only turns and interleaved chunks. Later usage reports alone do not change my context.
 "
 Class {
 	#name : #GtLACPPromptTurn,
@@ -21,7 +21,8 @@ Class {
 		'parentTurn',
 		'workUpdates',
 		'delegatedSessions',
-		'elicitationRequests'
+		'elicitationRequests',
+		'lastReceivedUpdate'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -119,6 +120,18 @@ GtLACPPromptTurn >> complete: aReason [
 { #category : #lifecycle }
 GtLACPPromptTurn >> connectionClosed: aReason [
 	^ self state connectionClosed: aReason
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> contextUsageUpdate [
+	^ lastReceivedUpdate ifNotNil: [ lastReceivedUpdate contextUsageUpdate ]
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> contextWindow [
+	^ self hasContextUsageUpdate
+		ifTrue: [ self contextUsageUpdate contextWindow ]
+		ifFalse: [ GtLACPContextWindow new ]
 ]
 
 { #category : #accessing }
@@ -222,8 +235,10 @@ GtLACPPromptTurn >> gtMessagesFor: aView [
  ^ aView list title: 'Messages'; priority: 5; items: [ messages copy ]; itemText: #printString; actionUpdateButtonTooltip: 'Refresh messages'
 ]
 
-{ #category : #views }
+{ #category : #'gt - views' }
 GtLACPPromptTurn >> gtOutcomeFor: aView [
+	"What is the outcome and the context known at the turn last received update?"
+
 	<gtView>
 	^ aView columnedList
 		title: 'Outcome';
@@ -231,6 +246,7 @@ GtLACPPromptTurn >> gtOutcomeFor: aView [
 		items: [ {'Status' -> self state.
 				'Stop reason' -> stopReason.
 				'Failure' -> error.
+				'Context at reception' -> self contextWindow.
 				'Started' -> startedAt.
 				'Finished' -> finishedAt} ];
 		column: 'Turn outcome' text: #key;
@@ -249,6 +265,11 @@ GtLACPPromptTurn >> gtPermissionsFor: aView [
 GtLACPPromptTurn >> gtToolsFor: aView [
  <gtView>
  ^ aView list title: 'Tool calls'; priority: 20; items: [ toolCalls copy ]; itemText: #title; actionUpdateButtonTooltip: 'Refresh tool calls'
+]
+
+{ #category : #testing }
+GtLACPPromptTurn >> hasContextUsageUpdate [
+	^ self contextUsageUpdate notNil
 ]
 
 { #category : #testing }
@@ -348,6 +369,11 @@ GtLACPPromptTurn >> lastAgentMessage [
 	^ messages reversed
 		detect: [ :message | message role = #agent ]
 		ifNone: [ nil ]
+]
+
+{ #category : #accessing }
+GtLACPPromptTurn >> lastReceivedUpdate [
+	^ lastReceivedUpdate
 ]
 
 { #category : #accessing }
@@ -474,29 +500,52 @@ GtLACPPromptTurn >> printOn: aStream [
 				nextPutAll: stopReason ]
 ]
 
-{ #category : #updating }
+{ #category : #receiving }
+GtLACPPromptTurn >> receiveSessionUpdate: anUpdate [
+	| kind aRole anId message aDictionary |
+	lastReceivedUpdate := anUpdate.
+	aDictionary := anUpdate data.
+	kind := aDictionary at: 'sessionUpdate'.
+	(#('tool_call' 'tool_call_update') includes: kind)
+		ifTrue: [ ^ self updateToolCall: aDictionary ].
+	aRole := {'agent_message_chunk' -> #agent.
+			'agent_thought_chunk' -> #thought.
+			'user_message_chunk' -> #user} asDictionary at: kind.
+	anId := aDictionary at: 'messageId' ifAbsent: [ nil ].
+	anId
+		ifNotNil: [ message := messages
+					detect: [ :each | each role = aRole and: [ each messageId = anId ] ]
+					ifNone: [ nil ] ]
+		ifNil: [ message := aRole = #user
+					ifTrue: [ messages ifEmpty: [ nil ] ifNotEmpty: [ messages last ] ]
+					ifFalse: [ self activity ifEmpty: [ nil ] ifNotEmpty: [ self activity last ] ].
+			(message notNil
+				and: [ (message isKindOf: GtLACPConversationMessage) not
+						or: [ message role ~= aRole or: [ message messageId notNil ] ] ])
+				ifTrue: [ message := nil ] ].
+	message
+		ifNil: [ message := self addMessageWithRole: aRole content: #().
+			message messageId: anId ].
+	(aDictionary at: '_meta' ifAbsent: [ nil ])
+		ifNotNil: [ :metadata | message protocolMetadata: metadata ].
+	message lastReceivedUpdate: anUpdate.
+	message content
+		add: (GtLACPContentBlock new
+				data: (aDictionary at: 'content');
+				yourself).
+	aRole = #user ifFalse: [ self recordWorkItem: message ]
+]
+
+{ #category : #receiving }
 GtLACPPromptTurn >> receiveUpdate: aDictionary [
- | kind aRole anId message |
- kind := aDictionary at: 'sessionUpdate'.
- (#('tool_call' 'tool_call_update') includes: kind) ifTrue: [ ^ self updateToolCall: aDictionary ].
- aRole := { 'agent_message_chunk' -> #agent. 'agent_thought_chunk' -> #thought. 'user_message_chunk' -> #user } asDictionary at: kind.
- anId := aDictionary at: 'messageId' ifAbsent: [ nil ].
- anId
-  ifNotNil: [
-   message := messages detect: [ :each | each role = aRole and: [ each messageId = anId ] ] ifNone: [ nil ] ]
-  ifNil: [
-   message := aRole = #user
-    ifTrue: [ messages ifEmpty: [ nil ] ifNotEmpty: [ messages last ] ]
-    ifFalse: [ self activity ifEmpty: [ nil ] ifNotEmpty: [ self activity last ] ].
-   (message notNil and: [ (message isKindOf: GtLACPConversationMessage) not or: [
-    message role ~= aRole or: [ message messageId notNil ] ] ]) ifTrue: [ message := nil ] ].
- message ifNil: [
-  message := self addMessageWithRole: aRole content: #().
-  message messageId: anId ].
- (aDictionary at: '_meta' ifAbsent: [ nil ]) ifNotNil: [ :metadata |
-  message protocolMetadata: metadata ].
- message content add: (GtLACPContentBlock new data: (aDictionary at: 'content'); yourself).
- aRole = #user ifFalse: [ self recordWorkItem: message ]
+	"Direct turn updates retain the same raw reception evidence as routed session updates."
+
+	^ self
+		receiveSessionUpdate: (GtLACPSessionUpdate new
+				data: aDictionary deepCopy;
+				timestamp: DateAndTime now;
+				contextUsageUpdate: (session ifNotNil: [ session latestContextUsageUpdate ]);
+				yourself)
 ]
 
 { #category : #updating }

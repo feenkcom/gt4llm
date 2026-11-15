@@ -16,6 +16,11 @@ GtLACPSessionTreeNode >> childrenIn: aCache [
 ]
 
 { #category : #accessing }
+GtLACPSessionTreeNode >> contextPercentage [
+	^ nil
+]
+
+{ #category : #accessing }
 GtLACPSessionTreeNode >> directory [
 	^ object directory
 		ifNil: [ '' ]

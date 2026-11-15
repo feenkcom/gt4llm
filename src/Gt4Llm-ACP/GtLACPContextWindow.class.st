@@ -1,5 +1,5 @@
 "
-I capture the latest context-window token counts reported by an ACP session. I describe current occupancy, not cumulative token consumption or a monetary budget.
+I am a derived interpretation of raw ACP usage evidence. Usage updates construct me on demand; sessions, turns and conversation messages delegate interpretation to those updates. I describe context occupancy, not cumulative token consumption or a monetary budget.
 "
 Class {
 	#name : #GtLACPContextWindow,

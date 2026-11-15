@@ -14,7 +14,8 @@ Class {
 
 { #category : #'gt - views' }
 GtLACPSessionGroup >> gtConversationTreeFor: aView [
-	"Which sessions and turns contain each message and tool call?"
+	"Which sessions and turns contain each message and tool call?
+	What context was known when each message or turn last received an update?"
 
 	<gtView>
 	| tree cache |
@@ -35,6 +36,16 @@ GtLACPSessionGroup >> gtConversationTreeFor: aView [
 			column: 'Messages'
 				text: [ :each | each messageCount isZero ifTrue: [ '' ] ifFalse: [ each messageCount ] ]
 				width: 75;
+			column: 'Context'
+				numberDo: [ :column | 
+					column
+						item: [ :node | node contextPercentage ifNil: [ -1 ] ];
+						format: [ :percentage | 
+							percentage < 0
+								ifTrue: [ '' ]
+								ifFalse: [ (percentage round: 1) printString , '%' ] ];
+						width: 80;
+						decorate: [ :decorations | decorations normalizedBar maximum: [ 100 ] ] ];
 			column: 'Directory' text: #directory;
 			send: #object;
 			expandUpTo: 1;

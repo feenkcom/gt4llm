@@ -19,6 +19,15 @@ GtLACPTurnTreeNode >> childrenIn: aCache [
 ]
 
 { #category : #accessing }
+GtLACPTurnTreeNode >> contextPercentage [
+	| window |
+	window := object contextWindow.
+	^ (window isReported and: [ window totalTokens > 0 ])
+		ifTrue: [ window usagePercentage ]
+		ifFalse: [ nil ]
+]
+
+{ #category : #accessing }
 GtLACPTurnTreeNode >> kind [
 	^ 'Turn'
 ]
