@@ -61,7 +61,7 @@ GtLMessageStyler >> exampleFor: aMethodDefinition [
 
 	^ aMethodDefinition
 		ifNotNil: [ aMethodDefinition compiledMethod
-				ifNotNil: [ :aMethod | aMethod gtExample ifNotNil: #asCachedExampleWithResult ] ]
+				ifNotNil: [ :aMethod | aMethod gtExample ifNotNil: [ :anExample | anExample asCachedExampleWithResult ] ] ]
 ]
 
 { #category : #accessing }
@@ -557,7 +557,9 @@ GtLMessageStyler >> styleExpandingExample: anExampleAnnotation [
 	anExample := anExampleAnnotation imageObject
 			ifNotNil: [ :aMethodDefinition | 
 				aMethodDefinition compiledMethod
-					ifNotNil: [ :aCompiledMethod | aCompiledMethod gtExample ifNotNil: #asCachedExampleWithResult ] ].
+					ifNotNil: [ :aCompiledMethod | 
+						aCompiledMethod gtExample
+							ifNotNil: [ :anExample | anExample asCachedExampleWithResult ] ] ].
 
 	anId := LeTextSnippetAttributeExampleElementId indexed: self nextUniqueId.
 
