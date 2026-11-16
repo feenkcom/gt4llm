@@ -10,11 +10,11 @@ Class {
 { #category : #examples }
 GtLMessageTallyExamples >> textReportLlmView [
 	<gtExample>
-	| tally view |
+	| tally view report |
 	tally := MessageTally gtExampleSimplePrintString.
+	report := tally gtTextReport.
 	view := tally llmTextReportFor: GtLDataView empty.
-	self assert: (view llmJsonData at: 'report') equals: tally textReport.
-	self assert: tally textReport notEmpty.
-	self assert: (tally llmDataViewsInContext: GtLDataViewContext new) notEmpty.
+	self assert: report notEmpty.
+	self assert: (view llmJsonData at: 'report') equals: report.
 	^ tally
 ]

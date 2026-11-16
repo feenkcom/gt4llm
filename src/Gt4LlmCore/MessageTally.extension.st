@@ -7,5 +7,5 @@ MessageTally >> llmTextReportFor: aDataView [
 	<gtLlmDataView>
 	^ aDataView
 		title: 'Text report';
-		jsonData: [ {'report' -> self textReport} asDictionary ]
+		jsonData: [ {'report' -> self gtTextReport} asDictionary ]
 ]
