@@ -21,6 +21,11 @@ GtLACPClaudeCodeSessionStore >> defaultDirectory [
   ifFalse: [ configured asFileReference ]
 ]
 
+{ #category : #accessing }
+GtLACPClaudeCodeSessionStore >> issues [
+	^ super issues , (sessions values flatCollect: #issues)
+]
+
 { #category : #clients }
 GtLACPClaudeCodeSessionStore >> newClient [
 	^ GtLACPClaudeCodeClient new
@@ -41,32 +46,7 @@ GtLACPClaudeCodeSessionStore >> readSessions [
 
 { #category : #reading }
 GtLACPClaudeCodeSessionStore >> readTranscript: aFile [
- | identifier session metadata found |
- identifier := aFile basename allButLast: '.jsonl' size.
- session := self sessionAt: identifier.
- metadata := { 'filenameSessionId' -> identifier } asDictionary.
- found := false.
- self readJsonLines: aFile limit: 50 do: [ :record :line |
-  (record includesKey: 'cwd')
-   ifFalse: [ false ]
-   ifTrue: [
-    | nativeId |
-    metadata addAll: (self metadataFrom: record keys:
-     #('sessionId' 'cwd' 'timestamp' 'slug' 'gitBranch' 'version')).
-    nativeId := record at: 'sessionId' ifAbsent: [ identifier ].
-    nativeId = identifier
-     ifFalse: [
-      self issueFor: aFile line: line description: 'Session ID disagrees with transcript filename'.
-      true ]
-     ifTrue: [
-      self directory: (record at: 'cwd') for: session file: aFile line: line.
-      session createdAt: (self dateFrom: (record at: 'timestamp' ifAbsent: [ nil ]) file: aFile line: line).
-      session title: (record at: 'slug' ifAbsent: [ '' ]).
-      found := true.
-      true ] ] ].
- session addSource: (self sourceFile: aFile format: #claudeTranscript metadata: metadata).
- found ifFalse: [
-  self issueFor: aFile line: nil description: 'Project directory is unknown after scanning up to 50 records' ]
+	(self sessionAt: aFile basenameWithoutExtension) file: aFile
 ]
 
 { #category : #private }

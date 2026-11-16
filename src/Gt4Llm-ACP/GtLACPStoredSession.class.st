@@ -32,11 +32,11 @@ GtLACPStoredSession class >> sessionsView: aView items: aBlock [
 					ifNil: [ '(unknown)' ]
 					ifNotNil: [ :aDirectory | aDirectory fullName ] ];
 		column: 'Session ID' text: #sessionId;
-		column: 'Metadata time'
+		column: 'Time'
 			text: [ :each | 
 				(each updatedAt ifNil: [ each createdAt ])
 					ifNil: [ '(unknown)' ]
-					ifNotNil: [ :aTime | aTime asString ] ];
+					ifNotNil: [ :aTime | aTime printToSeconds ] ];
 		actionUpdateButtonTooltip: 'Refresh session list'
 ]
 
@@ -70,7 +70,7 @@ GtLACPStoredSession >> directory: anObject [
  directory := anObject
 ]
 
-{ #category : #'gt - extensions' }
+{ #category : #'gt - views' }
 GtLACPStoredSession >> gtDetailsFor: aView [
 	"Which identity and project metadata describe this stored session?"
 
@@ -84,19 +84,19 @@ GtLACPStoredSession >> gtDetailsFor: aView [
 			value: [ self agentName ]
 			text: valueText;
 		row: 'Session ID'
-			value: [ sessionId ]
+			value: [ self sessionId ]
 			text: valueText;
 		row: 'Project directory'
-			value: [ directory ]
+			value: [ self directory ]
 			text: valueText;
 		row: 'Title'
-			value: [ title ]
+			value: [ self title ]
 			text: valueText;
 		row: 'Created'
-			value: [ createdAt ]
+			value: [ self createdAt ]
 			text: valueText;
 		row: 'Updated'
-			value: [ updatedAt ]
+			value: [ self updatedAt ]
 			text: valueText
 ]
 
@@ -131,13 +131,13 @@ GtLACPStoredSession >> gtLoadScriptFor: aView [
 				asExpandedOnlyElement) vFitContentLimited ]
 ]
 
-{ #category : #views }
+{ #category : #'gt - views' }
 GtLACPStoredSession >> gtSourcesFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Sources';
 		priority: 0;
-		items: [ sources ];
+		items: [ self sources ];
 		column: 'Format'
 			text: #format
 			width: 130;
@@ -156,18 +156,19 @@ GtLACPStoredSession >> load [
 	^ self loadConfigureClient: [ :client |  ]
 ]
 
-{ #category : #loading }
+{ #category : #accessing }
 GtLACPStoredSession >> loadConfigureClient: aBlock [
 	| client |
-	directory
+	self directory
 		ifNil: [ self
-				error: 'Session found, but its project directory is unknown: ' , sessionId asString ].
-	directory isDirectory
+				error: 'Session found, but its project directory is unknown: '
+						, self sessionId asString ].
+	self directory isDirectory
 		ifFalse: [ self
-				error: 'The recorded project directory no longer exists: ' , directory fullName ].
+				error: 'The recorded project directory no longer exists: ' , self directory fullName ].
 	client := self newClient.
 	aBlock value: client.
-	^ client loadSession: sessionId in: directory
+	^ client loadSession: self sessionId in: self directory
 ]
 
 { #category : #accessing }
@@ -175,7 +176,7 @@ GtLACPStoredSession >> loadSessionScript [
 	"Build source only; do not connect to an agent or load the session."
 
 	| clientClassName |
-	(directory isNil or: [ sessionId isNil ]) ifTrue: [ ^ nil ].
+	(self directory isNil or: [ self sessionId isNil ]) ifTrue: [ ^ nil ].
 	clientClassName := self newClient class name.
 	^ String
 		streamContents: [ :stream | 
@@ -190,11 +191,11 @@ GtLACPStoredSession >> loadSessionScript [
 				cr;
 				tab;
 				nextPutAll: 'loadSession: ';
-				nextPutAll: sessionId printString;
+				nextPutAll: self sessionId printString;
 				cr;
 				tab;
 				nextPutAll: 'in: ';
-				nextPutAll: directory fullName printString;
+				nextPutAll: self directory fullName printString;
 				nextPutAll: ' asFileReference.';
 				cr;
 				nextPutAll: 'GtLACPSessionRegistry current registerSession: session' ]
@@ -223,9 +224,9 @@ GtLACPStoredSession >> sessionId: anObject [
 
 { #category : #accessing }
 GtLACPStoredSession >> sortKey [
- ^ updatedAt
-  ifNil: [ createdAt ifNil: [ '' ] ifNotNil: [ :date | date asString ] ]
-  ifNotNil: [ :date | date asString ]
+	^ self updatedAt
+		ifNil: [ self createdAt ifNil: [ '' ] ifNotNil: [ :date | date asString ] ]
+		ifNotNil: [ :date | date asString ]
 ]
 
 { #category : #accessing }
