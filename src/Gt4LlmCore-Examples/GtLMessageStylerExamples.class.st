@@ -7,6 +7,32 @@ Class {
 	#category : #'Gt4LlmCore-Examples'
 }
 
+{ #category : #'examples - annotations' }
+GtLMessageStylerExamples >> allAnnotationsDoNotFail [
+	"Styling does not stop at an annotation the styler does not know: the bold text after it is still styled"
+
+	<gtExample>
+	<return: #Array>
+	^ self annotationSamples
+		collect: [ :each | 
+			| source text |
+			source := 'Before ' , each value , ' and **bold**'.
+			text := GtLMessageStyler new privateStyle: source asRopedText.
+			self assert: text asString equals: source.
+			self
+				assert: ((text attributesAt: source size - 3)
+						anySatisfy: [ :attribute | attribute isKindOf: BlFontWeightAttribute ])
+				description: [ each key , ' must not stop the styling' ].
+			each key -> text ]
+
+]
+
+{ #category : #private }
+GtLMessageStylerExamples >> annotationSamples [
+	^ GtLTextSnippetExporterExamples new annotationSamples
+
+]
+
 { #category : #'examples - markdown' }
 GtLMessageStylerExamples >> boldDelimitersAreHiddenInitially [
 	<gtExample>
@@ -293,6 +319,28 @@ GtLMessageStylerExamples >> gtExampleStylingWithOptions [
 	self assert: attribute previewSelectSelector equals: #gtRawFor:.
 	self assert: attribute previewHeight equals: 240.
 	^ text
+]
+
+{ #category : #'examples - annotations' }
+GtLMessageStylerExamples >> gtFileReferenceStyling [
+	"gtFileReference annotations are shown in the code font with the markup colour"
+
+	<gtExample>
+	<return: #BlText>
+	| source text index |
+	source := 'See {{gtFileReference:path=gtoolkit.yaml|label="Yaml"}} here'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	index := source indexOfSubCollection: 'gtoolkit.yaml'.
+	self
+		assert: ((text attributesAt: index)
+				anySatisfy: [ :each | each isKindOf: BlFontFamilyAttribute ]).
+	self
+		assert: (((text attributesAt: index) select: [ :each | each isKindOf: BlTextForegroundAttribute ])
+				anySatisfy: [ :each | each paint = BrGlamorousColors textMarkupColor ]).
+	self assert: (self hasAttribute: BlFontFamilyAttribute in: (text from: 1 to: 4)) not.
+	^ text
+
 ]
 
 { #category : #'examples - gtObject' }
@@ -738,6 +786,54 @@ GtLMessageStylerExamples >> gtPageStylingWithLabel [
 	^ buttons
 ]
 
+{ #category : #'examples - annotations' }
+GtLMessageStylerExamples >> gtPictureReferenceIsNotStyled [
+	"Chat messages have no picture snippets, so picture references stay plain text"
+
+	<gtExample>
+	<return: #BlText>
+	| source text |
+	source := 'See {{gtPictureReference:picture3}} here'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self assert: (self hasAttribute: GtButtonAttribute in: text) not.
+	self assert: (self hasAttribute: BrTextHideAttribute in: text) not.
+	^ text
+
+]
+
+{ #category : #'examples - annotations' }
+GtLMessageStylerExamples >> gtSymbolStyling [
+	"gtSymbol annotations are styled like in Lepiter snippets (LeSymbolAnnotationStyler): a #symbol button"
+
+	<gtExample>
+	<return: #BlText>
+	| source text |
+	source := 'Override {{gtSymbol:asString}} here'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self assert: (self hasAttribute: GtButtonAttribute in: text).
+	self assert: (self hasAttribute: BrTextHideAttribute in: text).
+	self
+		assert: (((text attributesAt: (source indexOf: ${)) select: [ :each | each isKindOf: BlTextForegroundAttribute ])
+				anySatisfy: [ :each | each paint = BrGlamorousColors textMarkupColor ]).
+	^ text
+
+]
+
+{ #category : #'examples - annotations' }
+GtLMessageStylerExamples >> gtSymbolStylingWithoutSymbol [
+	<gtExample>
+	<return: #BlText>
+	| source text |
+	source := 'Override {{gtSymbol:}} here'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self assert: (self hasAttribute: GtButtonAttribute in: text) not.
+	^ text
+
+]
+
 { #category : #examples }
 GtLMessageStylerExamples >> gtViewPragmaStyling [
 	<gtExample>
@@ -796,6 +892,26 @@ GtLMessageStylerExamples >> gtViewPragmaStylingWithoutFullName [
 	buttonColor := (button userData at: #brickLook) defaultColor.
 	self assert: buttonColor equals: BrGlamorousColors linkWithErrorColor.
 	^ text
+]
+
+{ #category : #private }
+GtLMessageStylerExamples >> hasAttribute: aClass in: aText [
+	^ (1 to: aText size)
+		anySatisfy: [ :index | (aText attributesAt: index) anySatisfy: [ :each | each isKindOf: aClass ] ]
+
+]
+
+{ #category : #'examples - annotations' }
+GtLMessageStylerExamples >> headerWithSymbolAnnotation [
+	<gtExample>
+	<return: #BlText>
+	| source text |
+	source := '# Header {{gtSymbol:asString}}'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self assert: (self hasAttribute: GtButtonAttribute in: text).
+	^ text
+
 ]
 
 { #category : #'examples - markdown' }
@@ -862,4 +978,17 @@ GtLMessageStylerExamples >> pageButtonFor: source [
 	attribute := (text attributesAt: 1)
 			detect: [ :each | each isKindOf: GtButtonAttribute ].
 	^ attribute stencil build
+]
+
+{ #category : #'examples - annotations' }
+GtLMessageStylerExamples >> unknownAnnotationIsNotStyled [
+	<gtExample>
+	<return: #BlText>
+	| source text |
+	source := 'a {{gtFoo:bar}} and {{gtClass:}} b'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self assert: (self hasAttribute: GtButtonAttribute in: text) not.
+	^ text
+
 ]

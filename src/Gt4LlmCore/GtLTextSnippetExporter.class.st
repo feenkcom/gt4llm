@@ -99,7 +99,18 @@ GtLTextSnippetExporter >> visitCodeBlock: aLeCodeBlockNode [
 
 { #category : #'as yet unclassified' }
 GtLTextSnippetExporter >> visitDocumenterAnnotation: aLeDocumenterAnnotationNode [
-	self visit: aLeDocumenterAnnotationNode annotation
+	"Export the annotations I support with my visit methods.
+	Write every other annotation as it was typed: annotations of packages I do not know,
+	for example gtSymbol, gtPictureReference, gtObject or gtChanges,
+	and unknown or malformed annotations, for example {{gtFoo:bar}}, which the parser answers as error nodes."
+
+	| anAnnotation |
+	anAnnotation := aLeDocumenterAnnotationNode annotation.
+	(GtLAnnotationVisitorSupport visitor: self supports: anAnnotation)
+		ifFalse: [ ^ stream nextPutAll: aLeDocumenterAnnotationNode source ].
+
+	^ self visit: anAnnotation
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -200,6 +211,14 @@ GtLTextSnippetExporter >> visitPageAnnotation: aLePageAnnotationNode [
 { #category : #'as yet unclassified' }
 GtLTextSnippetExporter >> visitPragmaAnnotation: aLePragmaAnnotationNode [ 
 	stream nextPutAll: aLePragmaAnnotationNode parent source
+]
+
+{ #category : #visiting }
+GtLTextSnippetExporter >> visitSmaCCError: aSmaCCErrorNode [
+	"Text that could not be parsed, for example an annotation without its closing braces, is written as it was typed"
+
+	stream nextPutAll: aSmaCCErrorNode source
+
 ]
 
 { #category : #'as yet unclassified' }
