@@ -114,6 +114,23 @@ GtLACPStoredSession >> gtLoadFor: anAction [
 			anElement phlow spawnObject: session ]
 ]
 
+{ #category : #'gt - extensions' }
+GtLACPStoredSession >> gtLoadScriptFor: aView [
+	"What script can I edit and run to load this session with its client and project directory?"
+
+	<gtView>
+	| script |
+	script := self loadSessionScript.
+	script ifNil: [ ^ aView empty ].
+	^ aView explicit
+		title: 'Load script';
+		priority: 15;
+		stencil: [ (GtPharoSnippetCoder new
+				forSource: script;
+				subscribeToSystem;
+				asExpandedOnlyElement) vFitContentLimited ]
+]
+
 { #category : #views }
 GtLACPStoredSession >> gtSourcesFor: aView [
 	<gtView>
@@ -151,6 +168,36 @@ GtLACPStoredSession >> loadConfigureClient: aBlock [
 	client := self newClient.
 	aBlock value: client.
 	^ client loadSession: sessionId in: directory
+]
+
+{ #category : #accessing }
+GtLACPStoredSession >> loadSessionScript [
+	"Build source only; do not connect to an agent or load the session."
+
+	| clientClassName |
+	(directory isNil or: [ sessionId isNil ]) ifTrue: [ ^ nil ].
+	clientClassName := self newClient class name.
+	^ String
+		streamContents: [ :stream | 
+			stream
+				nextPutAll: 'client := ';
+				nextPutAll: clientClassName;
+				nextPutAll: ' new.';
+				cr;
+				nextPutAll: 'client configuration requestTimeout: 6000.';
+				cr;
+				nextPutAll: 'session := client';
+				cr;
+				tab;
+				nextPutAll: 'loadSession: ';
+				nextPutAll: sessionId printString;
+				cr;
+				tab;
+				nextPutAll: 'in: ';
+				nextPutAll: directory fullName printString;
+				nextPutAll: ' asFileReference.';
+				cr;
+				nextPutAll: 'GtLACPSessionRegistry current registerSession: session' ]
 ]
 
 { #category : #loading }

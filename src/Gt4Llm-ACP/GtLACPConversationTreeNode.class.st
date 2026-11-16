@@ -17,6 +17,11 @@ GtLACPConversationTreeNode >> childrenIn: aCache [
 ]
 
 { #category : #accessing }
+GtLACPConversationTreeNode >> contextPercentage [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
 GtLACPConversationTreeNode >> directory [
  ^ ''
 ]

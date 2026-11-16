@@ -22,7 +22,7 @@ Class {
 		'interSessionMessages',
 		'conversationTitle',
 		'availableCommands',
-		'contextWindow'
+		'chatViewModel'
 	],
 	#classVars : [
 		'McpServer'
@@ -135,9 +135,14 @@ GtLACPSession >> applySubagentWorkState: aSnapshot [
 	self announceChanged
 ]
 
-{ #category : #ui }
+{ #category : #converting }
 GtLACPSession >> asChatViewModel [
- ^ GtLACPChatViewModel new session: self; yourself
+	"Retain presentation choices when the chat element or inspector view is rebuilt."
+
+	^ chatViewModel
+		ifNil: [ chatViewModel := GtLACPChatViewModel new
+					session: self;
+					yourself ]
 ]
 
 { #category : #converting }
@@ -282,7 +287,9 @@ GtLACPSession >> connectionClosed: aReason [
 
 { #category : #accessing }
 GtLACPSession >> contextWindow [
-	^ contextWindow ifNil: [ contextWindow := GtLACPContextWindow new ]
+	^ self latestContextUsageUpdate
+		ifNil: [ GtLACPContextWindow new ]
+		ifNotNil: #contextWindow
 ]
 
 { #category : #accessing }
@@ -388,6 +395,23 @@ GtLACPSession >> gtConfigurationOptionsFor: aView [
   column: 'Option' text: [ :each | each at: 'name' ifAbsent: [ each at: 'id' ] ];
   column: 'Current value' text: [ :each | (each at: 'currentValue' ifAbsent: [ nil ]) printString ];
   column: 'Choices' text: [ :each | (each at: 'options' ifAbsent: [ #() ]) printString ]
+]
+
+{ #category : #'gt - views' }
+GtLACPSession >> gtContextHistoryFor: aView [
+	"How did the latest known context change across received logical messages?"
+
+	<gtView>
+	^ aView columnedList
+		title: 'Context history';
+		priority: 25;
+		items: [ turns flatCollect: [ :turn | turn messages copy ] ];
+		column: 'Role' text: #role;
+		column: 'Message' text: #text;
+		column: 'Context at reception'
+			text: [ :message | message contextWindow printString ];
+		updateWhen: GtLACPSessionChanged in: [ self announcer ];
+		actionUpdateButtonTooltip: 'Refresh context history'
 ]
 
 { #category : #views }
@@ -716,6 +740,15 @@ GtLACPSession >> isSubagent [
 { #category : #testing }
 GtLACPSession >> isUnknown [
 	^ self state isUnknown
+]
+
+{ #category : #accessing }
+GtLACPSession >> latestContextUsageUpdate [
+	"Find raw evidence, including reports between turns. Ignore invalid reports."
+
+	updates
+		reverseDo: [ :update | update isValidContextUsage ifTrue: [ ^ update ] ].
+	^ nil
 ]
 
 { #category : #lifecycle }
@@ -1120,14 +1153,15 @@ GtLACPSession >> receiveSubagentUpdate: aDictionary [
 
 { #category : #receiving }
 GtLACPSession >> receiveUpdate: aDictionary [
-	| kind turn changedMessage |
-	[ updates
-		add: (GtLACPSessionUpdate new
-				data: aDictionary;
-				timestamp: DateAndTime now;
-				yourself).
+	| kind turn changedMessage receivedUpdate |
+	[ receivedUpdate := GtLACPSessionUpdate new
+			data: aDictionary deepCopy;
+			contextUsageUpdate: self latestContextUsageUpdate;
+			timestamp: DateAndTime now;
+			yourself.
+	updates add: receivedUpdate.
 	kind := aDictionary at: 'sessionUpdate'.
-	kind = 'usage_update' ifTrue: [ ^ self updateContextWindow: aDictionary ].
+	kind = 'usage_update' ifTrue: [ ^ self ].
 	kind = 'available_commands_update'
 		ifTrue: [ ^ self updateAvailableCommands: (aDictionary at: 'availableCommands') ].
 	kind = 'subagent_update'
@@ -1160,7 +1194,7 @@ GtLACPSession >> receiveUpdate: aDictionary [
 	(self isSubagent and: [ self isReplaying not ])
 		ifTrue: [ turn start.
 			self state: GtLACPSessionPromptingState new ].
-	turn receiveUpdate: aDictionary.
+	turn receiveSessionUpdate: receivedUpdate.
 	changedMessage := kind = 'user_message_chunk'
 			ifTrue: [ turn userMessages ifEmpty: [ nil ] ifNotEmpty: #last ]
 			ifFalse: [ turn assistantMessage ] ]
@@ -1331,11 +1365,6 @@ GtLACPSession >> updateAvailableCommands: aCollection [
 		announce: (GtLACPCommandsChanged new
 				session: self;
 				yourself)
-]
-
-{ #category : #updating }
-GtLACPSession >> updateContextWindow: aDictionary [
-	self contextWindow updateFrom: aDictionary
 ]
 
 { #category : #updating }

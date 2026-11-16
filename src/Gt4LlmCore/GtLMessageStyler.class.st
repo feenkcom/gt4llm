@@ -55,6 +55,15 @@ GtLMessageStyler >> elements [
 	^ elements
 ]
 
+{ #category : #private }
+GtLMessageStyler >> exampleFor: aMethodDefinition [
+	"Use the compiled method cache so restyling retains results and a changed method resolves a new example."
+
+	^ aMethodDefinition
+		ifNotNil: [ aMethodDefinition compiledMethod
+				ifNotNil: [ :aMethod | aMethod gtExample ifNotNil: #asCachedExampleWithResult ] ]
+]
+
 { #category : #accessing }
 GtLMessageStyler >> executionResults [
 	"Keys are {{gtClass:SmaCCToken}} that defines a text that was evaluated.
@@ -134,6 +143,26 @@ GtLMessageStyler >> objectRegistry [
 { #category : #accessing }
 GtLMessageStyler >> objectRegistry: anObjectStorage [
 	objectRegistry := anObjectStorage
+]
+
+{ #category : #private }
+GtLMessageStyler >> pageForAnnotation: aPageAnnotation [
+	| database uid |
+	database := LeDatabasesRegistry uniqueInstance defaultLogicalDatabase.
+	aPageAnnotation dbUuidString
+		ifNotNil: [ :databaseId | database := database databaseWithID: databaseId ifNone: [ nil ] ].
+	database ifNil: [ ^ nil ].
+	aPageAnnotation pageUidString
+		ifNotNil: [ :pageId | 
+			uid := [ UUID fromString36: pageId ] on: Error do: [ :error | ^ nil ].
+			^ database
+				pageWithID: uid
+				ifPresent: [ :page | page ]
+				ifAbsent: [ nil ] ].
+	^ database
+		pageNamed: aPageAnnotation pageName
+		ifPresent: [ :page | page ]
+		ifAbsent: [ nil ]
 ]
 
 { #category : #accessing }
@@ -405,6 +434,69 @@ GtLMessageStyler >> styleButton: anAnnotation for: object withTool: aBlock [
 		withTool: aBlock
 ]
 
+{ #category : #styling }
+GtLMessageStyler >> styleButton: anAnnotation forValuable: aValuable defaultLabel: aLabelBlock withTool: aBlock [
+	"Style the buttons for gtClass and gtMethod annotations"
+
+	| attribute anId |
+	anAnnotation isDefined ifFalse: [ ^ self ].
+
+	anId := LeTextSnippetAttributeLabelElementId indexed: self nextUniqueId.
+
+	attribute := GtButtonAttribute new
+			beAppend;
+			stencil: [ | button |
+				button := LeSnippetStylerVisitor
+						textLinkButtonPadding: (BlInsets top: 2)
+						margin: BlInsets empty.
+				button aptitude glamorousCodeFont.
+				button
+					id: anId;
+					beSmallSize;
+					label: '?';
+					enabled: false.
+
+				button
+					withAsyncFutureDo: [ :anElementFuture | 
+						anElementFuture
+							whenPending: [ :theButton | 
+								button
+									label: '?';
+									enabled: false ];
+							whenError: [ :theButton :anError | 
+								| aLabel |
+								aLabel := (anError messageText ifEmpty: [ anError printString ])
+										asRopedText.
+								aLabel foreground: BrGlamorousColors errorBackgroundColor.
+								theButton label: aLabel.
+								theButton action: [ :aButton | aButton phlow spawnObject: anError ].
+								theButton enabled: true ];
+							whenSuccess: [ :theButton :anObject | 
+								| aLabel |
+								aLabel := anObject
+										ifNil: [ anAnnotation nameNode
+												ifNil: [ '' ]
+												ifNotNil: [ :aName | (aName value ifNil: [ aName ]) source ] ]
+										ifNotNil: [ :theObject | 
+											anAnnotation labelNode
+												ifNil: [ aLabelBlock value: theObject ]
+												ifNotNil: [ :node | node labelFor: theObject ] ].
+								theButton label: aLabel.
+
+								theButton
+									action: [ :aButton | aButton phlow spawnTool: (aBlock cull: aButton) ].
+								theButton enabled: true ].
+
+						anElementFuture future: aValuable asAsyncFuture flatten ].
+
+				button ].
+
+	self text
+		attribute: attribute
+		from: anAnnotation parent startPosition
+		to: anAnnotation parent stopPosition
+]
+
 { #category : #accessing }
 GtLMessageStyler >> styleButton: anAnnotation withTool: aBlock [
 	self
@@ -457,10 +549,43 @@ GtLMessageStyler >> styleCodeBlockWithSmalltalkSnippet: aCodeNode [
 							asExpandedOnlyElement ]}
 ]
 
-{ #category : #accessing }
-GtLMessageStyler >> styleExpandingObject: anAnnotation withDefault: aSymbol [
+{ #category : #styling }
+GtLMessageStyler >> styleExpandingExample: anExampleAnnotation [
+	| attribute anExample anId |
+	anExampleAnnotation isDefined ifFalse: [ ^ self ].
+
+	anExample := anExampleAnnotation imageObject
+			ifNotNil: [ :aMethodDefinition | 
+				aMethodDefinition compiledMethod
+					ifNotNil: [ :aCompiledMethod | aCompiledMethod gtExample ifNotNil: #asCachedExampleWithResult ] ].
+
+	anId := LeTextSnippetAttributeExampleElementId indexed: self nextUniqueId.
+
+	attribute := GtExamplePreviewAttribute new
+			withCache: self elements
+				key: {anExampleAnnotation source.
+						anExample example method};
+			beAppend;
+			elementId: anId;
+			example: anExample;
+			codeExpanded: anExampleAnnotation codeExpanded;
+			noCode: anExampleAnnotation noCode;
+			previewExpanded: anExampleAnnotation previewExpanded;
+			previewShowSelector: (anExampleAnnotation previewShowSelector
+					ifNil: [ LepiterConstants defaultShowSelector ]);
+			previewSelectSelector: anExampleAnnotation previewSelectSelector;
+			previewHeight: (anExampleAnnotation previewHeight
+					ifNil: [ LepiterConstants defaultPreviewHeight ]).
+
+	(self text
+		from: anExampleAnnotation parent startPosition
+		to: anExampleAnnotation parent stopPosition) attribute: attribute
+]
+
+{ #category : #styling }
+GtLMessageStyler >> styleExpandingObject: anAnnotation for: anObject withDefault: aSymbol [
 	| cacheKey attribute |
-	anAnnotation isDefined ifFalse: [ ^ self ].
+	anObject ifNil: [ ^ self ].
 
 	cacheKey := anAnnotation source.
 
@@ -468,7 +593,7 @@ GtLMessageStyler >> styleExpandingObject: anAnnotation withDefault: aSymbol [
 			isExpanded: (self expanded at: cacheKey ifAbsentPut: [ anAnnotation expanded ]);
 			attributesCreatingBlock: [ GtResizablePreviewAttribute new
 					withCache: self elements key: cacheKey;
-					result: anAnnotation imageObject;
+					result: anObject;
 					showSelector: (anAnnotation showSelector ifNil: [ aSymbol ]);
 					height: (anAnnotation height ifNil: [ LepiterConstants defaultPreviewHeight ]) ];
 			onCachingDo: [ :aBoolean :theAttribute | self expanded at: cacheKey put: aBoolean ].
@@ -477,6 +602,15 @@ GtLMessageStyler >> styleExpandingObject: anAnnotation withDefault: aSymbol [
 		attribute: attribute
 		from: anAnnotation parent startPosition
 		to: anAnnotation parent stopPosition
+]
+
+{ #category : #styling }
+GtLMessageStyler >> styleExpandingObject: anAnnotation withDefault: aSymbol [
+	anAnnotation isDefined ifFalse: [ ^ self ].
+	self
+		styleExpandingObject: anAnnotation
+		for: anAnnotation imageObject
+		withDefault: aSymbol
 ]
 
 { #category : #generated }
@@ -810,6 +944,25 @@ GtLMessageStyler >> visitCodeBlock: aCodeNode [
 	^ self visitContent: aCodeNode
 ]
 
+{ #category : #visiting }
+GtLMessageStyler >> visitExampleAnnotation: anExampleAnnotation [
+	| anExample |
+	self visitAnnotation: anExampleAnnotation.
+	self styleName: anExampleAnnotation.
+	anExample := self exampleFor: anExampleAnnotation imageObject.
+	anExample ifNil: [ ^ self ].
+	self styleAutoHidingAnnotation: anExampleAnnotation.
+	anExampleAnnotation hasLabel
+		ifTrue: [
+			self
+				styleButton: anExampleAnnotation
+				forValuable: (MessageSend receiver: anExample selector: #returnValue)
+				defaultLabel: #printString
+				withTool: [ GtInspectorTool new
+						valuable: (MessageSend receiver: anExample selector: #returnValue) ] ]
+		ifFalse: [ self styleExpandingExample: anExampleAnnotation ]
+]
+
 { #category : #generated }
 GtLMessageStyler >> visitExternalImageLink: anExternalLink [ 
 	| linkText url validLink |
@@ -923,16 +1076,44 @@ GtLMessageStyler >> visitPackageAnnotation: aMethodAnnotation [
 		withDefault: LepiterConstants defaultPackageShowSelector
 ]
 
-{ #category : #generated }
+{ #category : #visiting }
 GtLMessageStyler >> visitPageAnnotation: aPageAnnotation [
-	| linkText |
+	| page label attribute anId |
 	self visitAnnotation: aPageAnnotation.
+	page := self pageForAnnotation: aPageAnnotation.
+	label := aPageAnnotation isLinkByLabel
+			ifTrue: [ aPageAnnotation labelName ]
+			ifFalse: [ page
+					ifNotNil: [ page title ]
+					ifNil: [ aPageAnnotation pageName
+							ifEmpty: [ aPageAnnotation pageUidString ifNil: [ '' ] ] ] ].
+	label ifEmpty: [ ^ self ].
 	self styleAutoHidingAnnotation: aPageAnnotation.
-	linkText := self text
+	anId := LeTextSnippetAttributeLabelElementId indexed: self nextUniqueId.
+	attribute := GtButtonAttribute new
+			beAppend;
+			stencil: [ | button |
+				button := LeSnippetStylerVisitor
+						textLinkButtonPadding: (BlInsets top: 2)
+						margin: BlInsets empty
+						valid: page isNotNil.
+				button
+					id: anId;
+					beSmallSize;
+					label: label;
+					enabled: page isNotNil.
+				page
+					ifNotNil: [ button
+							action: [ :aButton | aButton phlow spawnTool: (LePagePhlowTool page: page) ] ].
+				button ].
+	self text
+		attribute: attribute
 		from: aPageAnnotation parent startPosition
 		to: aPageAnnotation parent stopPosition.
-	
-	self styleButton: aPageAnnotation withTool: [ LePagePhlowTool page: aPageAnnotation asPageInDefaultLogicalDatabase ].
+	self
+		styleExpandingObject: aPageAnnotation
+		for: page
+		withDefault: #gtLiveFor:
 ]
 
 { #category : #accessing }

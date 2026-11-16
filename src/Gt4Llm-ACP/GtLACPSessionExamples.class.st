@@ -95,6 +95,63 @@ GtLACPSessionExamples >> assistantMessageElement [
  ^ element
 ]
 
+{ #category : #'examples - expansion' }
+GtLACPSessionExamples >> assistantSectionChoicesSurviveChatRefresh [
+	<gtExample>
+	| element session viewModel scripter refreshed |
+	element := self reasoningBetweenToolCalls.
+	session := element viewModel session.
+	viewModel := element viewModel.
+	scripter := BlScripter new
+			model: session;
+			element: element;
+			yourself.
+	scripter click
+		id: #'acp-work-toggle';
+		play.
+	scripter click
+		id: #'acp-final-toggle';
+		play.
+	refreshed := session asElement.
+	self assert: refreshed viewModel == viewModel.
+	scripter := BlScripter new
+			model: session;
+			element: refreshed;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-section';
+				satisfies: #isExpanded ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-section';
+				satisfies: #isCollapsed ].
+	scripter click
+		id: #'acp-work-toggle';
+		play.
+	scripter click
+		id: #'acp-final-toggle';
+		play.
+	scripter := BlScripter new
+			model: session;
+			element: session asElement;
+			yourself.
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-work-section';
+				satisfies: #isCollapsed ].
+	scripter
+		assertStep: [ :step | 
+			step
+				id: #'acp-final-section';
+				satisfies: #isExpanded ].
+	self assertNoRenderingErrorsIn: scripter.
+	^ scripter
+]
+
 { #category : #examples }
 GtLACPSessionExamples >> assistantSectionChoicesSurviveMessageUpdates [
 	<gtExample>
@@ -167,6 +224,25 @@ GtLACPSessionExamples >> assistantSectionsCollapseIndependently [
  scripter click id: #'acp-final-toggle'; play.
  scripter assertStep: [ :step | step id: #'acp-final-content'; exists ].
  ^ scripter
+]
+
+{ #category : #'examples - expansion' }
+GtLACPSessionExamples >> chatViewModelsAreSessionScoped [
+	<gtExample>
+	| first second firstModel secondModel |
+	first := self completedChat.
+	second := self completedChat.
+	firstModel := first viewModel messageViewModels last.
+	secondModel := second viewModel messageViewModels last.
+	firstModel
+		workExpanded: true;
+		finalReplyExpanded: false.
+	self assert: first viewModel == first viewModel session asChatViewModel.
+	self assert: (first viewModel == second viewModel) not.
+	self assert: (firstModel == secondModel) not.
+	self assert: secondModel isWorkExpanded not.
+	self assert: secondModel isFinalReplyExpanded.
+	^ first viewModel
 ]
 
 { #category : #examples }

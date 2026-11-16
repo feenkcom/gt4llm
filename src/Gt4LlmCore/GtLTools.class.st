@@ -19,6 +19,13 @@ GtLTools class >> files [
 ]
 
 { #category : #defaults }
+GtLTools class >> git [
+	^ self
+		withAll: {GtLMagritteToolForGitRepositoryLookup new.
+				GtLMagritteToolForGitRepositoryChanges new}
+]
+
+{ #category : #defaults }
 GtLTools class >> gt [
 	^self gtSearch , self leSearch , self gtCodeChange
 		, self gtCodeRefactoring , self leChange
