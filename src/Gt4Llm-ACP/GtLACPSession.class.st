@@ -289,7 +289,7 @@ GtLACPSession >> connectionClosed: aReason [
 GtLACPSession >> contextWindow [
 	^ self latestContextUsageUpdate
 		ifNil: [ GtLACPContextWindow new ]
-		ifNotNil: #contextWindow
+		ifNotNil: [ :anUpdate | anUpdate contextWindow ]
 ]
 
 { #category : #accessing }

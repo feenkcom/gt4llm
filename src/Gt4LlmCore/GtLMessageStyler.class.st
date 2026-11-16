@@ -61,7 +61,7 @@ GtLMessageStyler >> exampleFor: aMethodDefinition [
 
 	^ aMethodDefinition
 		ifNotNil: [ aMethodDefinition compiledMethod
-				ifNotNil: [ :aMethod | aMethod gtExample ifNotNil: #asCachedExampleWithResult ] ]
+				ifNotNil: [ :aMethod | aMethod gtExample ifNotNil: [ :anExample | anExample asCachedExampleWithResult ] ] ]
 ]
 
 { #category : #accessing }
@@ -557,7 +557,9 @@ GtLMessageStyler >> styleExpandingExample: anExampleAnnotation [
 	anExample := anExampleAnnotation imageObject
 			ifNotNil: [ :aMethodDefinition | 
 				aMethodDefinition compiledMethod
-					ifNotNil: [ :aCompiledMethod | aCompiledMethod gtExample ifNotNil: #asCachedExampleWithResult ] ].
+					ifNotNil: [ :aCompiledMethod | 
+						aCompiledMethod gtExample
+							ifNotNil: [ :anExample | anExample asCachedExampleWithResult ] ] ].
 
 	anId := LeTextSnippetAttributeExampleElementId indexed: self nextUniqueId.
 
@@ -798,6 +800,36 @@ GtLMessageStyler >> styleSmalltalkCodeBlock: aCodeNode [
 				to: aCodeNode code stopPosition)
 ]
 
+{ #category : #private }
+GtLMessageStyler >> styleSymbolButton: aSymbolAnnotation [
+	"Like LeSymbolAnnotationStyler>>#styleButton:, without its context menu"
+
+	| aSymbol attribute |
+	aSymbolAnnotation hasSymbolNameSpecified ifFalse: [ ^ self ].
+	aSymbol := aSymbolAnnotation symbolValue.
+	aSymbol ifNil: [ ^ self ].
+
+	attribute := GtButtonAttribute new
+			beAppend;
+			stencil: [ | button |
+				button := LeSnippetStylerVisitor
+						textLinkButtonPadding: (BlInsets top: 2)
+						margin: BlInsets empty
+						valid: true.
+				button aptitude glamorousCodeFont.
+				button
+					beSmallSize;
+					label: '#' , aSymbolAnnotation symbolName;
+					action: [ :aButton | aButton phlow spawnObject: aSymbol gtReferences ].
+				button ].
+
+	self text
+		attribute: attribute
+		from: aSymbolAnnotation parent startPosition
+		to: aSymbolAnnotation parent stopPosition
+
+]
+
 { #category : #tables }
 GtLMessageStyler >> styleTableCellText: aText ast: aCell [
 	"Style an already parsed cell, not a new document."
@@ -945,6 +977,21 @@ GtLMessageStyler >> visitCodeBlock: aCodeNode [
 ]
 
 { #category : #visiting }
+GtLMessageStyler >> visitDocumenterAnnotation: aDocumenterAnnotation [
+	"Style only the annotations I support (see GtLAnnotationVisitorSupport).
+	Annotations of grammars I do not know (for example gtPictureReference)
+	and unknown or malformed annotations (error nodes) stay plain text, instead of stopping the styling."
+
+	| anAnnotation |
+	anAnnotation := aDocumenterAnnotation annotation.
+	(GtLAnnotationVisitorSupport visitor: self supports: anAnnotation)
+		ifFalse: [ ^ aDocumenterAnnotation ].
+
+	^ anAnnotation acceptVisitor: self
+
+]
+
+{ #category : #visiting }
 GtLMessageStyler >> visitExampleAnnotation: anExampleAnnotation [
 	| anExample |
 	self visitAnnotation: anExampleAnnotation.
@@ -991,6 +1038,21 @@ GtLMessageStyler >> visitExternalLabelUrlLink: anExternalLabelUrlLink [
 GtLMessageStyler >> visitExternalUrlLink: anExternalUrlLink [
 	self visitExternalLink: anExternalUrlLink.
 	self styleExternalLink: anExternalUrlLink
+]
+
+{ #category : #visiting }
+GtLMessageStyler >> visitFileReferenceAnnotation: aFileReferenceAnnotation [
+	"Show the annotation in the code font with the markup colour.
+	Its nodes belong to the gtFileReference grammar, so I do not descend into them."
+
+	(self text
+		from: aFileReferenceAnnotation parent startPosition
+		to: aFileReferenceAnnotation parent stopPosition)
+		glamorousCodeFont;
+		foreground: BrGlamorousColors textMarkupColor.
+
+	^ aFileReferenceAnnotation
+
 ]
 
 { #category : #generated }
@@ -1128,6 +1190,25 @@ GtLMessageStyler >> visitPragmaAnnotation: aPragmaAnnotation [
 	"self
 		styleExpandingObject: aPragmaAnnotation
 		withDefault: LepiterConstants defaultClassShowSelector"
+]
+
+{ #category : #visiting }
+GtLMessageStyler >> visitSymbolAnnotation: aSymbolAnnotation [
+	"Style gtSymbol annotations like LeSymbolAnnotationStyler>>#visitSymbolAnnotation: does in Lepiter snippets:
+	the markup colour, and a #symbol button that spawns the references of the symbol.
+	The annotation text is hidden while the cursor is outside, if the symbol exists."
+
+	(self text
+		from: aSymbolAnnotation parent startPosition
+		to: aSymbolAnnotation parent stopPosition)
+		foreground: BrGlamorousColors textMarkupColor.
+
+	(aSymbolAnnotation hasSymbolNameSpecified and: [ aSymbolAnnotation isDefined ])
+		ifTrue: [ self styleAutoHidingAnnotation: aSymbolAnnotation ].
+	self styleSymbolButton: aSymbolAnnotation.
+
+	^ aSymbolAnnotation
+
 ]
 
 { #category : #visiting }
