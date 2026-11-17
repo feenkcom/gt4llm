@@ -23,6 +23,23 @@ GtLACPToolCall >> asConversationTreeNode [
 ]
 
 { #category : #accessing }
+GtLACPToolCall >> bashCommand [
+	| input |
+	(data at: 'name' ifAbsent: [ nil ]) = 'Bash' ifFalse: [ ^ nil ].
+	input := data at: 'rawInput' ifAbsent: [ ^ nil ].
+	(input isKindOf: Dictionary) ifFalse: [ ^ nil ].
+	^ (input at: 'command' ifAbsent: [ nil ])
+		ifNotNil: [ :command | command isString ifTrue: [ command ] ifFalse: [ nil ] ]
+]
+
+{ #category : #converting }
+GtLACPToolCall >> bashReport [
+	^ GtLACPBashReport new
+		toolCall: self;
+		yourself
+]
+
+{ #category : #accessing }
 GtLACPToolCall >> data [
  ^ data
 ]
@@ -35,6 +52,19 @@ GtLACPToolCall >> data: anObject [
 { #category : #accessing }
 GtLACPToolCall >> elicitationRequests [
 	^ elicitationRequests ifNil: [ elicitationRequests := OrderedCollection new ]
+]
+
+{ #category : #'gt - extensions' }
+GtLACPToolCall >> gtBashFor: aView [
+	"What Bash command was requested and what output was recorded?"
+
+	<gtView>
+	self bashCommand ifNil: [ ^ aView empty ].
+	^ aView forward
+		title: 'Bash';
+		priority: -1;
+		object: [ self bashReport ];
+		view: #gtCodeAndOutputFor:
 ]
 
 { #category : #'gt - views' }
@@ -53,6 +83,18 @@ GtLACPToolCall >> gtDisplayOn: aStream [
 	aStream nextPutAll: self summary
 ]
 
+{ #category : #'gt - extensions' }
+GtLACPToolCall >> gtInputFor: aView [
+	"What input arguments were supplied to this tool call?"
+
+	<gtView>
+	^ aView textEditor
+		title: 'Input';
+		priority: 20.1;
+		text: [ STONJSON toStringPretty: (data at: 'rawInput' ifAbsent: [ nil ]) ];
+		actionUpdateButtonTooltip: 'Refresh input'
+]
+
 { #category : #views }
 GtLACPToolCall >> gtMcpToolMessageFor: aView [
  <gtView>
@@ -69,16 +111,34 @@ GtLACPToolCall >> gtMcpToolMessageFor: aView [
       margin: (BlInsets all: 10) ] ]
 ]
 
-{ #category : #views }
+{ #category : #'gt - extensions' }
 GtLACPToolCall >> gtOutputFor: aView [
- <gtView>
- ^ aView textEditor title: 'Output'; priority: 20; text: [ STONJSON toStringPretty: (data at: 'rawOutput' ifAbsent: [ data at: 'content' ifAbsent: [ nil ] ]) ]; actionUpdateButtonTooltip: 'Refresh output'
+	"What output was recorded? Preserve strings without an extra JSON encoding layer."
+
+	<gtView>
+	^ aView textEditor
+		title: 'Output';
+		priority: 20.2;
+		text: [ | output |
+			output := data
+					at: 'rawOutput'
+					ifAbsent: [ data at: 'content' ifAbsent: [ nil ] ].
+			output isString
+				ifTrue: [ output ]
+				ifFalse: [ STONJSON toStringPretty: output ] ];
+		actionUpdateButtonTooltip: 'Refresh output'
 ]
 
 { #category : #views }
 GtLACPToolCall >> gtPermissionsFor: aView [
- <gtView>
- ^ aView list title: 'Permissions'; priority: 20; items: [ permissionRequests copy ]; itemText: #yourself; actionUpdateButtonTooltip: 'Refresh permissions'
+	<gtView>
+	
+	^ aView list
+		title: 'Permissions';
+		priority: 25;
+		items: [ permissionRequests copy ];
+		itemText: #yourself;
+		actionUpdateButtonTooltip: 'Refresh permissions'
 ]
 
 { #category : #views }
