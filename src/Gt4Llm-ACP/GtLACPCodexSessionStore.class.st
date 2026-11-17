@@ -1,5 +1,5 @@
 "
-I read Codex session_index.jsonl and rollout metadata from sessions and archived_sessions. Compressed rollouts retain their filename identity and an explicit coverage issue; no external decompressor or SQLite dependency is required.
+I discover Codex sessions from index entries and byte-streamed rollout headers. sessions is the default browsing collection: known internal and delegated subagents are omitted, while missing origin metadata remains visible. allSessions retains every discovered session for provenance and direct lookup. Agent origins, internalAgents and subagents operate on that complete collection. Full rollout bodies remain unread until requested. Compressed files expose filename identity and explicit coverage issues; SQLite indices are not opened.
 "
 Class {
 	#name : #GtLACPCodexSessionStore,
@@ -12,6 +12,13 @@ GtLACPCodexSessionStore >> agentName [
  ^ 'Codex'
 ]
 
+{ #category : #accessing }
+GtLACPCodexSessionStore >> allSessions [
+	"All discovered sessions, including internal and delegated agents."
+
+	^ super sessions
+]
+
 { #category : #defaults }
 GtLACPCodexSessionStore >> defaultDirectory [
  | configured |
@@ -21,6 +28,34 @@ GtLACPCodexSessionStore >> defaultDirectory [
   ifFalse: [ configured asFileReference ]
 ]
 
+{ #category : #'gt - views' }
+GtLACPCodexSessionStore >> gtAgentOriginsFor: aView [
+	"Which discovered sessions are internal or delegated agents, including those omitted from Sessions?"
+
+	<gtView>
+	^ aView columnedList
+		title: 'Agent origins';
+		priority: 5;
+		items: [ self allSessions ];
+		column: 'Kind' text: #agentKind;
+		column: 'Title' text: #title;
+		column: 'Agent' text: [ :session | session agentNickname ifNil: [ '' ] ];
+		column: 'Path' text: [ :session | session agentPath ifNil: [ '' ] ];
+		column: 'Parent thread'
+			text: [ :session | session parentThreadId ifNil: [ '' ] ];
+		column: 'Session ID' text: #sessionId
+]
+
+{ #category : #accessing }
+GtLACPCodexSessionStore >> internalAgents [
+	^ self allSessions select: #isInternalAgent
+]
+
+{ #category : #accessing }
+GtLACPCodexSessionStore >> issues [
+	^ super issues , (sessions values flatCollect: #issues)
+]
+
 { #category : #clients }
 GtLACPCodexSessionStore >> newClient [
 	^ GtLACPCodexClient new
@@ -28,52 +63,63 @@ GtLACPCodexSessionStore >> newClient [
 
 { #category : #reading }
 GtLACPCodexSessionStore >> readCompressedRollout: aFile [
- | basename identifier session |
- [ basename := aFile basename allButLast: '.jsonl.zst' size.
- identifier := basename last: 36.
- UUID fromString: identifier.
- session := self sessionAt: identifier.
- session addSource: (self sourceFile: aFile format: #codexCompressedRollout
-  metadata: { 'filenameSessionId' -> identifier } asDictionary).
- self issueFor: aFile line: nil description: 'Compressed rollout: identity read from filename; metadata not decoded' ]
-  on: Error do: [ :error | self issueFor: aFile line: nil description: error messageText ]
+	[ | basename identifier record |
+	basename := aFile basename allButLast: '.jsonl.zst' size.
+	identifier := basename last: 36.
+	UUID fromString: identifier.
+	record := GtLACPCodexCompressedRolloutRecord new
+			file: aFile;
+			rawData: {'filenameSessionId' -> identifier} asDictionary;
+			yourself.
+	(self sessionAt: identifier) addRecord: record ]
+		on: Error
+		do: [ :error | 
+			self
+				issueFor: aFile
+				line: nil
+				description: error messageText ]
 ]
 
 { #category : #reading }
 GtLACPCodexSessionStore >> readIndex: aFile [
- self readJsonLines: aFile limit: Float infinity do: [ :record :line |
-  | session source updated |
-  session := self sessionAt: (record at: 'id').
-  source := self sourceFile: aFile format: #codexIndex metadata:
-   (self metadataFrom: record keys: #('id' 'thread_name' 'name' 'updated_at')).
-  session addSource: source.
-  updated := self dateFrom: (record at: 'updated_at' ifAbsent: [ nil ]) file: aFile line: line.
-  (session updatedAt isNil or: [ updated notNil and: [ updated >= session updatedAt ] ]) ifTrue: [
-   session title: (record at: 'thread_name' ifAbsent: [ record at: 'name' ifAbsent: [ '' ] ]).
-   updated ifNotNil: [ session updatedAt: updated ] ].
-  false ]
+	self
+		readJsonLines: aFile
+		limit: Float infinity
+		do: [ :data :line | 
+			| record |
+			record := GtLACPCodexIndexRecord new
+					file: aFile;
+					lineNumber: line;
+					rawData: data;
+					yourself.
+			(self sessionAt: record sessionId) addRecord: record.
+			false ]
 ]
 
 { #category : #reading }
 GtLACPCodexSessionStore >> readRollout: aFile [
- | found |
- found := false.
- self readJsonLines: aFile limit: 50 do: [ :record :line |
-  (record at: 'type' ifAbsent: [ '' ]) = 'session_meta'
-   ifFalse: [ false ]
-   ifTrue: [
-    | metadata session created |
-    metadata := record at: 'payload'.
-    session := self sessionAt: (metadata at: 'id').
-    session addSource: (self sourceFile: aFile format: #codexRollout metadata:
-     (self metadataFrom: metadata keys: #('id' 'cwd' 'timestamp' 'originator' 'cli_version'))).
-    metadata at: 'cwd' ifPresent: [ :project | self directory: project for: session file: aFile line: line ].
-    created := self dateFrom: (metadata at: 'timestamp' ifAbsent: [ nil ]) file: aFile line: line.
-    created ifNotNil: [ session createdAt: created ].
-    found := true.
-    true ] ].
- found ifFalse: [
-  self issueFor: aFile line: nil description: 'No session_meta record found in the first 50 records' ]
+	| found |
+	found := false.
+	self
+		readJsonLines: aFile
+		limit: 50
+		do: [ :data :line | 
+			(data at: 'type' ifAbsent: [ '' ]) = 'session_meta'
+				ifFalse: [ false ]
+				ifTrue: [ | record |
+					record := GtLACPCodexRolloutRecord new
+							file: aFile;
+							lineNumber: line;
+							rawData: (data at: 'payload');
+							yourself.
+					(self sessionAt: record sessionId) addRecord: record.
+					found := true.
+					true ] ].
+	found
+		ifFalse: [ self
+				issueFor: aFile
+				line: nil
+				description: 'No session_meta record found in the first 50 records' ]
 ]
 
 { #category : #reading }
@@ -96,7 +142,19 @@ GtLACPCodexSessionStore >> readSessions [
     description: 'SQLite index not read; discovery uses rollout files and session_index.jsonl' ] ]
 ]
 
+{ #category : #accessing }
+GtLACPCodexSessionStore >> sessions [
+	"Browse top-level agents, excluding known subagents. Missing origin metadata stays visible."
+
+	^ super sessions reject: #isSubagent
+]
+
 { #category : #private }
 GtLACPCodexSessionStore >> storedSessionClass [
 	^ GtLACPCodexStoredSession
+]
+
+{ #category : #accessing }
+GtLACPCodexSessionStore >> subagents [
+	^ self allSessions select: #isSubagent
 ]

@@ -22,6 +22,11 @@ GtLACPExternalSessionStore >> agentName [
  self subclassResponsibility
 ]
 
+{ #category : #accessing }
+GtLACPExternalSessionStore >> allSessions [
+	^ self sessions
+]
+
 { #category : #reading }
 GtLACPExternalSessionStore >> dateFrom: aValue file: aFile line: aLine [
  aValue ifNil: [ ^ nil ].
@@ -56,17 +61,17 @@ GtLACPExternalSessionStore >> forDirectory: aDirectory [
   store: self; directory: aDirectory asFileReference asAbsolute; yourself
 ]
 
-{ #category : #views }
+{ #category : #'gt - views' }
 GtLACPExternalSessionStore >> gtIssuesFor: aView [
+	"What problems were found while reading the discovered sessions?"
+
 	<gtView>
 	^ aView columnedList
 		title: 'Read problems';
 		priority: 10;
-		items: [ issues ];
+		items: [ self issues ];
 		column: 'File' text: [ :issue | issue file fullName ];
-		column: 'Line'
-			text: [ :issue | issue lineNumber ifNil: [ '' ] ifNotNil: [ :aLineNumber | aLineNumber asString ] ]
-			width: 50;
+		column: 'Line' text: [ :issue | issue lineNumber ifNil: [ '' ] ];
 		column: 'Reason' text: #description
 ]
 
@@ -146,22 +151,35 @@ GtLACPExternalSessionStore >> read [
 
 { #category : #reading }
 GtLACPExternalSessionStore >> readJsonLines: aFile limit: aLimit do: aBlock [
- | lineNumber |
- lineNumber := 0.
- [ aFile readStreamDo: [ :stream |
-  [ stream atEnd not and: [ lineNumber < aLimit ] ] whileTrue: [
-   | line |
-   lineNumber := lineNumber + 1.
-   line := stream nextLine.
-   line ifNotEmpty: [
-    [ | record |
-     record := STONJSON fromString: line.
-     (record isKindOf: Dictionary) ifFalse: [ self error: 'Expected a JSON object' ].
-     (aBlock value: record value: lineNumber) ifTrue: [ ^ self ] ]
-      on: Error do: [ :error |
-       self issueFor: aFile line: lineNumber description: error messageText ] ] ] ] ]
-  on: Error do: [ :error |
-   self issueFor: aFile line: lineNumber description: error messageText ]
+	"Read UTF-8 JSONL one byte line at a time. A true result stops before the
+	next line is read, so a rollout's conversation body remains untouched."
+
+	| lineNumber |
+	lineNumber := 0.
+	[ aFile
+		binaryReadStreamDo: [ :stream | 
+			[ stream atEnd not and: [ lineNumber < aLimit ] ]
+				whileTrue: [ | bytes |
+					lineNumber := lineNumber + 1.
+					bytes := stream upTo: 10.
+					bytes
+						ifNotEmpty: [ [ | record |
+							record := STONJSON fromString: bytes utf8Decoded.
+							(record isKindOf: Dictionary)
+								ifFalse: [ self error: 'Expected a JSON object' ].
+							(aBlock value: record value: lineNumber) ifTrue: [ ^ self ] ]
+								on: Error
+								do: [ :error | 
+									self
+										issueFor: aFile
+										line: lineNumber
+										description: error messageText ] ] ] ] ]
+		on: Error
+		do: [ :error | 
+			self
+				issueFor: aFile
+				line: lineNumber
+				description: error messageText ]
 ]
 
 { #category : #reading }
