@@ -95,6 +95,22 @@ GtLMessageTableStylerExamples >> classSummaries [
 ]
 
 { #category : #examples }
+GtLMessageTableStylerExamples >> indentedTableWithTrailingSpaces [
+	<gtExample>
+	| table text previews |
+	table := LeMarkdownTableExamples new indentedTableWithTrailingSpaces.
+	text := table source asRopedText.
+	GtLMessageStyler new privateStyle: text.
+	previews := OrderedCollection new.
+	text
+		findAttributesSuchThat: [ :each | each isKindOf: BrTextAdornmentDynamicAttribute ]
+		indicesDo: [ :start :end :each | each shouldAppend ifTrue: [ previews add: each ] ].
+	self assert: previews size equals: 1.
+	self assert: text asString equals: table source.
+	^ text
+]
+
+{ #category : #examples }
 GtLMessageTableStylerExamples >> nativeHeadersAlignWithBody [
 	<gtExample>
 	| scripter |
