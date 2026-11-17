@@ -321,33 +321,40 @@ GtLOpenAiResponsesExamples >> openAiResponsesMarkdownChatHistory [
 
 { #category : #examples }
 GtLOpenAiResponsesExamples >> openAiServerSideCompaction [
-	"Have a conversation with ChatGPT with server-side compaction."
-	<gtExample>
-	"noTest as compaction messages are currently incorrectly grouped before the final assistant message."
-	"<noTest>"
-	| executor provider chat message entity |
+	"Have a conversation with ChatGPT with server-side compaction.
+	GT only: not exported to GemStone (see GtGemStoneGtCodeExporter>>#excludedMethodsList), as GtLTools gt includes the Lepiter tools (leSearch, leChange), and the stone doesn't have Lepiter."
 
+	"noTest as compaction messages are currently incorrectly grouped before the final assistant message."
+
+	"<noTest>"
+
+	<gtExample>
+	| executor provider chat message entity |
 	executor := GtLOpenAiResponsesExampleExecutor new.
 	executor loadExpectedHistoryFrom: self openAiServerSideCompactionHistory.
 	provider := executor provider.
-	provider compactionStrategy: ((GtLOpenAiServerSideCompactionStrategy forProvider: provider)
-		thresholdTokensLimit: 5000).
+	provider
+		compactionStrategy: ((GtLOpenAiServerSideCompactionStrategy forProvider: provider)
+				thresholdTokensLimit: 5000).
 	chat := executor chat.
-	chat 
+	chat
 		markdownResponse;
 		tools: GtLTools gt;
 		sendMarkdown: 'Use tools and give me a description of the class BlElement'.
 	executor waitTimeoutSeconds: 120.
 
 	chat tools removeAll.
-	chat sendMarkdown: 'Based on the information already obtained, and not using any additional tools, what is the superclass of {{gtClass:BlElement}}?'.
+	chat
+		sendMarkdown: 'Based on the information already obtained, and not using any additional tools, what is the superclass of {{gtClass:BlElement}}?'.
 	executor waitTimeoutSeconds: 120.
 	self assert: chat messages size equals: 4.
 	executor assertChatResponseOK: chat.
 
 	message := chat messages at: 1.
-	entity := NeoJSONReader fromString:message requestResponse request contents.
-	self assert: ((entity at: 'context_management') first at: 'compact_threshold') equals: 5000.
+	entity := NeoJSONReader fromString: message requestResponse request contents.
+	self
+		assert: ((entity at: 'context_management') first at: 'compact_threshold')
+		equals: 5000.
 
 	message := (chat messages at: 2) finalMessage.
 	self assert: message isAssistantRole.
@@ -358,12 +365,13 @@ GtLOpenAiResponsesExamples >> openAiServerSideCompaction [
 	self deny: (provider assistantMessageHasCompactionResponse: message).
 	self assert: (message contentText includesSubstring: 'Object').
 
-	self compareIfKnownShapes: chat messages 
+	self
+		compareIfKnownShapes: chat messages
 		with: executor expectedHistory
 		in: chat
 		selector: #openAiServerSideCompactionHistory.
 
-	^ chat.
+	^ chat
 ]
 
 { #category : #'private - data' }
@@ -376,17 +384,20 @@ GtLOpenAiResponsesExamples >> openAiServerSideCompactionHistory [
 { #category : #examples }
 GtLOpenAiResponsesExamples >> openAiServerSideMultipleCompaction [
 	"Have a conversation with ChatGPT with server-side compaction.
-	Note that the response is gibberish since the token limit is much too small for the requested task, however it does have tool calls with compaction responses."
+	Note that the response is gibberish since the token limit is much too small for the requested task, however it does have tool calls with compaction responses.
+	GT only: not exported to GemStone (see GtGemStoneGtCodeExporter>>#excludedMethodsList), as GtLTools gt includes the Lepiter tools (leSearch, leChange), and the stone doesn't have Lepiter."
+
 	<gtExample>
 	| executor provider chat message |
-
 	executor := GtLOpenAiResponsesExampleExecutor new.
-	executor loadExpectedHistoryFrom: self openAiServerSideMultipleCompactionHistory.
+	executor
+		loadExpectedHistoryFrom: self openAiServerSideMultipleCompactionHistory.
 	provider := executor provider.
-	provider compactionStrategy: ((GtLOpenAiServerSideCompactionStrategy forProvider: provider)
-		thresholdTokensLimit: 5000).
+	provider
+		compactionStrategy: ((GtLOpenAiServerSideCompactionStrategy forProvider: provider)
+				thresholdTokensLimit: 5000).
 	chat := executor chat.
-	chat 
+	chat
 		markdownResponse;
 		tools: GtLTools gt;
 		sendMarkdown: 'Please look at https://github.com/feenkcom/gtoolkit/issues/5139 and propose a fix.'.
@@ -396,12 +407,13 @@ GtLOpenAiResponsesExamples >> openAiServerSideMultipleCompaction [
 	self assert: message isAssistantRole.
 	self assert: (provider assistantMessageHasCompactionResponse: message).
 
-	self compareIfKnownShapes: chat messages 
+	self
+		compareIfKnownShapes: chat messages
 		with: executor expectedHistory
 		in: chat
 		selector: #openAiServerSideMultipleCompactionHistory.
 
-	^ chat.
+	^ chat
 ]
 
 { #category : #'private - data' }

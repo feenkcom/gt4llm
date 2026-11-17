@@ -23,22 +23,32 @@ GtLModelExamplesExecutor class >> isLive [
 	"Return true if an example should be execute against a real OpenAI server.
 	Return false, if a stub client should be used."
 
-	^ IsLive ifNil: [ IsLive := false ]
+	^ self
+		gtDo: [ IsLive ifNil: [ IsLive := false ] ]
+		gemstoneDo: [ SessionTemps current at: #GtLModelExamplesExecutor_IsLive ifAbsent: [ false ] ]
 ]
 
 { #category : #accessing }
 GtLModelExamplesExecutor class >> isLive: anObject [
-	IsLive := anObject
+	self
+		gtDo: [ IsLive := anObject ]
+		gemstoneDo: [ SessionTemps current at: #GtLModelExamplesExecutor_IsLive put: anObject ]
 ]
 
 { #category : #accessing }
 GtLModelExamplesExecutor class >> isSynchronous [
-	^ IsSynchronous
+	^ self
+		gtDo: [ IsSynchronous ]
+		gemstoneDo: [ SessionTemps current
+				at: #GtLModelExamplesExecutor_IsSynchronous
+				ifAbsent: [  ] ]
 ]
 
 { #category : #accessing }
 GtLModelExamplesExecutor class >> isSynchronous: anObject [
-	IsSynchronous := anObject
+	self
+		gtDo: [ IsSynchronous := anObject ]
+		gemstoneDo: [ SessionTemps current at: #GtLModelExamplesExecutor_IsSynchronous put: anObject ]
 ]
 
 { #category : #asserting }
@@ -121,9 +131,12 @@ GtLModelExamplesExecutor >> client [
 
 { #category : #'as yet unclassified' }
 GtLModelExamplesExecutor >> decodeHistory: aCollection [
+	"GemStone: GsDevKit's GZipReadStream can't inflate in the minimal Zinc runtime, so use native zlib (flag 1 = gzip headers). decodeFromUTF8ToString answers traditional String/DoubleByteString; utf8Decoded answers Unicode7/16, which raise in Zinc's legacy-mode String comparisons (ZnHeaders)."
 
-	^ GtLDataSourceEncoderDecoder loadClientHistoryFromStream:
-		(GZipReadStream on: aCollection) upToEnd utf8Decoded readStream
+	<gsCode: '^ GtLDataSourceEncoderDecoder loadClientHistoryFromStream:
+		(aCollection _decompress: 1) decodeFromUTF8ToString readStream'>
+	^ GtLDataSourceEncoderDecoder
+		loadClientHistoryFromStream: (GZipReadStream on: aCollection) upToEnd utf8Decoded readStream
 ]
 
 { #category : #accessing }

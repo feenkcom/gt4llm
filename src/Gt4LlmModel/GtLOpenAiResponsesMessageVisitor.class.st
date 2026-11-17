@@ -102,12 +102,9 @@ GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveCompositeJsonGenericDataBlo
 
 { #category : #'as yet unclassified' }
 GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveDocumentDataBlock: aDataBlock [
+	"Use the data block's own OpenAI serialisation: its data URL carries the full content type (text/plain, application/pdf, ...) and it adds the filename. Building 'data:application/' , documentFormat gave application/plain for text files, which OpenAI rejects."
 
-	^ {NeoJSONObject new
-			at: 'file_data' put: ('data:application/'
-				, aDataBlock documentFormat,';base64,' , aDataBlock encodedBytes);
-			at: 'type' put: 'input_file';
-			yourself}
+	^ aDataBlock serializeForOpenAI
 ]
 
 { #category : #'as yet unclassified' }

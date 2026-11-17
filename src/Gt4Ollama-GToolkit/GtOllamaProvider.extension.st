@@ -22,7 +22,7 @@ GtOllamaProvider >> gtExecutionsFor: aView [
 ]
 
 { #category : #'*Gt4Ollama-GToolkit' }
-GtOllamaProvider class >> gtToggleEnabledActionFor: anAction [
+GtOllamaProvider classSide >> gtToggleEnabledActionFor: anAction [
 	<gtClassAction>
 	^ anAction button
 		tooltip: (IsConnectable ifTrue: [ 'Disable' ] ifFalse: [ 'Enable' ]);
@@ -31,7 +31,7 @@ GtOllamaProvider class >> gtToggleEnabledActionFor: anAction [
 ]
 
 { #category : #'*Gt4Ollama-GToolkit' }
-GtOllamaProvider class >> isConnectable [
+GtOllamaProvider classSide >> isConnectable [
 	^ IsConnectable
 ]
 

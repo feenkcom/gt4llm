@@ -39,13 +39,18 @@ GtLChat class >> leJsonV4AttributeMapping [
 GtLChat class >> startSessionWriter [
 	"Whether newly created chats automatically attach a session writer."
 
-	^ StartSessionWriter ifNil: [ StartSessionWriter := false ]
+	^ self
+		gtDo: [ StartSessionWriter ifNil: [ StartSessionWriter := false ] ]
+		gemstoneDo: [ SessionTemps current at: #GtLChat_StartSessionWriter ifAbsentPut: [ false ] ]
 ]
 
 { #category : #accessing }
 GtLChat class >> startSessionWriter: aBoolean [
 	self assert: (aBoolean == true or: [ aBoolean == false ]).
-	StartSessionWriter := aBoolean
+	
+	self
+		gtDo: [ StartSessionWriter := aBoolean ]
+		gemstoneDo: [ SessionTemps current at: #GtLChat_StartSessionWriter put: aBoolean ]
 ]
 
 { #category : #visiting }
