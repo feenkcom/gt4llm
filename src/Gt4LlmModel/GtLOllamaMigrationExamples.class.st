@@ -90,8 +90,7 @@ GtLOllamaMigrationExamples >> gemma4CompletionsChatHistory [
 
 { #category : #examples }
 GtLOllamaMigrationExamples >> gemma4Image [
-	"Answer the model and chat for a query and image with Gemma4:31b.
-	noTest as this assumes a local Ollama installation with gemma4:31b available."
+	"Answer the model and chat for a query and image with Gemma4:31b."
 	<gtExample>
 	| provider executor image chat msg jsonDictionary requestJson |
 

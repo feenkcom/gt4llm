@@ -121,9 +121,12 @@ GtLModelExamplesExecutor >> client [
 
 { #category : #'as yet unclassified' }
 GtLModelExamplesExecutor >> decodeHistory: aCollection [
+	"GemStone: GsDevKit's GZipReadStream can't inflate in the minimal Zinc runtime, so use native zlib (flag 1 = gzip headers). decodeFromUTF8ToString answers traditional String/DoubleByteString; utf8Decoded answers Unicode7/16, which raise in Zinc's legacy-mode String comparisons (ZnHeaders)."
 
-	^ GtLDataSourceEncoderDecoder loadClientHistoryFromStream:
-		(GZipReadStream on: aCollection) upToEnd utf8Decoded readStream
+	<gsCode: '^ GtLDataSourceEncoderDecoder loadClientHistoryFromStream:
+		(aCollection _decompress: 1) decodeFromUTF8ToString readStream'>
+	^ GtLDataSourceEncoderDecoder
+		loadClientHistoryFromStream: (GZipReadStream on: aCollection) upToEnd utf8Decoded readStream
 ]
 
 { #category : #accessing }
