@@ -21,10 +21,17 @@ Class {
 
 { #category : #'instance creation' }
 GtLSynchronousPromise class >> evaluate: aBlock with: anObject [
-	"Evaluate aBlock with anObject (#cull:, so zero-argument blocks are accepted) and answer a promise fulfilled with its value, or rejected with the Error it signals."
+	"Evaluate aBlock with anObject (#cull:, so zero-argument blocks are accepted).
+	Answer a promise returned by the block directly, as AsyncPromiseComputation does;
+	otherwise answer a promise fulfilled with the value. Reject on Error."
 
 	<return: #GtLSynchronousPromise>
-	^ [ self fulfilledWith: (aBlock cull: anObject) ]
+	^ [ | aResult isPromise |
+	aResult := aBlock cull: anObject.
+	isPromise := self
+			gtDo: [ aResult isAsyncPromise ]
+			gemstoneDo: [ aResult isKindOf: GtLSynchronousPromise ].
+	isPromise ifTrue: [ aResult ] ifFalse: [ self fulfilledWith: aResult ] ]
 		on: Error
 		do: [ :anError | self rejectedWith: anError ]
 ]

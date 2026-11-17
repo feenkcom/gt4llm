@@ -23,6 +23,19 @@ GtLSerializedObjectValue class >> fromObject: anObject [
 		yourself
 ]
 
+{ #category : #printing }
+GtLSerializedObjectValue class >> printStringOf: anObject limitedTo: limit [
+	"Print an object's description within limit characters."
+
+	<gsCode: '	| aStream printed |
+	aStream := PrintStream printingOn: String new maxSize: limit + 1.
+	anObject printOn: aStream.
+	printed := aStream contents.
+	printed size <= limit ifTrue: [ ^ printed ].
+	^ (printed copyFrom: 1 to: limit - 4) , ''[..]'''>
+	^ anObject printStringLimitedTo: limit
+]
+
 { #category : #comparing }
 GtLSerializedObjectValue >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
@@ -66,12 +79,15 @@ GtLSerializedObjectValue >> hash [
 
 { #category : #initialization }
 GtLSerializedObjectValue >> initializeFromObject: anObject [
-	<gsCode: '	| slotNames |
-	"Capture a headless object snapshot, including named instance variables."
+	"Initialize from an object by extracting class info, views, and slots.
+	The GemStone variant prints through a PrintStream limited to 50000 characters."
+
+	<gsCode: '	"Capture a headless object snapshot, including named instance variables."
+	| slotNames |
 	objectClassName := anObject class name asString.
 	superclassName := anObject class superclass ifNil: [ '''' ] ifNotNil: [ :aClass | aClass name asString ].
 	packageName := anObject class category asString.
-	objectPrintString := [ anObject printString ] on: Error do: [ :error | ''Error printing object'' ].
+	objectPrintString := [ self class printStringOf: anObject limitedTo: 50000 ] on: Error do: [ :error | ''Error printing object'' ].
 	phlowViews := #().
 	slotNames := anObject class allInstVarNames.
 	allInstanceSlots := (1 to: slotNames size) collect: [ :index |
@@ -80,10 +96,11 @@ GtLSerializedObjectValue >> initializeFromObject: anObject [
 		GtLSerializedSlotInfo new
 			name: (slotNames at: index) asString;
 			valueClassName: slotValue class name asString;
-			valuePrintString: ([ slotValue asString ] on: Error do: [ :error | ''Error converting to string'' ]);
+			valuePrintString: ([ ((slotValue isKindOf: CharacterCollection) or: [ slotValue isKindOf: Character ])
+					ifTrue: [ slotValue asString ]
+					ifFalse: [ self class printStringOf: slotValue limitedTo: 50000 ] ]
+				on: Error do: [ :error | ''Error converting to string'' ]);
 			yourself ].'>
-	"Initialize from an object by extracting class info, views, and slots."
-
 	objectClassName := anObject class name asString.
 	superclassName := anObject class superclass
 			ifNil: [ '' ]

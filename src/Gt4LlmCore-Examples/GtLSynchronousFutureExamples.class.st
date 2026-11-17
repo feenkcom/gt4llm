@@ -8,6 +8,25 @@ Class {
 }
 
 { #category : #'examples - chaining' }
+GtLSynchronousFutureExamples >> continuationReturningPromiseIsForwarded [
+	"A continuation that returns a promise answers that promise, as GT's async promises do."
+
+	<gtExample>
+	<return: #GtLSynchronousPromise>
+	| fulfilled rejected inner |
+	fulfilled := self futureEvaluatesOnlyOnAwait.
+	rejected := self futureWithErrorIsRejected.
+	inner := GtLSynchronousPromise fulfilledWith: #inner.
+	self assert: (fulfilled then: [ :aValue | inner ]) == inner.
+	self
+		assert: (fulfilled then: [ :aValue | inner ] otherwise: [ :anError | nil ]) == inner.
+	self assert: (rejected otherwise: [ :anError | inner ]) == inner.
+	self
+		assert: (rejected then: [ :aValue | nil ] otherwise: [ :anError | inner ]) == inner.
+	^ inner
+]
+
+{ #category : #'examples - chaining' }
 GtLSynchronousFutureExamples >> errorInThenBlockRejectsWithoutCallingOtherwise [
 	"As in AsyncFulfilledPromise>>#then:otherwise:, the otherwise block only handles the receiver's rejection, not an error in the then block."
 
