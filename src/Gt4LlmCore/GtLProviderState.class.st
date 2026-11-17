@@ -12,22 +12,38 @@ Class {
 
 { #category : #factory }
 GtLProviderState class >> idle [
-	^ Idle ifNil: [ Idle := GtLProviderIdleState new ]
+	^ self
+		gtDo: [ Idle ifNil: [ Idle := GtLProviderIdleState new ] ]
+		gemstoneDo: [ SessionTemps current
+				at: #GtLProviderState_Idle
+				ifAbsentPut: [ GtLProviderIdleState new ] ]
 ]
 
 { #category : #factory }
 GtLProviderState class >> running [
-	^ Running ifNil: [ Running := GtLProviderRunningState new ]
+	^ self
+		gtDo: [ Running ifNil: [ Running := GtLProviderRunningState new ] ]
+		gemstoneDo: [ SessionTemps current
+				at: #GtLProviderState_Running
+				ifAbsentPut: [ GtLProviderRunningState new ] ]
 ]
 
 { #category : #factory }
 GtLProviderState class >> scheduled [
-	^ Scheduled ifNil: [ Scheduled := GtLProviderScheduledState new ]
+	^ self
+		gtDo: [ Scheduled ifNil: [ Scheduled := GtLProviderScheduledState new ] ]
+		gemstoneDo: [ SessionTemps current
+				at: #GtLProviderState_Scheduled
+				ifAbsentPut: [ GtLProviderScheduledState new ] ]
 ]
 
 { #category : #factory }
 GtLProviderState class >> stopping [
-	^ Stopping ifNil: [ Stopping := GtLProviderStoppingState new ]
+	^ self
+		gtDo: [ Stopping ifNil: [ Stopping := GtLProviderStoppingState new ] ]
+		gemstoneDo: [ SessionTemps current
+				at: #GtLProviderState_Stopping
+				ifAbsentPut: [ GtLProviderStoppingState new ] ]
 ]
 
 { #category : #'api - changes' }

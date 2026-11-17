@@ -29,6 +29,6 @@ GtOpenAIClient >> postStreaming: aString withEntity: anEntity [
 ]
 
 { #category : #'*Gt4OpenAI-GToolkit' }
-GtOpenAIClient class >> withApiKeyFromClipboard [
+GtOpenAIClient classSide >> withApiKeyFromClipboard [
 	^ self new apiKey: Clipboard clipboardText
 ]

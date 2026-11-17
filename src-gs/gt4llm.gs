@@ -6138,6 +6138,13 @@ signalRunIsDone
 
 category: 'accessing'
 method: GtLlmChat
+state
+
+	^ self status
+%
+
+category: 'accessing'
+method: GtLlmChat
 status
 	self hasProvider ifFalse: [ ^ GtLlmAssistantChatNotReadyStatus new ].
 
@@ -16142,6 +16149,19 @@ input
 	^ self embedding input
 %
 
+category: 'printing'
+method: GtLlmNearestEmbedding
+printOn: aStream
+
+	super printOn: aStream.
+	aStream parenthesize:
+		[ distance ifNotNil:
+			[ aStream print: distance ].
+		aStream << ': '.
+		self input ifNotNil:
+			[ aStream << self input asString ] ]
+%
+
 ! Class implementation for 'GtLlmNewAssistant'
 
 !		Instance methods for 'GtLlmNewAssistant'
@@ -18195,7 +18215,7 @@ serializeClass: aClass
 	^ {'class' -> aClass name.
 		'superclass'
 			-> (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]).
-		'comment' -> aClass instanceSide gtComment.
+		'comment' -> aClass instanceSide comment.
 		'package' -> aClass package name.
 		'instanceSlots' -> aClass slotNames.
 		'classSlots' -> aClass class slotNames.

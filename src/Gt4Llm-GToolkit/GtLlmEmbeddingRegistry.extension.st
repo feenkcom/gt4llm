@@ -22,7 +22,7 @@ GtLlmEmbeddingRegistry >> gtEmbeddingsFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmEmbeddingRegistry class >> gtInstanceButtonFor: anAction [
+GtLlmEmbeddingRegistry classSide >> gtInstanceButtonFor: anAction [
 	<gtClassAction>
 	^ anAction button
 		tooltip: 'Inspect unique instance';

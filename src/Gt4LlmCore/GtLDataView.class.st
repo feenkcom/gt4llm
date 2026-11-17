@@ -52,17 +52,21 @@ GtLDataView >> allDefiningMethods [
 GtLDataView >> basicOn: anObject perform: aMessageSymbol withArguments: aCollectionOfArguments [
 	<return: #GtPhlowView>
 	<gtCollector>
-	| dataView |
-	
-	dataView := thisContext
-		object: anObject
-		perform: aMessageSymbol
-		withArguments: aCollectionOfArguments
-		inClass: anObject class.
-		
+	<gsCode: '	| dataView |
+	dataView := anObject perform: aMessageSymbol withArguments: aCollectionOfArguments.
 	dataView = self ifTrue: [
-		^Error signal: 'Cannot return the same data.' ].
-			
+		^ Error signal: ''Cannot return the same data.'' ].
+	dataView object: anObject arguments: aCollectionOfArguments.
+	^ dataView'>
+	| dataView |
+	dataView := thisContext
+			object: anObject
+			perform: aMessageSymbol
+			withArguments: aCollectionOfArguments
+			inClass: anObject class.
+
+	dataView = self ifTrue: [ ^ Error signal: 'Cannot return the same data.' ].
+
 	dataView object: anObject arguments: aCollectionOfArguments.
 	^ dataView
 ]
@@ -120,6 +124,7 @@ GtLDataView >> definingMethodProvider: anObject [
 
 { #category : #building }
 GtLDataView >> documentData [
+	<gsCode: '	^ GtLDocumentDataView new originalView: self'>
 	^ GtLDocumentDataView new
 		originalView: self;
 		definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
@@ -127,9 +132,10 @@ GtLDataView >> documentData [
 
 { #category : #decorating }
 GtLDataView >> emptyData [
+	<gsCode: '	^ GtLEmptyDataView new originalView: self'>
 	^ GtLEmptyDataView new
-			originalView: self;
-			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
+		originalView: self;
+		definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
 ]
 
 { #category : #'message performing' }
@@ -167,13 +173,15 @@ GtLDataView >> errorViewWithException: anException reason: anExceptionReason isF
 
 { #category : #decorating }
 GtLDataView >> forwardCollection [
+	<gsCode: '	^ GtLForwardCollectionDataView new originalView: self'>
 	^ GtLForwardCollectionDataView new
-			originalView: self;
-			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
+		originalView: self;
+		definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
 ]
 
 { #category : #decorating }
 GtLDataView >> forwardObject [
+	<gsCode: '	^ GtLForwardObjectDataView new originalView: self'>
 	^ GtLForwardObjectDataView new
 		originalView: self;
 		definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
@@ -237,9 +245,10 @@ GtLDataView >> gtViewSerializationObjectsFor: aView [
 
 { #category : #decorating }
 GtLDataView >> imageData [
-	^GtLImageDataView new
-			originalView: self;
-			definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
+	<gsCode: '	^ GtLImageDataView new originalView: self'>
+	^ GtLImageDataView new
+		originalView: self;
+		definingMethod: (GtPhlowDefiningMethodsCollector forContext: thisContext) collect
 ]
 
 { #category : #testing }

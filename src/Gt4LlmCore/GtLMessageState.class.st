@@ -12,22 +12,38 @@ Class {
 
 { #category : #factory }
 GtLMessageState class >> created [
-	^ Created ifNil: [ Created := GtLMessageCreatedState new ]
+	^ self
+		gtDo: [ Created ifNil: [ Created := GtLMessageCreatedState new ] ]
+		gemstoneDo: [ SessionTemps current
+				at: #GtLMessageState_Created
+				ifAbsentPut: [ GtLMessageCreatedState new ] ]
 ]
 
 { #category : #factory }
 GtLMessageState class >> finished [
-	^ Finished ifNil: [ Finished := GtLMessageFinishedState new ]
+	^ self
+		gtDo: [ Finished ifNil: [ Finished := GtLMessageFinishedState new ] ]
+		gemstoneDo: [ SessionTemps current
+				at: #GtLMessageState_Finished
+				ifAbsentPut: [ GtLMessageFinishedState new ] ]
 ]
 
 { #category : #factory }
 GtLMessageState class >> running [
-	^ Running ifNil: [ Running := GtLMessageRunningState new ]
+	^ self
+		gtDo: [ Running ifNil: [ Running := GtLMessageRunningState new ] ]
+		gemstoneDo: [ SessionTemps current
+				at: #GtLMessageState_Running
+				ifAbsentPut: [ GtLMessageRunningState new ] ]
 ]
 
 { #category : #factory }
 GtLMessageState class >> skipped [
-	^ Skipped ifNil: [ Skipped := GtLMessageSkippedState new ]
+	^ self
+		gtDo: [ Skipped ifNil: [ Skipped := GtLMessageSkippedState new ] ]
+		gemstoneDo: [ SessionTemps current
+				at: #GtLMessageState_Skipped
+				ifAbsentPut: [ GtLMessageSkippedState new ] ]
 ]
 
 { #category : #testing }

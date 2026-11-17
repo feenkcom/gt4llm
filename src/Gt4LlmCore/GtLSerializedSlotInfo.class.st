@@ -36,14 +36,30 @@ GtLSerializedSlotInfo >> hash [
 
 { #category : #initialization }
 GtLSerializedSlotInfo >> initializeFromSlot: aSlot ofObject: anObject [
-	"Initialize from a slot and its owning object."
-	| slotValue |
-	slotValue := [ anObject readSlotNamed: aSlot name ]
+	"Initialize from a slot and its owning object.
+	The GemStone variant uses bounded printing for non-string values."
+
+	<gsCode: '	"Initialize from a slot and its owning object."
+	| slotValue slotIndex |
+	slotIndex := (anObject class allInstVarNames collect: [ :each | each asString ])
+		indexOf: aSlot name asString.
+	slotValue := [ anObject instVarAt: slotIndex ]
 		on: Error do: [ :e | nil ].
 	self name: aSlot name asString.
 	self valueClassName: slotValue class name asString.
-	self valuePrintString: ([ (slotValue asString escapeCharacter: $') ] 
-		on: Error do: [ :e | 'Error converting to string' ])
+	self valuePrintString: ([ 
+		((slotValue isKindOf: CharacterCollection) or: [ slotValue isKindOf: Character ])
+			ifTrue: [ slotValue asString ]
+			ifFalse: [ GtLSerializedObjectValue printStringOf: slotValue limitedTo: 50000 ] ]
+		on: Error do: [ :e | ''Error converting to string'' ])'>
+	| slotValue |
+	slotValue := [ anObject readSlotNamed: aSlot name ] on: Error do: [ :e | nil ].
+	self name: aSlot name asString.
+	self valueClassName: slotValue class name asString.
+	self
+		valuePrintString: ([ slotValue asString escapeCharacter: $' ]
+				on: Error
+				do: [ :e | 'Error converting to string' ])
 ]
 
 { #category : #accessing }

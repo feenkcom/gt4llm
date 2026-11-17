@@ -19,9 +19,11 @@ GtLMarkdown >> addContentOneLineSummaryTo: aWriteStream [
 
 { #category : #accessing }
 GtLMarkdown >> commentForSmaCC [
+	"The SmaCC example's percent sign is written as <percent> and substituted below: a literal line starting with a percent sign would terminate the method in a GemStone Topaz export."
+
 	^ 'Denote SmaCC grammar definitions as:
 ```smacc-grammar
-%root FileNode;
+<percent>root FileNode;
 <line>
 	: [^\r\n]+
 	;
@@ -41,6 +43,8 @@ Line
 	;
 ```
 '
+		copyReplaceAll: '<percent>'
+		with: (String with: $%)
 ]
 
 { #category : #accessing }

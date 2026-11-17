@@ -9,11 +9,14 @@ Class {
 
 { #category : #initialization }
 GtLResponseMarkdownFormat >> initialize [
+	"The SmaCC example's percent sign is written as <percent> and substituted below: a literal line starting with a percent sign would terminate the method in a GemStone Topaz export."
+
 	super initialize.
-	
+
+	"GemStone topaz interprets a percent character (%) at the start of the line as a command terminator.  Replace dynamically to avoid the trap."
 	schema := NeoJSONSchema new
-					json: (NeoJSONObject
-							fromString: '{
+			json: (NeoJSONObject
+					fromString: ('{
 	"description" : "This is a Markdown format with a few extensions.
 
 Annotate Smalltalk classes using `{{gtClass:ClassName}}`, where `ClassName` is the name of the class to be referenced.
@@ -43,7 +46,7 @@ Object subclass: #SomeClass
 
 Denote SmaCC grammar definitions as:
 ```smacc-grammar
-%root FileNode;
+<percent>root FileNode;
 <line>
 	: [^\r\n]+
 	;
@@ -64,7 +67,7 @@ Line
 ```
 ",
 	"type" : "string"
-}')
+}' copyReplaceAll: '<percent>' with: (String with: $%)))
 ]
 
 { #category : #printing }
