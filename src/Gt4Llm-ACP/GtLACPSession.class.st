@@ -325,8 +325,8 @@ GtLACPSession >> creationParameters [
 	| parameters prompt |
 	parameters := {'cwd' -> directory fullName.
 			'mcpServers' -> client configuration mcpServers} asDictionary.
-	prompt := systemPrompt.
-	prompt ifNil: [ ^ parameters ].
+	prompt := self systemPrompt.
+	prompt isEmpty ifTrue: [ ^ parameters ].
 	prompt validateCapabilities: connection capabilities.
 	parameters at: 'systemPrompt' put: prompt asDictionary.
 	^ parameters
@@ -1336,12 +1336,14 @@ GtLACPSession >> summarizersRegistry: aRegistry [
 
 { #category : #accessing }
 GtLACPSession >> systemPrompt [
-	^ systemPrompt
+	^ systemPrompt ifNil: [ systemPrompt := GtLACPSystemPrompt new ]
 ]
 
 { #category : #accessing }
 GtLACPSession >> systemPrompt: aSystemPrompt [
 	systemPrompt := aSystemPrompt
+			ifNil: [ GtLACPSystemPrompt new ]
+			ifNotNil: [ aSystemPrompt copy ]
 ]
 
 { #category : #accessing }
