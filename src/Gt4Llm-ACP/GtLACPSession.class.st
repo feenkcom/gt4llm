@@ -45,8 +45,8 @@ GtLACPSession class >> mcpServer: aServer [
 
 { #category : #accessing }
 GtLACPSession >> allToolCalls [
- ^ (turns copy flatCollect: [ :turn | turn toolCalls copy ]),
-  (self childSessions flatCollect: #allToolCalls)
+	^ (turns copy flatCollect: [ :turn | turn toolCalls copy ])
+		, (self childSessions flatCollect: [ :each | each allToolCalls ])
 ]
 
 { #category : #announcing }

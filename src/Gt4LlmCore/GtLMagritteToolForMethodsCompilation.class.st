@@ -12,12 +12,14 @@ GtLMagritteToolForMethodsCompilation >> description [
 	^ 'Compiles multiple method sources across classes and reports each result.
 
 Arguments:
-- methods: array of method compilation requests
+- methods: array of method compilation requests, each with methodClassName, sourceCode, classSide and an optional protocol
 
-Example JSON arguments:
+The protocol is optional. Omit it when modifying an existing method: the method keeps its current protocol. Do not guess a protocol for an existing method; changing the protocol of an extension method (a protocol starting with *) moves it to a different package. Provide a protocol only for a new method, or to deliberately change the protocol of an existing method.
+
+Example JSON arguments (modifying an existing method, then adding a new one):
 {
   "methods": [
-    {"methodClassName": "MyClass", "sourceCode": "myMethod ^ 42", "protocol": "accessing", "classSide": false},
+    {"methodClassName": "MyClass", "sourceCode": "myMethod ^ 42", "classSide": false},
     {"methodClassName": "MyClass", "sourceCode": "anotherMethod ^ 1", "protocol": "accessing", "classSide": false}
   ]
 }
