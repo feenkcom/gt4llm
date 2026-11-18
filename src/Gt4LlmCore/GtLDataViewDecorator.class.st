@@ -47,8 +47,8 @@ GtLDataViewDecorator >> ensureContext [
 { #category : #'gt extensions' }
 GtLDataViewDecorator >> gtDecoratorChainFor: aView [
 	<gtView>
-	^ aView list 
-		title: 'Decorators' translated;
+	^ aView list
+		title: (self gtDo: [ 'Decorators' translated ] gemstoneDo: [ 'Decorators' ]);
 		priority: 70;
 		items: [ self decoratorsChain ]
 ]

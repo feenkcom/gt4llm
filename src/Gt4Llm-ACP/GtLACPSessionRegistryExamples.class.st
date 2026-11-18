@@ -62,6 +62,20 @@ GtLACPSessionRegistryExamples >> closedSessionStaysListed [
 	^ registry
 ]
 
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> discoveredSessionClients [
+	<gtExample>
+	| descriptors |
+	descriptors := self emptyRegistry sessionClients.
+	{GtLACPClaudeCodeClient.
+		GtLACPCodexClient}
+		do: [ :aClass | 
+			| aDescriptor |
+			aDescriptor := descriptors detect: [ :each | each id = aClass name ].
+			self assert: aDescriptor newClient class equals: aClass ].
+	^ descriptors
+]
+
 { #category : #'examples - model' }
 GtLACPSessionRegistryExamples >> duplicateRegistrationIsIgnored [
 	<gtExample>
@@ -148,6 +162,26 @@ GtLACPSessionRegistryExamples >> failedStartIsNotRegistered [
 	^ registry
 ]
 
+{ #category : #examples }
+GtLACPSessionRegistryExamples >> menuBuildsClientOnDemand [
+	<gtExample>
+	| registry descriptor item creations |
+	registry := self emptyRegistry.
+	creations := 0.
+	descriptor := GtLACPClientDescriptor
+			id: #configuredClaudeCode
+			name: 'Claude Code with custom settings'
+			factory: [ creations := creations + 1.
+				self claudeClient ].
+	item := (registry newSessionDropdownFor: BlElement new clients: {descriptor})
+			items first.
+	self assert: item labelModel text asString equals: descriptor name.
+	self assert: creations equals: 0.
+	self assert: (item submenu stencil build isKindOf: BrFileSelector).
+	self assert: creations equals: 1.
+	^ item
+]
+
 { #category : #private }
 GtLACPSessionRegistryExamples >> newSessionIn: aRegistry [
 	^ aRegistry newSessionWithClient: self claudeClient in: FileLocator temp
@@ -156,16 +190,18 @@ GtLACPSessionRegistryExamples >> newSessionIn: aRegistry [
 { #category : #'examples - actions' }
 GtLACPSessionRegistryExamples >> newSessionMenu [
 	<gtExample>
-	| registry menu |
+	| registry descriptors menu |
 	registry := self emptyRegistry.
-	menu := registry
-			newSessionDropdownFor: BlElement new
-			clients: registry sessionClients.
+	descriptors := self discoveredSessionClients.
+	menu := registry newSessionDropdownFor: BlElement new clients: descriptors.
 	self assert: (menu isKindOf: BrMenuItems).
-	self assert: menu items size equals: 2.
+	self assert: menu items size equals: descriptors size.
 	menu items
-		do: [ :anItem | 
+		with: descriptors
+		do: [ :anItem :aDescriptor | 
 			self assert: (anItem isKindOf: BrMenuSubmenuItem).
+			self assert: anItem id equals: aDescriptor id.
+			self assert: anItem labelModel text asString equals: aDescriptor name.
 			self assert: (anItem submenu isKindOf: BrMenuExplicit) ].
 	^ menu
 ]

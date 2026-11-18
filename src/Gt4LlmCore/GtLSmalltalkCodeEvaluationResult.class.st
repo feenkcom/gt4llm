@@ -60,16 +60,24 @@ GtLSmalltalkCodeEvaluationResult >> gtCodeFor: aView [
 		gtDo: [ aView explicit
 				title: 'Code and object';
 				priority: 9;
-				stencil: [ | container |
+				stencil: [ | container coder coderViewModel sharedBindings |
+					coder := GtPharoSnippetCoder new
+							forSource: self code;
+							format;
+							subscribeToSystem;
+							yourself.
+					coderViewModel := coder asCoderViewModel.
+					self bindings
+						ifNotNil: [ :resolvedBindings | 
+							sharedBindings := GtSharedVariablesBindings new.
+							resolvedBindings
+								keysAndValuesDo: [ :name :value | (sharedBindings bindingOf: name) value: value ].
+							coderViewModel sharedBindings: sharedBindings ].
 					container := BrVerticalPane new.
 					container matchParent
 						addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
 						background: BrGlamorousColors backdropColor;
-						addChild: ((GtPharoSnippetCoder new
-								forSource: self code;
-								format;
-								subscribeToSystem;
-								asExpandedOnlyElement)
+						addChild: (coderViewModel asExpandedOnlyElement
 								margin: (BlInsets all: 10);
 								background: Color white;
 								addAptitude: BrShadowAptitude;

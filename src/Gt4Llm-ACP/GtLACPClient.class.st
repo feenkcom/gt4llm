@@ -114,12 +114,17 @@ GtLACPClient >> gtStopFor: anAction [
 
 { #category : #accessing }
 GtLACPClient >> initialize [
- super initialize.
- configuration := self defaultConfiguration.
- sessions := OrderedCollection new.
- connections := OrderedCollection new.
- transportFactory := [ :aConfiguration :aDirectory |
-  GtLACPStdioTransport new agentProcess: (GtLACPProcess new configuration: aConfiguration; directory: aDirectory; yourself); yourself ]
+	super initialize.
+	configuration := self defaultConfiguration.
+	sessions := OrderedCollection new.
+	connections := OrderedCollection new.
+	transportFactory := [ :aConfiguration :aDirectory | 
+		GtLACPStdioTransport new
+			agentProcess: (GtLACPProcess new
+					configuration: aConfiguration;
+					directory: aDirectory;
+					yourself);
+			yourself ]
 ]
 
 { #category : #sessions }
@@ -159,16 +164,15 @@ GtLACPClient >> newSessionDirectorySelectorFor: aDropdown registry: aRegistry [
 				fork ]
 ]
 
-{ #category : #private }
+{ #category : #sessions }
 GtLACPClient >> newSessionIn: aDirectory connection: aConnection [
 	| aSession |
 	aSession := GtLACPSession new
 			client: self;
 			directory: aDirectory asFileReference asAbsolute;
 			connection: aConnection;
+			systemPrompt: configuration systemPrompt;
 			yourself.
-	(configuration respondsTo: #systemPrompt)
-		ifTrue: [ aSession systemPrompt: configuration systemPrompt ].
 	sessions add: aSession.
 	^ aSession
 ]

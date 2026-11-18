@@ -3,7 +3,7 @@ I hold Claude Code-specific launch settings and initial session preferences. My 
 "
 Class {
 	#name : #GtLACPClaudeCodeClientConfiguration,
-	#superclass : #GtLACPObject,
+	#superclass : #GtLACPClientConfiguration,
 	#instVars : [
 		'executable',
 		'arguments',
@@ -129,12 +129,15 @@ GtLACPClaudeCodeClientConfiguration >> gtLaunchFor: aView [
 
 { #category : #views }
 GtLACPClaudeCodeClientConfiguration >> gtMcpServersFor: aView [
- <gtView>
- ^ aView list title: 'MCP servers'; priority: 15; items: [ mcpServers ];
-  itemText: [ :server | server at: 'name' ifAbsent: [ server printString ] ]
+	<gtView>
+	^ aView list
+		title: 'MCP servers';
+		priority: 15;
+		items: [ mcpServers ];
+		itemText: [ :server | server at: 'name' ifAbsent: [ server printString ] ]
 ]
 
-{ #category : #'gt - views' }
+{ #category : #'gt-extensions' }
 GtLACPClaudeCodeClientConfiguration >> gtPreferencesFor: aView [
 	"What preferences will the client apply when starting a session?"
 
@@ -142,12 +145,14 @@ GtLACPClaudeCodeClientConfiguration >> gtPreferencesFor: aView [
 	^ aView columnedList
 		title: 'Session preferences';
 		priority: 5;
-		items: [ {'Model' -> model.
+		items: [ | aPrompt |
+			aPrompt := self systemPrompt.
+			{'Model' -> model.
 				'Mode' -> mode.
 				'Authentication method' -> authenticationMethod.
-				'System prompt mode' -> (systemPrompt ifNotNil: [ :aPrompt | aPrompt mode ]).
-				'System prompt text'
-					-> (systemPrompt ifNotNil: [ :aPrompt | aPrompt textBlocks ])} ];
+				'System prompt mode' -> (aPrompt isEmpty ifFalse: [ aPrompt mode ]).
+				'System prompt instructions'
+					-> (aPrompt isEmpty ifFalse: [ aPrompt instructions instructionString ])} ];
 		column: 'Preference' text: #key;
 		column: 'Requested value' text: [ :entry | entry value printString ];
 		send: #value
@@ -200,16 +205,6 @@ GtLACPClaudeCodeClientConfiguration >> requestTimeout [
 { #category : #accessing }
 GtLACPClaudeCodeClientConfiguration >> requestTimeout: anObject [
  requestTimeout := anObject
-]
-
-{ #category : #accessing }
-GtLACPClaudeCodeClientConfiguration >> systemPrompt [
-	^ systemPrompt
-]
-
-{ #category : #accessing }
-GtLACPClaudeCodeClientConfiguration >> systemPrompt: aSystemPrompt [
-	systemPrompt := aSystemPrompt
 ]
 
 { #category : #validation }

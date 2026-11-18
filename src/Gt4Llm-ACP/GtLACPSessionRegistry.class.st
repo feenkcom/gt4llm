@@ -68,6 +68,20 @@ GtLACPSessionRegistry >> announcer [
 	^ announcer
 ]
 
+{ #category : #'session clients' }
+GtLACPSessionRegistry >> claudeCodeClientDescriptor [
+	<gtACPClient>
+	^ GtLACPClientDescriptor
+		id: #GtLACPClaudeCodeClient
+		name: 'Claude Code for GT'
+		factory: [ | client |
+			client := GtLACPClaudeCodeClient new.
+			client configuration
+				gtPageExplanation: 'Rules for Moldable Development for Glamorous Toolkit';
+				gtPageExplanation: 'Rules for styling replies'.
+			client ]
+]
+
 { #category : #removing }
 GtLACPSessionRegistry >> clearSessions [
 	| removedSessions |
@@ -79,6 +93,20 @@ GtLACPSessionRegistry >> clearSessions [
 				theSessions removeAll.
 				aCopy ].
 	removedSessions do: [ :each | self announceRemovedSession: each ]
+]
+
+{ #category : #'session clients' }
+GtLACPSessionRegistry >> codexClientDescriptor [
+	<gtACPClient>
+	^ GtLACPClientDescriptor
+		id: #GtLACPCodexClient
+		name: 'Codex for GT'
+		factory: [ | client |
+			client := GtLACPCodexClient new.
+			client configuration
+				gtPageExplanation: 'Rules for Moldable Development for Glamorous Toolkit';
+				gtPageExplanation: 'Rules for styling replies'.
+			client ]
 ]
 
 { #category : #'gt - extensions' }
@@ -182,18 +210,16 @@ GtLACPSessionRegistry >> newCodexSessionIn: aDirectory [
 
 { #category : #'private - interface' }
 GtLACPSessionRegistry >> newSessionDropdownFor: aDropdown clients: aCollection [
-	"Each client is a submenu containing the shared directory picker. Spawn from the outer action, which remains attached after the menus close."
-
 	| aMenu |
 	aMenu := BrMenuItems new.
 	aCollection
-		do: [ :aClient | 
+		do: [ :aDescriptor | 
 			aMenu
 				addItem: (BrMenuSubmenuItem new
-						id: aClient class name;
-						label: aClient displayName;
+						id: aDescriptor id;
+						label: aDescriptor name;
 						submenu: (BrMenuExplicit new
-								stencil: [ aClient newSessionDirectorySelectorFor: aDropdown registry: self ])) ].
+								stencil: [ aDescriptor newClient newSessionDirectorySelectorFor: aDropdown registry: self ])) ].
 	^ aMenu
 ]
 
@@ -292,8 +318,11 @@ GtLACPSessionRegistry >> removeSessionMenuItemFor: aSession hostElement: anEleme
 
 { #category : #'private - interface' }
 GtLACPSessionRegistry >> sessionClients [
-	^ {GtLACPClaudeCodeClient new.
-		GtLACPCodexClient new}
+	| clientPragmas |
+	clientPragmas := (Pragma allNamed: #gtACPClient in: GtLACPSessionRegistry)
+			select: [ :aPragma | aPragma method numArgs = 0 ].
+	^ (clientPragmas collect: [ :aPragma | self perform: aPragma method selector ])
+		sorted: [ :first :second | first name <= second name ]
 ]
 
 { #category : #accessing }

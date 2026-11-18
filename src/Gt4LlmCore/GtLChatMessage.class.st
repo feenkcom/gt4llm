@@ -206,12 +206,13 @@ GtLChatMessage >> gtDisplayOn: stream [
 GtLChatMessage >> gtFormatFor: aView [
 	<gtView>
 	formatDescriptions ifNil: [ ^ aView empty ].
-	formatDescriptions hasMagritteDescription ifFalse: [ ^ aView empty ].
+	(self gtDo: [ formatDescriptions hasMagritteDescription ] gemstoneDo: [ false ])
+		ifFalse: [ ^ aView empty ].
 
 	^ aView textEditor
 		title: 'Format JSON';
-		priority: 21; 
-		text: [ NeoJSONWriter toStringPretty: formatDescriptions  asJsonSchemaDictionary ];
+		priority: 21;
+		text: [ NeoJSONWriter toStringPretty: formatDescriptions asJsonSchemaDictionary ];
 		styler: JSONParser gtStyler;
 		actionButtonIcon: BrGlamorousVectorIcons playinspect
 			tooltip: 'Inspect Format'

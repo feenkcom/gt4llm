@@ -19,7 +19,6 @@ GtLMagritteToolForMethodCompilation >> compileMethodFromRequest: request [
  source := (request sourceCode ifNil: [ '''' ]) trimBoth.
  source isEmpty ifTrue: [ ^ GtLMissingDomainObject new objectName: ''sourceCode'' ].
  protocol := (request protocol ifNil: [ '''' ]) trimBoth.
- protocol isEmpty ifTrue: [ protocol := ''as yet unclassified'' ].
  behavior := request isClassSide ifTrue: [ targetClass class ] ifFalse: [ targetClass ].
  classDescription := GtLClassDefinitionDescription fromClass: targetClass.
  [
@@ -34,6 +33,9 @@ GtLMagritteToolForMethodCompilation >> compileMethodFromRequest: request [
  methodReference: reference;
  sourceCode: (behavior compiledMethodAt: selector environmentId: 0) sourceString;
  yourself ] ifFalse: [ nil ].
+ protocol isEmpty ifTrue: [ protocol := oldMethod
+ ifNil: [ ''as yet unclassified'' ]
+ ifNotNil: [ (behavior categoryOfSelector: selector environmentId: 0) asString ] ].
  behavior compileMethod: source category: protocol asSymbol environmentId: 0.
  newMethod := GtLMethodWithSource new
  methodReference: reference;
@@ -100,13 +102,24 @@ GtLMagritteToolForMethodCompilation >> description [
 	^ 'Compiles the provided method source code in the specified class or metaclass and reports the result.
 
 Arguments:
-- methodRequest: object with methodClassName, sourceCode, protocol, and classSide
+- methodRequest: object with methodClassName, sourceCode, classSide and an optional protocol
 
-Example JSON arguments:
+The protocol is optional. Omit it when modifying an existing method: the method keeps its current protocol. Do not guess a protocol for an existing method; changing the protocol of an extension method (a protocol starting with ''*'') moves it to a different package. Provide a protocol only for a new method, or to deliberately change the protocol of an existing method.
+
+Example JSON arguments (modifying an existing method):
 {
   "methodRequest": {
     "methodClassName": "MyClass",
     "sourceCode": "myMethod ^ 42",
+    "classSide": false
+  }
+}
+
+Example JSON arguments (new method):
+{
+  "methodRequest": {
+    "methodClassName": "MyClass",
+    "sourceCode": "myNewMethod ^ 42",
     "protocol": "accessing",
     "classSide": false
   }

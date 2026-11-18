@@ -421,17 +421,20 @@ GtLChat >> gtLimitedDisplayString [
 GtLChat >> gtLiveChatFor: aView [
 	"cannot be a forward because the update wouldn’t work"
 
+	"GemStone cannot build the GT chat element, so omit this local UI view."
+
 	<gtView>
 	<gtLlmView>
 	self provider ifNil: [ ^ aView empty ].
-
-	^ aView explicit
-		title: 'Live';
-		priority: 0;
-		stencil: [ self asElement ];
-		actionButtonIcon: BrGlamorousVectorIcons bin
-			tooltip: 'Delete history'
-			action: [ self reset ]
+	^ self
+		gtDo: [ aView explicit
+				title: 'Live';
+				priority: 0;
+				stencil: [ self asElement ];
+				actionButtonIcon: BrGlamorousVectorIcons bin
+					tooltip: 'Delete history'
+					action: [ self reset ] ]
+		gemstoneDo: [ aView empty ]
 ]
 
 { #category : #ui }
@@ -440,34 +443,47 @@ GtLChat >> gtMessagesFor: aView [
 
 	<gtView>
 	<gtLlmView>
-	^ aView columnedTree
-		title: 'Messages';
-		priority: 3;
-		items: [ self messages ];
-		children: [ :eachMessage | 
-			Array
-				streamContents: [ :aStream | 
-					eachMessage
-						messagesDo: [ :otherMessage | eachMessage == otherMessage ifFalse: [ aStream nextPut: otherMessage ] ] ] ];
-		column: 'Role'
-			text: [ :item | item roleLabel ]
-			width: 70;
-		column: 'Content' text: [ :item | item contentOneLineSummary ];
-		column: 'Forks'
-			text: [ :item | item forkingMessages isEmpty ifTrue: [ '' ] ifFalse: [ item forkingMessages size ] ]
-			width: 50;
-		column: 'Created'
-			text: [ :item | item createdAt asStringYMDHMS ]
-			width: 120;
-		contextItemLabel: 'Fork at this message'
-			action: [ :anElement :aNode | 
-				anElement phlow
-					spawnObject: (self forkAtMessage: aNode value);
-					fireViewUpdateWish ];
-		contextItemLabel: 'Browse forks'
-			action: [ :anElement :aNode | anElement phlow spawnObject: (aNode value forkingMessages 
-				collect: [ :each | each chat ]) ]
-			if: [ :aNode | aNode value forkingMessages notEmpty ];
+	| messagesView |
+	messagesView := aView columnedTree
+			title: 'Messages';
+			priority: 3;
+			items: [ self messages ];
+			children: [ :eachMessage | 
+				Array
+					streamContents: [ :aStream | 
+						eachMessage
+							messagesDo: [ :otherMessage | eachMessage == otherMessage ifFalse: [ aStream nextPut: otherMessage ] ] ] ];
+			column: 'Role'
+				text: [ :item | item roleLabel ]
+				width: 70;
+			column: 'Content' text: [ :item | item contentOneLineSummary ];
+			column: 'Forks'
+				text: [ :item | 
+					item forkingMessages isEmpty
+						ifTrue: [ '' ]
+						ifFalse: [ item forkingMessages size ] ]
+				width: 50;
+			column: 'Created'
+				text: [ :item | item createdAt asStringYMDHMS ]
+				width: 120;
+			contextItemLabel: 'Fork at this message'
+				action: [ :anElement :aNode | 
+					anElement phlow
+						spawnObject: (self forkAtMessage: aNode value);
+						fireViewUpdateWish ].
+	self
+		gtDo: [ messagesView
+				contextItemLabel: 'Browse forks'
+				action: [ :anElement :aNode | 
+					anElement phlow
+						spawnObject: (aNode value forkingMessages collect: [ :each | each chat ]) ]
+				if: [ :aNode | aNode value forkingMessages notEmpty ] ]
+		gemstoneDo: [  "Remote Phlow supports contextItemLabel:action: but not its conditional variant."messagesView
+				contextItemLabel: 'Browse forks'
+				action: [ :anElement :aNode | 
+					anElement phlow
+						spawnObject: (aNode value forkingMessages collect: [ :each | each chat ]) ] ].
+	^ messagesView
 		updateWhen: GtLThreadRunAnnouncement in: self announcer;
 		expandAll
 ]

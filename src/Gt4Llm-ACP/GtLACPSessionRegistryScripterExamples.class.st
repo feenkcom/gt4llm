@@ -339,10 +339,6 @@ GtLACPSessionRegistryScripterExamples >> newSessionAction [
 	<gtExample>
 	| registry button scripter |
 	registry := GtLACPSessionRegistryExamples new emptyRegistry.
-	self
-		assert: (registry sessionClients collect: #class)
-		equals: {GtLACPClaudeCodeClient.
-				GtLACPCodexClient}.
 	button := (registry gtNewSessionFor: GtPhlowAction noAction)
 			asElement: [ :anElement | anElement ]
 			withHostElement: nil.
@@ -474,11 +470,15 @@ GtLACPSessionRegistryScripterExamples >> registryDirectoryPicker [
 
 { #category : #'private - scripter' }
 GtLACPSessionRegistryScripterExamples >> registryDropdownWithClient: aClient [
-	| registry button scripter |
+	| registry descriptor button scripter |
 	registry := GtLACPSessionRegistryExamples new emptyRegistry.
+	descriptor := GtLACPClientDescriptor
+			id: aClient class name
+			name: aClient displayName
+			factory: [ aClient ].
 	button := (GtPhlowAction noAction dropdown
 			label: 'New session';
-			menu: [ :aDropdown | registry newSessionDropdownFor: aDropdown clients: {aClient} ])
+			menu: [ :aDropdown | registry newSessionDropdownFor: aDropdown clients: {descriptor} ])
 			asElement: [ :anElement | anElement ]
 			withHostElement: nil.
 	scripter := BlScripter new

@@ -56,6 +56,34 @@ GtLMagritteToolForMethodCompilationExamples >> compileClassSideMethod [
 ]
 
 { #category : #examples }
+GtLMagritteToolForMethodCompilationExamples >> compileExistingMethodWithoutProtocolKeepsProtocol [
+	"Modifying an existing method without a protocol keeps its current protocol"
+
+	<gtExample>
+	| selector targetClass |
+	selector := #gtMagritteCompiledExampleKeepsProtocol.
+	targetClass := GtLMagritteToolForMethodCompilationExamples.
+	targetClass
+		compile: 'gtMagritteCompiledExampleKeepsProtocol ^ 1'
+		classified: 'examples'.
+	[ | call targetObject |
+	call := self
+			executeTool: GtLMagritteToolForMethodCompilation new
+			withArguments: {'methodRequest'
+						-> {'methodClassName' -> targetClass name asString.
+								'sourceCode' -> 'gtMagritteCompiledExampleKeepsProtocol ^ 2'.
+								'classSide' -> false} asDictionary} asDictionary.
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLMethodCompilationResult).
+	self assert: targetObject status equals: 'compiled'.
+	self assert: targetObject oldMethod notNil.
+	self assert: (targetClass >> selector) protocolName equals: 'examples'.
+	^ call ]
+		ensure: [ (targetClass includesSelector: selector)
+				ifTrue: [ targetClass removeSelector: selector ] ]
+]
+
+{ #category : #examples }
 GtLMagritteToolForMethodCompilationExamples >> compileInstanceSideMethod [
 	<gtExample>
 	| selector targetClass source |
@@ -128,13 +156,13 @@ GtLMagritteToolForMethodCompilationExamples >> compileMethodWithEmptyMethodReque
 	<gtExample>
 	| call |
 	call := self
-		executeTool: GtLMagritteToolForMethodCompilation new
-		withArguments: { 'methodRequest' -> Dictionary new } asDictionary.
-	self 
-		assertMissingRequiredProperties: call result targetObject 
-		withPropertyNames: #('classSide' 'methodClassName' 'protocol' 'sourceCode') 
-		path: #('methodRequest') 
-		errorMessage: '@[methodRequest] required properties missing [classSide, methodClassName, protocol, sourceCode]'.
+			executeTool: GtLMagritteToolForMethodCompilation new
+			withArguments: {'methodRequest' -> Dictionary new} asDictionary.
+	self
+		assertMissingRequiredProperties: call result targetObject
+		withPropertyNames: #('classSide' 'methodClassName' 'sourceCode')
+		path: #('methodRequest')
+		errorMessage: '@[methodRequest] required properties missing [classSide, methodClassName, sourceCode]'.
 	^ call
 ]
 
@@ -214,4 +242,33 @@ GtLMagritteToolForMethodCompilationExamples >> compileMethodWithSyntaxError [
 	] ensure: [
 		(targetClass includesSelector: selector)
 			ifTrue: [ targetClass removeSelector: selector ] ]
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodCompilationExamples >> compileNewMethodWithoutProtocol [
+	"A new method compiled without a protocol is classified as 'as yet unclassified'"
+
+	<gtExample>
+	| selector targetClass |
+	selector := #gtMagritteCompiledExampleUnclassified.
+	targetClass := GtLMagritteToolForMethodCompilationExamples.
+	(targetClass includesSelector: selector)
+		ifTrue: [ targetClass removeSelector: selector ].
+	[ | call targetObject |
+	call := self
+			executeTool: GtLMagritteToolForMethodCompilation new
+			withArguments: {'methodRequest'
+						-> {'methodClassName' -> targetClass name asString.
+								'sourceCode' -> 'gtMagritteCompiledExampleUnclassified ^ 42'.
+								'classSide' -> false} asDictionary} asDictionary.
+	targetObject := call result targetObject.
+	self assert: (targetObject isKindOf: GtLMethodCompilationResult).
+	self assert: targetObject status equals: 'compiled'.
+	self assert: targetObject oldMethod isNil.
+	self
+		assert: (targetClass >> selector) protocolName
+		equals: 'as yet unclassified'.
+	^ call ]
+		ensure: [ (targetClass includesSelector: selector)
+				ifTrue: [ targetClass removeSelector: selector ] ]
 ]

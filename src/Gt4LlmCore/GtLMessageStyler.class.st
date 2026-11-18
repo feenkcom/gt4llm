@@ -1066,7 +1066,8 @@ GtLMessageStyler >> visitInlineCode: aCodeNode [
 	| size |
 	size := (aCodeNode code source at: 2) = $` ifTrue: [ 2 ] ifFalse: [ 1 ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
-		glamorousCodeFontAndSize.
+		glamorousCodeFontAndSmallSize;
+		highlight: BrAntColors gray3.
 	self
 		styleAutoHiding: (aCodeNode startPosition
 				to: aCodeNode startPosition + size - 1)
