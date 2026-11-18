@@ -5,6 +5,6 @@ BrMenuItemGroupConfiguration class >> llm [
 	^ self new
 		name: (GtLConnectionRegistry instance defaultConnection
 				ifNil: [ #Llm ]
-				ifNotNil: #label);
+				ifNotNil: [ :v | v label ]);
 		priority: 45
 ]
