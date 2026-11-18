@@ -21,22 +21,25 @@ GtLACPCodexStoredSession >> addRecord: aRecord [
 
 { #category : #accessing }
 GtLACPCodexStoredSession >> agentKind [
-	^ self originRecord ifNil: [ 'unknown' ] ifNotNil: #agentKind
+	^ self originRecord
+		ifNil: [ 'unknown' ]
+		ifNotNil: [ :record | record agentKind ]
 ]
 
 { #category : #accessing }
 GtLACPCodexStoredSession >> agentNickname [
-	^ self originRecord ifNotNil: #agentNickname
+	^ self originRecord ifNotNil: [ :record | record agentNickname ]
 ]
 
 { #category : #accessing }
 GtLACPCodexStoredSession >> agentPath [
-	^ self originRecord ifNotNil: #agentPath
+	^ self originRecord ifNotNil: [ :record | record agentPath ]
 ]
 
 { #category : #accessing }
 GtLACPCodexStoredSession >> createdAt [
-	^ createdAt ifNil: [ createdAt := self createdAtRecord ifNotNil: #createdAt ]
+	^ createdAt
+		ifNil: [ createdAt := self createdAtRecord ifNotNil: [ :record | record createdAt ] ]
 ]
 
 { #category : #accessing }
@@ -50,7 +53,8 @@ GtLACPCodexStoredSession >> createdAtRecord [
 
 { #category : #accessing }
 GtLACPCodexStoredSession >> directory [
-	^ directory ifNil: [ directory := self directoryRecord ifNotNil: #directory ]
+	^ directory
+		ifNil: [ directory := self directoryRecord ifNotNil: [ :record | record directory ] ]
 ]
 
 { #category : #accessing }
@@ -79,7 +83,10 @@ GtLACPCodexStoredSession >> gtDirectoryEvidenceFor: aView [
 		priority: 6;
 		items: [ self rolloutRecords ];
 		column: 'Directory'
-			text: [ :record | record directory ifNil: [ '(unknown)' ] ifNotNil: #fullName ];
+			text: [ :record | 
+				record directory
+					ifNil: [ '(unknown)' ]
+					ifNotNil: [ :directory | directory fullName ] ];
 		column: 'Created' text: [ :record | record createdAt ifNil: [ '(unknown)' ] ];
 		column: 'File' text: [ :record | record file fullName ];
 		column: 'Decision' text: #selectionReason
@@ -190,17 +197,21 @@ GtLACPCodexStoredSession >> indexRecords [
 
 { #category : #testing }
 GtLACPCodexStoredSession >> isGuardianReview [
-	^ self originRecord ifNil: [ false ] ifNotNil: #isGuardianReview
+	^ self originRecord
+		ifNil: [ false ]
+		ifNotNil: [ :record | record isGuardianReview ]
 ]
 
 { #category : #testing }
 GtLACPCodexStoredSession >> isInternalAgent [
-	^ self originRecord ifNil: [ false ] ifNotNil: #isInternalAgent
+	^ self originRecord
+		ifNil: [ false ]
+		ifNotNil: [ :record | record isInternalAgent ]
 ]
 
 { #category : #testing }
 GtLACPCodexStoredSession >> isSubagent [
-	^ self originRecord ifNil: [ false ] ifNotNil: #isSubagent
+	^ self originRecord ifNil: [ false ] ifNotNil: [ :record | record isSubagent ]
 ]
 
 { #category : #accessing }
@@ -244,7 +255,7 @@ GtLACPCodexStoredSession >> parentSession [
 
 { #category : #accessing }
 GtLACPCodexStoredSession >> parentThreadId [
-	^ self originRecord ifNotNil: #parentThreadId
+	^ self originRecord ifNotNil: [ :record | record parentThreadId ]
 ]
 
 { #category : #reading }
@@ -273,17 +284,18 @@ GtLACPCodexStoredSession >> rolloutRecords [
 
 { #category : #accessing }
 GtLACPCodexStoredSession >> source [
-	^ self originRecord ifNotNil: #source
+	^ self originRecord ifNotNil: [ :record | record source ]
 ]
 
 { #category : #accessing }
 GtLACPCodexStoredSession >> threadSource [
-	^ self originRecord ifNotNil: #threadSource
+	^ self originRecord ifNotNil: [ :record | record threadSource ]
 ]
 
 { #category : #accessing }
 GtLACPCodexStoredSession >> title [
-	^ title ifNil: [ title := self titleRecord ifNil: [ '' ] ifNotNil: #title ]
+	^ title
+		ifNil: [ title := self titleRecord ifNil: [ '' ] ifNotNil: [ :record | record title ] ]
 ]
 
 { #category : #accessing }
@@ -303,5 +315,6 @@ GtLACPCodexStoredSession >> titleRecord [
 
 { #category : #accessing }
 GtLACPCodexStoredSession >> updatedAt [
-	^ updatedAt ifNil: [ updatedAt := self titleRecord ifNotNil: #updatedAt ]
+	^ updatedAt
+		ifNil: [ updatedAt := self titleRecord ifNotNil: [ :record | record updatedAt ] ]
 ]
