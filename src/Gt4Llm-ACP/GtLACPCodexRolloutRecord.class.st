@@ -66,7 +66,7 @@ GtLACPCodexRolloutRecord >> gtOriginFor: aView [
 				'Agent path' -> self agentPath} ];
 		column: 'Property' text: #key;
 		column: 'Value'
-			text: [ :entry | entry value ifNil: [ '(unknown)' ] ifNotNil: #printString ];
+			text: [ :entry | entry value ifNil: [ '(unknown)' ] ifNotNil: [ :value | value printString ] ];
 		send: #value
 ]
 

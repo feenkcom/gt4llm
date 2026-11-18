@@ -13,7 +13,8 @@ Class {
 		'model',
 		'mode',
 		'authenticationMethod',
-		'adapter'
+		'adapter',
+		'systemPrompt'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -115,14 +116,23 @@ GtLACPCodexClientConfiguration >> gtMcpServersFor: aView [
   itemText: [ :server | server at: 'name' ifAbsent: [ server printString ] ]
 ]
 
-{ #category : #views }
+{ #category : #'gt - views' }
 GtLACPCodexClientConfiguration >> gtPreferencesFor: aView [
- <gtView>
- ^ aView columnedList title: 'Session preferences'; priority: 5;
-  items: [ { 'Model' -> model. 'Mode' -> mode. 'Authentication method' -> authenticationMethod } ];
-  column: 'Preference' text: #key;
-  column: 'Requested value' text: [ :entry | entry value printString ];
-  send: #value
+	"What preferences will the client apply when starting a session?"
+
+	<gtView>
+	^ aView columnedList
+		title: 'Session preferences';
+		priority: 5;
+		items: [ {'Model' -> model.
+				'Mode' -> mode.
+				'Authentication method' -> authenticationMethod.
+				'System prompt mode' -> (systemPrompt ifNotNil: [ :aPrompt | aPrompt mode ]).
+				'System prompt text'
+					-> (systemPrompt ifNotNil: [ :aPrompt | aPrompt textBlocks ])} ];
+		column: 'Preference' text: #key;
+		column: 'Requested value' text: [ :entry | entry value printString ];
+		send: #value
 ]
 
 { #category : #initialization }
@@ -172,6 +182,16 @@ GtLACPCodexClientConfiguration >> requestTimeout [
 { #category : #accessing }
 GtLACPCodexClientConfiguration >> requestTimeout: anObject [
  requestTimeout := anObject
+]
+
+{ #category : #accessing }
+GtLACPCodexClientConfiguration >> systemPrompt [
+	^ systemPrompt
+]
+
+{ #category : #accessing }
+GtLACPCodexClientConfiguration >> systemPrompt: aSystemPrompt [
+	systemPrompt := aSystemPrompt
 ]
 
 { #category : #validation }

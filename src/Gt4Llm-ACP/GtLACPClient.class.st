@@ -159,7 +159,7 @@ GtLACPClient >> newSessionDirectorySelectorFor: aDropdown registry: aRegistry [
 				fork ]
 ]
 
-{ #category : #sessions }
+{ #category : #private }
 GtLACPClient >> newSessionIn: aDirectory connection: aConnection [
 	| aSession |
 	aSession := GtLACPSession new
@@ -167,6 +167,8 @@ GtLACPClient >> newSessionIn: aDirectory connection: aConnection [
 			directory: aDirectory asFileReference asAbsolute;
 			connection: aConnection;
 			yourself.
+	(configuration respondsTo: #systemPrompt)
+		ifTrue: [ aSession systemPrompt: configuration systemPrompt ].
 	sessions add: aSession.
 	^ aSession
 ]

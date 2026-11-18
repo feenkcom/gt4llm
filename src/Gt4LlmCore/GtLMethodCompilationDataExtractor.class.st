@@ -18,38 +18,41 @@ Class {
 GtLMethodCompilationDataExtractor >> extractAllIfError: errorBlock [
 	self extractTargetClassIfError: errorBlock.
 	self extractSourceCodeIfError: errorBlock.
-	self extractProtocol.
-	self extractOldMethodWithSourceIfError: errorBlock
+	self extractOldMethodWithSourceIfError: errorBlock.
+	self extractProtocol
 ]
 
 { #category : #extracting }
 GtLMethodCompilationDataExtractor >> extractOldMethodWithSourceIfError: errorBlock [
 	| methodNode |
 	methodNode := [ GtPharoParser
-		parse: sourceCode
-		startingAt: GtPharoParser startingStateForMethod ]
-		on: Error
-		do: [ :error | 
-			^ errorBlock value: (GtLMethodCompilationExceptionDomainObject new
-				freeze: error;
-				targetClass: targetClass;
-				protocolName: protocol;
-				sourceCode: sourceCode;
-				description: 'Syntax error while parsing the given method source code') ].
+			parse: sourceCode
+			startingAt: GtPharoParser startingStateForMethod ]
+			on: Error
+			do: [ :error | 
+				^ errorBlock
+					value: (GtLMethodCompilationExceptionDomainObject new
+							freeze: error;
+							targetClass: targetClass;
+							protocolName: self requestedProtocol;
+							sourceCode: sourceCode;
+							description: 'Syntax error while parsing the given method source code') ].
 	(methodNode notNil
 		and: [ methodNode selector notNil
-			and: [ targetClass includesSelector: methodNode selector ] ])
-		ifTrue: [ oldMethodWithSource := GtLMethodWithSource fromCompiledMethod: (targetClass >> methodNode selector) ]
+				and: [ targetClass includesSelector: methodNode selector ] ])
+		ifTrue: [ oldMethodWithSource := GtLMethodWithSource
+					fromCompiledMethod: targetClass >> methodNode selector ]
 		ifFalse: [ oldMethodWithSource := nil ]
 ]
 
 { #category : #extracting }
 GtLMethodCompilationDataExtractor >> extractProtocol [
-	| protocolValue |
-	protocolValue := request protocol.
-	(protocolValue isNil or: [ protocolValue trimBoth isEmpty ])
-		ifTrue: [ protocol := 'as yet unclassified' ]
-		ifFalse: [ protocol := protocolValue trimBoth ]
+	"Use the requested protocol if one was given. Otherwise an existing method keeps its protocol (so an extension method stays in its package), and a new method is put in 'as yet unclassified'."
+
+	protocol := self requestedProtocol
+			ifNil: [ oldMethodWithSource
+					ifNil: [ 'as yet unclassified' ]
+					ifNotNil: [ :anOldMethod | anOldMethod compiledMethod protocolName ] ]
 ]
 
 { #category : #extracting }
@@ -128,6 +131,16 @@ GtLMethodCompilationDataExtractor >> request [
 { #category : #accessing }
 GtLMethodCompilationDataExtractor >> request: aGtLMethodCompilationRequest [
 	request := aGtLMethodCompilationRequest
+]
+
+{ #category : #extracting }
+GtLMethodCompilationDataExtractor >> requestedProtocol [
+	"Answer the trimmed protocol given in the request, or nil if none was given"
+
+	| protocolValue |
+	protocolValue := request protocol.
+	(protocolValue isNil or: [ protocolValue trimBoth isEmpty ]) ifTrue: [ ^ nil ].
+	^ protocolValue trimBoth
 ]
 
 { #category : #accessing }

@@ -24,12 +24,12 @@ GtLACPChatViewModel >> canStop [
 
 { #category : #accessing }
 GtLACPChatViewModel >> draft [
- ^ session promptText
+	^ session draftText
 ]
 
 { #category : #accessing }
 GtLACPChatViewModel >> draft: aString [
- session promptText: aString
+	session draftText: aString
 ]
 
 { #category : #accessing }
