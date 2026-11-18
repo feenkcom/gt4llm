@@ -56,15 +56,15 @@ GtLClassDescriptionExamples >> classDescriptionSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#currentClassName -> 'SampleClass'.
-		#superclassName -> 'Object'.
-		#comment -> 'Sample'.
-		#packageName -> 'Samples'.
-		#packageTagName -> 'SampleTag'.
-		#instanceSlotNames -> (NeoJSONArray withAll: #('a' 'b')).
-		#classSlotNames -> (NeoJSONArray withAll: #('c')).
-		#allInstanceMethodNames -> (NeoJSONArray withAll: #('foo' 'bar:')).
-		#allClassMethodNames -> (NeoJSONArray withAll: #('baz'))
+		'currentClassName' -> 'SampleClass'.
+		'superclassName' -> 'Object'.
+		'comment' -> 'Sample'.
+		'packageName' -> 'Samples'.
+		'packageTagName' -> 'SampleTag'.
+		'instanceSlotNames' -> (NeoJSONArray withAll: #('a' 'b')).
+		'classSlotNames' -> (NeoJSONArray withAll: #('c')).
+		'allInstanceMethodNames' -> (NeoJSONArray withAll: #('foo' 'bar:')).
+		'allClassMethodNames' -> (NeoJSONArray withAll: #('baz'))
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

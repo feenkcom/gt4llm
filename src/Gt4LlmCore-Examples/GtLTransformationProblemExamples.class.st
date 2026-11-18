@@ -40,7 +40,7 @@ GtLTransformationProblemExamples >> transformationProblemSerialization [
 				serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	expected := (Dictionary new)
-				at: #description put: 'Class not found: ClassThatDoesNotExist';
+				at: 'description' put: 'Class not found: ClassThatDoesNotExist';
 				yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	^dataBlock

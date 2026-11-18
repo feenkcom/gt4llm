@@ -36,8 +36,8 @@ GtLUnexpectedDomainObjectExamples >> emptyUnexpectedDomainObject [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#objectName -> nil.
-		#messageText -> 'nil already exists'
+		'objectName' -> nil.
+		'messageText' -> 'nil already exists'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -58,8 +58,8 @@ GtLUnexpectedDomainObjectExamples >> unexpectedDomainObjectDataViewSerialization
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#objectName -> 'ExistingClass'.
-		#messageText -> 'ExistingClass already exists'
+		'objectName' -> 'ExistingClass'.
+		'messageText' -> 'ExistingClass already exists'
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

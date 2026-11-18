@@ -53,9 +53,9 @@ GtLMissingRequiredPropertiesDomainObjectExamples >> missingRequiredPropertiesDat
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#errorMessage -> 'Missing required properties'.
-		#missingPropertyNames -> (NeoJSONArray withAll: #('name' 'version' 'author')).
-		#path -> (NeoJSONArray withAll: #('root' 'config'))
+		'errorMessage' -> 'Missing required properties'.
+		'missingPropertyNames' -> (NeoJSONArray withAll: #('name' 'version' 'author')).
+		'path' -> (NeoJSONArray withAll: #('root' 'config'))
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
@@ -112,9 +112,9 @@ GtLMissingRequiredPropertiesDomainObjectExamples >> missingRequiredPropertiesWit
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#errorMessage -> 'No properties missing'.
-		#missingPropertyNames -> NeoJSONArray new.
-		#path -> NeoJSONArray new
+		'errorMessage' -> 'No properties missing'.
+		'missingPropertyNames' -> NeoJSONArray new.
+		'path' -> NeoJSONArray new
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

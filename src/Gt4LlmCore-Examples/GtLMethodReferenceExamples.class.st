@@ -86,9 +86,9 @@ GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodClassSideDa
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #methodName put: #fromCompiledMethod:;
-		at: #classSide put: true;
-		at: #methodClassName put: #GtLMethodReference;
+		at: 'methodName' put: 'fromCompiledMethod:';
+		at: 'classSide' put: true;
+		at: 'methodClassName' put: 'GtLMethodReference';
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
@@ -140,9 +140,9 @@ GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodInstanceSid
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #methodName put: #methodReferenceObjectFromCompiledMethodInstanceSide;
-		at: #classSide put: false;
-		at: #methodClassName put: #GtLMethodReferenceExamples;
+		at: 'methodName' put: 'methodReferenceObjectFromCompiledMethodInstanceSide';
+		at: 'classSide' put: false;
+		at: 'methodClassName' put: 'GtLMethodReferenceExamples';
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	

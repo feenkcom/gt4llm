@@ -18,9 +18,9 @@ GtLMagritteToolForDirectoryContentsExamples >> directoryContentsDataViewSerializ
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #directoryPath) isNotNil.
-	self assert: (jsonData at: #files) isNotEmpty.
-	self assert: (jsonData at: #directories) isNotEmpty.
+	self assert: (jsonData at: 'directoryPath') isNotNil.
+	self assert: (jsonData at: 'files') isNotEmpty.
+	self assert: (jsonData at: 'directories') isNotEmpty.
 	
 	^ dataBlock
 ]

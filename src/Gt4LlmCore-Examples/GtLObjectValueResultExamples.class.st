@@ -24,11 +24,11 @@ GtLObjectValueResultExamples >> assertObjectValueJson: objectValueJson includesP
 GtLObjectValueResultExamples >> assertObjectValueResultJsonDataKeys: jsonData [
 	"Assert that the JSON data contains the expected keys for an object value result"
 	| expectedKeys expectedObjectValueKeys objectValueJson |
-	expectedKeys := #('objectDetails' #objectValue #playgroundPageReference).
+	expectedKeys := #('objectDetails' 'objectValue' 'playgroundPageReference').
 	self assert: jsonData keys sorted equals: expectedKeys sorted.
 	
-	objectValueJson := jsonData at: #objectValue.
-	expectedObjectValueKeys := #(#allInstanceSlots #objectClassName #objectPrintString #packageName #phlowViews #superclassName).
+	objectValueJson := jsonData at: 'objectValue'.
+	expectedObjectValueKeys := #('allInstanceSlots' 'objectClassName' 'objectPrintString' 'packageName' 'phlowViews' 'superclassName').
 	self assert: objectValueJson keys sorted equals: expectedObjectValueKeys sorted
 ]
 
@@ -108,8 +108,8 @@ GtLObjectValueResultExamples >> objectValueResultForIntegerSerialization [
 	jsonData := dataBlock llmJsonData.
 	self assertObjectValueResultJsonDataKeys: jsonData.
 	self assert: (jsonData at: 'objectDetails') equals: Dictionary new.
-	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForInteger.
-	objectValueJson := jsonData at: #objectValue.
+	self assert: (jsonData at: 'playgroundPageReference') equals: self expectedPlaygroundPageReferenceForInteger.
+	objectValueJson := jsonData at: 'objectValue'.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'SmallInteger'.
 	self assert: (objectValueJson at: 'objectPrintString') equals: '42'.
 	self assert: (objectValueJson at: 'superclassName') equals: 'Integer'.
@@ -184,9 +184,9 @@ GtLObjectValueResultExamples >> objectValueResultForStringSerialization [
 	jsonData := dataBlock llmJsonData.
 	self assertObjectValueResultJsonDataKeys: jsonData.
 	self assert: (jsonData at: 'objectDetails') isEmpty.
-	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForString.
+	self assert: (jsonData at: 'playgroundPageReference') equals: self expectedPlaygroundPageReferenceForString.
 	
-	objectValueJson := jsonData at: #objectValue.
+	objectValueJson := jsonData at: 'objectValue'.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'ByteString'.
 	self assert: (objectValueJson at: 'superclassName') equals: 'String'.
 	self assert: (objectValueJson at: 'packageName') equals: 'Collections-Strings'.
@@ -250,9 +250,9 @@ GtLObjectValueResultExamples >> objectValueResultForTestObjectSerialization [
 	jsonData := dataBlock llmJsonData.
 	self assertObjectValueResultJsonDataKeys: jsonData.
 	self assert: (jsonData at: 'objectDetails') equals: Dictionary new.
-	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForTestObject.
+	self assert: (jsonData at: 'playgroundPageReference') equals: self expectedPlaygroundPageReferenceForTestObject.
 	
-	objectValueJson := jsonData at: #objectValue.
+	objectValueJson := jsonData at: 'objectValue'.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'GtLSerializedObjectValueTestObject'.
 	self assert: (objectValueJson at: 'superclassName') equals: 'Object'.
 	self assert: (objectValueJson at: 'packageName') equals: 'Gt4LlmCore-Examples'.

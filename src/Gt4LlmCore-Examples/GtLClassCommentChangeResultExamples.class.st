@@ -47,8 +47,8 @@ GtLClassCommentChangeResultExamples >> classCommentChangeDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#changedClassName -> 'Object'.
-		#status -> 'changed'
+		'changedClassName' -> 'Object'.
+		'status' -> 'changed'
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
@@ -94,8 +94,8 @@ GtLClassCommentChangeResultExamples >> classCommentChangeResultWithNilOldComment
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#changedClassName -> 'Object'.
-		#status -> 'changed'
+		'changedClassName' -> 'Object'.
+		'status' -> 'changed'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -117,8 +117,8 @@ GtLClassCommentChangeResultExamples >> emptyClassCommentChangeDataViewSerializat
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#changedClassName -> 'Object'.
-		#status -> 'changed'
+		'changedClassName' -> 'Object'.
+		'status' -> 'changed'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

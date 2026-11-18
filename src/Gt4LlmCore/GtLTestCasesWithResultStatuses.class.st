@@ -59,19 +59,19 @@ GtLTestCasesWithResultStatuses >> llmRawDataViewFor: aDataView [
 			title: 'Example results';
 			jsonObject: [ :json | 
 				json 
-					at: #runCount put: self runCount;
-					at: #successes put: self passedCount;
-					at: #failures put: self failureCount;
-					at: #errors put: self errorCount;
-					at: #skips put: self skippedCount;
-					at: #unexpectedPasses put: self unexpectedPassCount;
-					at: #unexpectedFailures put: self unexpectedFailureCount;
-					at: #unexpectedErrors put: self unexpectedErrorCount;
-					at: #expectedPasses put: self expectedPassCount;
-					at: #expectedDefects put: self expectedDefectCount;
-					at: #notFound put: self notFoundClassNames;
-					at: #notTestCaseClasses put: self notTestCaseClasses;
-					at: #details
+					at: 'runCount' put: self runCount;
+					at: 'successes' put: self passedCount;
+					at: 'failures' put: self failureCount;
+					at: 'errors' put: self errorCount;
+					at: 'skips' put: self skippedCount;
+					at: 'unexpectedPasses' put: self unexpectedPassCount;
+					at: 'unexpectedFailures' put: self unexpectedFailureCount;
+					at: 'unexpectedErrors' put: self unexpectedErrorCount;
+					at: 'expectedPasses' put: self expectedPassCount;
+					at: 'expectedDefects' put: self expectedDefectCount;
+					at: 'notFound' put: self notFoundClassNames;
+					at: 'notTestCaseClasses' put: self notTestCaseClasses;
+					at: 'details'
 						put: (self testCases 
 							collect: [ :each | each serializeToLlmJsonObject] 
 							as: Array);

@@ -23,10 +23,10 @@ GtLIncorrectArgumentTypeDomainObjectExamples >> emptyIncorrectArgumentTypeDomain
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#argumentName -> nil.
-		#argumentValue -> nil.
-		#expectedArgumentValueKindName -> nil.
-		#errorMessage -> 'nil must be a kind of nil, not a UndefinedObject'
+		'argumentName' -> nil.
+		'argumentValue' -> nil.
+		'expectedArgumentValueKindName' -> nil.
+		'errorMessage' -> 'nil must be a kind of nil, not a UndefinedObject'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -57,10 +57,10 @@ GtLIncorrectArgumentTypeDomainObjectExamples >> incorrectArgumentTypeDomainObjec
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#argumentName -> 'amount'.
-		#argumentValue -> #(1 2 3).
-		#expectedArgumentValueKindName -> 'Number'.
-		#errorMessage -> 'Custom error: amount requires a numeric value'
+		'argumentName' -> 'amount'.
+		'argumentValue' -> #(1 2 3).
+		'expectedArgumentValueKindName' -> 'Number'.
+		'errorMessage' -> 'Custom error: amount requires a numeric value'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -90,10 +90,10 @@ GtLIncorrectArgumentTypeDomainObjectExamples >> incorrectArgumentTypeDomainObjec
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#argumentName -> 'count'.
-		#argumentValue -> 'five'.
-		#expectedArgumentValueKindName -> 'Integer'.
-		#errorMessage -> 'count must be a kind of Integer, not a ByteString'
+		'argumentName' -> 'count'.
+		'argumentValue' -> 'five'.
+		'expectedArgumentValueKindName' -> 'Integer'.
+		'errorMessage' -> 'count must be a kind of Integer, not a ByteString'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

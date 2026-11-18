@@ -77,9 +77,9 @@ GtLLepiterSnippetDomainObjectExamples >> snippetDomainObjectDataViewSerializatio
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #status put: 'created';
-		at: #pageUid put: 'test-page-uid';
-		at: #snippetUid put: 'test-snippet-uid';
+		at: 'status' put: 'created';
+		at: 'pageUid' put: 'test-page-uid';
+		at: 'snippetUid' put: 'test-snippet-uid';
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
@@ -98,10 +98,10 @@ GtLLepiterSnippetDomainObjectExamples >> snippetEditDomainObjectDataViewSerializ
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #status put: 'updated';
-		at: #pageUid put: 'test-page-uid';
-		at: #snippetUid put: 'test-snippet-uid';
-		at: #oldText put: 'Old content';
+		at: 'status' put: 'updated';
+		at: 'pageUid' put: 'test-page-uid';
+		at: 'snippetUid' put: 'test-snippet-uid';
+		at: 'oldText' put: 'Old content';
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
@@ -120,16 +120,16 @@ GtLLepiterSnippetDomainObjectExamples >> snippetsDomainObjectDataViewSerializati
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #snippets put: (NeoJSONArray withAll: {
+		at: 'snippets' put: (NeoJSONArray withAll: {
 			NeoJSONObject new
-				at: #status put: 'created';
-				at: #pageUid put: 'page-uid-1';
-				at: #snippetUid put: 'snippet-uid-1';
+				at: 'status' put: 'created';
+				at: 'pageUid' put: 'page-uid-1';
+				at: 'snippetUid' put: 'snippet-uid-1';
 				yourself.
 			NeoJSONObject new
-				at: #status put: 'created';
-				at: #pageUid put: 'page-uid-2';
-				at: #snippetUid put: 'snippet-uid-2';
+				at: 'status' put: 'created';
+				at: 'pageUid' put: 'page-uid-2';
+				at: 'snippetUid' put: 'snippet-uid-2';
 				yourself });
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.

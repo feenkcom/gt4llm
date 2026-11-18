@@ -15,7 +15,7 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForExistingMethods [
 				{'methodClassName' -> 'Collection'.
 					'methodName' -> 'withAll:'.
 					'classSide' -> true} asDictionary.
-				{'methodClassName' -> #GtLMagritteToolForMethodsSourceExamples.
+				{'methodClassName' -> 'GtLMagritteToolForMethodsSourceExamples'.
 					'methodName' -> 'methodSourcesForExistingMethods'.
 					'classSide' -> false} asDictionary
 			} asArray

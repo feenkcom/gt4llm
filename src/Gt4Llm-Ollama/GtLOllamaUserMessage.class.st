@@ -150,7 +150,7 @@ GtLOllamaUserMessage >> serializeForOllamaGenerateMessagesAPI [
 { #category : #api }
 GtLOllamaUserMessage >> serializeForOllamaOpenAiMessagesAPI [
 	^ {
-			#content	-> (self contentDataBlock serializeForOllamaOpenAi ).
-			#role -> self role
+			'content'	-> (self contentDataBlock serializeForOllamaOpenAi ).
+			'role' -> self role
 		} asDictionary
 ]

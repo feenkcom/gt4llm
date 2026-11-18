@@ -51,14 +51,14 @@ GtLMethodCompilationExceptionDomainObjectExamples >> methodCompilationExceptionD
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assertJsonData: jsonData hasExpectedKeys: #(#errorDetails #errorReason #objectId #objectValue #playgroundPageReference #protocolName #sourceCode #targetClassName).
-	self assert: (jsonData at: #targetClassName) equals: #Object.
-	self assert: (jsonData at: #protocolName) equals: 'testing'.
-	self assert: (jsonData at: #sourceCode) equals: 'badMethod ^'.
-	self assert: (jsonData at: #errorReason) equals: 'Syntax error while compiling'.
-	self assert: (jsonData at: #objectId) equals: 'exception-id-123'.
-	self assert: (jsonData at: #objectValue) isDictionary.
-	self assert: (jsonData at: #playgroundPageReference) isNil.
+	self assertJsonData: jsonData hasExpectedKeys: #('errorDetails' 'errorReason' 'objectId' 'objectValue' 'playgroundPageReference' 'protocolName' 'sourceCode' 'targetClassName').
+	self assert: (jsonData at: 'targetClassName') equals: 'Object'.
+	self assert: (jsonData at: 'protocolName') equals: 'testing'.
+	self assert: (jsonData at: 'sourceCode') equals: 'badMethod ^'.
+	self assert: (jsonData at: 'errorReason') equals: 'Syntax error while compiling'.
+	self assert: (jsonData at: 'objectId') equals: 'exception-id-123'.
+	self assert: (jsonData at: 'objectValue') isDictionary.
+	self assert: (jsonData at: 'playgroundPageReference') isNil.
 	
 	errorDetails := jsonData at: 'errorDetails'.
 	self assertExceptionResult: errorDetails errorClass: 'ZeroDivide' errorMessage: 'ZeroDivide' stackTraceIncludes: #('ZeroDivide' 'SmallInteger>>/').

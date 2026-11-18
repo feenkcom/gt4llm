@@ -80,10 +80,12 @@ GtLPhlowViewDomainObject >> llmRawDataViewFor: aDataView [
 		title: 'Phlow View Details';
 		jsonData: [ 
 			NeoJSONObject new
-				at: #viewTitle put: phlowView title;
-				at: #priority put: phlowView priority;
-				at: #viewMethodClass put: viewMethodClassName;
-				at: #viewMethodSourceCode put: viewMethodSourceCode;
+				at: 'viewTitle' put: phlowView title;
+				at: 'priority' put: phlowView priority;
+				at: 'viewMethodClass' put: (viewMethodClassName isSymbol
+						ifTrue: [ viewMethodClassName asString ]
+						ifFalse: [ viewMethodClassName ]);
+				at: 'viewMethodSourceCode' put: viewMethodSourceCode;
 				yourself ]
 ]
 

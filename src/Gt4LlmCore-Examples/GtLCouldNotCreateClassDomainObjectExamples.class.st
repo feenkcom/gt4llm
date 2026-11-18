@@ -43,13 +43,13 @@ GtLCouldNotCreateClassDomainObjectExamples >> couldNotCreateClassDataViewSeriali
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#targetClassName -> 'MyNewClass'.
-		#superclassName -> #Object.
-		#packageName -> 'MyPackage'.
-		#packageTagName -> 'Core'.
-		#instanceVariableNames -> 'slot1 slot2'.
-		#classVariableNames -> 'SharedVar'.
-		#messageText -> 'Class creation error: Superclass not found'
+		'targetClassName' -> 'MyNewClass'.
+		'superclassName' -> 'Object'.
+		'packageName' -> 'MyPackage'.
+		'packageTagName' -> 'Core'.
+		'instanceVariableNames' -> 'slot1 slot2'.
+		'classVariableNames' -> 'SharedVar'.
+		'messageText' -> 'Class creation error: Superclass not found'
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
@@ -76,13 +76,13 @@ GtLCouldNotCreateClassDomainObjectExamples >> emptyCouldNotCreateClassDomainObje
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#targetClassName -> nil.
-		#superclassName -> nil.
-		#packageName -> nil.
-		#packageTagName -> nil.
-		#instanceVariableNames -> nil.
-		#classVariableNames -> nil.
-		#messageText -> 'Class creation error: unknown error'
+		'targetClassName' -> nil.
+		'superclassName' -> nil.
+		'packageName' -> nil.
+		'packageTagName' -> nil.
+		'instanceVariableNames' -> nil.
+		'classVariableNames' -> nil.
+		'messageText' -> 'Class creation error: unknown error'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

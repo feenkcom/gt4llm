@@ -35,12 +35,12 @@ GtLToolForTestMethodRunExamples >> exampleRunComparisonFailure [
 	self assert: dataBlock imageDataBlocks size equals: 1.
 	
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #className) equals: 'GtLExampleDummyMixedTest'.
-	self assert: (jsonData at: #selector) equals: 'testComparisonFailure'.
-	self assert: (jsonData at: #status) equals: 'error'.
-	self assert: (jsonData at: #result) equals: 'Error'.
+	self assert: (jsonData at: 'className') equals: 'GtLExampleDummyMixedTest'.
+	self assert: (jsonData at: 'selector') equals: 'testComparisonFailure'.
+	self assert: (jsonData at: 'status') equals: 'error'.
+	self assert: (jsonData at: 'result') equals: 'Error'.
 	
-	exceptionData := jsonData at: #exception.
+	exceptionData := jsonData at: 'exception'.
 	self
 		assertExceptionResult: exceptionData
 		errorClass: 'GtLExampleDataComparisonException'
@@ -120,12 +120,12 @@ GtLToolForTestMethodRunExamples >> exampleRunFailureWithJsonAssertions [
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	jsonData := dataBlock llmJsonData.
 	
-	self assert: (jsonData at: #className) equals: 'GtLExampleDummyMixedTest'.
-	self assert: (jsonData at: #selector) equals: 'testFailure'.
-	self assert: (jsonData at: #status) equals: 'failure'.
-	self assert: (jsonData at: #result) equals: 'Failure'.
+	self assert: (jsonData at: 'className') equals: 'GtLExampleDummyMixedTest'.
+	self assert: (jsonData at: 'selector') equals: 'testFailure'.
+	self assert: (jsonData at: 'status') equals: 'failure'.
+	self assert: (jsonData at: 'result') equals: 'Failure'.
 	
-	exceptionData := jsonData at: #exception.
+	exceptionData := jsonData at: 'exception'.
 	self
 		assertExceptionResult: exceptionData
 		errorClass: 'TestFailure'
@@ -257,11 +257,11 @@ GtLToolForTestMethodRunExamples >> exampleRunSuccessWithDataViewSerialization [
 	compositeView := targetObject llmDataViewsFor: GtLDataView new.
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #className) equals: 'GtLExampleDummyMixedTest'.
-	self assert: (jsonData at: #selector) equals: 'testPass'.
-	self assert: (jsonData at: #status) equals: 'success'.
-	self assert: (jsonData at: #result) equals: 'Passed'.
-	self assert: (jsonData at: #shouldPass) equals: true.
-	self assert: (jsonData at: #expectedFailure) equals: false.
+	self assert: (jsonData at: 'className') equals: 'GtLExampleDummyMixedTest'.
+	self assert: (jsonData at: 'selector') equals: 'testPass'.
+	self assert: (jsonData at: 'status') equals: 'success'.
+	self assert: (jsonData at: 'result') equals: 'Passed'.
+	self assert: (jsonData at: 'shouldPass') equals: true.
+	self assert: (jsonData at: 'expectedFailure') equals: false.
 	^ call
 ]

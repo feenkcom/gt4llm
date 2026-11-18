@@ -32,13 +32,13 @@ GtLMethodsSearchResultExamples >> methodsSearchResultDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	referenceJson := NeoJSONObject new
-		at: #classSide put: false;
-		at: #methodClassName put: 'GtLMagritteToolForMethodReferences';
-		at: #methodName put: 'name';
+		at: 'classSide' put: false;
+		at: 'methodClassName' put: 'GtLMagritteToolForMethodReferences';
+		at: 'methodName' put: 'name';
 		yourself.
 	expected := Dictionary new
-		at: #foundMethods put: (NeoJSONArray with: referenceJson);
-		at: #mayHaveMore put: false;
+		at: 'foundMethods' put: (NeoJSONArray with: referenceJson);
+		at: 'mayHaveMore' put: false;
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	

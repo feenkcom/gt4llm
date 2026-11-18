@@ -30,7 +30,7 @@ GtLSmaCCSuccessExamples >> successDataViewSerialization [
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: jsonData equals: {
-		#message -> 'The sample was successfully parsed'
+		'message' -> 'The sample was successfully parsed'
 	} asDictionary.
 	
 	^ dataBlock

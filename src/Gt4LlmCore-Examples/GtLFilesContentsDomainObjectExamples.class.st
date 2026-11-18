@@ -21,7 +21,7 @@ GtLFilesContentsDomainObjectExamples >> emptyFilesContents [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#files -> NeoJSONArray new
+		'files' -> NeoJSONArray new
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -49,11 +49,11 @@ GtLFilesContentsDomainObjectExamples >> filesContentsWithMultipleFiles [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #files) size equals: 2.
-	self assert: ((jsonData at: #files) first at: #path) equals: '/tmp/file1.txt'.
-	self assert: ((jsonData at: #files) first at: #contents) equals: encoded1.
-	self assert: ((jsonData at: #files) second at: #path) equals: '/tmp/file2.txt'.
-	self assert: ((jsonData at: #files) second at: #contents) equals: encoded2.
+	self assert: (jsonData at: 'files') size equals: 2.
+	self assert: ((jsonData at: 'files') first at: 'path') equals: '/tmp/file1.txt'.
+	self assert: ((jsonData at: 'files') first at: 'contents') equals: encoded1.
+	self assert: ((jsonData at: 'files') second at: 'path') equals: '/tmp/file2.txt'.
+	self assert: ((jsonData at: 'files') second at: 'contents') equals: encoded2.
 	
 	^ domainObject
 ]

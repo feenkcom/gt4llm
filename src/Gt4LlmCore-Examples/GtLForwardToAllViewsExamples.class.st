@@ -63,14 +63,14 @@ GtLForwardToAllViewsExamples >> forwardToBothJsonViewsWithDataKey_serialization 
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 2.
 	
 	expectedData := Dictionary new
-		at: #allJsonViews put: (Dictionary new
-			at: #first put: (NeoJSONObject new
-				at: #type put: 'first';
-				at: #value put: 100;
+		at: 'allJsonViews' put: (Dictionary new
+			at: 'first' put: (NeoJSONObject new
+				at: 'type' put: 'first';
+				at: 'value' put: 100;
 				yourself);
-			at: #second put: (NeoJSONObject new
-				at: #type put: 'second';
-				at: #value put: 200;
+			at: 'second' put: (NeoJSONObject new
+				at: 'type' put: 'second';
+				at: 'value' put: 200;
 				yourself);
 			yourself);
 		yourself.
@@ -90,13 +90,13 @@ GtLForwardToAllViewsExamples >> forwardToBothJsonViews_serialization [
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 2.
 	
 	expectedData := Dictionary new
-		at: #first put: (NeoJSONObject new
-			at: #type put: 'first';
-			at: #value put: 100;
+		at: 'first' put: (NeoJSONObject new
+			at: 'type' put: 'first';
+			at: 'value' put: 100;
 			yourself);
-		at: #second put: (NeoJSONObject new
-			at: #type put: 'second';
-			at: #value put: 200;
+		at: 'second' put: (NeoJSONObject new
+			at: 'type' put: 'second';
+			at: 'value' put: 200;
 			yourself);
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
@@ -167,14 +167,14 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViewsWithDataKey_serialization 
 	
 	"Magritte view data is flat (not wrapped), JSON view data is wrapped under its dataKey"
 	expectedData := Dictionary new
-		at: #allViews put: (Dictionary new
-			at: #jsonData put: (NeoJSONObject new
-				at: #itemName put: 'Multi-View Item';
-				at: #itemAmount put: 99;
+		at: 'allViews' put: (Dictionary new
+			at: 'jsonData' put: (NeoJSONObject new
+				at: 'itemName' put: 'Multi-View Item';
+				at: 'itemAmount' put: 99;
 				yourself);
-			at: #magritteData put: (NeoJSONObject new
-				at: #name put: 'Multi-View Item';
-				at: #amount put: 99;
+			at: 'magritteData' put: (NeoJSONObject new
+				at: 'name' put: 'Multi-View Item';
+				at: 'amount' put: 99;
 				yourself);
 			yourself);
 		yourself.
@@ -195,13 +195,13 @@ GtLForwardToAllViewsExamples >> forwardToMultipleViews_serialization [
 	
 	"Magritte view data is flat (not wrapped), JSON view data is wrapped under its dataKey"
 	expectedData := Dictionary new
-		at: #jsonData put: (NeoJSONObject new
-			at: #itemName put: 'Multi-View Item';
-			at: #itemAmount put: 99;
+		at: 'jsonData' put: (NeoJSONObject new
+			at: 'itemName' put: 'Multi-View Item';
+			at: 'itemAmount' put: 99;
 			yourself);
-		at: #magritteData put: (NeoJSONObject new
-			at: #name put: 'Multi-View Item';
-			at: #amount put: 99;
+		at: 'magritteData' put: (NeoJSONObject new
+			at: 'name' put: 'Multi-View Item';
+			at: 'amount' put: 99;
 			yourself);
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.

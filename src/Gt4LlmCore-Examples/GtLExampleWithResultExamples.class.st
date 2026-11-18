@@ -24,7 +24,7 @@ GtLExampleWithResultExamples >> assertDomainObject: domainObject isSuccess: isSu
 { #category : #private }
 GtLExampleWithResultExamples >> assertExampleData: jsonData forMethod: aCompiledMethod status: statusString [
 	| exampleRefJson |
-	self assertJsonData: jsonData hasExpectedKeys: #('exampleReference' 'exampleStatus' #result).
+	self assertJsonData: jsonData hasExpectedKeys: #('exampleReference' 'exampleStatus' 'result').
 	exampleRefJson := jsonData at: 'exampleReference'.
 	self assert: (exampleRefJson at: 'exampleClassName') equals: aCompiledMethod methodClass instanceSide name asString.
 	self assert: (exampleRefJson at: 'methodName') equals: aCompiledMethod selector asString.
@@ -63,10 +63,10 @@ GtLExampleWithResultExamples >> assertSuccessResult: resultJson objectId: object
 { #category : #asserting }
 GtLExampleWithResultExamples >> assertSuccessResult: resultJson objectId: objectId objectDetails: expectedObjectDetails hasPlaygroundPageReference: aBoolean [
 	| expectedKeys |
-	expectedKeys := #('objectDetails' #objectId #objectValue).
-	aBoolean ifTrue: [ expectedKeys := expectedKeys copyWith: #playgroundPageReference ].
+	expectedKeys := #('objectDetails' 'objectId' 'objectValue').
+	aBoolean ifTrue: [ expectedKeys := expectedKeys copyWith: 'playgroundPageReference' ].
 	self assertJsonData: resultJson hasExpectedKeys: expectedKeys.
-	self assert: (resultJson at: #objectId) equals: objectId.
+	self assert: (resultJson at: 'objectId') equals: objectId.
 	self assert: (resultJson at: 'objectDetails') equals: expectedObjectDetails.
 ]
 
@@ -111,7 +111,7 @@ GtLExampleWithResultExamples >> exampleWithResultForComparisonFailure [
 	jsonData := dataBlock compositeJsonData.
 	self assertExampleData: jsonData forMethod: method status: 'error'.
 	
-	resultJson := jsonData at: #result.
+	resultJson := jsonData at: 'result'.
 	self 
 		assertExceptionResult: (resultJson at: 'objectDetails') 
 		errorClass: 'GtLExampleDataComparisonException' 
@@ -149,7 +149,7 @@ GtLExampleWithResultExamples >> exampleWithResultForFailingExample [
 	jsonData := dataBlock compositeJsonData.
 	self assertExampleData: jsonData forMethod: method status: 'failure'.
 	
-	resultJson := jsonData at: #result.
+	resultJson := jsonData at: 'result'.
 	self 
 		assertExceptionResult: (resultJson at: 'objectDetails') 
 		errorClass: 'AssertionFailure' 
@@ -193,14 +193,14 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExample [
 	jsonData := dataBlock compositeJsonData.
 	self assertExampleData: jsonData forMethod: method status: 'success'.
 	
-	resultJson := jsonData at: #result.
+	resultJson := jsonData at: 'result'.
 	self assertSuccessResult: resultJson objectId: 'test-object-id' objectDetails: Dictionary new.
-	self assert: (resultJson at: #playgroundPageReference) equals: (NeoJSONObject new
+	self assert: (resultJson at: 'playgroundPageReference') equals: (NeoJSONObject new
 		at: 'databaseId' put: self theDatabase primaryDB uuidString;
 		at: 'pageId' put: self theDatabase pages first uid asString36;
 		yourself).
 	
-	objectValueJson := resultJson at: #objectValue.
+	objectValueJson := resultJson at: 'objectValue'.
 	self 
 		assertObjectValue: objectValueJson 
 		className: 'SmallInteger' 
@@ -249,14 +249,14 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExampleWithDataJso
 	jsonData := dataBlock compositeJsonData.
 	self assertExampleData: jsonData forMethod: method status: 'success'.
 	
-	resultJson := jsonData at: #result.
+	resultJson := jsonData at: 'result'.
 	expectedObjectDetails := Dictionary new
 		at: 'valueOne' put: 1;
 		at: 'valueTwo' put: 2;
 		yourself.
 	self assertSuccessResult: resultJson objectId: 'test-object-id' objectDetails: expectedObjectDetails.
 	
-	objectValueJson := resultJson at: #objectValue.
+	objectValueJson := resultJson at: 'objectValue'.
 	expectedInstanceSlots := {
 		(NeoJSONObject new at: 'name' put: 'slotOne'; at: 'valueClassName' put: 'ByteString'; at: 'valuePrintString' put: 'AValue'; yourself).
 		(NeoJSONObject new at: 'name' put: 'slotTwo'; at: 'valueClassName' put: 'SmallInteger'; at: 'valuePrintString' put: '42'; yourself)
@@ -311,11 +311,11 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExampleWithoutLepi
 	jsonData := dataBlock compositeJsonData.
 	self assertExampleData: jsonData forMethod: method status: 'success'.
 	
-	resultJson := jsonData at: #result.
+	resultJson := jsonData at: 'result'.
 	self assertSuccessResult: resultJson objectId: 'test-object-id' objectDetails: Dictionary new.
-	self assert: (resultJson at: #playgroundPageReference) isNil.
+	self assert: (resultJson at: 'playgroundPageReference') isNil.
 	
-	objectValueJson := resultJson at: #objectValue.
+	objectValueJson := resultJson at: 'objectValue'.
 	self 
 		assertObjectValue: objectValueJson 
 		className: 'SmallInteger' 

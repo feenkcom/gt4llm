@@ -36,8 +36,8 @@ GtLClassRemovalResultExamples >> classRemovalResultDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#removedClassName -> 'MyTestClass'.
-		#status -> 'removed'
+		'removedClassName' -> 'MyTestClass'.
+		'status' -> 'removed'
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

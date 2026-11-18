@@ -83,10 +83,10 @@ GtLRefactoringChangeExamples >> refactoringChangeSerialization [
 	dataBlock := self refactoringChangeMainDataView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	expected := Dictionary new
-			at: #changeDescription put: 'MySuperclass>>foo';
-			at: #kind put: nil;
-			at: #target put: nil;
-			at: #newSource put: 'foo ^ 42';
+			at: 'changeDescription' put: 'MySuperclass>>foo';
+			at: 'kind' put: nil;
+			at: 'target' put: nil;
+			at: 'newSource' put: 'foo ^ 42';
 			yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	^ dataBlock
@@ -122,11 +122,11 @@ GtLRefactoringChangeExamples >> removeMethodRefactoringChangeSerialization [
 			llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	expected := Dictionary new
-			at: #changeDescription
+			at: 'changeDescription'
 				put: 'Remove GtLRefactoringChangeExamples>>#refactoringChange';
-			at: #kind put: 'removed method';
-			at: #target put: 'GtLRefactoringChangeExamples>>#refactoringChange';
-			at: #newSource put: nil;
+			at: 'kind' put: 'removed method';
+			at: 'target' put: 'GtLRefactoringChangeExamples>>#refactoringChange';
+			at: 'newSource' put: nil;
 			yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	^ dataBlock

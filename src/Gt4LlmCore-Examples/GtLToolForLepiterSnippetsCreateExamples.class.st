@@ -73,7 +73,7 @@ GtLToolForLepiterSnippetsCreateExamples >> emptyExampleClassName [
 					put: (Dictionary new
 						at: 'pageUid' put: page uidString;
 						at: 'exampleClassName' put: '';
-						at: 'exampleMethodName' put: #someMethod;
+						at: 'exampleMethodName' put: 'someMethod';
 						yourself);
 					yourself
 			}
@@ -556,7 +556,7 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulAllSnippetTypesCreate [
 					put: (Dictionary new
 						at: 'pageUid' put: page uidString;
 						at: 'exampleClassName' put: self class name;
-						at: 'exampleMethodName' put: #successfulSnippetCreate;
+						at: 'exampleMethodName' put: 'successfulSnippetCreate';
 						yourself);
 					yourself.
 				Dictionary new
@@ -594,7 +594,7 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulExampleSnippetCreate [
 					put: (Dictionary new
 						at: 'pageUid' put: page uidString;
 						at: 'exampleClassName' put: self class name;
-						at: 'exampleMethodName' put: #successfulSnippetCreate;
+						at: 'exampleMethodName' put: 'successfulSnippetCreate';
 						yourself);
 					yourself
 			}

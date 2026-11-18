@@ -38,23 +38,23 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithInnerDataKeys_ser
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 3.
 	
 	expectedData := Dictionary new
-		at: #data put: {
+		at: 'data' put: {
 			Dictionary new
-				at: #jsonContent put: (NeoJSONObject new
-					at: #type put: 'first';
-					at: #value put: 10;
+				at: 'jsonContent' put: (NeoJSONObject new
+					at: 'type' put: 'first';
+					at: 'value' put: 10;
 					yourself);
 				yourself.
 			Dictionary new
-				at: #jsonContent put: (NeoJSONObject new
-					at: #type put: 'first';
-					at: #value put: 20;
+				at: 'jsonContent' put: (NeoJSONObject new
+					at: 'type' put: 'first';
+					at: 'value' put: 20;
 					yourself);
 				yourself.
 			Dictionary new
-				at: #jsonContent put: (NeoJSONObject new
-					at: #type put: 'first';
-					at: #value put: 30;
+				at: 'jsonContent' put: (NeoJSONObject new
+					at: 'type' put: 'first';
+					at: 'value' put: 30;
 					yourself);
 				yourself};
 		yourself.
@@ -98,24 +98,24 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithMixedDataKeys_ser
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 3.
 	
 	expectedData := Dictionary new
-		at: #data put: {
+		at: 'data' put: {
 			"First item - has data key #jsonContent"
 			Dictionary new
-				at: #jsonContent put: (NeoJSONObject new
-					at: #type put: 'first';
-					at: #value put: 10;
+				at: 'jsonContent' put: (NeoJSONObject new
+					at: 'type' put: 'first';
+					at: 'value' put: 10;
 					yourself);
 				yourself.
 			"Second item - no data key, serialized directly"
 			NeoJSONObject new
-				at: #type put: 'first';
-				at: #value put: 20;
+				at: 'type' put: 'first';
+				at: 'value' put: 20;
 				yourself.
 			"Third item - has data key #jsonContent"
 			Dictionary new
-				at: #jsonContent put: (NeoJSONObject new
-					at: #type put: 'first';
-					at: #value put: 30;
+				at: 'jsonContent' put: (NeoJSONObject new
+					at: 'type' put: 'first';
+					at: 'value' put: 30;
 					yourself);
 				yourself};
 		yourself.
@@ -155,18 +155,18 @@ GtLForwardCollectionToJsonViewExamples >> forwardToJsonViewWithoutDataKeys_seria
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 3.
 	
 	expectedData := Dictionary new
-		at: #data put: {
+		at: 'data' put: {
 			NeoJSONObject new
-				at: #type put: 'first';
-				at: #value put: 10;
+				at: 'type' put: 'first';
+				at: 'value' put: 10;
 				yourself.
 			NeoJSONObject new
-				at: #type put: 'first';
-				at: #value put: 20;
+				at: 'type' put: 'first';
+				at: 'value' put: 20;
 				yourself.
 			NeoJSONObject new
-				at: #type put: 'first';
-				at: #value put: 30;
+				at: 'type' put: 'first';
+				at: 'value' put: 30;
 				yourself};
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.

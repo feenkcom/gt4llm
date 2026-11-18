@@ -29,10 +29,10 @@ GtLSmalltalkCodeEvaluationResultExamples >> expectedSimpleObjectValueJson [
 { #category : #private }
 GtLSmalltalkCodeEvaluationResultExamples >> expectedSimpleResultJsonData [
 	^ Dictionary new
-		at: #code put: '1 + 2';
+		at: 'code' put: '1 + 2';
 		at: 'objectDetails' put: Dictionary new;
-		at: #objectId put: 'test-uuid-123';
-		at: #objectValue put: self expectedSimpleObjectValueJson;
+		at: 'objectId' put: 'test-uuid-123';
+		at: 'objectValue' put: self expectedSimpleObjectValueJson;
 		yourself
 ]
 
@@ -79,7 +79,7 @@ GtLSmalltalkCodeEvaluationResultExamples >> resultWithLepiterPageReferenceDataVi
 		yourself.
 	
 	expectedJson := self expectedSimpleResultJsonData 
-		at: #playgroundPageReference put: expectedPlaygroundPageReference;
+		at: 'playgroundPageReference' put: expectedPlaygroundPageReference;
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -128,7 +128,7 @@ GtLSmalltalkCodeEvaluationResultExamples >> simpleResultDataViewSerialization [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := self expectedSimpleResultJsonData 
-		at: #playgroundPageReference put: nil;
+		at: 'playgroundPageReference' put: nil;
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.

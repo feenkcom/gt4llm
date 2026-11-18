@@ -136,8 +136,8 @@ GtLMagritteToolForClassRemovalExamples >> removeExistingClassDataViewSerializati
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#removedClassName -> 'GtLMagritteToolForClassRemovalExamplesTemporary'.
-		#status -> 'removed'
+		'removedClassName' -> 'GtLMagritteToolForClassRemovalExamplesTemporary'.
+		'status' -> 'removed'
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

@@ -84,9 +84,9 @@ GtLToolForObjectViewExamples >> viewContentForExistingObjectAndView [
 	self assert: compositeView dataViews size equals: 2.
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #viewMethodClass) equals: String name.
-	self assert: (jsonData at: #viewMethodSourceCode) equals: (String >> #gtStringFor:) sourceCode.
-	self assert: (jsonData at: #viewTitle) equals: 'String'.
+	self assert: (jsonData at: 'viewMethodClass') equals: String name asString.
+	self assert: (jsonData at: 'viewMethodSourceCode') equals: (String >> #gtStringFor:) sourceCode.
+	self assert: (jsonData at: 'viewTitle') equals: 'String'.
 	imageBlock := dataBlock imageDataBlocks first.
 	self assert: imageBlock imageType equals: 'png'.
 	self assert: imageBlock imageBytes isNotEmpty.
@@ -211,8 +211,8 @@ GtLToolForObjectViewExamples >> viewContentForViewWithExceptionAtCreation [
 	compositeView := targetObject llmDataViewsFor: GtLDataView new.
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #viewMethodClass) equals: GtInspectorSampleWithExceptionsInExtensions name.
-	self assert: (jsonData at: #viewMethodSourceCode) equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionAtCreationFor:) sourceCode.
+	self assert: (jsonData at: 'viewMethodClass') equals: GtInspectorSampleWithExceptionsInExtensions name asString.
+	self assert: (jsonData at: 'viewMethodSourceCode') equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionAtCreationFor:) sourceCode.
 	^ call
 ]
 
@@ -241,7 +241,7 @@ GtLToolForObjectViewExamples >> viewContentForViewWithExceptionInStencil [
 	compositeView := targetObject llmDataViewsFor: GtLDataView new.
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #viewMethodClass) equals: GtInspectorSampleWithExceptionsInExtensions name.
-	self assert: (jsonData at: #viewMethodSourceCode) equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionInStencilFor:) sourceCode.
+	self assert: (jsonData at: 'viewMethodClass') equals: GtInspectorSampleWithExceptionsInExtensions name asString.
+	self assert: (jsonData at: 'viewMethodSourceCode') equals: (GtInspectorSampleWithExceptionsInExtensions >> #gtViewWithExceptionInStencilFor:) sourceCode.
 	^ call
 ]

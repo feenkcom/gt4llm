@@ -120,7 +120,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetKnowledgeBaseUid [
 	self
 		assertMissingRequiredProperties: targetObject
 		withPropertyNames: #('knowledgeBaseUid')
-		path: #(#snippets 1)
+		path: #('snippets' 1)
 		errorMessage: '@[snippets/1] required properties missing [knowledgeBaseUid]'.
 	
 	^ call
@@ -146,7 +146,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetPageUid [
 	self
 		assertMissingRequiredProperties: targetObject
 		withPropertyNames: #('pageUid')
-		path: #(#snippets 1)
+		path: #('snippets' 1)
 		errorMessage: '@[snippets/1] required properties missing [pageUid]'.
 	
 	^ call
@@ -172,7 +172,7 @@ GtLToolForLepiterSnippetsRemoveExamples >> missingSnippetUid [
 	self
 		assertMissingRequiredProperties: targetObject
 		withPropertyNames: #('snippetUid')
-		path: #(#snippets 1)
+		path: #('snippets' 1)
 		errorMessage: '@[snippets/1] required properties missing [snippetUid]'.
 	
 	^ call

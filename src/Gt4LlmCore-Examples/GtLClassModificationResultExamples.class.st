@@ -83,14 +83,14 @@ GtLClassModificationResultExamples >> classModificationResultSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#currentClassName -> 'MyExampleClass'.
-		#superclassName -> 'Exception'.
-		#packageName -> 'NewPackage'.
-		#comment -> 'Updated comment'.
-		#instanceSlotNames -> (NeoJSONArray withAll: #('slot1' 'slot2' 'slot3')).
-		#classSlotNames -> (NeoJSONArray withAll: #('classSlot')).
-		#classVariableNames -> (NeoJSONArray withAll: #('SharedVar')).
-		#traitCompositionString -> '{}'
+		'currentClassName' -> 'MyExampleClass'.
+		'superclassName' -> 'Exception'.
+		'packageName' -> 'NewPackage'.
+		'comment' -> 'Updated comment'.
+		'instanceSlotNames' -> (NeoJSONArray withAll: #('slot1' 'slot2' 'slot3')).
+		'classSlotNames' -> (NeoJSONArray withAll: #('classSlot')).
+		'classVariableNames' -> (NeoJSONArray withAll: #('SharedVar')).
+		'traitCompositionString' -> '{}'
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
@@ -112,14 +112,14 @@ GtLClassModificationResultExamples >> classModificationResultSerializationWithou
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#currentClassName -> 'MyExampleClass'.
-		#superclassName -> 'Exception'.
-		#packageName -> 'NewPackage'.
-		#comment -> 'Updated comment'.
-		#instanceSlotNames -> (NeoJSONArray withAll: #('slot1' 'slot2' 'slot3')).
-		#classSlotNames -> (NeoJSONArray withAll: #('classSlot')).
-		#classVariableNames -> (NeoJSONArray withAll: #('SharedVar')).
-		#traitCompositionString -> '{}'
+		'currentClassName' -> 'MyExampleClass'.
+		'superclassName' -> 'Exception'.
+		'packageName' -> 'NewPackage'.
+		'comment' -> 'Updated comment'.
+		'instanceSlotNames' -> (NeoJSONArray withAll: #('slot1' 'slot2' 'slot3')).
+		'classSlotNames' -> (NeoJSONArray withAll: #('classSlot')).
+		'classVariableNames' -> (NeoJSONArray withAll: #('SharedVar')).
+		'traitCompositionString' -> '{}'
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

@@ -50,10 +50,10 @@ GtLLepiterKnowledgeBasesExamples >> knowledgeBaseDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #databaseName put: 'TestDatabase';
-		at: #uuidString put: '12345678-1234-1234-1234-123456789abc';
-		at: #pageCount put: 42;
-		at: #storeLocation put: '/path/to/store';
+		at: 'databaseName' put: 'TestDatabase';
+		at: 'uuidString' put: '12345678-1234-1234-1234-123456789abc';
+		at: 'pageCount' put: 42;
+		at: 'storeLocation' put: '/path/to/store';
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
@@ -72,11 +72,11 @@ GtLLepiterKnowledgeBasesExamples >> knowledgeBasesDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #knowledgeBases put: (NeoJSONArray with: (NeoJSONObject new
-			at: #databaseName put: 'TestDatabase';
-			at: #uuidString put: '12345678-1234-1234-1234-123456789abc';
-			at: #pageCount put: 42;
-			at: #storeLocation put: '/path/to/store';
+		at: 'knowledgeBases' put: (NeoJSONArray with: (NeoJSONObject new
+			at: 'databaseName' put: 'TestDatabase';
+			at: 'uuidString' put: '12345678-1234-1234-1234-123456789abc';
+			at: 'pageCount' put: 42;
+			at: 'storeLocation' put: '/path/to/store';
 			yourself));
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.

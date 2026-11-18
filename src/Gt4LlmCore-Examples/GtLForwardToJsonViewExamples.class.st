@@ -41,10 +41,10 @@ GtLForwardToJsonViewExamples >> forwardToFirstJsonViewWithBothDataKeys_serializa
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #outerKey put: (Dictionary new
-			at: #firstData put: (NeoJSONObject new
-				at: #type put: 'first';
-				at: #value put: 100;
+		at: 'outerKey' put: (Dictionary new
+			at: 'firstData' put: (NeoJSONObject new
+				at: 'type' put: 'first';
+				at: 'value' put: 100;
 				yourself);
 			yourself);
 		yourself.
@@ -83,9 +83,9 @@ GtLForwardToJsonViewExamples >> forwardToFirstJsonViewWithDataKey_serialization 
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #firstData put: (NeoJSONObject new
-			at: #type put: 'first';
-			at: #value put: 100;
+		at: 'firstData' put: (NeoJSONObject new
+			at: 'type' put: 'first';
+			at: 'value' put: 100;
 			yourself);
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
@@ -127,9 +127,9 @@ GtLForwardToJsonViewExamples >> forwardToFirstJsonViewWithForwardDataKey_seriali
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #forwardedFirst put: (Dictionary new
-			at: #type put: 'first';
-			at: #value put: 100;
+		at: 'forwardedFirst' put: (Dictionary new
+			at: 'type' put: 'first';
+			at: 'value' put: 100;
 			yourself);
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
@@ -167,8 +167,8 @@ GtLForwardToJsonViewExamples >> forwardToFirstJsonViewWithoutDataKey_serializati
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #type put: 'first';
-		at: #value put: 100;
+		at: 'type' put: 'first';
+		at: 'value' put: 100;
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	
@@ -205,8 +205,8 @@ GtLForwardToJsonViewExamples >> forwardToSecondJsonViewWithoutDataKey_serializat
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #type put: 'second';
-		at: #value put: 200;
+		at: 'type' put: 'second';
+		at: 'value' put: 200;
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	

@@ -59,15 +59,15 @@ GtLExceptionDomainObjectExamples >> dataComparisonExceptionDataViewSerialization
 	self assert: dataBlock imageDataBlocks size equals: 1.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assertJsonData: jsonData hasExpectedKeys: #(#errorDetails #errorReason #objectId #objectValue #playgroundPageReference).
-	self assert: (jsonData at: #errorReason) isNil.
-	self assert: (jsonData at: #objectId) isNil.
-	self assert: (jsonData at: #objectValue) isDictionary.
-	self assert: (jsonData at: #playgroundPageReference) isNil.
+	self assertJsonData: jsonData hasExpectedKeys: #('errorDetails' 'errorReason' 'objectId' 'objectValue' 'playgroundPageReference').
+	self assert: (jsonData at: 'errorReason') isNil.
+	self assert: (jsonData at: 'objectId') isNil.
+	self assert: (jsonData at: 'objectValue') isDictionary.
+	self assert: (jsonData at: 'playgroundPageReference') isNil.
 	
 	errorDetails := jsonData at: 'errorDetails'.
-	self assert: (errorDetails at: #errorClass) equals: 'GtLExampleDataComparisonException'.
-	self assert: ((errorDetails at: #stackTrace) includesSubstring: 'GtLExampleDataComparisonException').
+	self assert: (errorDetails at: 'errorClass') equals: 'GtLExampleDataComparisonException'.
+	self assert: ((errorDetails at: 'stackTrace') includesSubstring: 'GtLExampleDataComparisonException').
 	
 	"Assert that the diff image is generated"
 	imageBlock := dataBlock imageDataBlocks first.
@@ -91,12 +91,12 @@ GtLExceptionDomainObjectExamples >> emptyExceptionDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assertJsonData: jsonData hasExpectedKeys: #(#errorDetails #errorReason #objectId #objectValue #playgroundPageReference).
+	self assertJsonData: jsonData hasExpectedKeys: #('errorDetails' 'errorReason' 'objectId' 'objectValue' 'playgroundPageReference').
 	self assert: (jsonData at: 'errorDetails') equals: Dictionary new.
 	self assert: (jsonData at: 'errorReason') isNil.
-	self assert: (jsonData at: #objectId) isNil.
-	self assert: (jsonData at: #objectValue) isNil.
-	self assert: (jsonData at: #playgroundPageReference) isNil.
+	self assert: (jsonData at: 'objectId') isNil.
+	self assert: (jsonData at: 'objectValue') isNil.
+	self assert: (jsonData at: 'playgroundPageReference') isNil.
 	
 	^ jsonData
 ]
@@ -168,9 +168,9 @@ GtLExceptionDomainObjectExamples >> messageNotUnderstoodDataViewSerialization [
 	jsonData := dataBlock compositeJsonData.
 	
 	errorDetails := jsonData at: 'errorDetails'.
-	self assert: (errorDetails at: #errorClass) equals: 'MessageNotUnderstood'.
-	self assert: ((errorDetails at: #errorMessage) includesSubstring: 'foo').
-	self assert: ((errorDetails at: #stackTrace) includesSubstring: 'Object').
+	self assert: (errorDetails at: 'errorClass') equals: 'MessageNotUnderstood'.
+	self assert: ((errorDetails at: 'errorMessage') includesSubstring: 'foo').
+	self assert: ((errorDetails at: 'stackTrace') includesSubstring: 'Object').
 	
 	^ jsonData
 ]
@@ -202,11 +202,11 @@ GtLExceptionDomainObjectExamples >> zeroDivideExceptionDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assertJsonData: jsonData hasExpectedKeys: #(#errorDetails #errorReason #objectId #objectValue #playgroundPageReference).
-	self assert: (jsonData at: #errorReason) isNil.
-	self assert: (jsonData at: #objectId) isNil.
-	self assert: (jsonData at: #objectValue) isDictionary.
-	self assert: (jsonData at: #playgroundPageReference) isNil.
+	self assertJsonData: jsonData hasExpectedKeys: #('errorDetails' 'errorReason' 'objectId' 'objectValue' 'playgroundPageReference').
+	self assert: (jsonData at: 'errorReason') isNil.
+	self assert: (jsonData at: 'objectId') isNil.
+	self assert: (jsonData at: 'objectValue') isDictionary.
+	self assert: (jsonData at: 'playgroundPageReference') isNil.
 	
 	errorDetails := jsonData at: 'errorDetails'.
 	self 

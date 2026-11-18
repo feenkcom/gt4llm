@@ -95,7 +95,7 @@ GtLPrimitiveStandaloneJsonBlock >> serializeForOllamaGenerate [
 	<return: #Array of: #NeoJSONObject>
 	
 	^ {NeoJSONObject new
-			at: #prompt put: self serializedJsonString;
+			at: 'prompt' put: self serializedJsonString;
 			yourself}
 ]
 
@@ -105,8 +105,8 @@ GtLPrimitiveStandaloneJsonBlock >> serializeForOllamaOpenAi [
 	<return: #Array of: #NeoJSONObject>
 	
 	^ {NeoJSONObject new
-			at: #text put: self serializedJsonString;
-			at: #type put: #text;
+			at: 'text' put: self serializedJsonString;
+			at: 'type' put: 'text';
 			yourself}
 ]
 
@@ -116,8 +116,8 @@ GtLPrimitiveStandaloneJsonBlock >> serializeForOpenAI [
 
 	<return: #Array of: #NeoJSONObject>
 	^ {NeoJSONObject new
-			at: #text put: self serializedJsonString;
-			at: #type put: #input_text;
+			at: 'text' put: self serializedJsonString;
+			at: 'type' put: 'input_text';
 			yourself}
 ]
 

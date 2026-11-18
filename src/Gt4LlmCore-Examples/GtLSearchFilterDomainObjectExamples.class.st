@@ -17,9 +17,9 @@ GtLSearchFilterDomainObjectExamples >> searchFilterDomainObjectDataViewSerializa
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #query) equals: 'GtLSearchFilterDomainObjectExamples gtMethodsInClass'.
-	self assert: (jsonData at: #mayHaveMore) equals: false.
-	self assert: (jsonData at: #itemsAsPrintStrings) asArray equals: #(
+	self assert: (jsonData at: 'query') equals: 'GtLSearchFilterDomainObjectExamples gtMethodsInClass'.
+	self assert: (jsonData at: 'mayHaveMore') equals: false.
+	self assert: (jsonData at: 'itemsAsPrintStrings') asArray equals: #(
 		'GtLSearchFilterDomainObjectExamples>>#searchFilterDomainObjectWithItems'
 		'GtLSearchFilterDomainObjectExamples>>#searchFilterDomainObjectDataViewSerialization'
 	).
@@ -81,9 +81,9 @@ GtLSearchFilterDomainObjectExamples >> searchFilterDomainObjectWithMayHaveMoreDa
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #query) equals: 'Object gtMethodsInClass'.
-	self assert: (jsonData at: #mayHaveMore) equals: true.
-	self assert: (jsonData at: #itemsAsPrintStrings) asArray equals: #(
+	self assert: (jsonData at: 'query') equals: 'Object gtMethodsInClass'.
+	self assert: (jsonData at: 'mayHaveMore') equals: true.
+	self assert: (jsonData at: 'itemsAsPrintStrings') asArray equals: #(
 		'GtLSearchFilterDomainObjectExamples>>#searchFilterDomainObjectWithMayHaveMore'
 	).
 	

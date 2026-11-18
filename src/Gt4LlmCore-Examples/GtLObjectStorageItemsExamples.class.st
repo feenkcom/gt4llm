@@ -50,9 +50,9 @@ GtLObjectStorageItemsExamples >> storageItemDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #objectId put: 'abc123def456';
-		at: #objectValueString put: '42';
-		at: #reasonString put: 'test reason';
+		at: 'objectId' put: 'abc123def456';
+		at: 'objectValueString' put: '42';
+		at: 'reasonString' put: 'test reason';
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
@@ -71,10 +71,10 @@ GtLObjectStorageItemsExamples >> storageItemsDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #items put: (NeoJSONArray with: (NeoJSONObject new
-			at: #objectId put: 'abc123def456';
-			at: #objectValueString put: '42';
-			at: #reasonString put: 'test reason';
+		at: 'items' put: (NeoJSONArray with: (NeoJSONObject new
+			at: 'objectId' put: 'abc123def456';
+			at: 'objectValueString' put: '42';
+			at: 'reasonString' put: 'test reason';
 			yourself));
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.

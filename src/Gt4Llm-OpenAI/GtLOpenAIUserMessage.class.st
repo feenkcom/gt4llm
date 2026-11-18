@@ -185,7 +185,7 @@ GtLOpenAIUserMessage >> role [
 GtLOpenAIUserMessage >> serializeForOpenAIResponsesAPI [
 
 	^ {
-			#content	-> (self contentDataBlock serializeForOpenAI).
-			#role -> self role
+			'content'	-> (self contentDataBlock serializeForOpenAI).
+			'role' -> self role
 		} asDictionary
 ]
