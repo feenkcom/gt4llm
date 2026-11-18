@@ -90,8 +90,7 @@ GtLOllamaMigrationExamples >> gemma4CompletionsChatHistory [
 
 { #category : #examples }
 GtLOllamaMigrationExamples >> gemma4Image [
-	"Answer the model and chat for a query and image with Gemma4:31b.
-	noTest as this assumes a local Ollama installation with gemma4:31b available."
+	"Answer the model and chat for a query and image with Gemma4:31b."
 	<gtExample>
 	| provider executor image chat msg jsonDictionary requestJson |
 
@@ -260,13 +259,14 @@ GtLOllamaMigrationExamples >> llama3ChatInstructions [
 
 { #category : #examples }
 GtLOllamaMigrationExamples >> llama3PageInstructions [
-	"Answer model and chat for a simple question for Llama 3.2."
+	"Answer model and chat for a simple question for Llama 3.2.
+	GT only: not exported to GemStone (see GtGemStoneGtCodeExporter>>#excludedMethodsList), as #gtPageExplanation: reads a GT Book page through Lepiter, which the stone doesn't have."
+
 	<gtExample>
 	| provider model chat message entity endpoint context |
-	
 	provider := GtLOllamaProvider new
-		generate;
-		modelName: 'llama3.2'.
+			generate;
+			modelName: 'llama3.2'.
 	model := provider model.
 	chat := GtLChat new provider: model provider.
 	chat gtPageExplanation: 'Examples by example'.
@@ -277,10 +277,12 @@ GtLOllamaMigrationExamples >> llama3PageInstructions [
 	endpoint := model userMessageEndpoint.
 	context := endpoint newContextForModel: model.
 	entity := endpoint entityFromContext: context.
-	self assert: (entity includesKey: 'system')
+	self
+		assert: (entity includesKey: 'system')
 		description: 'entity missing system (instructions) attribute'.
-	self assert: ((entity at: 'system') beginsWith: '# Explanations')
-		description: [ 'Unexpected instructions: ', (entity at: 'system') printString ].
+	self
+		assert: ((entity at: 'system') beginsWith: '# Explanations')
+		description: [ 'Unexpected instructions: ' , (entity at: 'system') printString ].
 	^ entity
 ]
 
@@ -605,10 +607,11 @@ GtLOllamaMigrationExamples >> qwen35CompletionsObjectInspectionHistory [
 
 { #category : #examples }
 GtLOllamaMigrationExamples >> qwen35Instructions [
-	"Answer the model and chat for a simple question put to Gemma4:31b."
+	"Answer the model and chat for a simple question put to Gemma4:31b.
+	GT only: not exported to GemStone (see GtGemStoneGtCodeExporter>>#excludedMethodsList), as #gtPageExplanation: reads a GT Book page through Lepiter, which the stone doesn't have."
+
 	<gtExample>
 	| chat executor provider instructions explanations |
-	
 	executor := GtLOllamaCompletionsExampleExecutor new.
 	provider := executor provider.
 	provider
@@ -617,7 +620,7 @@ GtLOllamaMigrationExamples >> qwen35Instructions [
 	executor loadExpectedHistoryFrom: self qwen35InstructionsHistory.
 	chat := executor chat.
 	chat gtPageExplanation: 'Examples by example'.
-	chat 
+	chat
 		reasoningEffort: #none;
 		sendString: 'What is an example method?'.
 	executor waitTimeoutSeconds: 60.
@@ -626,13 +629,15 @@ GtLOllamaMigrationExamples >> qwen35Instructions [
 	self assert: instructions size equals: 1.
 	explanations := instructions sectionNamed: 'Explanations' ifAbsent: [ nil ].
 	self assert: explanations isNotNil.
-	
-	executor assertResponseCompletionsStringContent: chat messages last finalMessage.
-	self compareIfKnownShapes: chat messages
+
+	executor
+		assertResponseCompletionsStringContent: chat messages last finalMessage.
+	self
+		compareIfKnownShapes: chat messages
 		with: executor expectedHistory
 		in: chat
 		selector: #qwen35InstructionsHistory.
-	
+
 	^ chat
 ]
 
