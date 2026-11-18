@@ -18,10 +18,14 @@ GtLOpenAiResponsesEndpoint >> addInstructionsTo: entity from: command [
 
 { #category : #'as yet unclassified' }
 GtLOpenAiResponsesEndpoint >> assistantContentTextFrom: aGtLModelAssistantMessage [
-	| rawData |
+	"The content of the message of the first choice, or nil when one of them is missing"
 
+	| rawData choices aMessage |
 	rawData := aGtLModelAssistantMessage rawData.
-	^ rawData atPath: { 'choices'. 1. 'message'. 'content' }.
+	choices := rawData at: 'choices' ifAbsent: [ ^ nil ].
+	choices isEmptyOrNil ifTrue: [ ^ nil ].
+	aMessage := choices first at: 'message' ifAbsent: [ ^ nil ].
+	^ aMessage at: 'content' ifAbsent: [ nil ]
 ]
 
 { #category : #'as yet unclassified' }
