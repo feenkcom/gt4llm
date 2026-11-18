@@ -22,7 +22,8 @@ Class {
 		'interSessionMessages',
 		'conversationTitle',
 		'availableCommands',
-		'chatViewModel'
+		'chatViewModel',
+		'systemPrompt'
 	],
 	#classVars : [
 		'McpServer'
@@ -319,9 +320,16 @@ GtLACPSession >> create [
 	^ self state create
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtLACPSession >> creationParameters [
- ^ { 'cwd' -> directory fullName. 'mcpServers' -> client configuration mcpServers } asDictionary
+	| parameters prompt |
+	parameters := {'cwd' -> directory fullName.
+			'mcpServers' -> client configuration mcpServers} asDictionary.
+	prompt := systemPrompt.
+	prompt ifNil: [ ^ parameters ].
+	prompt validateCapabilities: connection capabilities.
+	parameters at: 'systemPrompt' put: prompt asDictionary.
+	^ parameters
 ]
 
 { #category : #accessing }
@@ -337,6 +345,18 @@ GtLACPSession >> directory [
 { #category : #accessing }
 GtLACPSession >> directory: anObject [
  directory := anObject
+]
+
+{ #category : #accessing }
+GtLACPSession >> draftText [
+	"The unsent user message in the chat composer."
+
+	^ promptText
+]
+
+{ #category : #accessing }
+GtLACPSession >> draftText: aString [
+	promptText := aString
 ]
 
 { #category : #updating }
@@ -861,18 +881,18 @@ GtLACPSession >> performCreate [
 			ex pass ] ] ensure: [ self announceChanged ]
 ]
 
-{ #category : #'private - lifecycle' }
+{ #category : #private }
 GtLACPSession >> performLoad: anId [
 	| params result |
 	[ connection capabilities supportsLoad
 		ifFalse: [ self error: 'Agent does not support loading sessions' ].
+	params := self creationParameters
+			at: 'sessionId' put: anId;
+			yourself.
 	self state: GtLACPSessionLoadingState new.
 	self childSessions do: #invalidateSubagentLiveState.
 	remoteSessionId := anId.
 	connection registerSession: self.
-	params := self creationParameters
-			at: 'sessionId' put: anId;
-			yourself.
 	[ result := connection request: 'session/load' parameters: params.
 	self updateSettingsFrom: result.
 	self state operationSucceeded ]
@@ -912,11 +932,11 @@ GtLACPSession >> performPromptContent: blocks [
 			self announceConversationTreeChanged ]
 ]
 
-{ #category : #sessions }
+{ #category : #private }
 GtLACPSession >> performReopen [
 	"Reconnect the same conversation without replaying or replacing its history."
 
-	| result |
+	| parameters result |
 	(client isNil or: [ connection isNil or: [ remoteSessionId isEmptyOrNil ] ])
 		ifTrue: [ self error: 'Reopening requires an existing client, connection and session ID' ].
 	directory isDirectory ifFalse: [ self error: 'Session directory must exist' ].
@@ -927,12 +947,11 @@ GtLACPSession >> performReopen [
 		ifTrue: [ client restartConnection: connection in: directory ].
 	connection capabilities supportsResume
 		ifFalse: [ self error: 'Agent does not support resuming sessions without replay' ].
+	parameters := self creationParameters
+			at: 'sessionId' put: remoteSessionId;
+			yourself.
 	self registerSessionTreeForResume.
-	result := connection
-			request: 'session/resume'
-			parameters: (self creationParameters
-					at: 'sessionId' put: remoteSessionId;
-					yourself).
+	result := connection request: 'session/resume' parameters: parameters.
 	self updateSettingsFrom: result.
 	self state operationSucceeded ]
 		on: Error
@@ -995,16 +1014,6 @@ GtLACPSession >> promptSucceeded: result turn: aTurn [
 	self updateToolSummarizers.
 	self announceMessageChanged: aTurn assistantMessage.
 	self announceConversationTreeChanged
-]
-
-{ #category : #accessing }
-GtLACPSession >> promptText [
- ^ promptText
-]
-
-{ #category : #accessing }
-GtLACPSession >> promptText: anObject [
- promptText := anObject
 ]
 
 { #category : #private }
@@ -1323,6 +1332,16 @@ GtLACPSession >> summarizersRegistry [
 { #category : #summaries }
 GtLACPSession >> summarizersRegistry: aRegistry [
  summarizersRegistry := aRegistry
+]
+
+{ #category : #accessing }
+GtLACPSession >> systemPrompt [
+	^ systemPrompt
+]
+
+{ #category : #accessing }
+GtLACPSession >> systemPrompt: aSystemPrompt [
+	systemPrompt := aSystemPrompt
 ]
 
 { #category : #accessing }

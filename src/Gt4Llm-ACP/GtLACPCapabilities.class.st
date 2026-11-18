@@ -56,3 +56,26 @@ GtLACPCapabilities >> supportsResume [
 	^ sessionCapabilities isDictionary
 		and: [ (sessionCapabilities at: 'resume' ifAbsent: [ nil ]) isDictionary ]
 ]
+
+{ #category : #testing }
+GtLACPCapabilities >> supportsSystemPrompt [
+	^ self systemPromptCapabilities isDictionary
+]
+
+{ #category : #testing }
+GtLACPCapabilities >> supportsSystemPromptOverride [
+	| promptCapabilities modes |
+	promptCapabilities := self systemPromptCapabilities.
+	promptCapabilities isDictionary ifFalse: [ ^ false ].
+	modes := promptCapabilities at: 'mode' ifAbsent: [ nil ].
+	^ modes isDictionary
+		and: [ (modes at: 'override' ifAbsent: [ nil ]) isDictionary ]
+]
+
+{ #category : #private }
+GtLACPCapabilities >> systemPromptCapabilities [
+	| sessionCapabilities |
+	sessionCapabilities := data at: 'sessionCapabilities' ifAbsent: [ nil ].
+	sessionCapabilities isDictionary ifFalse: [ ^ nil ].
+	^ sessionCapabilities at: 'systemPrompt' ifAbsent: [ nil ]
+]
