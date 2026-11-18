@@ -296,7 +296,9 @@ GtLACPClaudeCodeStoredSession >> sources [
 GtLACPClaudeCodeStoredSession >> title [
 	file ifNil: [ ^ super title ].
 	^ title
-		ifNil: [ title := self selectedTitleRecord ifNil: [ '' ] ifNotNil: #title ]
+		ifNil: [ title := self selectedTitleRecord
+					ifNil: [ '' ]
+					ifNotNil: [ :record | record title ] ]
 ]
 
 { #category : #accessing }

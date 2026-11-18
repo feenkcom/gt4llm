@@ -9,6 +9,50 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Domain Objects'
 }
 
+{ #category : #examples }
+GtLSmalltalkCodeEvaluationResultExamples >> codeViewWithBindings [
+	<gtExample>
+	<return: #GtLSmalltalkCodeEvaluationResult>
+	| input storage inputId call result element coderViewModel evaluation prefix completions |
+	self gtDo: [  ] gemstoneDo: [ self skip: 'Requires the Pharo snippet coder' ].
+	input := OrderedCollection with: 42.
+	storage := GtLObjectStorage new.
+	inputId := storage addNewObject: input.
+	call := GtLFunctionToolCall new
+			rawArguments: {'code' -> 'bindingInput size'.
+					'bindings'
+						-> {{'name' -> 'bindingInput'.
+									'objectId' -> inputId} asDictionary}} asDictionary;
+			yourself.
+	result := (GtLMagritteToolForSmalltalkCodeEvaluation new
+			performToolCall: call
+			inContext: (GtLToolExecutionContext new objectStorage: storage)) targetObject.
+	element := (result gtCodeFor: GtPhlowView empty) asElement.
+	coderViewModel := element children first coderViewModel.
+	self
+		assert: (coderViewModel sharedBindings bindingValueOf: #bindingInput) == input.
+
+	evaluation := coderViewModel coderModel
+			evaluate: result code
+			inContext: coderViewModel evaluationContext
+			thenDo: [  ].
+	self assert: evaluation isSuccess.
+	self assert: evaluation value equals: result object.
+
+	prefix := 'bindingInp' asRopedText.
+	completions := coderViewModel completionStrategy
+			completionActionStreamFor: prefix
+			at: prefix size
+			requested: true.
+	self
+		assert: ((completions take: 30) toArray wait
+				anySatisfy: [ :each | each label = 'bindingInput' ]).
+
+	(coderViewModel sharedBindings bindingOf: #bindingInput) value: nil.
+	self assert: (result bindings at: #bindingInput) == input.
+	^ result
+]
+
 { #category : #private }
 GtLSmalltalkCodeEvaluationResultExamples >> expectedSimpleObjectValueJson [
 	| expectedPhlowViews |

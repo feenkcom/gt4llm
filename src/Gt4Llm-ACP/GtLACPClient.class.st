@@ -114,12 +114,17 @@ GtLACPClient >> gtStopFor: anAction [
 
 { #category : #accessing }
 GtLACPClient >> initialize [
- super initialize.
- configuration := self defaultConfiguration.
- sessions := OrderedCollection new.
- connections := OrderedCollection new.
- transportFactory := [ :aConfiguration :aDirectory |
-  GtLACPStdioTransport new agentProcess: (GtLACPProcess new configuration: aConfiguration; directory: aDirectory; yourself); yourself ]
+	super initialize.
+	configuration := self defaultConfiguration.
+	sessions := OrderedCollection new.
+	connections := OrderedCollection new.
+	transportFactory := [ :aConfiguration :aDirectory | 
+		GtLACPStdioTransport new
+			agentProcess: (GtLACPProcess new
+					configuration: aConfiguration;
+					directory: aDirectory;
+					yourself);
+			yourself ]
 ]
 
 { #category : #sessions }
@@ -166,6 +171,7 @@ GtLACPClient >> newSessionIn: aDirectory connection: aConnection [
 			client: self;
 			directory: aDirectory asFileReference asAbsolute;
 			connection: aConnection;
+			systemPrompt: configuration systemPrompt;
 			yourself.
 	sessions add: aSession.
 	^ aSession

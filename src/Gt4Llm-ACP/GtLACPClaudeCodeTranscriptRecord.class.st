@@ -127,7 +127,8 @@ GtLACPClaudeCodeTranscriptRecord >> printOn: aStream [
 	aStream
 		nextPutAll: self kind asString;
 		nextPutAll: ' at ';
-		nextPutAll: (lineNumber ifNil: [ 'sidecar' ] ifNotNil: #asString)
+		nextPutAll: (lineNumber ifNil: [ 'sidecar' ] ifNotNil:
+			[ :v | v asString ])
 ]
 
 { #category : #accessing }

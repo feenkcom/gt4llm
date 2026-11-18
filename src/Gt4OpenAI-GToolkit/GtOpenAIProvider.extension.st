@@ -1,6 +1,6 @@
 Extension { #name : #GtOpenAIProvider }
 
 { #category : #'*Gt4OpenAI-GToolkit' }
-GtOpenAIProvider class >> withApiKeyFromClipboard [
+GtOpenAIProvider classSide >> withApiKeyFromClipboard [
 	^ self new apiKey: Clipboard clipboardText
 ]

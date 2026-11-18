@@ -3,7 +3,7 @@ I hold Codex-specific launch settings and initial session preferences. My Launch
 "
 Class {
 	#name : #GtLACPCodexClientConfiguration,
-	#superclass : #GtLACPObject,
+	#superclass : #GtLACPClientConfiguration,
 	#instVars : [
 		'executable',
 		'arguments',
@@ -13,7 +13,8 @@ Class {
 		'model',
 		'mode',
 		'authenticationMethod',
-		'adapter'
+		'adapter',
+		'systemPrompt'
 	],
 	#category : #'Gt4Llm-ACP-Core'
 }
@@ -76,16 +77,6 @@ GtLACPCodexClientConfiguration >> executable: anObject [
 ]
 
 { #category : #views }
-GtLACPCodexClientConfiguration >> gtAdapterFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Adapter';
-		priority: 1;
-		object: [ self adapter ];
-		view: #gtLaunchFor:
-]
-
-{ #category : #views }
 GtLACPCodexClientConfiguration >> gtEnvironmentFor: aView [
  <gtView>
  ^ aView list title: 'Environment overrides'; priority: 10;
@@ -115,14 +106,25 @@ GtLACPCodexClientConfiguration >> gtMcpServersFor: aView [
   itemText: [ :server | server at: 'name' ifAbsent: [ server printString ] ]
 ]
 
-{ #category : #views }
+{ #category : #'gt-extensions' }
 GtLACPCodexClientConfiguration >> gtPreferencesFor: aView [
- <gtView>
- ^ aView columnedList title: 'Session preferences'; priority: 5;
-  items: [ { 'Model' -> model. 'Mode' -> mode. 'Authentication method' -> authenticationMethod } ];
-  column: 'Preference' text: #key;
-  column: 'Requested value' text: [ :entry | entry value printString ];
-  send: #value
+	"What preferences will the client apply when starting a session?"
+
+	<gtView>
+	^ aView columnedList
+		title: 'Session preferences';
+		priority: 5;
+		items: [ | aPrompt |
+			aPrompt := self systemPrompt.
+			{'Model' -> model.
+				'Mode' -> mode.
+				'Authentication method' -> authenticationMethod.
+				'System prompt mode' -> (aPrompt isEmpty ifFalse: [ aPrompt mode ]).
+				'System prompt instructions'
+					-> (aPrompt isEmpty ifFalse: [ aPrompt instructions instructionString ])} ];
+		column: 'Preference' text: #key;
+		column: 'Requested value' text: [ :entry | entry value printString ];
+		send: #value
 ]
 
 { #category : #initialization }

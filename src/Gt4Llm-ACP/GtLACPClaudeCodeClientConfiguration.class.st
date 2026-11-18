@@ -3,7 +3,7 @@ I hold Claude Code-specific launch settings and initial session preferences. My 
 "
 Class {
 	#name : #GtLACPClaudeCodeClientConfiguration,
-	#superclass : #GtLACPObject,
+	#superclass : #GtLACPClientConfiguration,
 	#instVars : [
 		'executable',
 		'arguments',
@@ -13,7 +13,8 @@ Class {
 		'model',
 		'mode',
 		'authenticationMethod',
-		'adapter'
+		'adapter',
+		'systemPrompt'
 	],
 	#classVars : [
 		'DefaultEnvironment'
@@ -128,19 +129,33 @@ GtLACPClaudeCodeClientConfiguration >> gtLaunchFor: aView [
 
 { #category : #views }
 GtLACPClaudeCodeClientConfiguration >> gtMcpServersFor: aView [
- <gtView>
- ^ aView list title: 'MCP servers'; priority: 15; items: [ mcpServers ];
-  itemText: [ :server | server at: 'name' ifAbsent: [ server printString ] ]
+	<gtView>
+	^ aView list
+		title: 'MCP servers';
+		priority: 15;
+		items: [ mcpServers ];
+		itemText: [ :server | server at: 'name' ifAbsent: [ server printString ] ]
 ]
 
-{ #category : #views }
+{ #category : #'gt-extensions' }
 GtLACPClaudeCodeClientConfiguration >> gtPreferencesFor: aView [
- <gtView>
- ^ aView columnedList title: 'Session preferences'; priority: 5;
-  items: [ { 'Model' -> model. 'Mode' -> mode. 'Authentication method' -> authenticationMethod } ];
-  column: 'Preference' text: #key;
-  column: 'Requested value' text: [ :entry | entry value printString ];
-  send: #value
+	"What preferences will the client apply when starting a session?"
+
+	<gtView>
+	^ aView columnedList
+		title: 'Session preferences';
+		priority: 5;
+		items: [ | aPrompt |
+			aPrompt := self systemPrompt.
+			{'Model' -> model.
+				'Mode' -> mode.
+				'Authentication method' -> authenticationMethod.
+				'System prompt mode' -> (aPrompt isEmpty ifFalse: [ aPrompt mode ]).
+				'System prompt instructions'
+					-> (aPrompt isEmpty ifFalse: [ aPrompt instructions instructionString ])} ];
+		column: 'Preference' text: #key;
+		column: 'Requested value' text: [ :entry | entry value printString ];
+		send: #value
 ]
 
 { #category : #initialization }

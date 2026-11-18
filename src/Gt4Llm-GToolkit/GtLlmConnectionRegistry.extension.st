@@ -1,7 +1,7 @@
 Extension { #name : #GtLlmConnectionRegistry }
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmConnectionRegistry class >> gtConnectionsFor: aView [
+GtLlmConnectionRegistry classSide >> gtConnectionsFor: aView [
 	<gtClassView>
 	^ aView forward
 		title: 'Connections';
@@ -39,7 +39,7 @@ GtLlmConnectionRegistry >> gtConnectionsFor: aView [
 ]
 
 { #category : #'*Gt4Llm-GToolkit' }
-GtLlmConnectionRegistry class >> gtInstanceButtonFor: anAction [
+GtLlmConnectionRegistry classSide >> gtInstanceButtonFor: anAction [
 	<gtClassAction>
 	^ anAction button
 		tooltip: 'Inspect unique instance';

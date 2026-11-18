@@ -22,7 +22,8 @@ Class {
 		'interSessionMessages',
 		'conversationTitle',
 		'availableCommands',
-		'chatViewModel'
+		'chatViewModel',
+		'systemPrompt'
 	],
 	#classVars : [
 		'McpServer'
@@ -44,8 +45,8 @@ GtLACPSession class >> mcpServer: aServer [
 
 { #category : #accessing }
 GtLACPSession >> allToolCalls [
- ^ (turns copy flatCollect: [ :turn | turn toolCalls copy ]),
-  (self childSessions flatCollect: #allToolCalls)
+	^ (turns copy flatCollect: [ :turn | turn toolCalls copy ])
+		, (self childSessions flatCollect: [ :each | each allToolCalls ])
 ]
 
 { #category : #announcing }
@@ -319,9 +320,16 @@ GtLACPSession >> create [
 	^ self state create
 ]
 
-{ #category : #accessing }
+{ #category : #private }
 GtLACPSession >> creationParameters [
- ^ { 'cwd' -> directory fullName. 'mcpServers' -> client configuration mcpServers } asDictionary
+	| parameters prompt |
+	parameters := {'cwd' -> directory fullName.
+			'mcpServers' -> client configuration mcpServers} asDictionary.
+	prompt := self systemPrompt.
+	prompt isEmpty ifTrue: [ ^ parameters ].
+	prompt validateCapabilities: connection capabilities.
+	parameters at: 'systemPrompt' put: prompt asDictionary.
+	^ parameters
 ]
 
 { #category : #accessing }
@@ -337,6 +345,18 @@ GtLACPSession >> directory [
 { #category : #accessing }
 GtLACPSession >> directory: anObject [
  directory := anObject
+]
+
+{ #category : #accessing }
+GtLACPSession >> draftText [
+	"The unsent user message in the chat composer."
+
+	^ promptText
+]
+
+{ #category : #accessing }
+GtLACPSession >> draftText: aString [
+	promptText := aString
 ]
 
 { #category : #updating }
@@ -395,34 +415,6 @@ GtLACPSession >> gtConfigurationOptionsFor: aView [
   column: 'Option' text: [ :each | each at: 'name' ifAbsent: [ each at: 'id' ] ];
   column: 'Current value' text: [ :each | (each at: 'currentValue' ifAbsent: [ nil ]) printString ];
   column: 'Choices' text: [ :each | (each at: 'options' ifAbsent: [ #() ]) printString ]
-]
-
-{ #category : #'gt - views' }
-GtLACPSession >> gtContextHistoryFor: aView [
-	"How did the latest known context change across received logical messages?"
-
-	<gtView>
-	^ aView columnedList
-		title: 'Context history';
-		priority: 25;
-		items: [ turns flatCollect: [ :turn | turn messages copy ] ];
-		column: 'Role' text: #role;
-		column: 'Message' text: #text;
-		column: 'Context at reception'
-			text: [ :message | message contextWindow printString ];
-		updateWhen: GtLACPSessionChanged in: [ self announcer ];
-		actionUpdateButtonTooltip: 'Refresh context history'
-]
-
-{ #category : #views }
-GtLACPSession >> gtConversationFor: aView [
-	<gtView>
-	^ aView list
-		title: 'Conversation';
-		priority: 5;
-		items: [ turns flatCollect: [ :each | each messages copy ] ];
-		itemText: #printString;
-		actionUpdateButtonTooltip: 'Refresh conversation'
 ]
 
 { #category : #views }
@@ -598,21 +590,25 @@ GtLACPSession >> gtSummarizersRegistryFor: aView [
 ]
 
 { #category : #views }
-GtLACPSession >> gtTurnsFor: aView [
+GtLACPSession >> gtSystemPromptFor: aView [
 	<gtView>
-	^ aView list
-		title: 'Turns';
+	^ aView forward
+		title: 'System prompt';
 		priority: 20;
-		items: [ turns copy ];
-		itemText: #yourself;
-		actionUpdateButtonTooltip: 'Refresh turns'
+		object: [ systemPrompt ];
+		view: #gtInstructionsFor:
 ]
 
 { #category : #views }
 GtLACPSession >> gtUpdatesFor: aView [
- <gtView>
- <gtLlmView>
- ^ aView list title: 'Updates'; priority: 20; items: [ updates copy ]; itemText: #kind; actionUpdateButtonTooltip: 'Refresh updates'
+	<gtView>
+	<gtLlmView>
+	^ aView list
+		title: 'Updates';
+		priority: 50;
+		items: [ updates copy ];
+		itemText: #kind;
+		actionUpdateButtonTooltip: 'Refresh updates'
 ]
 
 { #category : #views }
@@ -861,18 +857,18 @@ GtLACPSession >> performCreate [
 			ex pass ] ] ensure: [ self announceChanged ]
 ]
 
-{ #category : #'private - lifecycle' }
+{ #category : #private }
 GtLACPSession >> performLoad: anId [
 	| params result |
 	[ connection capabilities supportsLoad
 		ifFalse: [ self error: 'Agent does not support loading sessions' ].
+	params := self creationParameters
+			at: 'sessionId' put: anId;
+			yourself.
 	self state: GtLACPSessionLoadingState new.
 	self childSessions do: #invalidateSubagentLiveState.
 	remoteSessionId := anId.
 	connection registerSession: self.
-	params := self creationParameters
-			at: 'sessionId' put: anId;
-			yourself.
 	[ result := connection request: 'session/load' parameters: params.
 	self updateSettingsFrom: result.
 	self state operationSucceeded ]
@@ -912,11 +908,11 @@ GtLACPSession >> performPromptContent: blocks [
 			self announceConversationTreeChanged ]
 ]
 
-{ #category : #sessions }
+{ #category : #private }
 GtLACPSession >> performReopen [
 	"Reconnect the same conversation without replaying or replacing its history."
 
-	| result |
+	| parameters result |
 	(client isNil or: [ connection isNil or: [ remoteSessionId isEmptyOrNil ] ])
 		ifTrue: [ self error: 'Reopening requires an existing client, connection and session ID' ].
 	directory isDirectory ifFalse: [ self error: 'Session directory must exist' ].
@@ -927,12 +923,11 @@ GtLACPSession >> performReopen [
 		ifTrue: [ client restartConnection: connection in: directory ].
 	connection capabilities supportsResume
 		ifFalse: [ self error: 'Agent does not support resuming sessions without replay' ].
+	parameters := self creationParameters
+			at: 'sessionId' put: remoteSessionId;
+			yourself.
 	self registerSessionTreeForResume.
-	result := connection
-			request: 'session/resume'
-			parameters: (self creationParameters
-					at: 'sessionId' put: remoteSessionId;
-					yourself).
+	result := connection request: 'session/resume' parameters: parameters.
 	self updateSettingsFrom: result.
 	self state operationSucceeded ]
 		on: Error
@@ -995,16 +990,6 @@ GtLACPSession >> promptSucceeded: result turn: aTurn [
 	self updateToolSummarizers.
 	self announceMessageChanged: aTurn assistantMessage.
 	self announceConversationTreeChanged
-]
-
-{ #category : #accessing }
-GtLACPSession >> promptText [
- ^ promptText
-]
-
-{ #category : #accessing }
-GtLACPSession >> promptText: anObject [
- promptText := anObject
 ]
 
 { #category : #private }
@@ -1323,6 +1308,18 @@ GtLACPSession >> summarizersRegistry [
 { #category : #summaries }
 GtLACPSession >> summarizersRegistry: aRegistry [
  summarizersRegistry := aRegistry
+]
+
+{ #category : #accessing }
+GtLACPSession >> systemPrompt [
+	^ systemPrompt ifNil: [ systemPrompt := GtLACPSystemPrompt new ]
+]
+
+{ #category : #accessing }
+GtLACPSession >> systemPrompt: aSystemPrompt [
+	systemPrompt := aSystemPrompt
+			ifNil: [ GtLACPSystemPrompt new ]
+			ifNotNil: [ aSystemPrompt copy ]
 ]
 
 { #category : #accessing }

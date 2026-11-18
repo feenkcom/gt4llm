@@ -85,21 +85,27 @@ GtLOllamaCompletionsMessageVisitor >> visitGtLPrimitiveJsonDataBlock: aDataBlock
 
 { #category : #visiting }
 GtLOllamaCompletionsMessageVisitor >> visitGtLPrimitiveMessageDataBlock: aDataBlock [
-	| content text |
+	"Non-string parts (for example a stored object's serialised views) are printed with #printOn: before joining. #join: relies on #asString, which answers the printString in Pharo but only a class description (such as 'aDictionary') in GemStone, and GemStone's Collection>>#printString is capped at 700 characters."
 
+	| content text |
 	content := OrderedCollection new.
-	text := String crlf join: 
-(aDataBlock compositeJsonDataBlock acceptVisitor: self).
-	content add: {
-		'type' -> 'text'.
-		'text' -> (NeoJSONWriter toStringPretty: text)
-		} asDictionary.
-	aDataBlock imageDataBlocks do: [ :dataBlock |
-		content add: {
-			'type' -> 'image_url'.
-			'image_url' -> ('data:image/', dataBlock imageType, ';base64,', dataBlock encodedBytes).
-			} asDictionary. ].
-	^ content asArray.
+	text := String crlf
+			join: ((aDataBlock compositeJsonDataBlock acceptVisitor: self)
+					collect: [ :each | 
+						each isString
+							ifTrue: [ each ]
+							ifFalse: [ String streamContents: [ :aStream | each printOn: aStream ] ] ]).
+	content
+		add: {'type' -> 'text'.
+				'text' -> (NeoJSONWriter toStringPretty: text)} asDictionary.
+	aDataBlock imageDataBlocks
+		do: [ :dataBlock | 
+			content
+				add: {'type' -> 'image_url'.
+						'image_url'
+							-> ('data:image/' , dataBlock imageType , ';base64,' , dataBlock encodedBytes)}
+						asDictionary ].
+	^ content asArray
 ]
 
 { #category : #visiting }

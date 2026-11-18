@@ -203,16 +203,13 @@ GtLChatLiveExamples >> exploringChatObject_stub_responses [
 { #category : #'examples - calls' }
 GtLChatLiveExamples >> howAreYouCallExample [
 	"Ready for stub execution"
+
 	<gtExample>
-	| responseMessage  |
-	responseMessage := self currentChat sendMarkdown: 'How are you?'.
-	
+	| responseMessage |
 	self stubResponses: [ self howAreYouCallExample_stub_responses ].
-	
+	responseMessage := self currentChat sendMarkdown: 'How are you?'.
 	self
-		waitForChatRunIsDoneThen: [ 
-			self assert: self currentChat messages size equals: 2 ].
-	
+		waitForChatRunIsDoneThen: [ self assert: self currentChat messages size equals: 2 ].
 	^ self currentChat
 ]
 
