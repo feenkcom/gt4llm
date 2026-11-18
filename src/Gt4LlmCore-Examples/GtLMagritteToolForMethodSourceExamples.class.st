@@ -172,7 +172,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownClassSideMethod 
 				'classSide' -> true
 			} asDictionary
 		} asDictionary.
-	expectedSignature := GtLMagritteToolForMethodImplementors name, ' class>>#unknownSelector42'.
+	expectedSignature := GtLMagritteToolForMethodImplementors name asString, ' class>>#unknownSelector42'.
 	self 
 		assertMissingObject: call result targetObject 
 		withObjectName: expectedSignature 
@@ -193,7 +193,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForUnknownInstanceSideMeth
 				'classSide' -> false
 			} asDictionary
 		} asDictionary.
-	expectedSignature := GtLMagritteToolForMethodImplementors name, '>>#unknownSelector42'.
+	expectedSignature := GtLMagritteToolForMethodImplementors name asString, '>>#unknownSelector42'.
 	self 
 		assertMissingObject: call result targetObject 
 		withObjectName: expectedSignature 

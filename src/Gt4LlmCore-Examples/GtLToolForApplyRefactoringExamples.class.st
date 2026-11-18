@@ -61,7 +61,7 @@ GtLToolForApplyRefactoringExamples >> applyAddClass [
 	self assert: newClass notNil.
 	self assert: newClass superclass equals: Object.
 	self assert: newClass instVarNames asArray equals: #(#first #second).
-	self assert: newClass package name equals: 'Gt4LlmCore-Examples'.
+	self assert: newClass package name equals: #'Gt4LlmCore-Examples'.
 	^call]
 			ensure: [self removeAppliedClass]
 ]

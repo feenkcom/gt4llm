@@ -23,7 +23,7 @@ GtLMethodCompilationExceptionDomainObjectExamples >> basicMethodCompilationExcep
 				description: 'Syntax error while compiling';
 				yourself ].
 	
-	self assert: domainObject targetClassName equals: 'Object'.
+	self assert: domainObject targetClassName equals: #Object.
 	self assert: domainObject protocolName equals: 'testing'.
 	self assert: domainObject sourceCode equals: 'badMethod ^'.
 	self assert: domainObject description equals: 'Syntax error while compiling'.

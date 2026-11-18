@@ -98,7 +98,7 @@ GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 			self assert: anAddition isMethodAdditionResult.
 			self
 				assert: anAddition targetMethodReference methodSignature
-				equals: aLeafClass name , '>>#appliedBeforeError'.
+				equals: aLeafClass name asString , '>>#appliedBeforeError'.
 			anAppliedRefactoring ]
 ]
 
@@ -273,7 +273,7 @@ GtLRefactoringCodeChangesExamples >> removeClass [
 					resultsOf: anAppliedRefactoring
 					ofKind: 'removed class'.
 			self assert: aClassRemovals size equals: 1.
-			self assert: aClassRemovals first removedClassName equals: aLeafName.
+			self assert: aClassRemovals first removedClassName equals: aLeafName asSymbol.
 			self
 				assert: anAppliedRefactoring codeChangeResults last == aClassRemovals first
 				description: 'Class removals come after the method removals'.

@@ -50,10 +50,10 @@ GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodClassSide [
 
 	self
 		assert: methodReferenceObject methodName
-		equals: #fromCompiledMethod:.
+		equals: 'fromCompiledMethod:'.
 	self
 		assert: methodReferenceObject methodClassName
-		equals: #GtLMethodReference.
+		equals: 'GtLMethodReference'.
 	self
 		assert: methodReferenceObject classSide
 		equals: true.
@@ -103,10 +103,10 @@ GtLMethodReferenceExamples >> methodReferenceObjectFromCompiledMethodInstanceSid
 
 	self
 		assert: methodReferenceObject methodName
-		equals: #methodReferenceObjectFromCompiledMethodInstanceSide.
+		equals: 'methodReferenceObjectFromCompiledMethodInstanceSide'.
 	self
 		assert: methodReferenceObject methodClassName
-		equals: #GtLMethodReferenceExamples.
+		equals: 'GtLMethodReferenceExamples'.
 	self
 		assert: methodReferenceObject classSide
 		equals: false.

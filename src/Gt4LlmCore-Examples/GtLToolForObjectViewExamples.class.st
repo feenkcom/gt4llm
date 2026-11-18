@@ -160,7 +160,7 @@ GtLToolForObjectViewExamples >> viewContentForNonExistentViewSelector [
 		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	self
 		assertMissingObject: call result targetObject
-		withObjectName: viewSelector
+		withObjectName: viewSelector asSymbol
 		errorMessage: viewSelector, ' is not found'.
 	^ call
 ]
