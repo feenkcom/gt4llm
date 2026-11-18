@@ -417,34 +417,6 @@ GtLACPSession >> gtConfigurationOptionsFor: aView [
   column: 'Choices' text: [ :each | (each at: 'options' ifAbsent: [ #() ]) printString ]
 ]
 
-{ #category : #'gt - views' }
-GtLACPSession >> gtContextHistoryFor: aView [
-	"How did the latest known context change across received logical messages?"
-
-	<gtView>
-	^ aView columnedList
-		title: 'Context history';
-		priority: 25;
-		items: [ turns flatCollect: [ :turn | turn messages copy ] ];
-		column: 'Role' text: #role;
-		column: 'Message' text: #text;
-		column: 'Context at reception'
-			text: [ :message | message contextWindow printString ];
-		updateWhen: GtLACPSessionChanged in: [ self announcer ];
-		actionUpdateButtonTooltip: 'Refresh context history'
-]
-
-{ #category : #views }
-GtLACPSession >> gtConversationFor: aView [
-	<gtView>
-	^ aView list
-		title: 'Conversation';
-		priority: 5;
-		items: [ turns flatCollect: [ :each | each messages copy ] ];
-		itemText: #printString;
-		actionUpdateButtonTooltip: 'Refresh conversation'
-]
-
 { #category : #views }
 GtLACPSession >> gtConversationTreeFor: aView [
 	<gtView>
@@ -618,21 +590,25 @@ GtLACPSession >> gtSummarizersRegistryFor: aView [
 ]
 
 { #category : #views }
-GtLACPSession >> gtTurnsFor: aView [
+GtLACPSession >> gtSystemPromptFor: aView [
 	<gtView>
-	^ aView list
-		title: 'Turns';
+	^ aView forward
+		title: 'System prompt';
 		priority: 20;
-		items: [ turns copy ];
-		itemText: #yourself;
-		actionUpdateButtonTooltip: 'Refresh turns'
+		object: [ systemPrompt ];
+		view: #gtInstructionsFor:
 ]
 
 { #category : #views }
 GtLACPSession >> gtUpdatesFor: aView [
- <gtView>
- <gtLlmView>
- ^ aView list title: 'Updates'; priority: 20; items: [ updates copy ]; itemText: #kind; actionUpdateButtonTooltip: 'Refresh updates'
+	<gtView>
+	<gtLlmView>
+	^ aView list
+		title: 'Updates';
+		priority: 50;
+		items: [ updates copy ];
+		itemText: #kind;
+		actionUpdateButtonTooltip: 'Refresh updates'
 ]
 
 { #category : #views }

@@ -77,16 +77,6 @@ GtLACPCodexClientConfiguration >> executable: anObject [
 ]
 
 { #category : #views }
-GtLACPCodexClientConfiguration >> gtAdapterFor: aView [
-	<gtView>
-	^ aView forward
-		title: 'Adapter';
-		priority: 1;
-		object: [ self adapter ];
-		view: #gtLaunchFor:
-]
-
-{ #category : #views }
 GtLACPCodexClientConfiguration >> gtEnvironmentFor: aView [
  <gtView>
  ^ aView list title: 'Environment overrides'; priority: 10;

@@ -61,6 +61,15 @@ GtLACPSystemPrompt >> beOverride [
 	self mode: GtLACPSystemPromptOverrideMode new
 ]
 
+{ #category : #views }
+GtLACPSystemPrompt >> gtInstructionsFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'Instructions';
+		object: [ instructions ];
+		view: #gtInstructionFor:
+]
+
 { #category : #initialization }
 GtLACPSystemPrompt >> initialize [
 	super initialize.
