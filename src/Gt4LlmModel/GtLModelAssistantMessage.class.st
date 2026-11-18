@@ -63,6 +63,9 @@ GtLModelAssistantMessage >> contentText [
 
 { #category : #ui }
 GtLModelAssistantMessage >> gtContentFor: aView inContext: aPhlowContext [
+	"GT only: the styled Content view needs a GT objectRegistry from Phlow's context.
+	GemStone provides the Content Text view instead."
+
 	<gtView>
 	<gtLlmView>
 	(self hasContent not or: [ self responseModels isNotEmpty ])
