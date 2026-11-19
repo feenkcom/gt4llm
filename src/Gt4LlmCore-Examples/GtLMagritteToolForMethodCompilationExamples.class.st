@@ -14,7 +14,7 @@ GtLMagritteToolForMethodCompilationExamples >> assertMethodCompilationException:
 	"Assert that the domain object is a GtLMethodCompilationExceptionDomainObject with expected values."
 	
 	self assert: (aDomainObject isKindOf: GtLMethodCompilationExceptionDomainObject).
-	self assert: aDomainObject targetClassName equals: aClassName.
+	self assert: aDomainObject targetClassName equals: aClassName asSymbol.
 	self assert: aDomainObject sourceCode equals: aSourceCode.
 	self assert: (aDomainObject description beginsWith: aDescription).
 	self 

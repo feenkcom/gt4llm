@@ -88,11 +88,11 @@ GtLMagritteToolForClassCreationExamples >> createClassWithInstanceVariables [
 		self assert: (targetObject isKindOf: GtLClassModificationResult).
 		createdClass := Smalltalk globals at: className ifAbsent: [ nil ].
 		self assert: createdClass notNil.
-		self assert: (createdClass instanceVariables collect: #name) equals: #('firstSlot' 'secondSlot').
-		self assert: targetObject currentClassName equals: className asString.
-		self assert: targetObject superclassName equals: 'Object'.
-		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage'.
-		self assert: targetObject instanceSlotNames asArray equals: #('firstSlot' 'secondSlot')
+		self assert: (createdClass instanceVariables collect: #name) equals: #(#firstSlot #secondSlot).
+		self assert: targetObject currentClassName equals: className asSymbol.
+		self assert: targetObject superclassName equals: #Object.
+		self assert: targetObject packageName equals: #Gt4LlmCoreNewPackage.
+		self assert: targetObject instanceSlotNames asArray equals: #(#firstSlot #secondSlot)
 	] ensure: [
 		self removeClassNamedIfPresent: className
 	].

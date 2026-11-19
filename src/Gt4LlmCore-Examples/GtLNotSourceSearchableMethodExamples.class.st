@@ -13,10 +13,10 @@ GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromC
 
 	self
 		assert: methodObject methodName
-		equals: #fromCompiledMethod:.
+		equals: 'fromCompiledMethod:'.
 	self
 		assert: methodObject methodClassName
-		equals: #GtLMethodReference.
+		equals: 'GtLMethodReference'.
 	self
 		assert: methodObject isClassSide
 		equals: true.

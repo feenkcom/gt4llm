@@ -41,7 +41,7 @@ GtLSmaCCToolForParserCompilationExamples >> compile [
 		withArguments: {'compileParser' -> {'parserClass' -> 'TemporaryExpressionParser'} asDictionary} asDictionary.
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmaCCParserReference).
-	self assert: targetObject parserClass equals: #TemporaryExpressionParser.
+	self assert: targetObject parserClass equals: 'TemporaryExpressionParser'.
 	self assert: (Smalltalk globals includesKey: #TemporaryExpressionParser).
 	self assert: (Smalltalk globals includesKey: #TemporaryExpressionScanner).
 	^ call

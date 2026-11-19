@@ -116,7 +116,7 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForUnknownMethod [
 	self assert: call result targetObject methods size equals: 2.
 	self assert: call result targetObject methods first isErrorDomainObject.
 	self assert: (call result targetObject methods second isKindOf: GtLMethodWithSource).
-	expectedSignature := GtLMagritteToolForMethodImplementors name, '>>#unknownSelector42'.
+	expectedSignature := GtLMagritteToolForMethodImplementors name asString, '>>#unknownSelector42'.
 	self assert: call result targetObject methods first objectName equals: expectedSignature.
 	^ call
 ]

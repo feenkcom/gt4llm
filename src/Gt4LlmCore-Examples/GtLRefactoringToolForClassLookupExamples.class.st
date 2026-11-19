@@ -14,7 +14,7 @@ GtLRefactoringToolForClassLookupExamples >> classLookupForExistingClass [
 		withArguments: {'targetClassName' -> 'GtLRefactoringToolForClassLookupExampleClass'} asDictionary.
 	targetObject := call result targetObject.
 	self assert: targetObject isErrorDomainObject not.
-	self assert: targetObject targetClass name equals: 'GtLRefactoringToolForClassLookupExampleClass'.
+	self assert: targetObject targetClass name equals: #GtLRefactoringToolForClassLookupExampleClass.
 	^ call
 ]
 

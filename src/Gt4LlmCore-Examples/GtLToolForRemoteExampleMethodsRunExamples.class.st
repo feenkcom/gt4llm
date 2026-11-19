@@ -307,7 +307,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> addMethodToEventFactory [
 	omEntry := eventFactory entries first.
 	epMethodAddition := omEntry content.
 	self assert: epMethodAddition class equals: EpMethodAddition.
-	self assert: epMethodAddition behaviorAffectedName equals: self class name asString.
+	self assert: epMethodAddition behaviorAffectedName equals: self class name.
 	rgMethodAddition := epMethodAddition methodAffected.
 	self assert: rgMethodAddition sourceCode
 		equals: (methodDefinition at: 'code').
@@ -370,7 +370,7 @@ GtLToolForRemoteExampleMethodsRunExamples >> addRemoveMethodToEventFactory [
 	omEntry := eventFactory entries first.
 	epMethodRemoval := omEntry content.
 	self assert: epMethodRemoval class equals: EpMethodRemoval.
-	self assert: epMethodRemoval behaviorAffectedName equals: self class name asString.
+	self assert: epMethodRemoval behaviorAffectedName equals: self class name.
 	rgMethodRemoval := epMethodRemoval methodAffected.
 	self assert: rgMethodRemoval sourceCode
 		equals: (methodDefinition at: 'code').

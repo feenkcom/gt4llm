@@ -65,7 +65,7 @@ GtLSmaCCToolForParserUpdatesExamples >> performUpdates [
 							'newSource' -> 'Expression : Multiplication;'} asDictionary}} asDictionary} asDictionary.
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmaCCParserUpdateResult).
-	self assert: targetObject parserClass equals: #ExpressionParser.
+	self assert: targetObject parserClass equals: 'ExpressionParser'.
 	self
 		assert: targetObject oldGrammar source
 		equals: ('<number> : \d+;

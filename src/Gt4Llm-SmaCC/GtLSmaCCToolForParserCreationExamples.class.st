@@ -24,12 +24,12 @@ Foo: <number>+;'.
 				'definition' -> definition} asDictionary} asDictionary.
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmaCCParserCreationResult).
-	self assert: targetObject parserClass equals: #GtPharoParser.
+	self assert: targetObject parserClass equals: 'GtPharoParser'.
 	self assert: targetObject createGrammar source equals: definition.
 	grammar := model grammarFor: #GtPharoParser.
 	self assert: grammar source equals: definition.
-	self assert: grammar parserClassName equals: #GtPharoParser.
-	self assert: grammar scannerClassName equals: #GtPharoScanner.
+	self assert: grammar parserClassName equals: 'GtPharoParser'.
+	self assert: grammar scannerClassName equals: 'GtPharoScanner'.
 	self assert: grammar package equals: 'TestPackage'.
 	^ grammar
 ]
@@ -51,12 +51,12 @@ Foo: <number>+;'.
 				'definition' -> definition} asDictionary} asDictionary.
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmaCCParserCreationResult).
-	self assert: targetObject parserClass equals: #ExpParser.
+	self assert: targetObject parserClass equals: 'ExpParser'.
 	self assert: targetObject createGrammar source equals: definition.
-	self assert: (model grammarFor: #ExpParser) source equals: definition.
-	self assert: (model grammarFor: #ExpParser) parserClassName equals: #ExpParser.
-	self assert: (model grammarFor: #ExpParser) scannerClassName equals: #ExpScanner.
-	self assert: (model grammarFor: #ExpParser) package equals: 'TestPackage'.
+	self assert: (model grammarFor: 'ExpParser') source equals: definition.
+	self assert: (model grammarFor: 'ExpParser') parserClassName equals: 'ExpParser'.
+	self assert: (model grammarFor: 'ExpParser') scannerClassName equals: 'ExpScanner'.
+	self assert: (model grammarFor: 'ExpParser') package equals: 'TestPackage'.
 	^ call
 ]
 

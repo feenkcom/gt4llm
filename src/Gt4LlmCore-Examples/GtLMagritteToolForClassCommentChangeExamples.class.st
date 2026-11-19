@@ -126,7 +126,7 @@ GtLMagritteToolForClassCommentChangeExamples >> changeCommentSuccessful [
 		targetObject := call result targetObject.
 	
 		self assert: (targetObject isKindOf: GtLClassCommentChangeResult).
-		self assert: targetObject changedClassName equals: className asString.
+		self assert: targetObject changedClassName equals: className asSymbol.
 		self assert: targetObject status equals: 'changed'.
 		self assert: targetObject oldClassComment equals: originalComment.
 		self assert: targetObject newClassComment equals: newComment.

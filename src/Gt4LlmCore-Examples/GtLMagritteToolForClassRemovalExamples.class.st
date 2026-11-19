@@ -114,7 +114,7 @@ GtLMagritteToolForClassRemovalExamples >> removeExistingClass [
 		targetObject := call result targetObject.
 		
 		self assert: (targetObject isKindOf: GtLClassRemovalResult).
-		self assert: targetObject removedClassName equals: className asString.
+		self assert: targetObject removedClassName equals: className asSymbol.
 		self assert: targetObject status equals: 'removed'.
 		self assert: (Smalltalk globals includesKey: className) not
 	] ensure: [ self removeClassNamedIfPresent: className ].
