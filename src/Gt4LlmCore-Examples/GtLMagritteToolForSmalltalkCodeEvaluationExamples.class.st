@@ -9,6 +9,27 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
+{ #category : #examples }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> argumentsHaveStringKeys [
+	"The arguments of a performed tool call have String keys, like those of a tool call that was only parsed
+	(GtLFunctionToolCall>>#arguments reads the raw arguments with STONJSON)"
+
+	<gtExample>
+	<return: #GtLFunctionToolCall>
+	| call parsedCall |
+	call := self executeSimpleDoIt.
+	self assert: call arguments keys isNotEmpty.
+	self assert: (call arguments keys allSatisfy: [ :each | each isString and: [ each isSymbol not ] ]).
+	self assert: (call arguments at: 'code') equals: '1 + 2'.
+
+	parsedCall := GtLFunctionToolCall new
+			rawArguments: call rawArgumentsJsonString;
+			yourself.
+	self assert: (parsedCall arguments keys allSatisfy: [ :each | each isString and: [ each isSymbol not ] ]).
+	self assert: parsedCall arguments keys asSortedCollection asArray equals: call arguments keys asSortedCollection asArray.
+	^ call
+]
+
 { #category : #asserting }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertExceptionDomainObject: aDomainObject withExceptionClass: anExceptionClass messageSubstring: aMessageSubstring [
 	self assert: aDomainObject exception class equals: anExceptionClass.
@@ -626,7 +647,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingNa
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('name')
-		path: #(#bindings 1)
+		path: #('bindings' 1)
 		errorMessage: '@[bindings/1] required properties missing [name]'.
 	^ call
 ]
@@ -673,7 +694,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingMissingOb
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('objectId')
-		path: #(#bindings 1)
+		path: #('bindings' 1)
 		errorMessage: '@[bindings/1] required properties missing [objectId]'.
 	^ call
 ]
@@ -720,7 +741,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilName [
 			lepiterDatabase: self theDatabase).
 	self
 		assertJSONSchemaValidationError: call result targetObject
-		withPath: #(#bindings 1 #name)
+		withPath: #('bindings' 1 'name')
 		errorMessage: '@[bindings/1/name] string expected'.
 	^ call
 ]
@@ -767,7 +788,7 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindingNilObject
 			lepiterDatabase: self theDatabase).
 	self
 		assertJSONSchemaValidationError: call result targetObject
-		withPath: #(#bindings 1 #objectId)
+		withPath: #('bindings' 1 'objectId')
 		errorMessage: '@[bindings/1/objectId] string expected'.
 	^ call
 ]

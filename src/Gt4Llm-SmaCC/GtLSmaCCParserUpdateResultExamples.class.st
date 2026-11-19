@@ -35,7 +35,7 @@ GtLSmaCCParserUpdateResultExamples >> updateResultDataViewSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #parserClass) equals: #TestParser.
+	self assert: (jsonData at: 'parserClass') equals: 'TestParser'.
 	"oldGrammar and newGrammar are not serialized via Magritte"
 	
 	^ dataBlock

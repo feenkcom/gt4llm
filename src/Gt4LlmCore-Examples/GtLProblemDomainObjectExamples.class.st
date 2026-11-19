@@ -33,7 +33,7 @@ GtLProblemDomainObjectExamples >> emptyProblemDomainObject [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#errorMessage -> nil
+		'errorMessage' -> nil
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -54,7 +54,7 @@ GtLProblemDomainObjectExamples >> problemDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#errorMessage -> 'Something went wrong during operation'
+		'errorMessage' -> 'Something went wrong during operation'
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
@@ -79,7 +79,7 @@ GtLProblemDomainObjectExamples >> problemWithEmptyErrorMessage [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#errorMessage -> ''
+		'errorMessage' -> ''
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

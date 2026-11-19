@@ -164,8 +164,8 @@ GtLOpenAIAssistantMessage >> senderText [
 
 { #category : #serializing }
 GtLOpenAIAssistantMessage >> serializeForOpenAIResponsesAPI [
-	^ {#content
+	^ {'content'
 			-> {{'type' -> 'output_text'.
 						'text' -> self contentText} asDictionary}.
-		#role -> self role} asDictionary
+		'role' -> self role} asDictionary
 ]

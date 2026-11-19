@@ -104,23 +104,23 @@ GtLTestCaseWithResultStatus >> serializeToLlmJsonObject [
 	<return: #NeoJSONObject>
 	| data |
 	data := NeoJSONObject new
-			at: #className put: self testCase class name asString;
-			at: #selector
+			at: 'className' put: self testCase class name asString;
+			at: 'selector'
 				put: (self testCase selector
 						ifNil: [ '' ]
 						ifNotNil: [ :anObject | anObject asString ]);
-			at: #status put: self statusText;
-			at: #result put: self messageText;
-			at: #shouldPass put: self testCase shouldPass;
-			at: #expectedFailure put: self testCase isExpectedFailure;
+			at: 'status' put: self statusText;
+			at: 'result' put: self messageText;
+			at: 'shouldPass' put: self testCase shouldPass;
+			at: 'expectedFailure' put: self testCase isExpectedFailure;
 			yourself.
 
 	(self isErrorResult or: [ self isFailureResult ])
 		ifTrue: [ data
-				at: #errorDetails
+				at: 'errorDetails'
 				put: (NeoJSONObject new
-						at: #errorMessage put: self normalizedErrorMessage;
-						at: #errorClass put: self result exception className;
+						at: 'errorMessage' put: self normalizedErrorMessage;
+						at: 'errorClass' put: self result exception className;
 						yourself) ].
 
 	^ data

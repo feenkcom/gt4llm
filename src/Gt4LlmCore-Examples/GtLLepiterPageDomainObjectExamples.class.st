@@ -55,10 +55,10 @@ GtLLepiterPageDomainObjectExamples >> pageCreateDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #status put: 'created';
-		at: #pageUid put: 'test-page-uid';
-		at: #title put: 'Test Page';
-		at: #databaseId put: 'test-db-uuid';
+		at: 'status' put: 'created';
+		at: 'pageUid' put: 'test-page-uid';
+		at: 'title' put: 'Test Page';
+		at: 'databaseId' put: 'test-db-uuid';
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
@@ -77,10 +77,10 @@ GtLLepiterPageDomainObjectExamples >> pageRemoveDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #status put: 'removed';
-		at: #pageUid put: 'test-page-uid';
-		at: #title put: 'Test Page';
-		at: #databaseId put: 'test-db-uuid';
+		at: 'status' put: 'removed';
+		at: 'pageUid' put: 'test-page-uid';
+		at: 'title' put: 'Test Page';
+		at: 'databaseId' put: 'test-db-uuid';
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	

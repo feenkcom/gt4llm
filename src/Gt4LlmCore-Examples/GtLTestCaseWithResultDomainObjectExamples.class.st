@@ -39,12 +39,12 @@ GtLTestCaseWithResultDomainObjectExamples >> testCaseWithResultForComparisonFail
 	self assert: dataBlock imageDataBlocks size equals: 1.
 	
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #className) equals: 'GtLExampleDummyMixedTest'.
-	self assert: (jsonData at: #selector) equals: 'testComparisonFailure'.
-	self assert: (jsonData at: #status) equals: 'error'.
-	self assert: (jsonData at: #result) equals: 'Error'.
+	self assert: (jsonData at: 'className') equals: 'GtLExampleDummyMixedTest'.
+	self assert: (jsonData at: 'selector') equals: 'testComparisonFailure'.
+	self assert: (jsonData at: 'status') equals: 'error'.
+	self assert: (jsonData at: 'result') equals: 'Error'.
 	
-	exceptionData := jsonData at: #exception.
+	exceptionData := jsonData at: 'exception'.
 	self 
 		assertExceptionResult: exceptionData 
 		errorClass: 'GtLExampleDataComparisonException' 
@@ -74,12 +74,12 @@ GtLTestCaseWithResultDomainObjectExamples >> testCaseWithResultForErrorTest [
 	
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #className) equals: 'GtLExampleDummyMixedTest'.
-	self assert: (jsonData at: #selector) equals: 'testError'.
-	self assert: (jsonData at: #status) equals: 'error'.
-	self assert: (jsonData at: #result) equals: 'Error'.
+	self assert: (jsonData at: 'className') equals: 'GtLExampleDummyMixedTest'.
+	self assert: (jsonData at: 'selector') equals: 'testError'.
+	self assert: (jsonData at: 'status') equals: 'error'.
+	self assert: (jsonData at: 'result') equals: 'Error'.
 	
-	exceptionData := jsonData at: #exception.
+	exceptionData := jsonData at: 'exception'.
 	self 
 		assertExceptionResult: exceptionData 
 		errorClass: 'Error' 
@@ -104,11 +104,11 @@ GtLTestCaseWithResultDomainObjectExamples >> testCaseWithResultForExpectedFailur
 	
 	dataBlock := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData.
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #className) equals: 'GtLExampleDummyMixedTest'.
-	self assert: (jsonData at: #selector) equals: 'testExpectedFailure'.
-	self assert: (jsonData at: #status) equals: 'failure'.
-	self assert: (jsonData at: #shouldPass) equals: false.
-	self assert: (jsonData at: #expectedFailure) equals: true.
+	self assert: (jsonData at: 'className') equals: 'GtLExampleDummyMixedTest'.
+	self assert: (jsonData at: 'selector') equals: 'testExpectedFailure'.
+	self assert: (jsonData at: 'status') equals: 'failure'.
+	self assert: (jsonData at: 'shouldPass') equals: false.
+	self assert: (jsonData at: 'expectedFailure') equals: true.
 	
 	^ domainObject
 ]
@@ -135,12 +135,12 @@ GtLTestCaseWithResultDomainObjectExamples >> testCaseWithResultForFailingTest [
 	self assert: dataBlock dataBlocks size equals: 1.
 	
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #className) equals: 'GtLExampleDummyMixedTest'.
-	self assert: (jsonData at: #selector) equals: 'testFailure'.
-	self assert: (jsonData at: #status) equals: 'failure'.
-	self assert: (jsonData at: #result) equals: 'Failure'.
+	self assert: (jsonData at: 'className') equals: 'GtLExampleDummyMixedTest'.
+	self assert: (jsonData at: 'selector') equals: 'testFailure'.
+	self assert: (jsonData at: 'status') equals: 'failure'.
+	self assert: (jsonData at: 'result') equals: 'Failure'.
 	
-	exceptionData := jsonData at: #exception.
+	exceptionData := jsonData at: 'exception'.
 	self 
 		assertExceptionResult: exceptionData 
 		errorClass: 'TestFailure' 
@@ -174,12 +174,12 @@ GtLTestCaseWithResultDomainObjectExamples >> testCaseWithResultForPassingTest [
 	
 	jsonData := dataBlock llmJsonData.
 	expectedJson := {
-		#className -> 'GtLExampleDummyMixedTest'.
-		#selector -> 'testPass'.
-		#status -> 'success'.
-		#result -> 'Passed'.
-		#shouldPass -> true.
-		#expectedFailure -> false
+		'className' -> 'GtLExampleDummyMixedTest'.
+		'selector' -> 'testPass'.
+		'status' -> 'success'.
+		'result' -> 'Passed'.
+		'shouldPass' -> true.
+		'expectedFailure' -> false
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -206,12 +206,12 @@ GtLTestCaseWithResultDomainObjectExamples >> testCaseWithResultForSkippedTest [
 	jsonData := dataBlock llmJsonData.
 	
 	expectedJson := {
-		#className -> 'GtLExampleDummyMixedTest'.
-		#selector -> 'testSkip'.
-		#status -> 'skipped'.
-		#result -> 'Skipped'.
-		#shouldPass -> true.
-		#expectedFailure -> false
+		'className' -> 'GtLExampleDummyMixedTest'.
+		'selector' -> 'testSkip'.
+		'status' -> 'skipped'.
+		'result' -> 'Skipped'.
+		'shouldPass' -> true.
+		'expectedFailure' -> false
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

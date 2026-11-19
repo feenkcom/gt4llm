@@ -30,7 +30,7 @@ GtLSmaCCParserReferenceExamples >> parserReferenceDataViewSerialization [
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: jsonData equals: {
-		#parserClass -> 'MyParser'
+		'parserClass' -> 'MyParser'
 	} asDictionary.
 	
 	^ dataBlock

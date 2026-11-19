@@ -60,9 +60,9 @@ GtLSmaCCToolForDefinitionExamples >> definitionForParser [
 		executeTool: tool
 		withArguments: {'parserDefinition' -> {'parserClass' -> 'JSParser'} asDictionary} asDictionary.
 	targetObject := call result targetObject.
-	self assert: targetObject parserClass equals: 'JSParser'.
-	self assert: targetObject scannerClass equals: 'JSScanner'.
-	self assert: targetObject package equals: 'SmaCC_Javascript_Parser'.
+	self assert: targetObject parserClass equals: #JSParser.
+	self assert: targetObject scannerClass equals: #JSScanner.
+	self assert: targetObject package equals: #SmaCC_Javascript_Parser.
 	self assert: targetObject definition equals: #JSParser asClass parserDefinitionString.
 	^ call
 ]

@@ -20,11 +20,14 @@ GtLAnthropicClientZincBuilder >> apiKey: anObject [
 
 { #category : #'api - instantiation' }
 GtLAnthropicClientZincBuilder >> create [
-	"Create a new Zinc client to communicate with OpenAI server"
+	"Create a new Zinc client to communicate with the Anthropic server.
+	Responses are read with STONJSON: plain dictionaries with String keys, as the response readers expect
+	(#forJsonREST alone would read NeoJSONObjects, whose keys are Symbols)"
 
 	| aClient |
 	aClient := self newBasicClient.
 	aClient forJsonREST.
+	aClient contentReader: [ :anEntity | STONJSON fromString: anEntity contents ].
 	aClient timeout: 1200.
 	aClient headerAt: 'x-api-key' put: apiKey.
 	aClient headerAt: 'anthropic-version' put: self version.

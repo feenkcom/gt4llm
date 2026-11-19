@@ -37,13 +37,13 @@ GtLClassReferencesExamples >> classReferencesDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#givenClassName -> 'GtLMagritteToolForClassReferences'.
-		#references -> (NeoJSONArray with: (NeoJSONObject new
-			at: #methodClassName put: 'GtLMagritteToolForClassReferences';
-			at: #methodName put: 'name';
-			at: #classSide put: false;
+		'givenClassName' -> 'GtLMagritteToolForClassReferences'.
+		'references' -> (NeoJSONArray with: (NeoJSONObject new
+			at: 'methodClassName' put: 'GtLMagritteToolForClassReferences';
+			at: 'methodName' put: 'name';
+			at: 'classSide' put: false;
 			yourself)).
-		#mayHaveMore -> true
+		'mayHaveMore' -> true
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

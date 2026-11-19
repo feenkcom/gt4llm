@@ -20,11 +20,11 @@ GtLObjectStorageValueResultExamples >> assertObjectDetailsJson: objectDetailsJso
 { #category : #asserting }
 GtLObjectStorageValueResultExamples >> assertObjectStorageValueResultJsonDataKeys: jsonData [
 	| expectedKeys expectedObjectValueKeys objectValueJson |
-	expectedKeys := #('objectDetails' #objectId #objectValue #playgroundPageReference).
+	expectedKeys := #('objectDetails' 'objectId' 'objectValue' 'playgroundPageReference').
 	self assertJsonData: jsonData hasExpectedKeys: expectedKeys.
 	
-	objectValueJson := jsonData at: #objectValue.
-	expectedObjectValueKeys := #(#allInstanceSlots #objectClassName #objectPrintString #packageName #phlowViews #superclassName).
+	objectValueJson := jsonData at: 'objectValue'.
+	expectedObjectValueKeys := #('allInstanceSlots' 'objectClassName' 'objectPrintString' 'packageName' 'phlowViews' 'superclassName').
 	self assertJsonData: objectValueJson hasExpectedKeys: expectedObjectValueKeys
 ]
 
@@ -147,11 +147,11 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForBlElement [
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
-	self assert: (jsonData at: #objectId) equals: 'element-id-001'.
+	self assert: (jsonData at: 'objectId') equals: 'element-id-001'.
 	self assert: (jsonData at: 'objectDetails') isEmpty.
-	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForBlElement.
+	self assert: (jsonData at: 'playgroundPageReference') equals: self expectedPlaygroundPageReferenceForBlElement.
 	
-	objectValueJson := jsonData at: #objectValue.
+	objectValueJson := jsonData at: 'objectValue'.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'BlElement'.
 	self assert: (objectValueJson at: 'superclassName') equals: 'Object'.
 	self assert: (objectValueJson at: 'packageName') equals: 'Bloc'.
@@ -181,11 +181,11 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForCollection [
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
-	self assert: (jsonData at: #objectId) equals: 'array-id-789'.
+	self assert: (jsonData at: 'objectId') equals: 'array-id-789'.
 	self assert: (jsonData at: 'objectDetails') isEmpty.
-	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForCollection.
+	self assert: (jsonData at: 'playgroundPageReference') equals: self expectedPlaygroundPageReferenceForCollection.
 	
-	objectValueJson := jsonData at: #objectValue.
+	objectValueJson := jsonData at: 'objectValue'.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'Array'.
 	self assert: (objectValueJson at: 'superclassName') equals: 'ArrayedCollection'.
 	self assert: (objectValueJson at: 'packageName') equals: 'Collections-Sequenceable'.
@@ -230,8 +230,8 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForDataComparison
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
-	self assert: (jsonData at: #objectId) equals: 'comparison-exception-id'.
-	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForDataComparisonException.
+	self assert: (jsonData at: 'objectId') equals: 'comparison-exception-id'.
+	self assert: (jsonData at: 'playgroundPageReference') equals: self expectedPlaygroundPageReferenceForDataComparisonException.
 	
 	objectDetailsJson := jsonData at: 'objectDetails'.
 	self 
@@ -240,7 +240,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForDataComparison
 		errorClass: 'GtLExampleDataComparisonException' 
 		stackTraceIncludes: #('GtLExampleDataComparisonException(Exception)>>signal').
 	
-	objectValueJson := jsonData at: #objectValue.
+	objectValueJson := jsonData at: 'objectValue'.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'GtLExampleDataComparisonException'.
 	self assert: (objectValueJson at: 'superclassName') equals: 'Error'.
 	self assert: (objectValueJson at: 'packageName') equals: 'Gt4LlmCore-Examples'.
@@ -276,8 +276,8 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForException [
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
-	self assert: (jsonData at: #objectId) equals: 'exception-id-123'.
-	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForException.
+	self assert: (jsonData at: 'objectId') equals: 'exception-id-123'.
+	self assert: (jsonData at: 'playgroundPageReference') equals: self expectedPlaygroundPageReferenceForException.
 	
 	objectDetailsJson := jsonData at: 'objectDetails'.
 	self 
@@ -286,7 +286,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForException [
 		errorClass: 'ZeroDivide' 
 		stackTraceIncludes: #('ZeroDivide' 'SmallInteger>>/').
 	
-	objectValueJson := jsonData at: #objectValue.
+	objectValueJson := jsonData at: 'objectValue'.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'ZeroDivide'.
 	self assert: (objectValueJson at: 'superclassName') equals: 'ArithmeticError'.
 	self assert: (objectValueJson at: 'packageName') equals: 'Kernel'.
@@ -317,11 +317,11 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForInteger [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #objectId) equals: 'test-id-123'.
+	self assert: (jsonData at: 'objectId') equals: 'test-id-123'.
 	self assert: (jsonData at: 'objectDetails') equals: Dictionary new.
-	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForInteger.
+	self assert: (jsonData at: 'playgroundPageReference') equals: self expectedPlaygroundPageReferenceForInteger.
 	
-	objectValueJson := jsonData at: #objectValue.
+	objectValueJson := jsonData at: 'objectValue'.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'SmallInteger'.
 	self assert: (objectValueJson at: 'objectPrintString') equals: '42'.
 	self assert: (objectValueJson at: 'superclassName') equals: 'Integer'.
@@ -390,10 +390,10 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForIntegerFullSer
 		yourself.
 	
 	expectedJson := Dictionary new
-		at: #objectId put: 'test-id-123';
+		at: 'objectId' put: 'test-id-123';
 		at: 'objectDetails' put: Dictionary new;
-		at: #objectValue put: expectedObjectValue;
-		at: #playgroundPageReference put: self expectedPlaygroundPageReferenceForInteger;
+		at: 'objectValue' put: expectedObjectValue;
+		at: 'playgroundPageReference' put: self expectedPlaygroundPageReferenceForInteger;
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -422,10 +422,10 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForObjectStorageV
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
-	self assert: (jsonData at: #objectId) equals: 'outer-id-456'.
-	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForObjectStorageValueResult.
+	self assert: (jsonData at: 'objectId') equals: 'outer-id-456'.
+	self assert: (jsonData at: 'playgroundPageReference') equals: self expectedPlaygroundPageReferenceForObjectStorageValueResult.
 	
-	objectValueJson := jsonData at: #objectValue.
+	objectValueJson := jsonData at: 'objectValue'.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'GtLObjectStorageValueResult'.
 	self assert: ((objectValueJson at: 'objectPrintString') includesSubstring: 'inner-id-123').
 	self assert: (objectValueJson at: 'superclassName') equals: 'GtLObjectValueResult'.
@@ -459,11 +459,11 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForString [
 	
 	jsonData := dataBlock compositeJsonData.
 	self assertObjectStorageValueResultJsonDataKeys: jsonData.
-	self assert: (jsonData at: #objectId) equals: 'string-id-456'.
+	self assert: (jsonData at: 'objectId') equals: 'string-id-456'.
 	self assert: (jsonData at: 'objectDetails') isEmpty.
-	self assert: (jsonData at: #playgroundPageReference) equals: self expectedPlaygroundPageReferenceForString.
+	self assert: (jsonData at: 'playgroundPageReference') equals: self expectedPlaygroundPageReferenceForString.
 	
-	objectValueJson := jsonData at: #objectValue.
+	objectValueJson := jsonData at: 'objectValue'.
 	self assert: (objectValueJson at: 'objectClassName') equals: 'ByteString'.
 	self assert: (objectValueJson at: 'superclassName') equals: 'String'.
 	self assert: (objectValueJson at: 'packageName') equals: 'Collections-Strings'.
@@ -522,10 +522,10 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 		yourself.
 	
 	expectedJsonOne := Dictionary new
-		at: #objectDetails put: Dictionary new;
-		at: #objectId put: 'test-object-id-789';
-		at: #objectValue put: expectedObjectValue;
-		at: #playgroundPageReference put: nil;
+		at: 'objectDetails' put: Dictionary new;
+		at: 'objectId' put: 'test-object-id-789';
+		at: 'objectValue' put: expectedObjectValue;
+		at: 'playgroundPageReference' put: nil;
 		yourself.
 	expectedJsonTwo := Dictionary new
 		at: 'objectDetails' put: Dictionary new;
@@ -533,7 +533,7 @@ GtLObjectStorageValueResultExamples >> objectStorageValueResultForTestObject [
 		at: 'objectValue' put: (expectedObjectValue copy
 			at: 'objectPrintString' put: 'aGtLSerializedObjectValueTestObject(TestObject)';
 			yourself);
-		at: #playgroundPageReference put: nil;
+		at: 'playgroundPageReference' put: nil;
 		yourself.
 	
 	self assert: ((jsonData = expectedJsonOne) or: [jsonData = expectedJsonOne]).

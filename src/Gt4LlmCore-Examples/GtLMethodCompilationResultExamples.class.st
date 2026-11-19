@@ -60,15 +60,15 @@ GtLMethodCompilationResultExamples >> methodCompilationResultDataViewSerializati
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 
 	jsonData := dataBlock compositeJsonData.
-	targetMethodReference := jsonData at: #targetMethodReference.
+	targetMethodReference := jsonData at: 'targetMethodReference'.
 	expectedTargetMethodReference := targetMethodReference class new
 		at: 'methodName' put: 'sampleMethod';
 		at: 'methodClassName' put: 'SampleClass';
 		at: 'classSide' put: false;
 		yourself.
 	expectedJson := jsonData class new
-		at: #status put: 'compiled';
-		at: #targetMethodReference put: expectedTargetMethodReference;
+		at: 'status' put: 'compiled';
+		at: 'targetMethodReference' put: expectedTargetMethodReference;
 		yourself.
 	self assert: jsonData equals: expectedJson.
 
@@ -120,15 +120,15 @@ GtLMethodCompilationResultExamples >> methodCompilationResultMethodAdditionDataV
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 
 	jsonData := dataBlock compositeJsonData.
-	targetMethodReference := jsonData at: #targetMethodReference.
+	targetMethodReference := jsonData at: 'targetMethodReference'.
 	expectedTargetMethodReference := targetMethodReference class new
 		at: 'methodName' put: 'addedMethod';
 		at: 'methodClassName' put: 'SampleClass';
 		at: 'classSide' put: false;
 		yourself.
 	expectedJson := jsonData class new
-		at: #status put: 'compiled';
-		at: #targetMethodReference put: expectedTargetMethodReference;
+		at: 'status' put: 'compiled';
+		at: 'targetMethodReference' put: expectedTargetMethodReference;
 		yourself.
 	self assert: jsonData equals: expectedJson.
 

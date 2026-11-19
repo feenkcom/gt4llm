@@ -26,8 +26,8 @@ GtLMethodIsNotExampleDomainObjectExamples >> methodIsNotExampleDomainObject [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#methodName -> 'GtLExampleRunDummyExamples>>#regularMethod'.
-		#errorMessage -> 'Method is not an example: GtLExampleRunDummyExamples>>#regularMethod'
+		'methodName' -> 'GtLExampleRunDummyExamples>>#regularMethod'.
+		'errorMessage' -> 'Method is not an example: GtLExampleRunDummyExamples>>#regularMethod'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -53,8 +53,8 @@ GtLMethodIsNotExampleDomainObjectExamples >> methodIsNotExampleDomainObjectFromC
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#methodName -> 'GtLExampleReference class>>#fromCompiledMethod:'.
-		#errorMessage -> 'Method is not an example: GtLExampleReference class>>#fromCompiledMethod:'
+		'methodName' -> 'GtLExampleReference class>>#fromCompiledMethod:'.
+		'errorMessage' -> 'Method is not an example: GtLExampleReference class>>#fromCompiledMethod:'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

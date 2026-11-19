@@ -68,6 +68,22 @@ GtLModelUserMessage >> gtContentFor: aView [
 		text: [ self contentText ]
 ]
 
+{ #category : #'private - serialization' }
+GtLModelUserMessage >> gtViewContentDataViewFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Data View';
+		priority: 43;
+		object: [ self computeContentDataViewFromInputModels ];
+		view: #gtDataViewsFor:;
+		actionButtonIcon: (GtPhlowGlamorousVectorIconNameStencil new
+					iconName: #inspect)
+			label: 'View'
+			tooltip: 'Inspect data view'
+			action: [ :aButton | aButton phlow spawnObject: self computeContentDataViewFromInputModels ]
+]
+
 { #category : #testing }
 GtLModelUserMessage >> hasContent [
 

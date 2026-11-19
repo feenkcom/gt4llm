@@ -38,8 +38,8 @@ GtLMissingArgumentDomainObjectExamples >> emptyMissingArgumentDomainObject [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#missingArgument -> nil.
-		#errorMessage -> ''
+		'missingArgument' -> nil.
+		'errorMessage' -> ''
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -60,8 +60,8 @@ GtLMissingArgumentDomainObjectExamples >> missingArgumentDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#missingArgument -> 'requiredParam'.
-		#errorMessage -> 'Missing required argument: requiredParam'
+		'missingArgument' -> 'requiredParam'.
+		'errorMessage' -> 'Missing required argument: requiredParam'
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
@@ -88,8 +88,8 @@ GtLMissingArgumentDomainObjectExamples >> missingArgumentWithEmptyArguments [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#missingArgument -> 'requiredParam'.
-		#errorMessage -> 'Missing argument called requiredParam'
+		'missingArgument' -> 'requiredParam'.
+		'errorMessage' -> 'Missing argument called requiredParam'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -115,8 +115,8 @@ GtLMissingArgumentDomainObjectExamples >> missingArgumentWithoutErrorMessage [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#missingArgument -> 'testParam'.
-		#errorMessage -> 'Missing argument called testParam'
+		'missingArgument' -> 'testParam'.
+		'errorMessage' -> 'Missing argument called testParam'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

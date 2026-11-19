@@ -13,10 +13,10 @@ GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromC
 
 	self
 		assert: methodObject methodName
-		equals: #fromCompiledMethod:.
+		equals: 'fromCompiledMethod:'.
 	self
 		assert: methodObject methodClassName
-		equals: #GtLMethodReference.
+		equals: 'GtLMethodReference'.
 	self
 		assert: methodObject isClassSide
 		equals: true.
@@ -46,13 +46,13 @@ GtLNotSourceSearchableMethodExamples >> methodWithNotSearchableSourceObjectFromC
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	methodRefJson := NeoJSONObject new
-		at: #methodName put: 'fromCompiledMethod:';
-		at: #methodClassName put: 'GtLMethodReference';
-		at: #classSide put: true;
+		at: 'methodName' put: 'fromCompiledMethod:';
+		at: 'methodClassName' put: 'GtLMethodReference';
+		at: 'classSide' put: true;
 		yourself.
 	expected := Dictionary new
-		at: #methodReference put: methodRefJson;
-		at: #sourceCode put: '<not searchable method>';
+		at: 'methodReference' put: methodRefJson;
+		at: 'sourceCode' put: '<not searchable method>';
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	

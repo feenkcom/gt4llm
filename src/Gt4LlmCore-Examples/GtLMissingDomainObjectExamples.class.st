@@ -22,8 +22,8 @@ GtLMissingDomainObjectExamples >> emptyMissingDomainObject [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#missingObjectName -> nil.
-		#errorMessage -> ''
+		'missingObjectName' -> nil.
+		'errorMessage' -> ''
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -50,8 +50,8 @@ GtLMissingDomainObjectExamples >> missingDomainObjectWithCustomErrorMessage [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#missingObjectName -> 'Database connection'.
-		#errorMessage -> 'Custom error: database connection unavailable'
+		'missingObjectName' -> 'Database connection'.
+		'errorMessage' -> 'Custom error: database connection unavailable'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -77,8 +77,8 @@ GtLMissingDomainObjectExamples >> missingDomainObjectWithObjectName [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#missingObjectName -> 'User'.
-		#errorMessage -> 'User is not found'
+		'missingObjectName' -> 'User'.
+		'errorMessage' -> 'User is not found'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

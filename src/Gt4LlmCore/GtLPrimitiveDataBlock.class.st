@@ -21,7 +21,9 @@ GtLPrimitiveDataBlock >> dataKey [
 
 { #category : #accessing }
 GtLPrimitiveDataBlock >> dataKey: anObject [
-	dataKey := anObject
+	"The data key is the JSON key of the block's data: keep it as a String"
+
+	dataKey := anObject ifNotNil: [ :aKey | aKey isSymbol ifTrue: [ aKey asString ] ifFalse: [ aKey ] ]
 ]
 
 { #category : #printing }

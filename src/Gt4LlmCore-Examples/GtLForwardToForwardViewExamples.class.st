@@ -112,9 +112,9 @@ GtLForwardToForwardViewExamples >> forwardToChainOfForwardersWithDataKeys_serial
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #jsonContent put: (NeoJSONObject new
-			at: #type put: 'first';
-			at: #value put: 100;
+		at: 'jsonContent' put: (NeoJSONObject new
+			at: 'type' put: 'first';
+			at: 'value' put: 100;
 			yourself);
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
@@ -155,10 +155,10 @@ GtLForwardToForwardViewExamples >> forwardToChainOfForwardersWithOuterDataKey_se
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #topLevel put: (Dictionary new
-			at: #jsonContent put: (NeoJSONObject new
-				at: #type put: 'first';
-				at: #value put: 100;
+		at: 'topLevel' put: (Dictionary new
+			at: 'jsonContent' put: (NeoJSONObject new
+				at: 'type' put: 'first';
+				at: 'value' put: 100;
 				yourself);
 			yourself);
 		yourself.
@@ -178,9 +178,9 @@ GtLForwardToForwardViewExamples >> forwardToChainOfForwarders_serialization [
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #jsonContent put: (NeoJSONObject new
-			at: #type put: 'first';
-			at: #value put: 100;
+		at: 'jsonContent' put: (NeoJSONObject new
+			at: 'type' put: 'first';
+			at: 'value' put: 100;
 			yourself);
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
@@ -223,10 +223,10 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithBothDataKeys_serializ
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #outerKey put: (Dictionary new
-			at: #jsonContent put: (NeoJSONObject new
-				at: #type put: 'first';
-				at: #value put: 100;
+		at: 'outerKey' put: (Dictionary new
+			at: 'jsonContent' put: (NeoJSONObject new
+				at: 'type' put: 'first';
+				at: 'value' put: 100;
 				yourself);
 			yourself);
 		yourself.
@@ -265,9 +265,9 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithInnerDataKey_serializ
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #jsonContent put: (NeoJSONObject new
-			at: #type put: 'first';
-			at: #value put: 100;
+		at: 'jsonContent' put: (NeoJSONObject new
+			at: 'type' put: 'first';
+			at: 'value' put: 100;
 			yourself);
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
@@ -304,10 +304,10 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithOuterDataKey_serializ
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #outerForward put: (Dictionary new
-			at: #jsonContent put: (NeoJSONObject new
-				at: #type put: 'first';
-				at: #value put: 100;
+		at: 'outerForward' put: (Dictionary new
+			at: 'jsonContent' put: (NeoJSONObject new
+				at: 'type' put: 'first';
+				at: 'value' put: 100;
 				yourself);
 			yourself);
 		yourself.
@@ -348,9 +348,9 @@ GtLForwardToForwardViewExamples >> forwardToForwardViewWithoutDataKey_serializat
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #jsonContent put: (NeoJSONObject new
-			at: #type put: 'first';
-			at: #value put: 100;
+		at: 'jsonContent' put: (NeoJSONObject new
+			at: 'type' put: 'first';
+			at: 'value' put: 100;
 			yourself);
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.

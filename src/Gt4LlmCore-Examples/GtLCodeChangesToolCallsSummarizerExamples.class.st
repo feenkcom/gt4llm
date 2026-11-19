@@ -38,7 +38,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> classInPackageHistory [
 	
 	self assert: classHistory class equals: GtLClassInPackageTagChangeHistory.
 	self assert: classHistory targetClassName equals: 'GtLTemporarySummarizerExampleClass'.
-	self assert: classHistory targetPackageName equals: 'Gt4LlmCore-Examples'.
+	self assert: classHistory targetPackageName equals: #'Gt4LlmCore-Examples'.
 	self assert: classHistory behaviourChanges size equals: 2.
 	self assert: classHistory isInitialDefinitionChangeAddition.
 	self assert: classHistory isLatestDefinitionChangeRemoval.
@@ -287,13 +287,13 @@ GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesForClassPacka
 	
 	"Find source package (Gt4LlmCore-Examples)"
 	sourcePackageHistory := packageHistories items 
-		detect: [ :ph | ph targetPackageName = 'Gt4LlmCore-Examples' ]
+		detect: [ :ph | ph targetPackageName = #'Gt4LlmCore-Examples' ]
 		ifNone: [ nil ].
 	self assert: sourcePackageHistory notNil.
 	
 	"Find destination package (Gt4LlmCore-Examples-Temp)"
 	destPackageHistory := packageHistories items 
-		detect: [ :ph | ph targetPackageName = 'Gt4LlmCore-Examples-Temp' ]
+		detect: [ :ph | ph targetPackageName = #'Gt4LlmCore-Examples-Temp' ]
 		ifNone: [ nil ].
 	self assert: destPackageHistory notNil.
 	
@@ -351,7 +351,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> packageHistory [
 	
 	packageHistory := packageHistories items first.
 	
-	self assert: packageHistory targetPackageName equals: 'Gt4LlmCore-Examples'.
+	self assert: packageHistory targetPackageName equals: #'Gt4LlmCore-Examples'.
 	self assert: packageHistory classHistories items size equals: 1.
 	self assert: packageHistory gtViewChangesCount equals: 2.
 	self assert: packageHistory hasNoEffect.
@@ -458,7 +458,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedAddClassRefact
 			aResult := summarizer codeChanges first changeResult.
 			self assert: aResult class equals: GtLClassModificationResult.
 			self assert: aResult isClassAdditionResult.
-			self assert: aResult targetClassName asString equals: aClassName.
+			self assert: aResult targetClassName asString equals: aClassName asString.
 			self assert: aResult superclassName asString equals: aRootClass name asString.
 
 			self assert: summarizer methodChangeHistories isEmpty.

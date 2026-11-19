@@ -37,10 +37,10 @@ GtLSmaCCDefinitionExamples >> definitionDataViewSerialization [
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: jsonData equals: {
-		#parserClass -> 'TestParser'.
-		#scannerClass -> 'TestScanner'.
-		#package -> 'TestPackage'.
-		#definition -> '<token>: \d+; Expr: <token>;'
+		'parserClass' -> 'TestParser'.
+		'scannerClass' -> 'TestScanner'.
+		'package' -> 'TestPackage'.
+		'definition' -> '<token>: \d+; Expr: <token>;'
 	} asDictionary.
 	
 	^ dataBlock

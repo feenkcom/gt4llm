@@ -60,7 +60,7 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeClassInstanceVariables 
 			withArguments: {
 				'classChangeRequest' -> {
 					'targetClassName' -> className.
-					'superclassName' -> #Object.
+					'superclassName' -> 'Object'.
 					'instanceVariables' -> #('alpha' 'beta').
 					'classVariables' -> #().
 					'package' -> 'Gt4LlmCoreNewPackage'
@@ -69,8 +69,8 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeClassInstanceVariables 
 		targetObject := call result targetObject.
 		
 		self assert: (targetObject isKindOf: GtLClassModificationResult).
-		self assert: (targetClass instanceVariables collect: #name) equals: #('alpha' 'beta').
-		self assert: targetObject instanceSlotNames asArray equals: #('alpha' 'beta')
+		self assert: (targetClass instanceVariables collect: #name) equals: #(#alpha #beta).
+		self assert: targetObject instanceSlotNames asArray equals: #(#alpha #beta)
 	] ensure: [ self removeClassNamedIfPresent: className ].
 		
 	^ call
@@ -139,14 +139,14 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeClassVariablesWithParti
 		targetObject := call result targetObject.
 		
 		self assert: (targetObject isKindOf: GtLClassModificationResult).
-		self assert: (targetClass instanceVariables collect: #name) equals: #('first' 'second').
-		self assert: (targetClass classVariables collect: #name) asSet equals: #('NewShared' 'AnotherShared') asSet.
+		self assert: (targetClass instanceVariables collect: #name) equals: #(#first #second).
+		self assert: (targetClass classVariables collect: #name) asSet equals: #(#NewShared #AnotherShared) asSet.
 		self assert: targetClass superclass equals: Object.
-		self assert: targetClass package name equals: 'Gt4LlmCoreNewPackage'.
-		self assert: targetObject instanceSlotNames asArray equals: #('first' 'second').
-		self assert: targetObject classVariableNames asSet equals: #('NewShared' 'AnotherShared') asSet.
-		self assert: targetObject superclassName equals: 'Object'.
-		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage'
+		self assert: targetClass package name equals: #Gt4LlmCoreNewPackage.
+		self assert: targetObject instanceSlotNames asArray equals: #(#first #second).
+		self assert: targetObject classVariableNames asSet equals: #(#NewShared #AnotherShared) asSet.
+		self assert: targetObject superclassName equals: #Object.
+		self assert: targetObject packageName equals: #Gt4LlmCoreNewPackage
 	] ensure: [ self removeClassNamedIfPresent: className ].
 		
 	^ call
@@ -215,14 +215,14 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeInstanceVariablesWithPa
 		targetObject := call result targetObject.
 		
 		self assert: (targetObject isKindOf: GtLClassModificationResult).
-		self assert: (targetClass instanceVariables collect: #name) equals: #('alpha' 'beta').
-		self assert: (targetClass classVariables collect: #name) equals: #('SharedValue').
+		self assert: (targetClass instanceVariables collect: #name) equals: #(#alpha #beta).
+		self assert: (targetClass classVariables collect: #name) equals: #(#SharedValue).
 		self assert: targetClass superclass equals: Object.
-		self assert: targetClass package name equals: 'Gt4LlmCoreNewPackage'.
-		self assert: targetObject instanceSlotNames asArray equals: #('alpha' 'beta').
-		self assert: targetObject classVariableNames asArray equals: #('SharedValue').
-		self assert: targetObject superclassName equals: 'Object'.
-		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage'
+		self assert: targetClass package name equals: #Gt4LlmCoreNewPackage.
+		self assert: targetObject instanceSlotNames asArray equals: #(#alpha #beta).
+		self assert: targetObject classVariableNames asArray equals: #(#SharedValue).
+		self assert: targetObject superclassName equals: #Object.
+		self assert: targetObject packageName equals: #Gt4LlmCoreNewPackage
 	] ensure: [ self removeClassNamedIfPresent: className ].
 		
 	^ call
@@ -291,14 +291,14 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changePackageWithPartialArgum
 		targetObject := call result targetObject.
 		
 		self assert: (targetObject isKindOf: GtLClassModificationResult).
-		self assert: (targetClass instanceVariables collect: #name) equals: #('first' 'second').
-		self assert: (targetClass classVariables collect: #name) equals: #('SharedValue').
+		self assert: (targetClass instanceVariables collect: #name) equals: #(#first #second).
+		self assert: (targetClass classVariables collect: #name) equals: #(#SharedValue).
 		self assert: targetClass superclass equals: Object.
-		self assert: targetClass package name equals: 'Gt4LlmCoreNewPackage2'.
-		self assert: targetObject instanceSlotNames asArray equals: #('first' 'second').
-		self assert: targetObject classVariableNames asArray equals: #('SharedValue').
-		self assert: targetObject superclassName equals: 'Object'.
-		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage2'
+		self assert: targetClass package name equals: #Gt4LlmCoreNewPackage2.
+		self assert: targetObject instanceSlotNames asArray equals: #(#first #second).
+		self assert: targetObject classVariableNames asArray equals: #(#SharedValue).
+		self assert: targetObject superclassName equals: #Object.
+		self assert: targetObject packageName equals: #Gt4LlmCoreNewPackage2
 	] ensure: [ self removeClassNamedIfPresent: className ].
 		
 	^ call
@@ -367,14 +367,14 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeSuperclassWithPartialAr
 		targetObject := call result targetObject.
 		
 		self assert: (targetObject isKindOf: GtLClassModificationResult).
-		self assert: (targetClass instanceVariables collect: #name) equals: #('first' 'second').
-		self assert: (targetClass classVariables collect: #name) equals: #('SharedValue').
+		self assert: (targetClass instanceVariables collect: #name) equals: #(#first #second).
+		self assert: (targetClass classVariables collect: #name) equals: #(#SharedValue).
 		self assert: targetClass superclass equals: Exception.
-		self assert: targetClass package name equals: 'Gt4LlmCoreNewPackage'.
-		self assert: targetObject instanceSlotNames asArray equals: #('first' 'second').
-		self assert: targetObject classVariableNames asArray equals: #('SharedValue').
-		self assert: targetObject superclassName equals: 'Exception'.
-		self assert: targetObject packageName equals: 'Gt4LlmCoreNewPackage'
+		self assert: targetClass package name equals: #Gt4LlmCoreNewPackage.
+		self assert: targetObject instanceSlotNames asArray equals: #(#first #second).
+		self assert: targetObject classVariableNames asArray equals: #(#SharedValue).
+		self assert: targetObject superclassName equals: #Exception.
+		self assert: targetObject packageName equals: #Gt4LlmCoreNewPackage
 	] ensure: [ self removeClassNamedIfPresent: className ].
 		
 	^ call
@@ -415,7 +415,7 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeUnknownClass [
 		withArguments: {
 			'classChangeRequest' -> {
 				'targetClassName' -> className.
-				'superclassName' -> #Object.
+				'superclassName' -> 'Object'.
 				'instanceVariables' -> #().
 				'classVariables' -> #().
 				'package' -> 'Gt4LlmCoreNewPackage'
@@ -526,7 +526,7 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeWithNilTargetClassName 
 	
 	self
 		assertJSONSchemaValidationError: call result targetObject
-		withPath: #(#classChangeRequest #targetClassName)
+		withPath: #('classChangeRequest' 'targetClassName')
 		errorMessage: '@[classChangeRequest/targetClassName] string expected'.
 		
 	^ call

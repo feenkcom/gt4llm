@@ -22,13 +22,13 @@ GtLFileInformationDomainObjectExamples >> fileInformationDataViewSerialization [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#path -> domainObject path.
-		#size -> domainObject size.
-		#creationTime -> domainObject creationTime asIso8601.
-		#modificationTime -> domainObject modificationTime asIso8601.
-		#accessTime -> domainObject accessTime asIso8601.
-		#type -> domainObject type.
-		#permissions -> domainObject permissions
+		'path' -> domainObject path.
+		'size' -> domainObject size.
+		'creationTime' -> domainObject creationTime asIso8601.
+		'modificationTime' -> domainObject modificationTime asIso8601.
+		'accessTime' -> domainObject accessTime asIso8601.
+		'type' -> domainObject type.
+		'permissions' -> domainObject permissions
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

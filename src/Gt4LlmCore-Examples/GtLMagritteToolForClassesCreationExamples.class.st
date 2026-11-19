@@ -44,10 +44,10 @@ GtLMagritteToolForClassesCreationExamples >> createClassAlongsideTrait [
 		result := call result targetObject.
 		self assert: result classes size equals: 2.
 		self assert: result classes last isClassAdditionResult.
-		self assert: result classes last instanceSlotNames equals: #('value').
-		self assert: result classes last classVariableNames equals: #('SharedValue').
-		self assert: result classes last classSlotNames equals: #('classValue').
-		self assert: result classes last packageName equals: 'Gt4LlmCoreNewPackage'.
+		self assert: (result classes last instanceSlotNames collect: [ :each | each asString ]) equals: #('value').
+		self assert: (result classes last classVariableNames collect: [ :each | each asString ]) equals: #('SharedValue').
+		self assert: (result classes last classSlotNames collect: [ :each | each asString ]) equals: #('classValue').
+		self assert: result classes last packageName asString equals: 'Gt4LlmCoreNewPackage'.
 		self assert: result classes last comment equals: 'A class created alongside a Trait request'.
 		created := Smalltalk globals at: className.
 		self gtDo: [
@@ -74,7 +74,7 @@ GtLMagritteToolForClassesCreationExamples >> createClassWithMissingTargetClassNa
 		executeTool: GtLMagritteToolForClassesCreation new
 		withArguments: {
 			'classes' -> {
-				{ 'superclassName' -> #Object.
+				{ 'superclassName' -> 'Object'.
 				  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
 			} asArray.
 			'traits' -> {}
@@ -83,7 +83,7 @@ GtLMagritteToolForClassesCreationExamples >> createClassWithMissingTargetClassNa
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('targetClassName')
-		path: (self gtDo: [ #(#classes 1) ] gemstoneDo: [ #('classes' 1) ])
+		path: (self gtDo: [ #('classes' 1) ] gemstoneDo: [ #('classes' 1) ])
 		errorMessage: '@[classes/1] required properties missing [targetClassName]'.
 		
 	^ call
@@ -106,7 +106,7 @@ GtLMagritteToolForClassesCreationExamples >> createClassesThatAlreadyExist [
 			withArguments: {
 				'classes' -> {
 					{ 'targetClassName' -> className.
-					  'superclassName' -> #Object.
+					  'superclassName' -> 'Object'.
 					  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
 				} asArray.
 				'traits' -> {}
@@ -140,11 +140,11 @@ GtLMagritteToolForClassesCreationExamples >> createClassesWithInstanceVariables 
 			withArguments: {
 				'classes' -> {
 					{ 'targetClassName' -> classNames first.
-					  'superclassName' -> #Object.
+					  'superclassName' -> 'Object'.
 					  'instanceVariables' -> 'firstSlot secondSlot'.
 					  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary.
 					{ 'targetClassName' -> classNames second.
-					  'superclassName' -> #Object.
+					  'superclassName' -> 'Object'.
 					  'instanceVariables' -> 'value'.
 					  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
 				} asArray.
@@ -157,9 +157,9 @@ GtLMagritteToolForClassesCreationExamples >> createClassesWithInstanceVariables 
 		createdClasses := classNames collect: [ :each |
 			Smalltalk globals at: each ifAbsent: [ nil ] ].
 		self assert: (createdClasses allSatisfy: #notNil).
-		self assert: (self gtDo: [ createdClasses first instanceVariables collect: #name ]
+		self assert: (self gtDo: [ createdClasses first instanceVariables collect: [ :each | each name asString ] ]
 			gemstoneDo: [ createdClasses first instVarNames collect: [ :each | each asString ] ]) equals: #('firstSlot' 'secondSlot').
-		self assert: (self gtDo: [ createdClasses second instanceVariables collect: #name ]
+		self assert: (self gtDo: [ createdClasses second instanceVariables collect: [ :each | each name asString ] ]
 			gemstoneDo: [ createdClasses second instVarNames collect: [ :each | each asString ] ]) equals: #('value')
 	] ensure: [ classNames do: [ :each | self removeClassNamedIfPresent: each ] ].
 		
@@ -293,7 +293,7 @@ GtLMagritteToolForClassesCreationExamples >> createTraitWithMissingTargetTraitNa
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('targetTraitName')
-		path: (self gtDo: [ #(#traits 1) ] gemstoneDo: [ #('traits' 1) ])
+		path: (self gtDo: [ #('traits' 1) ] gemstoneDo: [ #('traits' 1) ])
 		errorMessage: '@[traits/1] required properties missing [targetTraitName]'.
 		
 	^ call
@@ -336,12 +336,12 @@ GtLMagritteToolForClassesCreationExamples >> createTraitsWithInstanceVariables [
 			Smalltalk globals at: each ifAbsent: [ nil ] ].
 		self assert: (createdTraits allSatisfy: #notNil).
 		self assert: (createdTraits allSatisfy: #isTrait).
-		self assert: (createdTraits first instanceVariables collect: #name) equals: #('firstSlot' 'secondSlot').
-		self assert: (createdTraits second instanceVariables collect: #name) equals: #('value').
-		self assert: (createdTraits second classSide instanceVariables collect: #name as: Array) equals: #('classValue').
-		self assert: createdTraits first package name equals: 'Gt4LlmCoreNewPackage'.
-		self assert: createdTraits second package name equals: 'Gt4LlmCoreNewPackage'.
-		self assert: createdTraits second packageTag name equals: 'TagTwo' ]
+		self assert: (createdTraits first instanceVariables collect: #name) equals: #(#firstSlot #secondSlot).
+		self assert: (createdTraits second instanceVariables collect: #name) equals: #(#value).
+		self assert: (createdTraits second classSide instanceVariables collect: #name as: Array) equals: #(#classValue).
+		self assert: createdTraits first package name equals: #Gt4LlmCoreNewPackage.
+		self assert: createdTraits second package name equals: #Gt4LlmCoreNewPackage.
+		self assert: createdTraits second packageTag name equals: #TagTwo ]
 			gemstoneDo: [
 				self assert: (targetObject classes allSatisfy: [ :each |
 					each isErrorDomainObject and: [ each errorMessage = 'GemStone does not support Trait creation' ] ]).

@@ -20,9 +20,9 @@ GtLClassSubclassesExamples >> classSubclassesDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#givenClassName -> 'SampleClass'.
-		#subclassNames -> (NeoJSONArray with: 'A' with: 'B').
-		#mayHaveMore -> true
+		'givenClassName' -> 'SampleClass'.
+		'subclassNames' -> (NeoJSONArray with: 'A' with: 'B').
+		'mayHaveMore' -> true
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

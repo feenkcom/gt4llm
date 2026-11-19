@@ -9,8 +9,8 @@ Trait {
 { #category : #assertions }
 TGtLExceptionResultSerializationAssertions >> assertExceptionResult: resultJson errorClass: errorClassName errorMessage: errorMessage stackTraceIncludes: stackTraceSubstrings [
 	self assertJsonData: resultJson hasExpectedKeys: #('errorClass' 'errorMessage' 'stackTrace').
-	self assert: (resultJson at: #errorClass) equals: errorClassName.
-	self assert: ((resultJson at: #errorMessage) includesSubstring: errorMessage).
+	self assert: (resultJson at: 'errorClass') equals: errorClassName.
+	self assert: ((resultJson at: 'errorMessage') includesSubstring: errorMessage).
 	stackTraceSubstrings do: [ :substring |
-		self assert: ((resultJson at: #stackTrace) includesSubstring: substring) ].
+		self assert: ((resultJson at: 'stackTrace') includesSubstring: substring) ].
 ]

@@ -98,8 +98,8 @@ GtLExampleWithResultStatusesExamples >> domainObjectDataViews [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #total) equals: 4.
-	self assert: (jsonData at: #details) size equals: 4.
+	self assert: (jsonData at: 'total') equals: 4.
+	self assert: (jsonData at: 'details') size equals: 4.
 	
 	^ domainObject
 ]

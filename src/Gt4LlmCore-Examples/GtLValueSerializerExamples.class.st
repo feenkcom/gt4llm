@@ -51,7 +51,7 @@ GtLValueSerializerExamples >> validateBrokenDummyClassOne [
 	aSerializer := aResult serializer.
 	aJson := aResult output.
 	aJson := aJson copy.
-	aJson removeKey: #class.
+	aJson removeKey: 'class'.
 	aResult := aSerializer validateClass: aJson.
 	
 	self assert: aResult isValid not.

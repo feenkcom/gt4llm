@@ -17,13 +17,13 @@ GtLClassCommentChangeResultExamples >> basicClassCommentChangeResult [
 		status: 'changed';
 		yourself.
 		
-	self assert: result originalClass currentClassName equals: 'Object'.
-	self assert: result originalClass packageName equals: 'Kernel'.
-	self assert: result originalClass packageTagName equals: 'Objects'.
-	self assert: result updatedClass currentClassName equals: 'Object'.
-	self assert: result updatedClass packageName equals: 'Kernel'.
-	self assert: result updatedClass packageTagName equals: 'Objects'.
-	self assert: result changedClassName equals: 'Object'.
+	self assert: result originalClass currentClassName equals: #Object.
+	self assert: result originalClass packageName equals: #Kernel.
+	self assert: result originalClass packageTagName equals: #Objects.
+	self assert: result updatedClass currentClassName equals: #Object.
+	self assert: result updatedClass packageName equals: #Kernel.
+	self assert: result updatedClass packageTagName equals: #Objects.
+	self assert: result changedClassName equals: #Object.
 	self assert: result status equals: 'changed'.
 	self assert: result oldClassComment equals: 'Old class comment'.
 	self assert: result newClassComment equals: 'New class comment'.
@@ -47,8 +47,8 @@ GtLClassCommentChangeResultExamples >> classCommentChangeDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#changedClassName -> 'Object'.
-		#status -> 'changed'
+		'changedClassName' -> 'Object'.
+		'status' -> 'changed'
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
@@ -68,9 +68,9 @@ GtLClassCommentChangeResultExamples >> classCommentChangeResultWithNilOldComment
 		updatedClass: updatedClass;
 		status: 'changed'.
 		
-	self assert: result updatedClass currentClassName equals: 'Object'.
-	self assert: result updatedClass packageName equals: 'Kernel'.
-	self assert: result updatedClass packageTagName equals: 'Objects'.
+	self assert: result updatedClass currentClassName equals: #Object.
+	self assert: result updatedClass packageName equals: #Kernel.
+	self assert: result updatedClass packageTagName equals: #Objects.
 	self assert: result oldClassComment isNil.
 	self assert: result newClassComment equals: 'First comment'.
 	self assertResultIsClass: result.
@@ -94,8 +94,8 @@ GtLClassCommentChangeResultExamples >> classCommentChangeResultWithNilOldComment
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#changedClassName -> 'Object'.
-		#status -> 'changed'
+		'changedClassName' -> 'Object'.
+		'status' -> 'changed'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -117,8 +117,8 @@ GtLClassCommentChangeResultExamples >> emptyClassCommentChangeDataViewSerializat
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#changedClassName -> 'Object'.
-		#status -> 'changed'
+		'changedClassName' -> 'Object'.
+		'status' -> 'changed'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -138,9 +138,9 @@ GtLClassCommentChangeResultExamples >> emptyClassCommentChangeResult [
 		updatedClass: updatedClass;
 		status: 'changed'.
 		
-	self assert: result updatedClass currentClassName equals: 'Object'.
-	self assert: result updatedClass packageName equals: 'Kernel'.
-	self assert: result updatedClass packageTagName equals: 'Objects'.
+	self assert: result updatedClass currentClassName equals: #Object.
+	self assert: result updatedClass packageName equals: #Kernel.
+	self assert: result updatedClass packageTagName equals: #Objects.
 	self assert: result oldClassComment equals: ''.
 	self assert: result newClassComment equals: 'A new comment'.
 	self assertResultIsClass: result.

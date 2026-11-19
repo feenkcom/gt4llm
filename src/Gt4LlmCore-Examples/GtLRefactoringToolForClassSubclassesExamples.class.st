@@ -14,7 +14,7 @@ GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForClassWithNoSub
 		withArguments: {'targetClassName' -> 'GtLRefactoringToolForClassSubclassesExampleChild'} asDictionary.
 	targetObject := call result targetObject.
 	self assert: targetObject isErrorDomainObject not.
-	self assert: targetObject targetClass name equals: 'GtLRefactoringToolForClassSubclassesExampleChild'.
+	self assert: targetObject targetClass name equals: #GtLRefactoringToolForClassSubclassesExampleChild.
 	self assert: targetObject subclasses equals: #().
 	^ call
 ]
@@ -31,10 +31,10 @@ GtLRefactoringToolForClassSubclassesExamples >> classSubclassesForExistingClass 
 	self assert: targetObject isErrorDomainObject not.
 	self
 		assert: targetObject targetClass name
-		equals: 'GtLRefactoringToolForClassSubclassesExampleBase'.
+		equals: #GtLRefactoringToolForClassSubclassesExampleBase.
 	self
 		assert: (targetObject subclasses collect: #name as: Array)
-		equals: #('GtLRefactoringToolForClassSubclassesExampleChild').
+		equals: #(#GtLRefactoringToolForClassSubclassesExampleChild).
 	^ call
 ]
 

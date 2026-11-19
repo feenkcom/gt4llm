@@ -7,7 +7,12 @@ Class {
 { #category : #assertions }
 GtMagritteJSONSchemaExporterExamples >> assertSchema: aJsonSchema equals: aSchemaString [
 	| expectedSchema |
-	expectedSchema := NeoJSONSchema new json: (NeoJSONObject fromString: aSchemaString).
+	"The expected schema is read with String keys, as the exporter writes them (NeoJSONObject class>>#fromString: answers Symbol keys)"
+	expectedSchema := NeoJSONSchema new
+			json: ((NeoJSONReader on: aSchemaString readStream)
+					mapClass: NeoJSONObject;
+					listClass: NeoJSONArray;
+					next).
 	self 
 		assert: aJsonSchema
 		equals: expectedSchema.

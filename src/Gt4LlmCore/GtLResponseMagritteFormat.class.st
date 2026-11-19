@@ -79,21 +79,22 @@ GtLResponseMagritteFormat >> propertyNames [
 
 { #category : #'neo json' }
 GtLResponseMagritteFormat >> readGenericDomainObjectsFrom: aString [
-	| neoJsonMapper genericMapping |
-	
+	| neoJsonMapper genericMapping arguments |
 	neoJsonMapper := NeoJSONReader on: aString readStream.
-	
+
 	self appendNeoJsonMappingTo: neoJsonMapper.
-	
-	genericMapping := (neoJsonMapper mappings  at: modelClass) copy.
+
+	genericMapping := (neoJsonMapper mappings at: modelClass) copy.
 	genericMapping subjectClass: NeoJSONObject.
+
+	neoJsonMapper mappings at: #GenericEntity put: genericMapping.
+
+	arguments := OrderedDictionary new.
 	
-	neoJsonMapper mappings 
-		at: #GenericEntity
-		put: genericMapping.
-	
-	^ (neoJsonMapper nextAs: #GenericEntity)
-			asOrderedDictionary.
+	"Answer the top-level properties as an OrderedDictionary with String keys, the keys that the JSON readers (and GtLFunctionToolCall>>#arguments) give and that the tools read. NeoJSONObject has Symbol keys; the nested values are mapped to domain objects, so only the top level is converted."
+	(neoJsonMapper nextAs: #GenericEntity)
+		keysAndValuesDo: [ :aKey :aValue | arguments at: aKey asString put: aValue ].
+	^ arguments
 ]
 
 { #category : #accessing }

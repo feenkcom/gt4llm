@@ -17,8 +17,8 @@ GtLLepiterPagesDomainObjectExamples >> lepiterPagesDomainObjectDataViewSerializa
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData includesKey: #pages).
-	pagesData := jsonData at: #pages.
+	self assert: (jsonData includesKey: 'pages').
+	pagesData := jsonData at: 'pages'.
 	self assert: pagesData size equals: 1.
 	
 	firstPage := pagesData first.
@@ -72,7 +72,7 @@ GtLLepiterPagesDomainObjectExamples >> lepiterPagesEmptyDataViewSerialization [
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
-	expected := { #pages -> #() } asDictionary.
+	expected := { 'pages' -> #() } asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
 	^ dataBlock

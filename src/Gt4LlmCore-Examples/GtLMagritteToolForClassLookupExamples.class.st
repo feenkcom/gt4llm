@@ -77,7 +77,7 @@ GtLMagritteToolForClassLookupExamples >> lookupClassSuccessful [
 	
 	self assert: (targetObject isKindOf: GtLClassDescription).
 	self assert: targetObject currentClassName equals: GtLMagritteToolForClassLookup name.
-	self assert: targetObject packageName equals: 'Gt4LlmCore'.
+	self assert: targetObject packageName equals: #Gt4LlmCore.
 	self assert: targetObject instanceSlotNames isEmpty.
 	self assert: targetObject classSlotNames isEmpty.
 	self assert: targetObject allInstanceMethodNames notEmpty.

@@ -27,9 +27,9 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> assertTestStatus: aTestSta
 	"Assert the properties from serializeToLlmJsonObject."
 	| json |
 	json := aTestStatus serializeToLlmJsonObject.
-	self assert: (json at: #className) equals: aClassName.
-	self assert: (json at: #selector) equals: aSelector.
-	self assert: (json at: #status) equals: aStatusText.
+	self assert: (json at: 'className') equals: aClassName.
+	self assert: (json at: 'selector') equals: aSelector.
+	self assert: (json at: 'status') equals: aStatusText.
 ]
 
 { #category : #private }
@@ -67,8 +67,8 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> domainObjectDataViews [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #runCount) equals: 3.
-	self assert: (jsonData at: #details) size equals: 4.
+	self assert: (jsonData at: 'runCount') equals: 3.
+	self assert: (jsonData at: 'details') size equals: 4.
 	
 	^ domainObject
 ]
@@ -328,19 +328,19 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForEmptyS
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
 	
 	expectedJson := Dictionary new
-		at: #runCount put: 0;
-		at: #successes put: 0;
-		at: #failures put: 0;
-		at: #errors put: 0;
-		at: #skips put: 0;
-		at: #unexpectedPasses put: 0;
-		at: #unexpectedFailures put: 0;
-		at: #unexpectedErrors put: 0;
-		at: #expectedPasses put: 0;
-		at: #expectedDefects put: 0;
-		at: #notFound put: #();
-		at: #notTestCaseClasses put: #();
-		at: #details put: #();
+		at: 'runCount' put: 0;
+		at: 'successes' put: 0;
+		at: 'failures' put: 0;
+		at: 'errors' put: 0;
+		at: 'skips' put: 0;
+		at: 'unexpectedPasses' put: 0;
+		at: 'unexpectedFailures' put: 0;
+		at: 'unexpectedErrors' put: 0;
+		at: 'expectedPasses' put: 0;
+		at: 'expectedDefects' put: 0;
+		at: 'notFound' put: #();
+		at: 'notTestCaseClasses' put: #();
+		at: 'details' put: #();
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -358,34 +358,34 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForErrorT
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
 	
 	errorDetails := NeoJSONObject new
-		at: #errorMessage put: 'Boom';
-		at: #errorClass put: 'Error';
+		at: 'errorMessage' put: 'Boom';
+		at: 'errorClass' put: 'Error';
 		yourself.
 	
 	expectedDetail := NeoJSONObject new
-		at: #className put: 'GtLExampleDummyMixedTest';
-		at: #selector put: 'testError';
-		at: #status put: 'error';
-		at: #result put: 'Error';
-		at: #shouldPass put: true;
-		at: #expectedFailure put: false;
-		at: #errorDetails put: errorDetails;
+		at: 'className' put: 'GtLExampleDummyMixedTest';
+		at: 'selector' put: 'testError';
+		at: 'status' put: 'error';
+		at: 'result' put: 'Error';
+		at: 'shouldPass' put: true;
+		at: 'expectedFailure' put: false;
+		at: 'errorDetails' put: errorDetails;
 		yourself.
 	
 	expectedJson := Dictionary new
-		at: #runCount put: 1;
-		at: #successes put: 0;
-		at: #failures put: 0;
-		at: #errors put: 1;
-		at: #skips put: 0;
-		at: #unexpectedPasses put: 0;
-		at: #unexpectedFailures put: 0;
-		at: #unexpectedErrors put: 1;
-		at: #expectedPasses put: 0;
-		at: #expectedDefects put: 0;
-		at: #notFound put: #();
-		at: #notTestCaseClasses put: #();
-		at: #details put: { expectedDetail };
+		at: 'runCount' put: 1;
+		at: 'successes' put: 0;
+		at: 'failures' put: 0;
+		at: 'errors' put: 1;
+		at: 'skips' put: 0;
+		at: 'unexpectedPasses' put: 0;
+		at: 'unexpectedFailures' put: 0;
+		at: 'unexpectedErrors' put: 1;
+		at: 'expectedPasses' put: 0;
+		at: 'expectedDefects' put: 0;
+		at: 'notFound' put: #();
+		at: 'notTestCaseClasses' put: #();
+		at: 'details' put: { expectedDetail };
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -409,34 +409,34 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForExpect
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
 	
 	errorDetails := NeoJSONObject new
-		at: #errorMessage put: 'Assertion failed';
-		at: #errorClass put: 'TestFailure';
+		at: 'errorMessage' put: 'Assertion failed';
+		at: 'errorClass' put: 'TestFailure';
 		yourself.
 	
 	expectedDetail := NeoJSONObject new
-		at: #className put: 'GtLExampleDummyMixedTest';
-		at: #selector put: 'testExpectedFailure';
-		at: #status put: 'failure';
-		at: #result put: 'Failure';
-		at: #shouldPass put: false;
-		at: #expectedFailure put: true;
-		at: #errorDetails put: errorDetails;
+		at: 'className' put: 'GtLExampleDummyMixedTest';
+		at: 'selector' put: 'testExpectedFailure';
+		at: 'status' put: 'failure';
+		at: 'result' put: 'Failure';
+		at: 'shouldPass' put: false;
+		at: 'expectedFailure' put: true;
+		at: 'errorDetails' put: errorDetails;
 		yourself.
 	
 	expectedJson := Dictionary new
-		at: #runCount put: 1;
-		at: #successes put: 0;
-		at: #failures put: 1;
-		at: #errors put: 0;
-		at: #skips put: 0;
-		at: #unexpectedPasses put: 0;
-		at: #unexpectedFailures put: 0;
-		at: #unexpectedErrors put: 0;
-		at: #expectedPasses put: 0;
-		at: #expectedDefects put: 1;
-		at: #notFound put: #();
-		at: #notTestCaseClasses put: #();
-		at: #details put: { expectedDetail };
+		at: 'runCount' put: 1;
+		at: 'successes' put: 0;
+		at: 'failures' put: 1;
+		at: 'errors' put: 0;
+		at: 'skips' put: 0;
+		at: 'unexpectedPasses' put: 0;
+		at: 'unexpectedFailures' put: 0;
+		at: 'unexpectedErrors' put: 0;
+		at: 'expectedPasses' put: 0;
+		at: 'expectedDefects' put: 1;
+		at: 'notFound' put: #();
+		at: 'notTestCaseClasses' put: #();
+		at: 'details' put: { expectedDetail };
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -454,34 +454,34 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForFailin
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
 	
 	errorDetails := NeoJSONObject new
-		at: #errorMessage put: 'Assertion failed';
-		at: #errorClass put: 'TestFailure';
+		at: 'errorMessage' put: 'Assertion failed';
+		at: 'errorClass' put: 'TestFailure';
 		yourself.
 	
 	expectedDetail := NeoJSONObject new
-		at: #className put: 'GtLExampleDummyMixedTest';
-		at: #selector put: 'testFailure';
-		at: #status put: 'failure';
-		at: #result put: 'Failure';
-		at: #shouldPass put: true;
-		at: #expectedFailure put: false;
-		at: #errorDetails put: errorDetails;
+		at: 'className' put: 'GtLExampleDummyMixedTest';
+		at: 'selector' put: 'testFailure';
+		at: 'status' put: 'failure';
+		at: 'result' put: 'Failure';
+		at: 'shouldPass' put: true;
+		at: 'expectedFailure' put: false;
+		at: 'errorDetails' put: errorDetails;
 		yourself.
 	
 	expectedJson := Dictionary new
-		at: #runCount put: 1;
-		at: #successes put: 0;
-		at: #failures put: 1;
-		at: #errors put: 0;
-		at: #skips put: 0;
-		at: #unexpectedPasses put: 0;
-		at: #unexpectedFailures put: 1;
-		at: #unexpectedErrors put: 0;
-		at: #expectedPasses put: 0;
-		at: #expectedDefects put: 0;
-		at: #notFound put: #();
-		at: #notTestCaseClasses put: #();
-		at: #details put: { expectedDetail };
+		at: 'runCount' put: 1;
+		at: 'successes' put: 0;
+		at: 'failures' put: 1;
+		at: 'errors' put: 0;
+		at: 'skips' put: 0;
+		at: 'unexpectedPasses' put: 0;
+		at: 'unexpectedFailures' put: 1;
+		at: 'unexpectedErrors' put: 0;
+		at: 'expectedPasses' put: 0;
+		at: 'expectedDefects' put: 0;
+		at: 'notFound' put: #();
+		at: 'notTestCaseClasses' put: #();
+		at: 'details' put: { expectedDetail };
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -499,67 +499,67 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForMixedS
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
 	
 	successDetail := NeoJSONObject new
-		at: #className put: 'GtLExampleDummyPassingTest';
-		at: #selector put: 'testSuccess';
-		at: #status put: 'success';
-		at: #result put: 'Passed';
-		at: #shouldPass put: true;
-		at: #expectedFailure put: false;
+		at: 'className' put: 'GtLExampleDummyPassingTest';
+		at: 'selector' put: 'testSuccess';
+		at: 'status' put: 'success';
+		at: 'result' put: 'Passed';
+		at: 'shouldPass' put: true;
+		at: 'expectedFailure' put: false;
 		yourself.
 	
 	failureErrorDetails := NeoJSONObject new
-		at: #errorMessage put: 'Assertion failed';
-		at: #errorClass put: 'TestFailure';
+		at: 'errorMessage' put: 'Assertion failed';
+		at: 'errorClass' put: 'TestFailure';
 		yourself.
 	
 	failureDetail := NeoJSONObject new
-		at: #className put: 'GtLExampleDummyMixedTest';
-		at: #selector put: 'testFailure';
-		at: #status put: 'failure';
-		at: #result put: 'Failure';
-		at: #shouldPass put: true;
-		at: #expectedFailure put: false;
-		at: #errorDetails put: failureErrorDetails;
+		at: 'className' put: 'GtLExampleDummyMixedTest';
+		at: 'selector' put: 'testFailure';
+		at: 'status' put: 'failure';
+		at: 'result' put: 'Failure';
+		at: 'shouldPass' put: true;
+		at: 'expectedFailure' put: false;
+		at: 'errorDetails' put: failureErrorDetails;
 		yourself.
 	
 	errorErrorDetails := NeoJSONObject new
-		at: #errorMessage put: 'Boom';
-		at: #errorClass put: 'Error';
+		at: 'errorMessage' put: 'Boom';
+		at: 'errorClass' put: 'Error';
 		yourself.
 	
 	errorDetail := NeoJSONObject new
-		at: #className put: 'GtLExampleDummyMixedTest';
-		at: #selector put: 'testError';
-		at: #status put: 'error';
-		at: #result put: 'Error';
-		at: #shouldPass put: true;
-		at: #expectedFailure put: false;
-		at: #errorDetails put: errorErrorDetails;
+		at: 'className' put: 'GtLExampleDummyMixedTest';
+		at: 'selector' put: 'testError';
+		at: 'status' put: 'error';
+		at: 'result' put: 'Error';
+		at: 'shouldPass' put: true;
+		at: 'expectedFailure' put: false;
+		at: 'errorDetails' put: errorErrorDetails;
 		yourself.
 	
 	skippedDetail := NeoJSONObject new
-		at: #className put: 'GtLExampleDummyMixedTest';
-		at: #selector put: 'testSkip';
-		at: #status put: 'skipped';
-		at: #result put: 'Skipped';
-		at: #shouldPass put: true;
-		at: #expectedFailure put: false;
+		at: 'className' put: 'GtLExampleDummyMixedTest';
+		at: 'selector' put: 'testSkip';
+		at: 'status' put: 'skipped';
+		at: 'result' put: 'Skipped';
+		at: 'shouldPass' put: true;
+		at: 'expectedFailure' put: false;
 		yourself.
 	
 	expectedJson := Dictionary new
-		at: #runCount put: 3;
-		at: #successes put: 1;
-		at: #failures put: 1;
-		at: #errors put: 1;
-		at: #skips put: 1;
-		at: #unexpectedPasses put: 0;
-		at: #unexpectedFailures put: 1;
-		at: #unexpectedErrors put: 1;
-		at: #expectedPasses put: 1;
-		at: #expectedDefects put: 0;
-		at: #notFound put: #();
-		at: #notTestCaseClasses put: #();
-		at: #details put: { successDetail. failureDetail. errorDetail. skippedDetail };
+		at: 'runCount' put: 3;
+		at: 'successes' put: 1;
+		at: 'failures' put: 1;
+		at: 'errors' put: 1;
+		at: 'skips' put: 1;
+		at: 'unexpectedPasses' put: 0;
+		at: 'unexpectedFailures' put: 1;
+		at: 'unexpectedErrors' put: 1;
+		at: 'expectedPasses' put: 1;
+		at: 'expectedDefects' put: 0;
+		at: 'notFound' put: #();
+		at: 'notTestCaseClasses' put: #();
+		at: 'details' put: { successDetail. failureDetail. errorDetail. skippedDetail };
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -577,28 +577,28 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForNotFou
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
 	
 	expectedDetail := NeoJSONObject new
-		at: #className put: 'GtLExampleDummyPassingTest';
-		at: #selector put: 'testSuccess';
-		at: #status put: 'success';
-		at: #result put: 'Passed';
-		at: #shouldPass put: true;
-		at: #expectedFailure put: false;
+		at: 'className' put: 'GtLExampleDummyPassingTest';
+		at: 'selector' put: 'testSuccess';
+		at: 'status' put: 'success';
+		at: 'result' put: 'Passed';
+		at: 'shouldPass' put: true;
+		at: 'expectedFailure' put: false;
 		yourself.
 	
 	expectedJson := Dictionary new
-		at: #runCount put: 1;
-		at: #successes put: 1;
-		at: #failures put: 0;
-		at: #errors put: 0;
-		at: #skips put: 0;
-		at: #unexpectedPasses put: 0;
-		at: #unexpectedFailures put: 0;
-		at: #unexpectedErrors put: 0;
-		at: #expectedPasses put: 1;
-		at: #expectedDefects put: 0;
-		at: #notFound put: #('NonExistentClass1' 'NonExistentClass2');
-		at: #notTestCaseClasses put: #();
-		at: #details put: { expectedDetail };
+		at: 'runCount' put: 1;
+		at: 'successes' put: 1;
+		at: 'failures' put: 0;
+		at: 'errors' put: 0;
+		at: 'skips' put: 0;
+		at: 'unexpectedPasses' put: 0;
+		at: 'unexpectedFailures' put: 0;
+		at: 'unexpectedErrors' put: 0;
+		at: 'expectedPasses' put: 1;
+		at: 'expectedDefects' put: 0;
+		at: 'notFound' put: #('NonExistentClass1' 'NonExistentClass2');
+		at: 'notTestCaseClasses' put: #();
+		at: 'details' put: { expectedDetail };
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -616,28 +616,28 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForNotTes
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
 	
 	expectedDetail := NeoJSONObject new
-		at: #className put: 'GtLExampleDummyPassingTest';
-		at: #selector put: 'testSuccess';
-		at: #status put: 'success';
-		at: #result put: 'Passed';
-		at: #shouldPass put: true;
-		at: #expectedFailure put: false;
+		at: 'className' put: 'GtLExampleDummyPassingTest';
+		at: 'selector' put: 'testSuccess';
+		at: 'status' put: 'success';
+		at: 'result' put: 'Passed';
+		at: 'shouldPass' put: true;
+		at: 'expectedFailure' put: false;
 		yourself.
 	
 	expectedJson := Dictionary new
-		at: #runCount put: 1;
-		at: #successes put: 1;
-		at: #failures put: 0;
-		at: #errors put: 0;
-		at: #skips put: 0;
-		at: #unexpectedPasses put: 0;
-		at: #unexpectedFailures put: 0;
-		at: #unexpectedErrors put: 0;
-		at: #expectedPasses put: 1;
-		at: #expectedDefects put: 0;
-		at: #notFound put: #();
-		at: #notTestCaseClasses put: { Object. String };
-		at: #details put: { expectedDetail };
+		at: 'runCount' put: 1;
+		at: 'successes' put: 1;
+		at: 'failures' put: 0;
+		at: 'errors' put: 0;
+		at: 'skips' put: 0;
+		at: 'unexpectedPasses' put: 0;
+		at: 'unexpectedFailures' put: 0;
+		at: 'unexpectedErrors' put: 0;
+		at: 'expectedPasses' put: 1;
+		at: 'expectedDefects' put: 0;
+		at: 'notFound' put: #();
+		at: 'notTestCaseClasses' put: { Object. String };
+		at: 'details' put: { expectedDetail };
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -655,28 +655,28 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForSkippe
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
 	
 	expectedDetail := NeoJSONObject new
-		at: #className put: 'GtLExampleDummyMixedTest';
-		at: #selector put: 'testSkip';
-		at: #status put: 'skipped';
-		at: #result put: 'Skipped';
-		at: #shouldPass put: true;
-		at: #expectedFailure put: false;
+		at: 'className' put: 'GtLExampleDummyMixedTest';
+		at: 'selector' put: 'testSkip';
+		at: 'status' put: 'skipped';
+		at: 'result' put: 'Skipped';
+		at: 'shouldPass' put: true;
+		at: 'expectedFailure' put: false;
 		yourself.
 	
 	expectedJson := Dictionary new
-		at: #runCount put: 0;
-		at: #successes put: 0;
-		at: #failures put: 0;
-		at: #errors put: 0;
-		at: #skips put: 1;
-		at: #unexpectedPasses put: 0;
-		at: #unexpectedFailures put: 0;
-		at: #unexpectedErrors put: 0;
-		at: #expectedPasses put: 0;
-		at: #expectedDefects put: 0;
-		at: #notFound put: #();
-		at: #notTestCaseClasses put: #();
-		at: #details put: { expectedDetail };
+		at: 'runCount' put: 0;
+		at: 'successes' put: 0;
+		at: 'failures' put: 0;
+		at: 'errors' put: 0;
+		at: 'skips' put: 1;
+		at: 'unexpectedPasses' put: 0;
+		at: 'unexpectedFailures' put: 0;
+		at: 'unexpectedErrors' put: 0;
+		at: 'expectedPasses' put: 0;
+		at: 'expectedDefects' put: 0;
+		at: 'notFound' put: #();
+		at: 'notTestCaseClasses' put: #();
+		at: 'details' put: { expectedDetail };
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.
@@ -694,28 +694,28 @@ GtLTestCasesWithResultStatusesDomainObjectExamples >> jsonSerializationForSucces
 	jsonData := (domainObject llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData compositeJsonData.
 	
 	expectedDetail := NeoJSONObject new
-		at: #className put: 'GtLExampleDummyPassingTest';
-		at: #selector put: 'testSuccess';
-		at: #status put: 'success';
-		at: #result put: 'Passed';
-		at: #shouldPass put: true;
-		at: #expectedFailure put: false;
+		at: 'className' put: 'GtLExampleDummyPassingTest';
+		at: 'selector' put: 'testSuccess';
+		at: 'status' put: 'success';
+		at: 'result' put: 'Passed';
+		at: 'shouldPass' put: true;
+		at: 'expectedFailure' put: false;
 		yourself.
 	
 	expectedJson := Dictionary new
-		at: #runCount put: 1;
-		at: #successes put: 1;
-		at: #failures put: 0;
-		at: #errors put: 0;
-		at: #skips put: 0;
-		at: #unexpectedPasses put: 0;
-		at: #unexpectedFailures put: 0;
-		at: #unexpectedErrors put: 0;
-		at: #expectedPasses put: 1;
-		at: #expectedDefects put: 0;
-		at: #notFound put: #();
-		at: #notTestCaseClasses put: #();
-		at: #details put: { expectedDetail };
+		at: 'runCount' put: 1;
+		at: 'successes' put: 1;
+		at: 'failures' put: 0;
+		at: 'errors' put: 0;
+		at: 'skips' put: 0;
+		at: 'unexpectedPasses' put: 0;
+		at: 'unexpectedFailures' put: 0;
+		at: 'unexpectedErrors' put: 0;
+		at: 'expectedPasses' put: 1;
+		at: 'expectedDefects' put: 0;
+		at: 'notFound' put: #();
+		at: 'notTestCaseClasses' put: #();
+		at: 'details' put: { expectedDetail };
 		yourself.
 	
 	self assert: jsonData equals: expectedJson.

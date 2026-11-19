@@ -49,6 +49,7 @@ GtMagriteJSONDataCreationVisitor >> visitNumberDescription: aStringDescription [
 
 { #category : #'visiting-description' }
 GtMagriteJSONDataCreationVisitor >> visitPriorityContainer: aContainer [
+	"The properties are keyed by the names of the accessors, as Strings (JSON keys)"
 	jsonResult := NeoJSONObject new.
 	(aContainer children
 		sorted: [ :aDescription | aDescription accessor readSelector] ascending)
@@ -58,13 +59,17 @@ GtMagriteJSONDataCreationVisitor >> visitPriorityContainer: aContainer [
 					perform: aDescription accessor readSelector.
 			visitor := GtMagriteJSONDataCreationVisitor new currentObject: self currentObject.
 			aDescription acceptMagritte: visitor.
-			jsonResult at: aDescription accessor readSelector put: visitor jsonResult ].
+			jsonResult at: aDescription accessor readSelector asString put: visitor jsonResult ].
 	^ jsonResult
 ]
 
 { #category : #'visiting-description' }
 GtMagriteJSONDataCreationVisitor >> visitStringDescription: aStringDescription [
-	^ jsonResult := self currentObject perform: aStringDescription accessor readSelector.
+	"JSON strings are Strings (a Symbol value, such as a class name, is converted)"
+
+	| aValue |
+	aValue := self currentObject perform: aStringDescription accessor readSelector.
+	^ jsonResult := aValue isSymbol ifTrue: [ aValue asString ] ifFalse: [ aValue ]
 ]
 
 { #category : #'visiting-description' }
@@ -83,9 +88,11 @@ GtMagriteJSONDataCreationVisitor >> visitToManyRelationDescription: aDescription
 
 { #category : #visiting }
 GtMagriteJSONDataCreationVisitor >> visitToManyScalarRelationDescription: aDescription [
+	"JSON strings are Strings (Symbol elements, such as class names, are converted)"
+
 	| result |
 	result := self currentObject perform: aDescription accessor readSelector.
-	^ jsonResult := NeoJSONArray withAll: result
+	^ jsonResult := NeoJSONArray withAll: (result collect: [ :each | each isSymbol ifTrue: [ each asString ] ifFalse: [ each ] ])
 ]
 
 { #category : #'visiting-description' }

@@ -49,11 +49,11 @@ GtLIncorrectArgumentArrayItemDomainObjectExamples >> incorrectArgumentArrayItemD
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#argumentName -> 'items'.
-		#argumentValue -> #('one' 2 'three').
-		#incorrectItems -> #(2).
-		#expectedItemKindName -> 'String'.
-		#messageText -> 'items must be an array with items of String kind, not a SmallInteger'
+		'argumentName' -> 'items'.
+		'argumentValue' -> #('one' 2 'three').
+		'incorrectItems' -> #(2).
+		'expectedItemKindName' -> 'String'.
+		'messageText' -> 'items must be an array with items of String kind, not a SmallInteger'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -84,11 +84,11 @@ GtLIncorrectArgumentArrayItemDomainObjectExamples >> incorrectArgumentArrayItemD
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#argumentName -> 'numbers'.
-		#argumentValue -> #(1 'two' 3 'four').
-		#incorrectItems -> #('two' 'four').
-		#expectedItemKindName -> 'Integer'.
-		#messageText -> 'numbers must be an array with items of Integer kind, not a ByteString'
+		'argumentName' -> 'numbers'.
+		'argumentValue' -> #(1 'two' 3 'four').
+		'incorrectItems' -> #('two' 'four').
+		'expectedItemKindName' -> 'Integer'.
+		'messageText' -> 'numbers must be an array with items of Integer kind, not a ByteString'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

@@ -161,16 +161,16 @@ GtLErrorMessage >> senderText [
 GtLErrorMessage >> serializeForOpenAIResponsesAPI [
 	<return: #NeoJSONObject>
 	^ NeoJSONObject new
-		at: #role put: 'user';
-		at: #content
+		at: 'role' put: 'user';
+		at: 'content'
 			put: {NeoJSONObject new
-						at: #type put: 'input_text';
-						at: #text
+						at: 'type' put: 'input_text';
+						at: 'text'
 							put: (STONJSON toString: (NeoJSONObject new
-									at: #error put: self exception messageText;
-									at: #errorClass put: self exception className;
-									at: #description put: self exception description;
-									at: #stackTrace put: self exception stackString;
+									at: 'error' put: self exception messageText;
+									at: 'errorClass' put: self exception className;
+									at: 'description' put: self exception description;
+									at: 'stackTrace' put: self exception stackString;
 									yourself));
 						yourself};
 		yourself

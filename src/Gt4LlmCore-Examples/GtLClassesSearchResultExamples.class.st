@@ -20,8 +20,8 @@ GtLClassesSearchResultExamples >> classesSearchResultDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#foundClassNames -> (NeoJSONArray withAll: #('Object' 'String')).
-		#mayHaveMore -> false
+		'foundClassNames' -> (NeoJSONArray withAll: #('Object' 'String')).
+		'mayHaveMore' -> false
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
@@ -34,7 +34,7 @@ GtLClassesSearchResultExamples >> classesSearchResultWithMatches [
 	| matches result |
 	matches := { Object. String }.
 	result := GtLClassesSearchResult fromClasses: matches.
-	self assert: result foundClassNames equals: #('Object' 'String').
+	self assert: result foundClassNames equals: #(#Object #String).
 	self assert: result mayHaveMore not.
 	^ result
 ]

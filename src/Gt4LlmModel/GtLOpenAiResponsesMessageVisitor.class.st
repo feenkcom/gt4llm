@@ -124,8 +124,8 @@ GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveJsonBareDataBlock: aDataBlo
 	string := aDataBlock jsonData.
 	self assert: string isString.
 	^ {NeoJSONObject new
-			at: #text put: string;
-			at: #type put: #input_text;
+			at: 'text' put: string;
+			at: 'type' put: 'input_text';
 			yourself}
 ]
 
@@ -133,8 +133,8 @@ GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveJsonBareDataBlock: aDataBlo
 GtLOpenAiResponsesMessageVisitor >> visitGtLPrimitiveJsonDataBlock: aDataBlock [
 
 	^ {NeoJSONObject new
-			at: #text put: aDataBlock serializedJsonString;
-			at: #type put: #input_text;
+			at: 'text' put: aDataBlock serializedJsonString;
+			at: 'type' put: 'input_text';
 			yourself}
 ]
 

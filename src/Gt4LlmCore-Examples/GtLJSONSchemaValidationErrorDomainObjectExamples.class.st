@@ -50,8 +50,8 @@ GtLJSONSchemaValidationErrorDomainObjectExamples >> validationErrorDataViewSeria
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#errorMessage -> 'Invalid type: expected string, got number'.
-		#path -> (NeoJSONArray withAll: #('root' 'items' '0' 'name'))
+		'errorMessage' -> 'Invalid type: expected string, got number'.
+		'path' -> (NeoJSONArray withAll: #('root' 'items' '0' 'name'))
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
@@ -88,8 +88,8 @@ GtLJSONSchemaValidationErrorDomainObjectExamples >> validationErrorWithEmptyPath
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#errorMessage -> 'Root object is invalid'.
-		#path -> NeoJSONArray new
+		'errorMessage' -> 'Root object is invalid'.
+		'path' -> NeoJSONArray new
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
