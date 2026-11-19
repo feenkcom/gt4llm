@@ -24,14 +24,14 @@ GtLSmalltalkCodeEvaluationExceptionDomainObjectExamples >> exceptionDomainObject
 	
 	jsonData := dataBlock compositeJsonData.
 	
-	self assertJsonData: jsonData hasExpectedKeys: #(#code #errorDetails #errorReason #objectId #objectValue #playgroundPageReference).
-	self assert: (jsonData at: #code) equals: '1 / 0'.
-	self assert: (jsonData at: #errorReason) equals: 'Error while evaluating smalltalk code'.
+	self assertJsonData: jsonData hasExpectedKeys: #('code' 'errorDetails' 'errorReason' 'objectId' 'objectValue' 'playgroundPageReference').
+	self assert: (jsonData at: 'code') equals: '1 / 0'.
+	self assert: (jsonData at: 'errorReason') equals: 'Error while evaluating smalltalk code'.
 	
-	self assert: (jsonData at: #objectId) equals: 'exception-id-123'.
+	self assert: (jsonData at: 'objectId') equals: 'exception-id-123'.
 	
 	self 
-		assert: (jsonData at: #playgroundPageReference) 
+		assert: (jsonData at: 'playgroundPageReference') 
 		equals: (self expectedPlaygroundPageReferenceForObjectClassName: 'ZeroDivide').
 
 	errorDetails := jsonData at: 'errorDetails'.

@@ -42,27 +42,27 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMixedResults 
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData includesKey: #classes).
-	classesJson := jsonData at: #classes.
+	self assert: (jsonData includesKey: 'classes').
+	classesJson := jsonData at: 'classes'.
 	self assert: classesJson size equals: 4.
 	
 	"First element: successful class"
-	self assert: (classesJson first at: #currentClassName) equals: 'SampleCreatedClass'.
-	self assert: (classesJson first at: #superclassName) equals: 'Object'.
-	self assert: (classesJson first at: #packageName) equals: 'SamplePackage'.
+	self assert: (classesJson first at: 'currentClassName') equals: 'SampleCreatedClass'.
+	self assert: (classesJson first at: 'superclassName') equals: 'Object'.
+	self assert: (classesJson first at: 'packageName') equals: 'SamplePackage'.
 	
 	"Second element: missing domain object error"
-	self assert: (classesJson second at: #missingObjectName) equals: 'UnknownSuperclass'.
-	self assert: (classesJson second at: #errorMessage) equals: 'UnknownSuperclass is not found'.
+	self assert: (classesJson second at: 'missingObjectName') equals: 'UnknownSuperclass'.
+	self assert: (classesJson second at: 'errorMessage') equals: 'UnknownSuperclass is not found'.
 	
 	"Third element: another successful class"
-	self assert: (classesJson third at: #currentClassName) equals: 'AnotherCreatedClass'.
-	self assert: (classesJson third at: #superclassName) equals: 'Exception'.
+	self assert: (classesJson third at: 'currentClassName') equals: 'AnotherCreatedClass'.
+	self assert: (classesJson third at: 'superclassName') equals: 'Exception'.
 	
 	"Fourth element: could not create class error"
-	self assert: (classesJson fourth at: #targetClassName) equals: 'FailedClass'.
-	self assert: (classesJson fourth at: #packageName) equals: 'TestPackage'.
-	self assert: (classesJson fourth at: #messageText) equals: 'Class creation error: unknown error'.
+	self assert: (classesJson fourth at: 'targetClassName') equals: 'FailedClass'.
+	self assert: (classesJson fourth at: 'packageName') equals: 'TestPackage'.
+	self assert: (classesJson fourth at: 'messageText') equals: 'Class creation error: unknown error'.
 	
 	^ dataBlock
 ]
@@ -81,27 +81,27 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithMultipleClass
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	firstClassJson := NeoJSONObject new
-		at: #currentClassName put: 'SampleCreatedClass';
-		at: #superclassName put: 'Object';
-		at: #packageName put: 'SamplePackage';
-		at: #comment put: 'A sample class';
-		at: #instanceSlotNames put: (NeoJSONArray withAll: #('slot1'));
-		at: #classSlotNames put: NeoJSONArray new;
-		at: #classVariableNames put: NeoJSONArray new;
-		at: #traitCompositionString put: '{}';
+		at: 'currentClassName' put: 'SampleCreatedClass';
+		at: 'superclassName' put: 'Object';
+		at: 'packageName' put: 'SamplePackage';
+		at: 'comment' put: 'A sample class';
+		at: 'instanceSlotNames' put: (NeoJSONArray withAll: #('slot1'));
+		at: 'classSlotNames' put: NeoJSONArray new;
+		at: 'classVariableNames' put: NeoJSONArray new;
+		at: 'traitCompositionString' put: '{}';
 		yourself.
 	secondClassJson := NeoJSONObject new
-		at: #currentClassName put: 'AnotherCreatedClass';
-		at: #superclassName put: 'Exception';
-		at: #packageName put: 'SamplePackage';
-		at: #comment put: 'Another sample class';
-		at: #instanceSlotNames put: (NeoJSONArray withAll: #('value' 'count'));
-		at: #classSlotNames put: NeoJSONArray new;
-		at: #classVariableNames put: NeoJSONArray new;
-		at: #traitCompositionString put: '{}';
+		at: 'currentClassName' put: 'AnotherCreatedClass';
+		at: 'superclassName' put: 'Exception';
+		at: 'packageName' put: 'SamplePackage';
+		at: 'comment' put: 'Another sample class';
+		at: 'instanceSlotNames' put: (NeoJSONArray withAll: #('value' 'count'));
+		at: 'classSlotNames' put: NeoJSONArray new;
+		at: 'classVariableNames' put: NeoJSONArray new;
+		at: 'traitCompositionString' put: '{}';
 		yourself.
 	expectedJson := {
-		#classes -> (NeoJSONArray with: firstClassJson with: secondClassJson)
+		'classes' -> (NeoJSONArray with: firstClassJson with: secondClassJson)
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
@@ -122,17 +122,17 @@ GtLClassesCreationResultExamples >> creationResultSerializationWithSingleClass [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedClassJson := NeoJSONObject new
-		at: #currentClassName put: 'SampleCreatedClass';
-		at: #superclassName put: 'Object';
-		at: #packageName put: 'SamplePackage';
-		at: #comment put: 'A sample class';
-		at: #instanceSlotNames put: (NeoJSONArray withAll: #('slot1'));
-		at: #classSlotNames put: NeoJSONArray new;
-		at: #classVariableNames put: NeoJSONArray new;
-		at: #traitCompositionString put: '{}';
+		at: 'currentClassName' put: 'SampleCreatedClass';
+		at: 'superclassName' put: 'Object';
+		at: 'packageName' put: 'SamplePackage';
+		at: 'comment' put: 'A sample class';
+		at: 'instanceSlotNames' put: (NeoJSONArray withAll: #('slot1'));
+		at: 'classSlotNames' put: NeoJSONArray new;
+		at: 'classVariableNames' put: NeoJSONArray new;
+		at: 'traitCompositionString' put: '{}';
 		yourself.
 	expectedJson := {
-		#classes -> (NeoJSONArray with: expectedClassJson)
+		'classes' -> (NeoJSONArray with: expectedClassJson)
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	
@@ -254,7 +254,7 @@ GtLClassesCreationResultExamples >> emptyCreationResultSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#classes -> NeoJSONArray new
+		'classes' -> NeoJSONArray new
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

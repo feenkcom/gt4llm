@@ -18,10 +18,10 @@ GtLMethodWithSourceExamples >> methodWithSourceDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: ((jsonData at: #methodReference) at: #methodName) equals: 'fromCompiledMethod:'.
-	self assert: ((jsonData at: #methodReference) at: #methodClassName) equals: 'GtLMethodReference'.
-	self assert: ((jsonData at: #methodReference) at: #classSide) equals: true.
-	self assert: (jsonData at: #sourceCode) equals: (GtLMethodReference class >> #fromCompiledMethod:) sourceCode.
+	self assert: ((jsonData at: 'methodReference') at: 'methodName') equals: 'fromCompiledMethod:'.
+	self assert: ((jsonData at: 'methodReference') at: 'methodClassName') equals: 'GtLMethodReference'.
+	self assert: ((jsonData at: 'methodReference') at: 'classSide') equals: true.
+	self assert: (jsonData at: 'sourceCode') equals: (GtLMethodReference class >> #fromCompiledMethod:) sourceCode.
 	
 	^ dataBlock
 ]

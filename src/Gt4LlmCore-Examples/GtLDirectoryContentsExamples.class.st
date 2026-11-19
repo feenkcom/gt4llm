@@ -29,13 +29,13 @@ GtLDirectoryContentsExamples >> directoryContentsWithFilesAndDirectories [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#directoryPath -> '/tmp/test'.
-		#files -> (NeoJSONArray withAll: {
-			NeoJSONObject new at: #pathString put: '/tmp/test/file1.txt'; yourself.
-			NeoJSONObject new at: #pathString put: '/tmp/test/file2.txt'; yourself
+		'directoryPath' -> '/tmp/test'.
+		'files' -> (NeoJSONArray withAll: {
+			NeoJSONObject new at: 'pathString' put: '/tmp/test/file1.txt'; yourself.
+			NeoJSONObject new at: 'pathString' put: '/tmp/test/file2.txt'; yourself
 		}).
-		#directories -> (NeoJSONArray withAll: {
-			NeoJSONObject new at: #pathString put: '/tmp/test/subdir'; yourself
+		'directories' -> (NeoJSONArray withAll: {
+			NeoJSONObject new at: 'pathString' put: '/tmp/test/subdir'; yourself
 		})
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
@@ -65,9 +65,9 @@ GtLDirectoryContentsExamples >> emptyDirectoryContents [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#directoryPath -> '/tmp/test'.
-		#files -> NeoJSONArray new.
-		#directories -> NeoJSONArray new
+		'directoryPath' -> '/tmp/test'.
+		'files' -> NeoJSONArray new.
+		'directories' -> NeoJSONArray new
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

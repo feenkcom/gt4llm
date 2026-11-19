@@ -42,10 +42,10 @@ GtLPhlowViewDomainObjectExamples >> phlowViewDataViewSerialization [
 	
 	jsonData := dataBlock compositeJsonData.
 	self assert: jsonData equals: (Dictionary new
-		at: #viewTitle put: 'String';
-		at: #priority put: 9;
-		at: #viewMethodClass put: #String;
-		at: #viewMethodSourceCode put: (String >> #gtStringFor:) sourceCode;
+		at: 'viewTitle' put: 'String';
+		at: 'priority' put: 9;
+		at: 'viewMethodClass' put: 'String';
+		at: 'viewMethodSourceCode' put: (String >> #gtStringFor:) sourceCode;
 		yourself).
 	
 	imageBlock := dataBlock imageDataBlocks first.

@@ -8,19 +8,19 @@ Class {
 GtLValueSerializer class >> classSchema [
 	^ NeoJSONSchema new
 		json: (NeoJSONObject new
-				at: #type put: 'object';
-				at: #properties
+				at: 'type' put: 'object';
+				at: 'properties'
 					put: (NeoJSONObject new
-							putStringOrNilSchemaAt: #class;
-							putStringOrNilSchemaAt: #superclass;
-							putStringSchemaAt: #comment;
-							putStringSchemaAt: #package;
-							putStringArraySchemaAt: #instanceSlots;
-							putStringArraySchemaAt: #classSlots;
-							putStringArraySchemaAt: #allInstanceMethods;
-							putStringArraySchemaAt: #allClassMethods;
+							putStringOrNilSchemaAt: 'class';
+							putStringOrNilSchemaAt: 'superclass';
+							putStringSchemaAt: 'comment';
+							putStringSchemaAt: 'package';
+							putStringArraySchemaAt: 'instanceSlots';
+							putStringArraySchemaAt: 'classSlots';
+							putStringArraySchemaAt: 'allInstanceMethods';
+							putStringArraySchemaAt: 'allClassMethods';
 							yourself);
-				at: #required put: #(class superclass package);
+				at: 'required' put: #('class' 'superclass' 'package');
 				yourself)
 ]
 
@@ -34,17 +34,17 @@ GtLValueSerializer class >> serializeException: anException [
 GtLValueSerializer class >> valueSchema [
 	^ NeoJSONSchema new
 		json: (NeoJSONObject new
-				at: #type put: 'object';
-				at: #properties
+				at: 'type' put: 'object';
+				at: 'properties'
 					put: (NeoJSONObject new
-							putStringOrNilSchemaAt: #class;
-							putStringOrNilSchemaAt: #superclass;
-							putStringSchemaAt: #package;
-							putStringSchemaAt: #printString;
-							putStringArraySchemaAt: #allInstanceMethods;
-							putStringArraySchemaAt: #instanceSlots;
+							putStringOrNilSchemaAt: 'class';
+							putStringOrNilSchemaAt: 'superclass';
+							putStringSchemaAt: 'package';
+							putStringSchemaAt: 'printString';
+							putStringArraySchemaAt: 'allInstanceMethods';
+							putStringArraySchemaAt: 'instanceSlots';
 							yourself);
-				at: #required put: #(class superclass package);
+				at: 'required' put: #('class' 'superclass' 'package');
 				yourself)
 ]
 
@@ -77,9 +77,9 @@ GtLValueSerializer >> serializeClass: aClass [
 { #category : #'as yet unclassified' }
 GtLValueSerializer >> serializeException: anException [
 	^NeoJSONObject new
-		at: #errorMessage put: anException description;
-		at: #errorClass put: anException className;
-		at: #stackTrace put: (anException signalerContext
+		at: 'errorMessage' put: anException description;
+		at: 'errorClass' put: anException className;
+		at: 'stackTrace' put: (anException signalerContext
 			ifNotNil: [ :ctx | 
 				String lf join: ((ctx stackOfSize: 30) 
 					collect: [ :each | each gtDisplayString]) ]

@@ -50,12 +50,12 @@ GtLAppliedRefactoringExamples >> appliedRefactoringSerialization [
 	dataBlock := self appliedRefactoringMainDataView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	expected := Dictionary new
-			at: #status put: 'applied';
-			at: #changesCount put: 1;
-			at: #codeChanges put: NeoJSONArray new;
-			at: #errorMessage put: nil;
-			at: #refactoringName put: nil;
-			at: #refactoringDescription put: nil;
+			at: 'status' put: 'applied';
+			at: 'changesCount' put: 1;
+			at: 'codeChanges' put: NeoJSONArray new;
+			at: 'errorMessage' put: nil;
+			at: 'refactoringName' put: nil;
+			at: 'refactoringDescription' put: nil;
 			yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	^ dataBlock

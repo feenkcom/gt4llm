@@ -74,7 +74,7 @@ GtLMagritteToolForClassesCreationExamples >> createClassWithMissingTargetClassNa
 		executeTool: GtLMagritteToolForClassesCreation new
 		withArguments: {
 			'classes' -> {
-				{ 'superclassName' -> #Object.
+				{ 'superclassName' -> 'Object'.
 				  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
 			} asArray.
 			'traits' -> {}
@@ -83,7 +83,7 @@ GtLMagritteToolForClassesCreationExamples >> createClassWithMissingTargetClassNa
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('targetClassName')
-		path: (self gtDo: [ #(#classes 1) ] gemstoneDo: [ #('classes' 1) ])
+		path: (self gtDo: [ #('classes' 1) ] gemstoneDo: [ #('classes' 1) ])
 		errorMessage: '@[classes/1] required properties missing [targetClassName]'.
 		
 	^ call
@@ -106,7 +106,7 @@ GtLMagritteToolForClassesCreationExamples >> createClassesThatAlreadyExist [
 			withArguments: {
 				'classes' -> {
 					{ 'targetClassName' -> className.
-					  'superclassName' -> #Object.
+					  'superclassName' -> 'Object'.
 					  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
 				} asArray.
 				'traits' -> {}
@@ -140,11 +140,11 @@ GtLMagritteToolForClassesCreationExamples >> createClassesWithInstanceVariables 
 			withArguments: {
 				'classes' -> {
 					{ 'targetClassName' -> classNames first.
-					  'superclassName' -> #Object.
+					  'superclassName' -> 'Object'.
 					  'instanceVariables' -> 'firstSlot secondSlot'.
 					  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary.
 					{ 'targetClassName' -> classNames second.
-					  'superclassName' -> #Object.
+					  'superclassName' -> 'Object'.
 					  'instanceVariables' -> 'value'.
 					  'package' -> 'Gt4LlmCoreNewPackage' } asDictionary
 				} asArray.
@@ -293,7 +293,7 @@ GtLMagritteToolForClassesCreationExamples >> createTraitWithMissingTargetTraitNa
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('targetTraitName')
-		path: (self gtDo: [ #(#traits 1) ] gemstoneDo: [ #('traits' 1) ])
+		path: (self gtDo: [ #('traits' 1) ] gemstoneDo: [ #('traits' 1) ])
 		errorMessage: '@[traits/1] required properties missing [targetTraitName]'.
 		
 	^ call

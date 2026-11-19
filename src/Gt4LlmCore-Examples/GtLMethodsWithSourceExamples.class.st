@@ -38,21 +38,21 @@ GtLMethodsWithSourceExamples >> methodsWithSourceObjectFromCompiledMethodsDataVi
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #methods) size equals: 2.
+	self assert: (jsonData at: 'methods') size equals: 2.
 	
 	methodRefOne := NeoJSONObject new
-		at: #methodName put: 'fromCompiledMethod:';
-		at: #methodClassName put: 'GtLMethodReference';
-		at: #classSide put: true;
+		at: 'methodName' put: 'fromCompiledMethod:';
+		at: 'methodClassName' put: 'GtLMethodReference';
+		at: 'classSide' put: true;
 		yourself.
-	self assert: ((jsonData at: #methods) first at: #methodReference) equals: methodRefOne.
+	self assert: ((jsonData at: 'methods') first at: 'methodReference') equals: methodRefOne.
 	
 	methodRefTwo := NeoJSONObject new
-		at: #methodName put: 'methods:';
-		at: #methodClassName put: 'GtLMethodsWithSource';
-		at: #classSide put: false;
+		at: 'methodName' put: 'methods:';
+		at: 'methodClassName' put: 'GtLMethodsWithSource';
+		at: 'classSide' put: false;
 		yourself.
-	self assert: ((jsonData at: #methods) second at: #methodReference) equals: methodRefTwo.
+	self assert: ((jsonData at: 'methods') second at: 'methodReference') equals: methodRefTwo.
 	
 	^ dataBlock
 ]
@@ -109,16 +109,16 @@ GtLMethodsWithSourceExamples >> methodsWithSourceObjectWithMissingEntriesDataVie
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #methods) size equals: 3.
+	self assert: (jsonData at: 'methods') size equals: 3.
 	
 	methodRef := NeoJSONObject new
-		at: #methodName put: 'methods:';
-		at: #methodClassName put: 'GtLMethodsWithSource';
-		at: #classSide put: false;
+		at: 'methodName' put: 'methods:';
+		at: 'methodClassName' put: 'GtLMethodsWithSource';
+		at: 'classSide' put: false;
 		yourself.
-	self assert: ((jsonData at: #methods) first at: #methodReference) equals: methodRef.
-	self assert: ((jsonData at: #methods) second at: #missingObjectName) equals: 'MissingMethod'.
-	self assert: ((jsonData at: #methods) third at: #missingArgument) equals: 'methodDescriptors'.
+	self assert: ((jsonData at: 'methods') first at: 'methodReference') equals: methodRef.
+	self assert: ((jsonData at: 'methods') second at: 'missingObjectName') equals: 'MissingMethod'.
+	self assert: ((jsonData at: 'methods') third at: 'missingArgument') equals: 'methodDescriptors'.
 	
 	^ dataBlock
 ]

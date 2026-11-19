@@ -45,20 +45,20 @@ GtLRefactoringPreviewExamples >> namedRefactoringPreviewSerialization [
 	self
 		assertDataBlock: dataBlock
 		hasLlmJsonData: (Dictionary new
-				at: #changes
+				at: 'changes'
 					put: (NeoJSONArray
 							with: (NeoJSONObject new
-									at: #changeDescription
+									at: 'changeDescription'
 										put: 'Add GtLRefactoringPreviewExamples>>#previewedMethod';
-									at: #kind put: 'added method';
-									at: #target put: 'GtLRefactoringPreviewExamples>>#previewedMethod';
-									at: #newSource put: 'previewedMethod ^ 42';
+									at: 'kind' put: 'added method';
+									at: 'target' put: 'GtLRefactoringPreviewExamples>>#previewedMethod';
+									at: 'newSource' put: 'previewedMethod ^ 42';
 									yourself));
-				at: #changesCount put: 1;
-				at: #objectId put: 'example-object-id';
-				at: #applied put: false;
-				at: #refactoringName put: 'Add method';
-				at: #refactoringDescription
+				at: 'changesCount' put: 1;
+				at: 'objectId' put: 'example-object-id';
+				at: 'applied' put: false;
+				at: 'refactoringName' put: 'Add method';
+				at: 'refactoringDescription'
 					put: 'Add method previewedMethod ^ 42 in class GtLRefactoringPreviewExamples protocol examples';
 				yourself).
 	^ dataBlock
@@ -166,20 +166,20 @@ GtLRefactoringPreviewExamples >> refactoringPreviewSerialization [
 	dataBlock := self refactoringPreviewMainDataView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	expected := Dictionary new
-			at: #changes
+			at: 'changes'
 				put: (NeoJSONArray
 						with: (NeoJSONObject new
-								at: #changeDescription
+								at: 'changeDescription'
 									put: 'Add GtLRefactoringPreviewExamples>>#previewedMethod';
-								at: #kind put: 'added method';
-								at: #target put: 'GtLRefactoringPreviewExamples>>#previewedMethod';
-								at: #newSource put: 'previewedMethod ^ 42';
+								at: 'kind' put: 'added method';
+								at: 'target' put: 'GtLRefactoringPreviewExamples>>#previewedMethod';
+								at: 'newSource' put: 'previewedMethod ^ 42';
 								yourself));
-			at: #changesCount put: 1;
-			at: #objectId put: 'example-object-id';
-			at: #applied put: false;
-			at: #refactoringName put: nil;
-			at: #refactoringDescription put: nil;
+			at: 'changesCount' put: 1;
+			at: 'objectId' put: 'example-object-id';
+			at: 'applied' put: false;
+			at: 'refactoringName' put: nil;
+			at: 'refactoringDescription' put: nil;
 			yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	^ dataBlock

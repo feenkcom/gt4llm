@@ -41,10 +41,10 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithBothDataKeys_serial
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #outerKey put: (Dictionary new
+		at: 'outerKey' put: (Dictionary new
 			at: 'itemData' put: (NeoJSONObject new
-				at: #name put: 'Example Item';
-				at: #amount put: 42;
+				at: 'name' put: 'Example Item';
+				at: 'amount' put: 42;
 				yourself);
 			yourself);
 		yourself.
@@ -86,8 +86,8 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithDataKey_serializati
 	
 	expectedData := Dictionary new 
 		at: 'itemData' put: (NeoJSONObject new
-			at: #name put: 'Example Item';
-			at: #amount put: 42;
+			at: 'name' put: 'Example Item';
+			at: 'amount' put: 42;
 			yourself);
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
@@ -128,9 +128,9 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithForwardDataKey_seri
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #forwardedMagritte put: (Dictionary new
-			at: #name put: 'Example Item';
-			at: #amount put: 42;
+		at: 'forwardedMagritte' put: (Dictionary new
+			at: 'name' put: 'Example Item';
+			at: 'amount' put: 42;
 			yourself);
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
@@ -167,8 +167,8 @@ GtLForwardToMagritteViewExamples >> forwardToMagritteViewWithoutDataKey_serializ
 	self assert: dataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 	
 	expectedData := Dictionary new
-		at: #name put: 'Example Item';
-		at: #amount put: 42;
+		at: 'name' put: 'Example Item';
+		at: 'amount' put: 42;
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedData.
 	

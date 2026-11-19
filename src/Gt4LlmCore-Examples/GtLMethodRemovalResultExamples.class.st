@@ -51,7 +51,7 @@ GtLMethodRemovalResultExamples >> methodRemovalResultDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #status put: 'removed';
+		at: 'status' put: 'removed';
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	

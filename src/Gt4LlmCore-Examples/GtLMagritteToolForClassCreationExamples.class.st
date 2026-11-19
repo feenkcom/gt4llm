@@ -16,8 +16,8 @@ GtLMagritteToolForClassCreationExamples >> createClassThatAlreadyExists [
 		executeTool: GtLMagritteToolForClassCreation new
 		withArguments: {
 			'classCreationRequest' -> {
-				'targetClassName' -> #Object.
-				'superclassName' -> #Object.
+				'targetClassName' -> 'Object'.
+				'superclassName' -> 'Object'.
 				'package' -> 'Gt4LlmCoreNewPackage'
 			} asDictionary
 		} asDictionary.
@@ -45,7 +45,7 @@ GtLMagritteToolForClassCreationExamples >> createClassWithComment [
 			withArguments: {
 				'classCreationRequest' -> {
 					'targetClassName' -> className.
-					'superclassName' -> #Object.
+					'superclassName' -> 'Object'.
 					'package' -> 'Gt4LlmCoreNewPackage'.
 					'comment' -> comment
 				} asDictionary
@@ -78,7 +78,7 @@ GtLMagritteToolForClassCreationExamples >> createClassWithInstanceVariables [
 			withArguments: {
 				'classCreationRequest' -> {
 					'targetClassName' -> className.
-					'superclassName' -> #Object.
+					'superclassName' -> 'Object'.
 					'instanceVariables' -> 'firstSlot secondSlot'.
 					'package' -> 'Gt4LlmCoreNewPackage'
 				} asDictionary
@@ -127,7 +127,7 @@ GtLMagritteToolForClassCreationExamples >> createClassWithMissingTargetClassName
 		executeTool: GtLMagritteToolForClassCreation new
 		withArguments: {
 			'classCreationRequest' -> {
-				'superclassName' -> #Object.
+				'superclassName' -> 'Object'.
 				'package' -> 'Gt4LlmCoreNewPackage'
 			} asDictionary
 		} asDictionary.
@@ -170,14 +170,14 @@ GtLMagritteToolForClassCreationExamples >> createClassWithNilClassName [
 		withArguments: {
 			'classCreationRequest' -> {
 				'targetClassName' -> nil.
-				'superclassName' -> #Object.
+				'superclassName' -> 'Object'.
 				'package' -> 'Gt4LlmCoreNewPackage'
 			} asDictionary
 		} asDictionary.
 	
 	self
 		assertJSONSchemaValidationError: call result targetObject
-		withPath: #(#classCreationRequest #targetClassName)
+		withPath: #('classCreationRequest' 'targetClassName')
 		errorMessage: '@[classCreationRequest/targetClassName] string expected'.
 		
 	^ call
@@ -192,15 +192,15 @@ GtLMagritteToolForClassCreationExamples >> createClassWithNilPackage [
 		executeTool: GtLMagritteToolForClassCreation new
 		withArguments: {
 			'classCreationRequest' -> {
-				'targetClassName' -> #TestClassName.
-				'superclassName' -> #Object.
+				'targetClassName' -> 'TestClassName'.
+				'superclassName' -> 'Object'.
 				'package' -> nil
 			} asDictionary
 		} asDictionary.
 	
 	self
 		assertJSONSchemaValidationError: call result targetObject
-		withPath: #(#classCreationRequest #package)
+		withPath: #('classCreationRequest' 'package')
 		errorMessage: '@[classCreationRequest/package] string expected'.
 		
 	^ call
@@ -215,7 +215,7 @@ GtLMagritteToolForClassCreationExamples >> createClassWithNilSuperclass [
 		executeTool: GtLMagritteToolForClassCreation new
 		withArguments: {
 			'classCreationRequest' -> {
-				'targetClassName' -> #TestClassName.
+				'targetClassName' -> 'TestClassName'.
 				'superclassName' -> nil.
 				'package' -> 'Gt4LlmCoreNewPackage'
 			} asDictionary
@@ -223,7 +223,7 @@ GtLMagritteToolForClassCreationExamples >> createClassWithNilSuperclass [
 	
 	self
 		assertJSONSchemaValidationError: call result targetObject
-		withPath: #(#classCreationRequest #superclassName)
+		withPath: #('classCreationRequest' 'superclassName')
 		errorMessage: '@[classCreationRequest/superclassName] string expected'.
 		
 	^ call
@@ -238,7 +238,7 @@ GtLMagritteToolForClassCreationExamples >> createClassWithUnknownSuperclass [
 		executeTool: GtLMagritteToolForClassCreation new
 		withArguments: {
 			'classCreationRequest' -> {
-				'targetClassName' -> #GtLMagritteToolForClassCreationExamplesUnknownSuperclass.
+				'targetClassName' -> 'GtLMagritteToolForClassCreationExamplesUnknownSuperclass'.
 				'superclassName' -> 'ClassThatDoesNotExistForClassCreation'.
 				'package' -> 'Gt4LlmCoreNewPackage'
 			} asDictionary

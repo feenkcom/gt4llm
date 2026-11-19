@@ -22,6 +22,26 @@ GtLApiEntityExamples >> functionCallEntity [
 ]
 
 { #category : #examples }
+GtLApiEntityExamples >> openAiClientReadsJsonWithStringKeys [
+	"The Zinc client of the OpenAI-compatible providers reads JSON responses as plain dictionaries with String keys,
+	the keys the response readers use (`aDictionary at: 'model'`)"
+
+	<gtExample>
+	<return: #Dictionary>
+	| client response |
+	client := GtLOpenAIClientZincBuilder new
+			apiKey: 'none';
+			create.
+	response := client contentReader
+			value: (ZnEntity json: '{"model":"m","choices":[{"message":{"role":"assistant","content":"x"}}]}').
+	self assert: response class equals: Dictionary.
+	self assert: (response keys allSatisfy: [ :each | each isString and: [ each isSymbol not ] ]).
+	self assert: (response at: 'model') equals: 'm'.
+	self assert: (((response at: 'choices') first at: 'message') at: 'content') equals: 'x'.
+	^ response
+]
+
+{ #category : #examples }
 GtLApiEntityExamples >> openAiCompletionsRequestEntity [
 	<gtExample>
 	| rawData entity message content tool |

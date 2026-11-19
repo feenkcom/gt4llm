@@ -73,7 +73,7 @@ GtLAnthropicClient >> baseUrl: anObject [
 { #category : #'as yet unclassified' }
 GtLAnthropicClient >> checkForErrors: aResponse [
 	((aResponse includesKey: 'error')
-		and: [ ((aResponse at: 'error') isKindOf: NeoJSONObject)
+		and: [ (aResponse at: 'error') isDictionary
 				and: [ (aResponse at: 'error') includesKey: 'message' ] ])
 		ifTrue: [ ^ (GtLAnthropicError from: (aResponse at: 'error')) signal ].
 

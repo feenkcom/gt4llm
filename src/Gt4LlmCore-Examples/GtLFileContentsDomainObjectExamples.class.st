@@ -22,8 +22,8 @@ GtLFileContentsDomainObjectExamples >> emptyFileContents [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#path -> nil.
-		#contents -> nil
+		'path' -> nil.
+		'contents' -> nil
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -50,8 +50,8 @@ GtLFileContentsDomainObjectExamples >> fileContentsWithData [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#path -> '/tmp/test.txt'.
-		#contents -> encodedContents
+		'path' -> '/tmp/test.txt'.
+		'contents' -> encodedContents
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

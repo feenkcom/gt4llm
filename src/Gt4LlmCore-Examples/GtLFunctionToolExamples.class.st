@@ -69,7 +69,7 @@ GtLFunctionToolExamples >> additionToolDataViewSerialization [
 	self assert: dataBlock isNotNil.
 	
 	jsonData := dataBlock llmJsonData.
-	objectValue := jsonData at: #objectValue.
+	objectValue := jsonData at: 'objectValue'.
 	self assert: (objectValue at: 'objectClassName') equals: 'SmallInteger'.
 	self assert: (objectValue at: 'objectPrintString') equals: '30'.
 	

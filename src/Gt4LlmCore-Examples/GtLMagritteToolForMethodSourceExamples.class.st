@@ -42,7 +42,7 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMet
 		executeTool: GtLMagritteToolForMethodSource new
 		withArguments: {
 			'methodDescriptor' -> {
-				'methodClassName' -> #GtLMagritteToolForMethodSourceExamples.
+				'methodClassName' -> 'GtLMagritteToolForMethodSourceExamples'.
 				'methodName' -> 'methodSourceForExistingInstanceSideMethod'.
 				'classSide' -> false
 			} asDictionary

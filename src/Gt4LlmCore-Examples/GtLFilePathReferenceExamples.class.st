@@ -21,7 +21,7 @@ GtLFilePathReferenceExamples >> emptyFilePathReference [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#pathString -> nil
+		'pathString' -> nil
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -46,7 +46,7 @@ GtLFilePathReferenceExamples >> filePathReferenceForDirectory [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#pathString -> pathString
+		'pathString' -> pathString
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -70,7 +70,7 @@ GtLFilePathReferenceExamples >> filePathReferenceForFile [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expectedJson := {
-		#pathString -> pathString
+		'pathString' -> pathString
 	} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 	

@@ -132,7 +132,7 @@ GtLWrappedObjectModelExamples >> wrappedObjectModelWithMarkdownSerialization [
 	jsonData := dataBlock llmJsonData.
 	expectedJsonData := Dictionary new
 		at: 'testMarkdown' put: (Dictionary new
-			at: #content put: '# Test Content';
+			at: 'content' put: '# Test Content';
 			yourself);
 		yourself.
 	self assert: jsonData equals: expectedJsonData.

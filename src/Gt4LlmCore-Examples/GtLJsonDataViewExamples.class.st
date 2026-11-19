@@ -56,7 +56,7 @@ GtLJsonDataViewExamples >> standaloneJsonDataViewWithDataKey_serialization [
 	
 	concreteJsonDataBlock := compositeJsonDataBlock jsonDataBlocks first.
 	self assert: concreteJsonDataBlock sourceDataView notNil.
-	self assert: concreteJsonDataBlock dataKey equals: #data.
+	self assert: concreteJsonDataBlock dataKey equals: 'data'.
 	self
 		assert: concreteJsonDataBlock llmJsonData
 		equals: {'data' -> {

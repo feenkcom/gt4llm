@@ -35,7 +35,7 @@ GtLClassMethodsDomainObject >> llmRawDataViewFor: aDataView [
 	
 	^ aDataView jsonObject: [ :json |
 		json
-			at: 'className' put: self targetClass name;
+			at: 'className' put: self targetClass name asString;
 			at: 'methods' put: (self methods
 				collect: [ :eachMethod | 
 					eachMethod methodClass name asString, '>>#', eachMethod selector ]

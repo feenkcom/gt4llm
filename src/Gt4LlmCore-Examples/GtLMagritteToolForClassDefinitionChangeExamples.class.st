@@ -60,7 +60,7 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeClassInstanceVariables 
 			withArguments: {
 				'classChangeRequest' -> {
 					'targetClassName' -> className.
-					'superclassName' -> #Object.
+					'superclassName' -> 'Object'.
 					'instanceVariables' -> #('alpha' 'beta').
 					'classVariables' -> #().
 					'package' -> 'Gt4LlmCoreNewPackage'
@@ -415,7 +415,7 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeUnknownClass [
 		withArguments: {
 			'classChangeRequest' -> {
 				'targetClassName' -> className.
-				'superclassName' -> #Object.
+				'superclassName' -> 'Object'.
 				'instanceVariables' -> #().
 				'classVariables' -> #().
 				'package' -> 'Gt4LlmCoreNewPackage'
@@ -526,7 +526,7 @@ GtLMagritteToolForClassDefinitionChangeExamples >> changeWithNilTargetClassName 
 	
 	self
 		assertJSONSchemaValidationError: call result targetObject
-		withPath: #(#classChangeRequest #targetClassName)
+		withPath: #('classChangeRequest' 'targetClassName')
 		errorMessage: '@[classChangeRequest/targetClassName] string expected'.
 		
 	^ call

@@ -22,8 +22,8 @@ GtLMissingInformationDomainObjectExamples >> emptyMissingInformationDomainObject
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#missingModelName -> nil.
-		#errorMessage -> ''
+		'missingModelName' -> nil.
+		'errorMessage' -> ''
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -50,8 +50,8 @@ GtLMissingInformationDomainObjectExamples >> missingInformationWithCustomErrorMe
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#missingModelName -> 'configuration'.
-		#errorMessage -> 'Custom error: configuration not found'
+		'missingModelName' -> 'configuration'.
+		'errorMessage' -> 'Custom error: configuration not found'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	
@@ -77,8 +77,8 @@ GtLMissingInformationDomainObjectExamples >> missingInformationWithModelName [
 	
 	jsonData := dataBlock compositeJsonData.
 	expectedJson := {
-		#missingModelName -> 'API key'.
-		#errorMessage -> 'Missing API key'
+		'missingModelName' -> 'API key'.
+		'errorMessage' -> 'Missing API key'
 	} asDictionary.
 	self assert: jsonData equals: expectedJson.
 	

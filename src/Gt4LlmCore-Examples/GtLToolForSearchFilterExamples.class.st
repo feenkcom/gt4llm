@@ -18,9 +18,9 @@ GtLToolForSearchFilterExamples >> searchFilterDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #query) equals: 'GtLToolForSearchFilterExamples gtMethodsInClass & #gtExample gtPragmas'.
-	self assert: (jsonData at: #itemsAsPrintStrings) isNotEmpty.
-	self assert: ((jsonData at: #itemsAsPrintStrings) anySatisfy: [ :item | 
+	self assert: (jsonData at: 'query') equals: 'GtLToolForSearchFilterExamples gtMethodsInClass & #gtExample gtPragmas'.
+	self assert: (jsonData at: 'itemsAsPrintStrings') isNotEmpty.
+	self assert: ((jsonData at: 'itemsAsPrintStrings') anySatisfy: [ :item | 
 		item includesSubstring: 'searchFilterForExampleMethods' ]).
 	
 	^ dataBlock

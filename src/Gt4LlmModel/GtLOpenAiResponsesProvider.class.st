@@ -21,9 +21,9 @@ GtLOpenAiResponsesProvider >> assistantMessageHasCompactionResponse: anAssistant
 	E.g. OpenAI will include an encrypted_content output for server-side compaction.
 	This can be used to check whether an LLM response contains server-side copmaction, however the compaction will always be modelled as a separate compaction message, not as part of the assistant message."
 	| response |
-	
+
 	response := anAssistantMessage requestResponse result.
-	^ response output anySatisfy: [ :jsonObject |
+	^ (response at: 'output') anySatisfy: [ :jsonObject |
 		(jsonObject at: 'type' ifAbsent: []) = 'compaction' ].
 ]
 

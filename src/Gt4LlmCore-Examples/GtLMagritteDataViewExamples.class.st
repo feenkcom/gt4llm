@@ -23,8 +23,8 @@ GtLMagritteDataViewExamples >> expectedMathReasoningJsonData [
 		yourself.
 	
 	expectedData := NeoJSONObject new
-		at: #steps put: (NeoJSONArray withAll: { step1Data. step2Data });
-		at: #finalAnswer put: '20';
+		at: 'steps' put: (NeoJSONArray withAll: { step1Data. step2Data });
+		at: 'finalAnswer' put: '20';
 		yourself.
 	
 	^ expectedData
@@ -59,7 +59,7 @@ GtLMagritteDataViewExamples >> magritteDataViewWithDataKey_serialization [
 	self assert: aDataBlock compositeJsonDataBlock containedJsonDataBlocksCount equals: 1.
 
 	expectedData := Dictionary new
-		at: #mathReasoning put: self expectedMathReasoningJsonData;
+		at: 'mathReasoning' put: self expectedMathReasoningJsonData;
 		yourself.
 	self assertDataBlock: aDataBlock hasLlmJsonData: expectedData.
 

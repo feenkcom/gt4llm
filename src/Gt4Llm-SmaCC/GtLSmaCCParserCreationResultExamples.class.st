@@ -32,7 +32,7 @@ GtLSmaCCParserCreationResultExamples >> creationResultDataViewSerialization [
 	self assert: dataBlock dataBlocks size equals: 1.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #parserClass) equals: #TestParser.
+	self assert: (jsonData at: 'parserClass') equals: 'TestParser'.
 	"createGrammar is not included in Magritte description, only parserClass"
 	
 	^ dataBlock

@@ -21,9 +21,9 @@ GtLFilesInformationDomainObjectExamples >> filesInformationDataViewSerialization
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock compositeJsonData.
-	self assert: (jsonData at: #files) size equals: 2.
-	self assert: ((jsonData at: #files) first at: #path) equals: domainObject files first path.
-	self assert: ((jsonData at: #files) second at: #path) equals: domainObject files second path.
+	self assert: (jsonData at: 'files') size equals: 2.
+	self assert: ((jsonData at: 'files') first at: 'path') equals: domainObject files first path.
+	self assert: ((jsonData at: 'files') second at: 'path') equals: domainObject files second path.
 	
 	^ dataBlock
 ]

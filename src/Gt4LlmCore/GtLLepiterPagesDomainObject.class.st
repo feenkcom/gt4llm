@@ -27,12 +27,12 @@ GtLLepiterPagesDomainObject >> llmRawDataViewFor: aDataView [
 	
 	^ aDataView jsonObject: [ :json |
 		json
-			at: #pages
+			at: 'pages'
 			put: (self pages collect: [ :eachPage | 
 				Dictionary new
-					at: #pageTitle put: eachPage title;
-					at: #pageUid put: eachPage uid asString36;
-					at: #databaseId put: eachPage database uuidString;
+					at: 'pageTitle' put: eachPage title;
+					at: 'pageUid' put: eachPage uid asString36;
+					at: 'databaseId' put: eachPage database uuidString;
 					yourself ]) ]
 ]
 

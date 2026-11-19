@@ -55,9 +55,9 @@ GtLMethodsRemovalResultExamples >> methodsRemovalResultDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	expected := Dictionary new
-		at: #methods put: (NeoJSONArray withAll: {
-			NeoJSONObject new at: #status put: 'removed'; yourself.
-			NeoJSONObject new at: #status put: 'removed'; yourself });
+		at: 'methods' put: (NeoJSONArray withAll: {
+			NeoJSONObject new at: 'status' put: 'removed'; yourself.
+			NeoJSONObject new at: 'status' put: 'removed'; yourself });
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	
