@@ -287,13 +287,13 @@ GtLCodeChangesToolCallsSummarizerExamples >> packageChangeHistoriesForClassPacka
 	
 	"Find source package (Gt4LlmCore-Examples)"
 	sourcePackageHistory := packageHistories items 
-		detect: [ :ph | ph targetPackageName = 'Gt4LlmCore-Examples' ]
+		detect: [ :ph | ph targetPackageName = #'Gt4LlmCore-Examples' ]
 		ifNone: [ nil ].
 	self assert: sourcePackageHistory notNil.
 	
 	"Find destination package (Gt4LlmCore-Examples-Temp)"
 	destPackageHistory := packageHistories items 
-		detect: [ :ph | ph targetPackageName = 'Gt4LlmCore-Examples-Temp' ]
+		detect: [ :ph | ph targetPackageName = #'Gt4LlmCore-Examples-Temp' ]
 		ifNone: [ nil ].
 	self assert: destPackageHistory notNil.
 	

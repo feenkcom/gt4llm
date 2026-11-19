@@ -34,7 +34,7 @@ GtLMagritteToolForPackageClassesExamples >> packageClassesForExistingPackage [
 		} asDictionary.
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLClassesSearchResult).
-	self assert: (targetObject foundClassNames includes: (self gtDo: [ 'GtArrayBox' ] gemstoneDo: [ 'String' ])).
+	self assert: (targetObject foundClassNames includes: (self gtDo: [ #GtArrayBox ] gemstoneDo: [ 'String' ])).
 	self assert: targetObject mayHaveMore not.
 	^ call
 ]

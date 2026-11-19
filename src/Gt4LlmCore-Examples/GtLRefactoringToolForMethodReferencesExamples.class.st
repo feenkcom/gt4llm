@@ -16,13 +16,13 @@ GtLRefactoringToolForMethodReferencesExamples >> methodReferencesForExistingSele
 	self assert: targetObject isErrorDomainObject not.
 	references := targetObject references
 			detect: [ :each | 
-				each methodClass name = 'GtLRefactoringMethodReferencesSender'
-					and: [ each selector = 'call' ] ].
+				each methodClass name = #GtLRefactoringMethodReferencesSender
+					and: [ each selector = #call ] ].
 	self assert: references isNotNil.
 	references := targetObject references
 			detect: [ :each | 
-				each methodClass name = 'GtLRefactoringMethodReferencesForwarder'
-					and: [ each selector = 'call' ] ].
+				each methodClass name = #GtLRefactoringMethodReferencesForwarder
+					and: [ each selector = #call ] ].
 	self assert: references isNotNil.
 	^ call
 ]

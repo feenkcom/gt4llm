@@ -15,10 +15,10 @@ GtLRefactoringToolForMethodImplementorsExamples >> methodImplementorsForExisting
 	targetObject := call result targetObject.
 	self assert: targetObject isErrorDomainObject not.
 	implementor := targetObject implementors
-			detect: [ :each | each name = 'GtLRefactoringMethodImplementorsBase' ].
+			detect: [ :each | each name = #GtLRefactoringMethodImplementorsBase ].
 	self assert: implementor isNotNil.
 	implementor := targetObject implementors
-			detect: [ :each | each name = 'GtLRefactoringMethodImplementorsChild' ].
+			detect: [ :each | each name = #GtLRefactoringMethodImplementorsChild ].
 	self assert: implementor isNotNil.
 	^ call
 ]

@@ -77,7 +77,7 @@ GtLMagritteToolForMethodCompilationExamples >> compileExistingMethodWithoutProto
 	self assert: (targetObject isKindOf: GtLMethodCompilationResult).
 	self assert: targetObject status equals: 'compiled'.
 	self assert: targetObject oldMethod notNil.
-	self assert: (targetClass >> selector) protocolName equals: 'examples'.
+	self assert: (targetClass >> selector) protocolName equals: #examples.
 	^ call ]
 		ensure: [ (targetClass includesSelector: selector)
 				ifTrue: [ targetClass removeSelector: selector ] ]
@@ -267,7 +267,7 @@ GtLMagritteToolForMethodCompilationExamples >> compileNewMethodWithoutProtocol [
 	self assert: targetObject oldMethod isNil.
 	self
 		assert: (targetClass >> selector) protocolName
-		equals: 'as yet unclassified'.
+		equals: #'as yet unclassified'.
 	^ call ]
 		ensure: [ (targetClass includesSelector: selector)
 				ifTrue: [ targetClass removeSelector: selector ] ]
