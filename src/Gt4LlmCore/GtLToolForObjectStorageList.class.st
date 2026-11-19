@@ -17,21 +17,18 @@ GtLToolForObjectStorageList >> name [
 { #category : #private }
 GtLToolForObjectStorageList >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
 	| items |
-	
 	anExecutionContext objectStorage
-		ifNil: [ ^ GtLMissingInformationDomainObject new
-			missingModelName: 'objectStorage' ].
-			
+		ifNil: [ ^ GtLMissingInformationDomainObject new missingModelName: 'objectStorage' ].
+
 	items := anExecutionContext objectStorage objectIds
-		collect: [ :eachId |
-			| storedObject |
-			storedObject := anExecutionContext objectStorage storedObjectAt: eachId.
-			GtLObjectStorageItem new
-				objectId: eachId;
-				objectValue: storedObject value;
-				reason: storedObject reason;
-				yourself ].
-				
-	^ GtLObjectStorageItems new
-		items: items
+			collect: [ :eachId | 
+				| storedObject |
+				storedObject := anExecutionContext objectStorage storedObjectAt: eachId.
+				GtLObjectStorageItem new
+					objectId: eachId;
+					objectValue: storedObject storedValue;
+					reason: storedObject reason;
+					yourself ].
+
+	^ GtLObjectStorageItems new items: items
 ]

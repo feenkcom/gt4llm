@@ -79,6 +79,21 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> ensureLepiterPageForObject:
 	self lepiterPageReferenceForObject: anObject withSnippetCode: aString
 ]
 
+{ #category : #'private - examples' }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> evaluateProvenanceCode: aString bindings: someBindings in: aStorage [
+	| toolCall |
+	toolCall := self
+			executeTool: GtLMagritteToolForSmalltalkCodeEvaluation new
+			withArguments: {'code' -> aString.
+					'bindings'
+						-> (someBindings
+								collect: [ :each | 
+									{'name' -> each key.
+										'objectId' -> each value} asDictionary ])} asDictionary
+			inContext: (GtLToolExecutionContext new objectStorage: aStorage).
+	^ aStorage storedObjectAt: toolCall result targetObject objectId
+]
+
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningBlElement [
 	<gtExample>
@@ -1021,6 +1036,71 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithErrorWithoutObje
 ]
 
 { #category : #examples }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> flattenedProvenanceWithIdenticalSource [
+	<gtExample>
+	| storage first second result |
+	storage := GtLObjectStorage new.
+	first := self
+			evaluateProvenanceCode: '1'
+			bindings: #()
+			in: storage.
+	second := self
+			evaluateProvenanceCode: '1'
+			bindings: #()
+			in: storage.
+	self
+		evaluateProvenanceCode: '99'
+		bindings: #()
+		in: storage.
+	result := self
+			evaluateProvenanceCode: 'left + right'
+			bindings: {'left' -> first idString36.
+					'right' -> second idString36}
+			in: storage.
+	self
+		assert: (GtLProvenanceCodeGenerator new evaluationEntriesFrom: result provenanceTree)
+		equals: {first.
+				second.
+				result}.
+	^ result
+]
+
+{ #category : #examples }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> inlinedProvenanceWithReusedBindingName [
+	<gtExample>
+	| storage firstSeed secondSeed left right result script |
+	storage := GtLObjectStorage new.
+	firstSeed := storage addNewObject: 10.
+	secondSeed := storage addNewObject: 20.
+	left := self
+			evaluateProvenanceCode: '| subtotal | subtotal := value + 1. value := subtotal + 2. ^ value'
+			bindings: {'value' -> firstSeed}
+			in: storage.
+	right := self
+			evaluateProvenanceCode: 'value + 2'
+			bindings: {'value' -> secondSeed}
+			in: storage.
+	result := self
+			evaluateProvenanceCode: 'left * 100 + right'
+			bindings: {'left' -> left idString36.
+					'right' -> right idString36}
+			in: storage.
+	script := result provenanceScript.
+	self assert: (script beginsWith: '| value subtotal left right |').
+	self
+		assert: (script includesSubstring: 'value := subtotal + 2. left := value.').
+	self assert: (script includesSubstring: 'right := value + 2.').
+	self
+		gtDo: [ self
+				assert: (OpalCompiler new
+						bindings: (Dictionary newFrom: {#objectStorage -> storage});
+						evaluate: script)
+				equals: result storedValue ]
+		gemstoneDo: [  ].
+	^ result
+]
+
+{ #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 	<gsCode: '	<gtExample>
 	<return: #GtLFunctionToolCall>
@@ -1055,4 +1135,103 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> missingCodeArgument [
 		path: #(nil)
 		errorMessage: 'required properties missing [code]'.
 	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> storedEvaluationProvenance [
+	<gtExample>
+	| storage seedId intermediate result root call inputs script |
+	storage := GtLObjectStorage new.
+	seedId := storage addNewObject: 40.
+	intermediate := self
+			evaluateProvenanceCode: 'value + 1'
+			bindings: {'value' -> seedId}
+			in: storage.
+	result := self
+			evaluateProvenanceCode: 'left + right'
+			bindings: {'left' -> intermediate idString36.
+					'right' -> intermediate idString36}
+			in: storage.
+
+	root := result provenanceTree.
+	call := root children first.
+	inputs := call children.
+	self assert: root target == result.
+	self assert: call target == result reason toolCall.
+	self assert: (inputs collect: #label) asArray equals: #('left' 'right').
+	self assert: (inputs allSatisfy: [ :each | each target == intermediate ]).
+	self assert: inputs first children first target == intermediate reason toolCall.
+	self
+		assert: inputs first children first children first target
+				== (storage storedObjectAt: seedId).
+
+	script := result provenanceScript.
+	self
+		assert: script
+		equals: (String cr
+				join: {'| value left right |'.
+						''.
+						'value := (objectStorage objectAt: ' , seedId storeString , ').'.
+						'left := value + 1.'.
+						''.
+						'right := left.'.
+						'left + right'}).
+	self
+		gtDo: [ self
+				assert: (OpalCompiler new
+						bindings: (Dictionary newFrom: {#objectStorage -> storage});
+						evaluate: script)
+				equals: result storedValue ]
+		gemstoneDo: [  ].
+	^ result
+]
+
+{ #category : #examples }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> storedEvaluationProvenanceAfterClearingStorage [
+	<gtExample>
+	| storage seedId seed result root inputs missing |
+	storage := GtLObjectStorage new.
+	seedId := storage addNewObject: 40.
+	seed := storage storedObjectAt: seedId.
+	result := self
+			evaluateProvenanceCode: 'value + 1'
+			bindings: {'value' -> seedId}
+			in: storage.
+	root := result provenanceTree.
+	inputs := root children first children.
+	storage clearCache.
+
+	self assert: inputs == root children first children.
+	self assert: inputs first target == seed.
+	self assert: inputs first children isEmpty.
+	missing := result provenanceTree children first children first.
+	self assert: missing label equals: 'value'.
+	self assert: missing target objectId equals: seedId.
+	self assert: missing detail equals: 'Unavailable object: ' , seedId.
+	self assert: missing children isEmpty.
+	^ result
+]
+
+{ #category : #examples }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> storedEvaluationProvenanceWithCycle [
+	<gtExample>
+	| storage seedId result root cycle |
+	storage := GtLObjectStorage new.
+	seedId := storage addNewObject: 40.
+	result := self
+			evaluateProvenanceCode: 'value + 1'
+			bindings: {'value' -> seedId}
+			in: storage.
+	"manually mess up with the object id to create a cycle"
+	result reason provenanceBindings first objectId: result idString36.
+
+	root := result provenanceTree.
+	cycle := root children first children first.
+	self assert: cycle label equals: 'value (cycle)'.
+	self assert: cycle target == result.
+	self assert: cycle children isEmpty.
+	self
+		assert: (root gtChildrenFor: GtPhlowView empty) itemsProviderComputation value
+				== root children.
+	^ root
 ]

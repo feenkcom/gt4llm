@@ -132,14 +132,15 @@ GtLToolForApplyRefactoringExamples >> applyNonRefactoringObject [
 	<gtExample>
 	| objectStorage objectId call |
 	objectStorage := GtLObjectStorage new.
-	objectId := objectStorage addNewObject: 42 reason: 'example object'.
+	objectId := objectStorage addNewObject: 42 reasonString: 'example object'.
 	call := self
-				executeTool: GtLToolForApplyRefactoring new
-				withArguments: (self argumentsWithObjectId: objectId)
-				inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	self assertProblem: call result targetObject
+			executeTool: GtLToolForApplyRefactoring new
+			withArguments: (self argumentsWithObjectId: objectId)
+			inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	self
+		assertProblem: call result targetObject
 		withErrorMessage: objectId , ' is not a refactoring preview'.
-	^call
+	^ call
 ]
 
 { #category : #examples }
