@@ -15,6 +15,16 @@ GtLStoredObjectToolBasedReason class >> toolCall: aToolCall [
 	^ self new toolCall: aToolCall; yourself
 ]
 
+{ #category : #provenance }
+GtLStoredObjectToolBasedReason >> provenanceBindings [
+	^ #()
+]
+
+{ #category : #provenance }
+GtLStoredObjectToolBasedReason >> provenanceToolCall [
+	^ self toolCall
+]
+
 { #category : #accessing }
 GtLStoredObjectToolBasedReason >> toolCall [
 	^ toolCall

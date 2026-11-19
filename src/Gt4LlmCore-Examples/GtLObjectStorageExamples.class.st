@@ -14,24 +14,23 @@ GtLObjectStorageExamples >> accessingObjectReturnsStoredObject [
 	<gtExample>
 	<return: #GtLStoredObject>
 	| objectStorage object objectId presentObject storedObject reason |
-	
 	reason := GtLStoredObjectStringReason text: 'for retrieval'.
 	objectStorage := self newObjectStorage.
 	object := Object new.
 	objectId := objectStorage addNewObject: object reason: reason.
-	
+
 	self assert: (objectStorage objectAt: objectId) == object.
 	presentObject := objectStorage
-		objectAt: objectId
-		ifPresent: [ :found | found ]
-		ifAbsent: [ nil ].
+			objectAt: objectId
+			ifPresent: [ :found | found ]
+			ifAbsent: [ nil ].
 	self assert: presentObject == object.
 	storedObject := objectStorage storedObjectAt: objectId.
-	self assert: storedObject value == object.
+	self assert: storedObject storedValue == object.
 	self assert: storedObject id equals: (UUID fromString36: objectId).
 	self assert: storedObject reason == reason.
 	self assert: storedObject reason asReasonString equals: 'for retrieval'.
-	
+
 	^ storedObject
 ]
 
@@ -161,17 +160,36 @@ GtLObjectStorageExamples >> storedObjectIncludesIdValueAndReason [
 	<gtExample>
 	<return: #GtLStoredObject>
 	| objectStorage value objectId storedObject reason |
-	
 	reason := GtLStoredObjectStringReason text: 'kept for later use'.
 	objectStorage := self newObjectStorage.
 	value := Object new.
 	objectId := objectStorage addNewObject: value reason: reason.
 	storedObject := objectStorage storedObjectAt: objectId.
-	
+
 	self assert: storedObject id equals: (UUID fromString36: objectId).
-	self assert: storedObject value == value.
+	self assert: storedObject storedValue == value.
 	self assert: storedObject reason == reason.
 	self assert: storedObject reason asReasonString equals: 'kept for later use'.
-	
+
+	^ storedObject
+]
+
+{ #category : #examples }
+GtLObjectStorageExamples >> storedObjectWithoutProducingToolCall [
+	<gtExample>
+	| storage storedObject |
+	storage := self newObjectStorage.
+	self
+		should: [ storage addNewObject: 42 reason: 'plain reason' ]
+		raise: AssertionFailure.
+	self should: [ storage addNewObject: 42 reason: nil ] raise: AssertionFailure.
+	self assert: storage objectCount equals: 0.
+
+	storedObject := storage
+			storedObjectAt: (storage addNewObject: 42 reasonString: 'plain reason').
+	self assert: storedObject reason class equals: GtLStoredObjectStringReason.
+	self assert: storedObject reason asReasonString equals: 'plain reason'.
+	self assert: storedObject provenanceTree children isEmpty.
+	self assert: storedObject provenanceScript isEmpty.
 	^ storedObject
 ]

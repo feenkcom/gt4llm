@@ -23,8 +23,9 @@ GtLObjectStorage >> addNewObject: anObject reason: aReason [
 			id: newUUID
 			value: anObject
 			reason: aReason.
+	storedObject objectStorage: self.
 	objectsByUUID at: newUUID put: storedObject.
-	
+
 	self notifyObjectAdded: storedObject.
 
 	^ newUUID asString36
@@ -70,20 +71,20 @@ GtLObjectStorage >> gtObjectsByUUIDFor: aView [
 		column: 'ID'
 			text: [ :each | each id asString36 ]
 			width: 200;
-		column: 'Value' text: [ :each | each value ];
+		column: 'Value' text: [ :each | each storedValue ];
 		column: 'Reason' text: [ :each | each reason asReasonString ];
 		updateWhen: GtLObjectStorageContentChangeAnnouncement in: self announcer;
-		send: [ :each | each value ];
+		send: [ :each | each objectStorage: self ];
 		contextItemLabel: 'Copy ID'
 			action: [ :anElement :each | Clipboard clipboardText: each id asString36 ];
 		contextItemLabel: 'Inspect ID'
 			action: [ :anElement :each | anElement phlow spawnObject: each id ];
 		contextItemLabel: 'Inspect value'
-			action: [ :anElement :each | anElement phlow spawnObject: each value ];
+			action: [ :anElement :each | anElement phlow spawnObject: each storedValue ];
 		contextItemLabel: 'Inspect reason'
 			action: [ :anElement :each | anElement phlow spawnObject: each reason ];
 		contextItemLabel: 'Remove item'
-			action: [ :anElement :each | self privateRemoveObjectAt: each id ifAbsent: [ ] ]
+			action: [ :anElement :each | self privateRemoveObjectAt: each id ifAbsent: [  ] ]
 ]
 
 { #category : #'api - testing' }
@@ -103,10 +104,10 @@ GtLObjectStorage >> initialize [
 
 { #category : #accessing }
 GtLObjectStorage >> locateIdByIdentityForObject: anObject [
-	objectsByUUID valuesDo: [ :aStoredObject |
-		aStoredObject value == anObject ifTrue: [ ^ aStoredObject id asString36 ] ].
-	
-	NotFound signal: 'Could not find object'  
+	objectsByUUID
+		valuesDo: [ :aStoredObject | aStoredObject storedValue == anObject ifTrue: [ ^ aStoredObject id asString36 ] ].
+
+	NotFound signal: 'Could not find object'
 ]
 
 { #category : #notifications }
@@ -123,15 +124,15 @@ GtLObjectStorage >> notifyStorageContentChanges [
 ]
 
 { #category : #accessing }
-GtLObjectStorage >> objectAt: anObjectId [ 
-	^ (self storedObjectAt: anObjectId) value
+GtLObjectStorage >> objectAt: anObjectId [
+	^ (self storedObjectAt: anObjectId) storedValue
 ]
 
 { #category : #accessing }
 GtLObjectStorage >> objectAt: anObjectId ifPresent: aPresentBlock ifAbsent: anAbsentBlock [
 	^ self
 		storedObjectAt: anObjectId
-		ifPresent: [ :aStoredObject | aPresentBlock value: aStoredObject value ]
+		ifPresent: [ :aStoredObject | aPresentBlock value: aStoredObject storedValue ]
 		ifAbsent: anAbsentBlock
 ]
 
@@ -182,20 +183,18 @@ GtLObjectStorage >> size [
 { #category : #accessing }
 GtLObjectStorage >> storedObjectAt: anObjectId [
 	| internalId |
-	
 	internalId := self convertToInternalId: anObjectId.
-	^ objectsByUUID at: internalId
+	^ (objectsByUUID at: internalId) objectStorage: self
 ]
 
 { #category : #accessing }
 GtLObjectStorage >> storedObjectAt: anObjectId ifPresent: aPresentBlock ifAbsent: anAbsentBlock [
 	| internalId |
-	
 	internalId := [ self convertToInternalId: anObjectId ]
-		on: Error
-		do: [ :anError | ^ anAbsentBlock value ].
-	^ objectsByUUID 
+			on: Error
+			do: [ :anError | ^ anAbsentBlock value ].
+	^ objectsByUUID
 		at: internalId
-		ifPresent: aPresentBlock
+		ifPresent: [ :aStoredObject | aPresentBlock value: (aStoredObject objectStorage: self) ]
 		ifAbsent: anAbsentBlock
 ]
