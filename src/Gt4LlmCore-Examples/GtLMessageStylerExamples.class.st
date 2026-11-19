@@ -376,27 +376,25 @@ GtLMessageStylerExamples >> gtObjectStylingWithHeightOnly [
 	<return: #BlText>
 	| storage string36 text styler range |
 	storage := GtLObjectStorage new.
-	string36 := storage addNewObject: 'Hello World' reason: 'test'.
-	text := ('\{\{gtObject:id={1}|height=400\}\}' format: {string36})
-				asRopedText.
+	string36 := storage addNewObject: 'Hello World' reasonString: 'test'.
+	text := ('\{\{gtObject:id={1}|height=400\}\}' format: {string36}) asRopedText.
 	styler := GtLMessageStyler new objectRegistry: storage.
 	styler privateStyle: text.
 	range := 1 to: text size.
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: BlTextForegroundAttribute]]).
+						anySatisfy: [ :a | a isKindOf: BlTextForegroundAttribute ] ]).
 	self
-		assert: (range anySatisfy: 
-					[:i |
-					(text attributesAt: i) anySatisfy: [:a | a isKindOf: GtButtonAttribute]]).
+		assert: (range
+				anySatisfy: [ :i | (text attributesAt: i) anySatisfy: [ :a | a isKindOf: GtButtonAttribute ] ]).
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: GtCachedTextExpandButtonAttribute]]).
-	^text
+						anySatisfy: [ :a | a isKindOf: GtCachedTextExpandButtonAttribute ] ]).
+	^ text
 ]
 
 { #category : #examples }
@@ -405,22 +403,21 @@ GtLMessageStylerExamples >> gtObjectStylingWithLabelError [
 	<return: #BlText>
 	| storage string36 text styler range |
 	storage := GtLObjectStorage new.
-	string36 := storage addNewObject: Object new reason: 'error test'.
+	string36 := storage addNewObject: Object new reasonString: 'error test'.
 	text := ('\{\{gtObject:id={1}|label=#thisWillFail\}\}' format: {string36})
-				asRopedText.
+			asRopedText.
 	styler := GtLMessageStyler new objectRegistry: storage.
 	styler privateStyle: text.
 	range := 1 to: text size.
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: BlTextForegroundAttribute]]).
+						anySatisfy: [ :a | a isKindOf: BlTextForegroundAttribute ] ]).
 	self
-		assert: (range anySatisfy: 
-					[:i |
-					(text attributesAt: i) anySatisfy: [:a | a isKindOf: GtButtonAttribute]]).
-	^text
+		assert: (range
+				anySatisfy: [ :i | (text attributesAt: i) anySatisfy: [ :a | a isKindOf: GtButtonAttribute ] ]).
+	^ text
 ]
 
 { #category : #examples }
@@ -457,21 +454,20 @@ GtLMessageStylerExamples >> gtObjectStylingWithMultipleObjects [
 	<return: #BlText>
 	| storage id1 id2 text styler |
 	storage := GtLObjectStorage new.
-	id1 := storage addNewObject: (BlElement new size: 200 @ 100)
-				reason: 'element'.
-	id2 := storage addNewObject: 'Hello World' reason: 'string'.
+	id1 := storage
+			addNewObject: (BlElement new size: 200 @ 100)
+			reasonString: 'element'.
+	id2 := storage addNewObject: 'Hello World' reasonString: 'string'.
 	text := ('See \{\{gtObject:id={1}\}\} and \{\{gtObject:id={2}\}\}'
-				format: 
-					{id1.
+			format: {id1.
 					id2}) asRopedText.
 	styler := GtLMessageStyler new objectRegistry: storage.
 	styler privateStyle: text.
 	self
-		assert: ((1 to: text size) count: 
-					[:i |
-					(text attributesAt: i) anySatisfy: [:a | a isKindOf: GtButtonAttribute]])
+		assert: ((1 to: text size)
+				count: [ :i | (text attributesAt: i) anySatisfy: [ :a | a isKindOf: GtButtonAttribute ] ])
 				>= 2.
-	^text
+	^ text
 ]
 
 { #category : #examples }
@@ -480,26 +476,27 @@ GtLMessageStylerExamples >> gtObjectStylingWithShowAndHeight [
 	<return: #BlText>
 	| storage string36 text styler range |
 	storage := GtLObjectStorage new.
-	string36 := storage addNewObject: ((BlElement new)
-						size: 200 @ 100;
-						background: Color blue)
-				reason: 'test'.
+	string36 := storage
+			addNewObject: (BlElement new
+					size: 200 @ 100;
+					background: Color blue)
+			reasonString: 'test'.
 	text := ('\{\{gtObject:id={1}|show=#gtViewsFor:|height=300|expanded=true\}\}'
-				format: {string36}) asRopedText.
+			format: {string36}) asRopedText.
 	styler := GtLMessageStyler new objectRegistry: storage.
 	styler privateStyle: text.
 	range := 1 to: text size.
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: BlTextForegroundAttribute]]).
+						anySatisfy: [ :a | a isKindOf: BlTextForegroundAttribute ] ]).
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: GtCachedTextExpandButtonAttribute]]).
-	^text
+						anySatisfy: [ :a | a isKindOf: GtCachedTextExpandButtonAttribute ] ]).
+	^ text
 ]
 
 { #category : #running }
@@ -508,23 +505,23 @@ GtLMessageStylerExamples >> gtObjectStylingWithShowError [
 	<return: #BlText>
 	| storage string36 text styler range |
 	storage := GtLObjectStorage new.
-	string36 := storage addNewObject: Object new reason: 'error test'.
+	string36 := storage addNewObject: Object new reasonString: 'error test'.
 	text := ('\{\{gtObject:id={1}|show=#nonExistentView:|expanded=true\}\}'
-				format: {string36}) asRopedText.
+			format: {string36}) asRopedText.
 	styler := GtLMessageStyler new objectRegistry: storage.
 	styler privateStyle: text.
 	range := 1 to: text size.
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: BlTextForegroundAttribute]]).
+						anySatisfy: [ :a | a isKindOf: BlTextForegroundAttribute ] ]).
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: GtCachedTextExpandButtonAttribute]]).
-	^text
+						anySatisfy: [ :a | a isKindOf: GtCachedTextExpandButtonAttribute ] ]).
+	^ text
 ]
 
 { #category : #running }
@@ -533,27 +530,26 @@ GtLMessageStylerExamples >> gtObjectStylingWithShowOnly [
 	<return: #BlText>
 	| storage string36 text styler range |
 	storage := GtLObjectStorage new.
-	string36 := storage addNewObject: 'Hello World' reason: 'test'.
+	string36 := storage addNewObject: 'Hello World' reasonString: 'test'.
 	text := ('\{\{gtObject:id={1}|show=#gtItemsFor:\}\}' format: {string36})
-				asRopedText.
+			asRopedText.
 	styler := GtLMessageStyler new objectRegistry: storage.
 	styler privateStyle: text.
 	range := 1 to: text size.
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: BlTextForegroundAttribute]]).
+						anySatisfy: [ :a | a isKindOf: BlTextForegroundAttribute ] ]).
 	self
-		assert: (range anySatisfy: 
-					[:i |
-					(text attributesAt: i) anySatisfy: [:a | a isKindOf: GtButtonAttribute]]).
+		assert: (range
+				anySatisfy: [ :i | (text attributesAt: i) anySatisfy: [ :a | a isKindOf: GtButtonAttribute ] ]).
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: GtCachedTextExpandButtonAttribute]]).
-	^text
+						anySatisfy: [ :a | a isKindOf: GtCachedTextExpandButtonAttribute ] ]).
+	^ text
 ]
 
 { #category : #examples }
@@ -562,33 +558,32 @@ GtLMessageStylerExamples >> gtObjectStylingWithSingleObject [
 	<return: #BlText>
 	| storage string36 text styler range |
 	storage := GtLObjectStorage new.
-	string36 := storage addNewObject: ((BlElement new)
-						size: 200 @ 100;
-						background: Color blue)
-				reason: 'test'.
+	string36 := storage
+			addNewObject: (BlElement new
+					size: 200 @ 100;
+					background: Color blue)
+			reasonString: 'test'.
 	text := ('\{\{gtObject:id={1}\}\}' format: {string36}) asRopedText.
 	styler := GtLMessageStyler new objectRegistry: storage.
 	styler privateStyle: text.
 	range := 1 to: text size.
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: BlTextForegroundAttribute]]).
+						anySatisfy: [ :a | a isKindOf: BlTextForegroundAttribute ] ]).
 	self
-		assert: (range anySatisfy: 
-					[:i |
-					(text attributesAt: i) anySatisfy: [:a | a isKindOf: GtButtonAttribute]]).
+		assert: (range
+				anySatisfy: [ :i | (text attributesAt: i) anySatisfy: [ :a | a isKindOf: GtButtonAttribute ] ]).
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: GtCachedTextExpandButtonAttribute]]).
+						anySatisfy: [ :a | a isKindOf: GtCachedTextExpandButtonAttribute ] ]).
 	self
-		assert: (range anySatisfy: 
-					[:i |
-					(text attributesAt: i) anySatisfy: [:a | a isKindOf: BrTextHideAttribute]]).
-	^text
+		assert: (range
+				anySatisfy: [ :i | (text attributesAt: i) anySatisfy: [ :a | a isKindOf: BrTextHideAttribute ] ]).
+	^ text
 ]
 
 { #category : #examples }

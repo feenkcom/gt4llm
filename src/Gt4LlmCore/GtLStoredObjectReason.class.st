@@ -45,3 +45,8 @@ GtLStoredObjectReason >> printOn: aStream [
 	super printOn: aStream.
 	aStream << ' (' << self asReasonString << ')'
 ]
+
+{ #category : #provenance }
+GtLStoredObjectReason >> provenanceToolCall [
+	^ nil
+]

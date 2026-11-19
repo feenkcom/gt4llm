@@ -365,7 +365,7 @@ GtLRefactoringCodeChangesExamples >> summarizerWithAppliedRefactoring [
 			anObjectStorage := GtLObjectStorage new.
 			anObjectId := anObjectStorage
 					addNewObject: (GtLRefactoringPreview namespace: aNamespace)
-					reason: 'example preview'.
+					reasonString: 'example preview'.
 			aToolCall := GtLFunctionToolCall new
 					name: GtLToolForApplyRefactoring new name;
 					rawArguments: (Dictionary new

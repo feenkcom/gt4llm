@@ -30,20 +30,24 @@ GtLMagritteToolForObjectStorageValueExamples >> retrieveStoredObjectValue [
 	<gtExample>
 	| objectStorage storedObjectId call targetObject |
 	objectStorage := GtLObjectStorage new.
-	storedObjectId := objectStorage addNewObject: GtLSerializedObjectValueTestObject exampleInstance reason: 'example object'.
+	storedObjectId := objectStorage
+			addNewObject: GtLSerializedObjectValueTestObject exampleInstance
+			reasonString: 'example object'.
 	call := self
-		executeTool: GtLMagritteToolForObjectStorageValue new
-		withArguments: {
-			'objectId' -> storedObjectId
-		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+			executeTool: GtLMagritteToolForObjectStorageValue new
+			withArguments: {'objectId' -> storedObjectId} asDictionary
+			inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLObjectStorageValueResult).
 	self assert: targetObject object == (objectStorage objectAt: storedObjectId).
 	self assert: targetObject objectId equals: storedObjectId.
-	self assert: targetObject objectValue objectClassName equals: 'GtLSerializedObjectValueTestObject'.
 	self
-		gtDo: [ self assert: (targetObject objectValue phlowViews anySatisfy: [ :each | each title = 'Details' ]) ]
+		assert: targetObject objectValue objectClassName
+		equals: 'GtLSerializedObjectValueTestObject'.
+	self
+		gtDo: [ self
+				assert: (targetObject objectValue phlowViews
+						anySatisfy: [ :each | each title = 'Details' ]) ]
 		gemstoneDo: [ self assert: targetObject objectValue phlowViews isEmpty ].
 	self assert: targetObject objectValue allInstanceSlots size equals: 3.
 	^ call

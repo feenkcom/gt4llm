@@ -12,14 +12,14 @@ GtLMagritteToolForObjectStorageSlotValueExamples >> retrieveMissingSlotValue [
 	<gtExample>
 	| objectStorage storedObjectId call |
 	objectStorage := GtLObjectStorage new.
-	storedObjectId := objectStorage addNewObject: GtLSerializedObjectValueTestObject exampleInstance reason: 'example object'.
+	storedObjectId := objectStorage
+			addNewObject: GtLSerializedObjectValueTestObject exampleInstance
+			reasonString: 'example object'.
 	call := self
-		executeTool: GtLMagritteToolForObjectStorageSlotValue new
-		withArguments: {
-			'objectId' -> storedObjectId.
-			'slotName' -> 'missingSlot'
-		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+			executeTool: GtLMagritteToolForObjectStorageSlotValue new
+			withArguments: {'objectId' -> storedObjectId.
+					'slotName' -> 'missingSlot'} asDictionary
+			inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	self
 		assertMissingObject: call result targetObject
 		withObjectName: 'missingSlot'
@@ -51,14 +51,14 @@ GtLMagritteToolForObjectStorageSlotValueExamples >> retrieveSlotValueWithEmptySl
 	<gtExample>
 	| objectStorage storedObjectId call |
 	objectStorage := GtLObjectStorage new.
-	storedObjectId := objectStorage addNewObject: GtLSerializedObjectValueTestObject exampleInstance reason: 'example object'.
+	storedObjectId := objectStorage
+			addNewObject: GtLSerializedObjectValueTestObject exampleInstance
+			reasonString: 'example object'.
 	call := self
-		executeTool: GtLMagritteToolForObjectStorageSlotValue new
-		withArguments: { 
-			'objectId' -> storedObjectId.
-			'slotName' -> '   '
-		} asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+			executeTool: GtLMagritteToolForObjectStorageSlotValue new
+			withArguments: {'objectId' -> storedObjectId.
+					'slotName' -> '   '} asDictionary
+			inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	self
 		assertMissingArgument: call result targetObject
 		withArgumentName: 'slotName'
@@ -88,11 +88,13 @@ GtLMagritteToolForObjectStorageSlotValueExamples >> retrieveSlotValueWithMissing
 	<gtExample>
 	| objectStorage storedObjectId call |
 	objectStorage := GtLObjectStorage new.
-	storedObjectId := objectStorage addNewObject: GtLSerializedObjectValueTestObject exampleInstance reason: 'example object'.
+	storedObjectId := objectStorage
+			addNewObject: GtLSerializedObjectValueTestObject exampleInstance
+			reasonString: 'example object'.
 	call := self
-		executeTool: GtLMagritteToolForObjectStorageSlotValue new
-		withArguments: { 'objectId' -> storedObjectId } asDictionary
-		inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+			executeTool: GtLMagritteToolForObjectStorageSlotValue new
+			withArguments: {'objectId' -> storedObjectId} asDictionary
+			inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('slotName')
@@ -107,19 +109,18 @@ GtLMagritteToolForObjectStorageSlotValueExamples >> retrieveStoredObjectSlotValu
 	| objectStorage storedObjectId call nameObjectId targetObject |
 	objectStorage := GtLObjectStorage new.
 	targetObject := GtLSerializedObjectValueTestObject exampleInstance.
-	storedObjectId := objectStorage addNewObject: targetObject reason: 'example object'.
+	storedObjectId := objectStorage
+			addNewObject: targetObject
+			reasonString: 'example object'.
 	call := self
-		executeTool: GtLMagritteToolForObjectStorageSlotValue new
-		withArguments: {
-			'objectId' -> storedObjectId.
-			'slotName' -> 'name'
-		} asDictionary
-		inContext: (GtLToolExecutionContext new 
-			objectStorage: objectStorage).
-		
+			executeTool: GtLMagritteToolForObjectStorageSlotValue new
+			withArguments: {'objectId' -> storedObjectId.
+					'slotName' -> 'name'} asDictionary
+			inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+
 	self assert: objectStorage objectCount equals: 2.
 	nameObjectId := objectStorage locateIdByIdentityForObject: targetObject name.
-	
+
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLObjectStorageValueResult).
 	self assert: targetObject object equals: 'TestObject'.
@@ -128,8 +129,9 @@ GtLMagritteToolForObjectStorageSlotValueExamples >> retrieveStoredObjectSlotValu
 	self
 		gtDo: [ self assert: targetObject objectValue objectClassName equals: 'ByteString' ]
 		gemstoneDo: [ self assert: targetObject objectValue objectClassName equals: 'String' ].
-	self assert: (targetObject objectValue objectPrintString includesSubstring: 'TestObject').
-	
+	self
+		assert: (targetObject objectValue objectPrintString includesSubstring: 'TestObject').
+
 	^ call
 ]
 
