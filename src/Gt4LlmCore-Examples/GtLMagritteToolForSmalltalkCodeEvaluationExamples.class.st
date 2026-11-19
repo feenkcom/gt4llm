@@ -24,6 +24,20 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertPlaygroundPageReferen
 	self assert: aPlaygroundPageReference pageId equals: self theDatabase pages first uid asString36.
 ]
 
+{ #category : #'private - examples' }
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertReplayOf: aScript in: aStorage equals: anObject [
+	self
+		gtDo: [ | viewModel bindings result |
+			viewModel := (GtPharoSnippetCoder forSource: aScript) asCoderViewModel.
+			bindings := GtSharedVariablesBindings new.
+			(bindings bindingOf: #objectStorage) value: aStorage.
+			viewModel sharedBindings: bindings.
+			result := viewModel coderModel doItInContext: viewModel evaluationContext all.
+			self assert: result isSuccess.
+			self assert: result value equals: anObject ]
+		gemstoneDo: [  ]
+]
+
 { #category : #assertions }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertSmalltalkCodeEvaluationException: aDomainObject withCode: aCodeString exceptionClass: anExceptionClass messageSubstring: aMessageSubstring [
 	"Assert that the domain object is a GtLSmalltalkCodeEvaluationExceptionDomainObject with expected values."
@@ -1086,17 +1100,14 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> inlinedProvenanceWithReused
 					'right' -> right idString36}
 			in: storage.
 	script := result provenanceScript.
-	self assert: (script beginsWith: '| value subtotal left right |').
 	self
-		assert: (script includesSubstring: 'value := subtotal + 2. left := value.').
+		assert: (script
+				includesSubstring: 'subtotal := value + 1. value := subtotal + 2. left := value.').
 	self assert: (script includesSubstring: 'right := value + 2.').
 	self
-		gtDo: [ self
-				assert: (OpalCompiler new
-						bindings: (Dictionary newFrom: {#objectStorage -> storage});
-						evaluate: script)
-				equals: result storedValue ]
-		gemstoneDo: [  ].
+		assertReplayOf: script
+		in: storage
+		equals: result storedValue.
 	^ result
 ]
 
@@ -1169,20 +1180,15 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> storedEvaluationProvenance 
 	self
 		assert: script
 		equals: (String cr
-				join: {'| value left right |'.
-						''.
-						'value := (objectStorage objectAt: ' , seedId storeString , ').'.
+				join: {'value := (objectStorage objectAt: ' , seedId storeString , ').'.
 						'left := value + 1.'.
 						''.
 						'right := left.'.
 						'left + right'}).
 	self
-		gtDo: [ self
-				assert: (OpalCompiler new
-						bindings: (Dictionary newFrom: {#objectStorage -> storage});
-						evaluate: script)
-				equals: result storedValue ]
-		gemstoneDo: [  ].
+		assertReplayOf: script
+		in: storage
+		equals: result storedValue.
 	^ result
 ]
 

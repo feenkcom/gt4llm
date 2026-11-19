@@ -25,6 +25,21 @@ GtLProvenanceCodeGenerator >> appendProvenanceEvaluationsFrom: aNode visited: vi
 ]
 
 { #category : #private }
+GtLProvenanceCodeGenerator >> bindingIdsFor: someBindings [
+	| bindingIds |
+	bindingIds := OrderedDictionary new.
+	someBindings
+		do: [ :each | 
+			| name node |
+			name := (each name ifNil: [ '' ]) asString.
+			node := OCParser parseFaultyExpression: name.
+			(node isVariable
+				and: [ node isPseudoVariable not and: [ node name asString = name ] ])
+				ifTrue: [ bindingIds at: name put: each objectId asString ] ].
+	^ bindingIds
+]
+
+{ #category : #private }
 GtLProvenanceCodeGenerator >> evaluationEntriesFrom: aTree [
 	| visitedCalls |
 	visitedCalls := IdentitySet new.
@@ -37,119 +52,44 @@ GtLProvenanceCodeGenerator >> evaluationEntriesFrom: aTree [
 ]
 
 { #category : #private }
-GtLProvenanceCodeGenerator >> provenanceBindingIdsForEvaluation: anEvaluation [
-	| bindingIds |
-	bindingIds := OrderedDictionary new.
-	anEvaluation key reason provenanceBindings
-		do: [ :each | 
-			| name node |
-			name := (each name ifNil: [ '' ]) asString.
-			node := OCParser parseFaultyExpression: name.
-			(node isVariable
-				and: [ node isPseudoVariable not and: [ node name asString = name ] ])
-				ifTrue: [ bindingIds at: name put: each objectId asString ] ].
-	^ bindingIds
-]
-
-{ #category : #private }
-GtLProvenanceCodeGenerator >> provenanceResultNamesFor: evaluations bindings: bindingsByStep [
-	| preferredNames bindingIdsByName sourceNames reassignedNames resultNames |
-	preferredNames := Dictionary new.
-	bindingIdsByName := Dictionary new.
-	sourceNames := Set with: 'objectStorage'.
-	reassignedNames := Set with: 'objectStorage'.
-	evaluations
-		with: bindingsByStep
-		do: [ :evaluation :bindings | 
-			reassignedNames addAll: (self provenanceTemporariesOf: evaluation value).
-			evaluation value
-				nodesDo: [ :node | 
-					node isVariable
-						ifTrue: [ sourceNames add: node name asString.
-							node isWrite ifTrue: [ reassignedNames add: node name asString ] ] ].
-			bindings
-				keysAndValuesDo: [ :name :id | 
-					sourceNames add: name.
-					preferredNames at: id ifAbsentPut: [ name ].
-					(bindingIdsByName at: name ifAbsentPut: [ Set new ]) add: id ] ].
+GtLProvenanceCodeGenerator >> resultNamesFrom: bindingsByStep [
+	| resultNames |
 	resultNames := Dictionary new.
-	evaluations allButLast
-		withIndexDo: [ :evaluation :index | 
-			| id name |
-			id := evaluation key idString36.
-			name := preferredNames at: id ifAbsent: [ nil ].
-			(name isNil
-				or: [ (reassignedNames includes: name) or: [ (bindingIdsByName at: name) size > 1 ] ])
-				ifTrue: [ name := self
-							uniqueProvenanceName: 'result' , index asString
-							avoiding: sourceNames ].
-			resultNames at: id put: name ].
+	bindingsByStep
+		do: [ :bindings | 
+			bindings
+				keysAndValuesDo: [ :name :id | resultNames at: id ifAbsentPut: [ name ] ] ].
 	^ resultNames
-]
-
-{ #category : #private }
-GtLProvenanceCodeGenerator >> provenanceTemporariesOf: anAst [
-	^ anAst isSequence
-		ifTrue: [ anAst temporaryNames collect: #asString ]
-		ifFalse: [ #() ]
 ]
 
 { #category : #generating }
 GtLProvenanceCodeGenerator >> scriptFor: someEntries [
-	| evaluations bindingsByStep resultNames availableResults declaredNames body |
-	evaluations := someEntries
-			collect: [ :entry | entry -> (OCParser parseFaultyExpression: entry reason code) ].
-	evaluations ifEmpty: [ ^ '' ].
-	bindingsByStep := evaluations
-			collect: [ :each | self provenanceBindingIdsForEvaluation: each ].
-	resultNames := self
-			provenanceResultNamesFor: evaluations
-			bindings: bindingsByStep.
+	| bindingsByStep resultNames availableResults |
+	bindingsByStep := someEntries
+			collect: [ :entry | self bindingIdsFor: entry reason provenanceBindings ].
+	resultNames := self resultNamesFrom: bindingsByStep.
 	availableResults := Dictionary new.
-	declaredNames := OrderedCollection new.
-	body := String
-			streamContents: [ :aStream | 
-				evaluations
-					withIndexDo: [ :evaluation :index | 
-						| resultName |
-						resultName := resultNames at: evaluation key idString36 ifAbsent: [ nil ].
-						self
-							writeProvenanceInputs: (bindingsByStep at: index)
-							using: availableResults
-							declaredIn: declaredNames
-							on: aStream.
-						(self provenanceTemporariesOf: evaluation value)
-							do: [ :name | 
-								(declaredNames includes: name)
-									ifTrue: [ aStream
-											nextPutAll: name;
-											nextPutAll: ' := nil.';
-											cr ]
-									ifFalse: [ declaredNames add: name ] ].
-						self
-							writeInlineProvenance: evaluation
-							result: resultName
-							on: aStream.
-						resultName
-							ifNotNil: [ declaredNames add: resultName.
-								availableResults at: evaluation key idString36 put: resultName.
-								aStream
-									cr;
-									cr ] ] ].
-	declaredNames ifEmpty: [ ^ body ].
 	^ String
 		streamContents: [ :aStream | 
-			aStream nextPutAll: '| '.
-			declaredNames
-				do: [ :each | 
-					aStream
-						nextPutAll: each;
-						space ].
-			aStream
-				nextPut: $|;
-				cr;
-				cr;
-				nextPutAll: body ]
+			someEntries
+				withIndexDo: [ :entry :index | 
+					| id resultName |
+					id := entry idString36.
+					resultName := index = someEntries size
+							ifFalse: [ resultNames at: id ifAbsent: [ 'result' , index asString ] ].
+					self
+						writeProvenanceInputs: (bindingsByStep at: index)
+						using: availableResults
+						on: aStream.
+					self
+						writeInlineProvenance: entry
+						result: resultName
+						on: aStream.
+					resultName
+						ifNotNil: [ availableResults at: id put: resultName.
+							aStream
+								cr;
+								cr ] ] ]
 ]
 
 { #category : #generating }
@@ -158,23 +98,14 @@ GtLProvenanceCodeGenerator >> scriptForTree: aTree [
 ]
 
 { #category : #private }
-GtLProvenanceCodeGenerator >> uniqueProvenanceName: aName avoiding: occupiedNames [
-	| name |
-	name := aName.
-	[ occupiedNames includes: name ] whileTrue: [ name := name , 'x' ].
-	occupiedNames add: name.
-	^ name
-]
-
-{ #category : #private }
-GtLProvenanceCodeGenerator >> writeInlineProvenance: anEvaluation result: resultName on: aStream [
+GtLProvenanceCodeGenerator >> writeInlineProvenance: anEntry result: resultName on: aStream [
 	| ast source bodyStart lastStatement trailing expressionStart |
-	ast := anEvaluation value.
+	source := anEntry reason code.
+	ast := OCParser parseFaultyExpression: source.
 	ast isFaulty
 		ifTrue: [ aStream
 				nextPutAll: 'self error: ''The recorded evaluation has a syntax error''.'.
 			^ self ].
-	source := anEvaluation key reason code.
 	bodyStart := (ast isSequence and: [ ast hasTemporaries ])
 			ifTrue: [ ast rightBar + 1 ]
 			ifFalse: [ 1 ].
@@ -208,31 +139,21 @@ GtLProvenanceCodeGenerator >> writeInlineProvenance: anEvaluation result: result
 ]
 
 { #category : #private }
-GtLProvenanceCodeGenerator >> writeProvenanceArgument: anObjectId using: availableResults on: aStream [
-	| bindingId |
-	bindingId := anObjectId asString.
-	availableResults
-		at: bindingId
-		ifPresent: [ :resultName | aStream nextPutAll: resultName ]
-		ifAbsent: [ aStream nextPutAll: '(objectStorage objectAt: '.
-			bindingId storeOn: aStream.
-			aStream nextPut: $) ]
-]
-
-{ #category : #private }
-GtLProvenanceCodeGenerator >> writeProvenanceInputs: bindingIds using: availableResults declaredIn: declaredNames on: aStream [
+GtLProvenanceCodeGenerator >> writeProvenanceInputs: bindingIds using: availableResults on: aStream [
 	bindingIds
 		keysAndValuesDo: [ :name :objectId | 
-			(availableResults at: objectId ifAbsent: [ nil ]) = name
+			| resultName |
+			resultName := availableResults at: objectId ifAbsent: [ nil ].
+			resultName = name
 				ifFalse: [ aStream
 						nextPutAll: name;
 						nextPutAll: ' := '.
-					self
-						writeProvenanceArgument: objectId
-						using: availableResults
-						on: aStream.
+					resultName
+						ifNil: [ aStream nextPutAll: '(objectStorage objectAt: '.
+							objectId storeOn: aStream.
+							aStream nextPut: $) ]
+						ifNotNil: [ aStream nextPutAll: resultName ].
 					aStream
 						nextPut: $.;
-						cr.
-					(declaredNames includes: name) ifFalse: [ declaredNames add: name ] ] ]
+						cr ] ]
 ]
