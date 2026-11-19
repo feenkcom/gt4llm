@@ -19,13 +19,13 @@ GtLSmaCCModel >> defineParser: parserClass andScanner: scannerClass using: aDefi
 
 { #category : #'as yet unclassified' }
 GtLSmaCCModel >> defineParser: parserClass as: aGrammar [
-	^ grammars at: parserClass put: aGrammar
+	^ grammars at: parserClass asSymbol put: aGrammar
 ]
 
 { #category : #'as yet unclassified' }
 GtLSmaCCModel >> grammarFor: aClassName [
 	^ grammars
-		at: aClassName
+		at: aClassName asSymbol
 		ifAbsentPut: [ | class |
 			class := Smalltalk globals at: aClassName asSymbol ifAbsent: [ ^ nil ].
 			(class inheritsFrom: SmaCCParser) ifFalse: [ ^ nil ].
