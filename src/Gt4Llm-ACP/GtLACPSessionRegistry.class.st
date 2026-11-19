@@ -208,6 +208,16 @@ GtLACPSessionRegistry >> newCodexSessionIn: aDirectory [
 	^ self newSessionWithClient: GtLACPCodexClient new in: aDirectory
 ]
 
+{ #category : #'instance creation' }
+GtLACPSessionRegistry >> newGTCodexSessionIn: aDirectory [
+	| client |
+	client := GtLACPCodexClient new.
+	client configuration systemPrompt
+		gtPageExplanation: 'Rules for Moldable Development for Glamorous Toolkit';
+		gtPageExplanation: 'Rules for styling replies'.
+	^ self newSessionWithClient: client in: aDirectory
+]
+
 { #category : #'private - interface' }
 GtLACPSessionRegistry >> newSessionDropdownFor: aDropdown clients: aCollection [
 	| aMenu |
