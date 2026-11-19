@@ -38,6 +38,17 @@ GtLObjectValueResultExamples >> expectedPlaygroundPageReferenceForInteger [
 ]
 
 { #category : #private }
+GtLObjectValueResultExamples >> expectedPlaygroundPageReferenceForObjectClassName: aClassName [
+	| page expectedTitle |
+	expectedTitle := aClassName asString , ' Page'.
+	page := self theDatabase pages detect: [ :each | each title = expectedTitle ].
+	^ NeoJSONObject new
+		at: 'databaseId' put: self theDatabase primaryDB uuidString;
+		at: 'pageId' put: page uid asString36;
+		yourself
+]
+
+{ #category : #private }
 GtLObjectValueResultExamples >> expectedPlaygroundPageReferenceForString [
 	^ self expectedPlaygroundPageReferenceForObjectClassName: 'ByteString'
 ]

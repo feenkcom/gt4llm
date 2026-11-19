@@ -201,7 +201,7 @@ GtLDataSourceEncoderDecoder >> initializeZnRequestMapper: aJsonMapper [
 				} asDictionary ]
 			setter: [ :znRequest :jsonObject | 
 				znRequest requestLine: (ZnRequestLine new
-					method: (jsonObject at: 'method');
+					method: (jsonObject at: 'method') asSymbol;
 					uri: (jsonObject at: 'uri') asZnUrl;
 					version: (jsonObject at: 'version'))] ].
 ]

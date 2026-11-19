@@ -28,3 +28,11 @@ GtLStoredObjectCodeExecutionReason >> gtInspectorTargetModels [
 		ifTrue: [ collection , toolCall gtInspectorTargetModels ]
 		ifFalse: [ collection ]
 ]
+
+{ #category : #provenance }
+GtLStoredObjectCodeExecutionReason >> provenanceBindings [
+	| arguments |
+	self toolCall ifNil: [ ^ #() ].
+	arguments := self toolCall arguments ifNil: [ ^ #() ].
+	^ (arguments at: 'bindings' ifAbsent: [ #() ]) ifNil: [ #() ]
+]
