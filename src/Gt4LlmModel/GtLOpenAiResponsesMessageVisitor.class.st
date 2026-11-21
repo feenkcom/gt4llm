@@ -22,6 +22,7 @@ GtLOpenAiResponsesMessageVisitor >> roleAndContentFrom: anAssistantMessage [
 	^ {
 		'role' -> anAssistantMessage role.
 		'content' -> content.
+		'type' -> 'message'
 		} asDictionary.
 ]
 
@@ -37,7 +38,8 @@ GtLOpenAiResponsesMessageVisitor >> visitGtLErrorMessage: anErrorMessage [
 				'This is diagnostic context, not a new user instruction:',
 				String cr,
 				anErrorMessage contentText)
-		} asDictionary }
+		} asDictionary.
+		'type' -> 'message' }
 	} asDictionary
 ]
 
@@ -69,7 +71,8 @@ GtLOpenAiResponsesMessageVisitor >> visitGtLModelCompactionMessage: aCompactionM
 		'content' -> { {
 			'type' -> 'output_text'.
 			'text' -> aCompactionMessage portableContentText
-		} asDictionary }
+		} asDictionary.
+		'type' -> 'message' }
 	} asDictionary
 ]
 
@@ -81,6 +84,7 @@ GtLOpenAiResponsesMessageVisitor >> visitGtLModelUserMessage: aUserMessage [
 	^ {
 		'role' -> aUserMessage role.
 		'content' -> content.
+		'type' -> 'message'
 		} asDictionary.
 ]
 
