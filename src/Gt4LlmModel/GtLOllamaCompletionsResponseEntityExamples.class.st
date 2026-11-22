@@ -72,7 +72,7 @@ Let me make the function call now.';
 	self assert: toolCall class equals: GtLOllamaCompletionsToolCallEntity.
 	self assert: toolCall type equals: 'function'.
 	self assert: toolCall function name equals: 'WebFetch'.
-	self assert: (toolCall function arguments printString) equals: '{"url":"https://example.com"}'.
+	self assert: (toolCall function arguments at: 'url') equals: 'https://example.com'.
 	self assert: toolCall id equals: 'call_q0u2tdvg'.
 	self assert: toolCall index equals: 0.
 	^ entity
