@@ -162,7 +162,8 @@ GtLMessageStyler >> initialize [
 { #category : #private }
 GtLMessageStyler >> inlineReferenceParser [
 	^ inlineReferenceParser
-		ifNil: [ inlineReferenceParser := self newInlineReferenceParser optimize ]
+		ifNil: [ inlineReferenceParser := (GtLInlineCodeReferenceParser forStyler: self)
+					optimize ]
 ]
 
 { #category : #generated }
@@ -177,71 +178,6 @@ GtLMessageStyler >> isValidLink: urlString [
 	<return: #Boolean>
 
 	^ (self resolveUrl: urlString) isValid
-]
-
-{ #category : #private }
-GtLMessageStyler >> newInlineReferenceParser [
-	| behaviorNamed identifierPart className symbol selectorName keyword binarySelector selector classSide methodReference noise |
-	behaviorNamed := [ :name | 
-		| global |
-		global := Smalltalk at: name asSymbol ifAbsent: [ nil ].
-		global isBehavior ifTrue: [ global ] ].
-
-	identifierPart := #word asPParser / $_ asPParser.
-	className := ((PP2PredicateObjectNode new
-			predicate: [ :character | character isUppercase ];
-			predicateMessage: 'uppercase letter expected';
-			yourself) , identifierPart star) flatten.
-	symbol := ((PP2PredicateObjectNode new
-			predicate: [ :character | character isLowercase ];
-			predicateMessage: 'lowercase letter expected';
-			yourself) , identifierPart star) flatten ==> #asSymbol.
-
-	selectorName := #letter asPParser / $_ asPParser , identifierPart star.
-	keyword := selectorName , $: asPParser.
-	binarySelector := (PP2PredicateObjectNode anyOf: '+-*/\~<>=@%|&,?!') plus.
-	selector := ((keyword plus / selectorName , (identifierPart / $: asPParser) not)
-			/ binarySelector) flatten ==> #asSymbol.
-
-	classSide := (#space asPParser plus , 'class' asPParser) optional.
-	methodReference := (className , classSide
-			, ('>>' asPParser trim , $# asPParser optional) , selector) trim end
-			==> [ :parts | 
-				| behavior method |
-				behavior := behaviorNamed value: parts first.
-				method := behavior
-						ifNotNil: [ (parts second ifNil: [ behavior ] ifNotNil: [ behavior class ])
-								lookupSelector: parts fourth ].
-				method
-					ifNil: [ [ :codeText :appendButton | 
-						self styleInlineSmalltalk: codeText source: codeText asString.
-						false ] ]
-					ifNotNil: [ [ :codeText :appendButton | 
-						appendButton
-							value: (self
-									coderButtonAttributeWithLabel: [ method gtDisplayString ]
-									valid: true
-									withTool: [ GtMethodCoderTool compiledMethod: method ]) ] ] ].
-
-	noise := #any asPParser star end
-			==> [ :ignored | 
-				[ :codeText :appendButton | 
-				self styleInlineSmalltalk: codeText source: codeText asString.
-				false ] ].
-
-	^ (className trim end
-		==> [ :name | 
-			(behaviorNamed value: name)
-				ifNotNil: [ :behavior | 
-					[ :codeText :appendButton | 
-					appendButton
-						value: (self
-								coderButtonAttributeWithLabel: [ behavior gtDisplayString ]
-								valid: true
-								withTool: [ GtClassCoderTool forClass: behavior ]) ] ] ])
-		/ (symbol trim end
-				==> [ :name | [ :codeText :appendButton | appendButton value: (self symbolButtonAttributeFor: name) ] ])
-		/ methodReference / noise
 ]
 
 { #category : #accessing }

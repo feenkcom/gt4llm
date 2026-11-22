@@ -1105,6 +1105,7 @@ GtLMessageStylerExamples >> inlineReferenceParserIsReused [
 
 	first := styler privateStyle: '`Point`' asRopedText.
 	parser := styler instVarNamed: #inlineReferenceParser.
+	self assert: parser class equals: GtLInlineCodeReferenceParser.
 	self assert: parser isOptimized.
 	self
 		assert: (self inlineButtonLabelsAndPositionsIn: first)
