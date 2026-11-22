@@ -1031,6 +1031,131 @@ GtLMessageStylerExamples >> inlineCodeWithoutReferenceButtons [
 ]
 
 { #category : #examples }
+GtLMessageStylerExamples >> inlineDirectoryPathOpensFileReference [
+	<gtExample>
+	| path source text editor scripter openedTool |
+	path := '.' asFileReference asAbsolute fullName.
+	source := 'Open `' , path , '`'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self
+		assert: (self inlineButtonLabelsAndPositionsIn: text)
+		equals: {{path.
+					source size}}.
+
+	editor := BrEditor new
+			aptitude: BrGlamorousRegularEditorAptitude;
+			beReadOnlyWithSelection;
+			hExact: 800;
+			vFitContent;
+			text: text;
+			yourself.
+	scripter := BlScripter new element: editor.
+	(editor query // BrButton) all first
+		when: GtPhlowObjectToSpawn
+		do: [ :event | 
+			openedTool := event tool.
+			event consumed: true ].
+	scripter clickStep: [ :step | step // BrButton ].
+	self assert: (openedTool isKindOf: GtInspectorTool).
+	self assert: openedTool object equals: path asFileReference.
+	self assert: openedTool object isDirectory.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineDotOpensWorkingDirectory [
+	<gtExample>
+	| source text attribute button scripter tool |
+	source := '`.`'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self
+		assert: (self inlineButtonLabelsAndPositionsIn: text)
+		equals: {{'.'.
+					source size}}.
+	attribute := (text attributesAt: text size)
+			detect: [ :each | each isKindOf: GtButtonAttribute ].
+	button := attribute stencil build.
+	scripter := BlScripter new element: button.
+	button
+		when: GtPhlowObjectToSpawn
+		do: [ :event | 
+			tool := event tool.
+			event consumed: true ].
+	scripter clickStep: [ :step | step label: 'Open the working directory' ].
+	self assert: (tool isKindOf: GtInspectorTool).
+	self assert: tool object equals: FileSystem workingDirectory asAbsolute.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineFilePathOpensFileReference [
+	<gtExample>
+	| file path source text editor scripter openedTool |
+	file := FileReference newTempFilePrefix: 'gt inline ... file ' suffix: '.txt'.
+	[ file writeStreamDo: [ :stream | stream nextPutAll: 'Example file' ].
+	path := file fullName.
+	source := 'Open `` ' , path , ' ``'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self
+		assert: (self inlineButtonLabelsAndPositionsIn: text)
+		equals: {{path.
+					source size}}.
+	self
+		assert: ((text attributesAt: source size)
+				anySatisfy: [ :attribute | attribute isKindOf: BrTextHideAttribute ]).
+
+	editor := BrEditor new
+			aptitude: BrGlamorousRegularEditorAptitude;
+			beReadOnlyWithSelection;
+			hExact: 800;
+			vFitContent;
+			text: text;
+			yourself.
+	scripter := BlScripter new element: editor.
+	(editor query // BrButton) all first
+		when: GtPhlowObjectToSpawn
+		do: [ :event | 
+			openedTool := event tool.
+			event consumed: true ].
+	scripter clickStep: [ :step | step // BrButton ].
+	self assert: (openedTool isKindOf: GtInspectorTool).
+	self assert: openedTool object equals: file asAbsolute.
+	^ scripter ] ensure: [ file ensureDelete ]
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineHomeShorthandOpensHome [
+	<gtExample>
+	| home scripter |
+	home := FileLocator home asFileReference asAbsolute.
+	{'~'.
+		'~' , home fileSystem delimiter asString}
+		do: [ :path | 
+			| source text attribute button tool |
+			source := '`' , path , '`'.
+			text := GtLMessageStyler new privateStyle: source asRopedText.
+			self
+				assert: (self inlineButtonLabelsAndPositionsIn: text)
+				equals: {{path.
+							source size}}.
+			attribute := (text attributesAt: text size)
+					detect: [ :each | each isKindOf: GtButtonAttribute ].
+			button := attribute stencil build.
+			scripter := BlScripter new element: button.
+			button
+				when: GtPhlowObjectToSpawn
+				do: [ :event | 
+					tool := event tool.
+					event consumed: true ].
+			scripter clickStep: [ :step | step label: 'Open the home directory' ].
+			self assert: (tool isKindOf: GtInspectorTool).
+			self assert: tool object equals: home ].
+	^ scripter
+]
+
+{ #category : #examples }
 GtLMessageStylerExamples >> inlineMethodReferenceButtons [
 	<gtExample>
 	<return: #BlText>
@@ -1049,6 +1174,24 @@ GtLMessageStylerExamples >> inlineMethodReferenceButtons [
 					lastPosition + ' and `` ' size + references second size + ' ``' size}.
 				{'SmallInteger>>#+'.
 					text size}}.
+	^ text
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineMissingFilePathStaysVisible [
+	<gtExample>
+	<return: #BlText>
+	| file source text |
+	file := FileReference
+			newTempFilePrefix: 'gt-missing-inline-file-'
+			suffix: '.txt'.
+	source := '`' , file fullName , '`'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: (self inlineButtonLabelsAndPositionsIn: text) isEmpty.
+	self
+		assert: ((text attributesAt: 2)
+				anySatisfy: [ :attribute | attribute isKindOf: BrTextHideAttribute ]) not.
+	self assert: text asString equals: source.
 	^ text
 ]
 

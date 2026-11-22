@@ -161,9 +161,11 @@ GtLMessageStyler >> initialize [
 
 { #category : #private }
 GtLMessageStyler >> inlineReferenceParser [
+	((inlineReferenceParser isKindOf: GtLInlineCodeReferenceParser)
+		and: [ inlineReferenceParser hasFilePathProduction ])
+		ifFalse: [ inlineReferenceParser := (GtLInlineCodeReferenceParser forStyler: self)
+					optimize ].
 	^ inlineReferenceParser
-		ifNil: [ inlineReferenceParser := (GtLInlineCodeReferenceParser forStyler: self)
-					optimize ]
 ]
 
 { #category : #generated }
