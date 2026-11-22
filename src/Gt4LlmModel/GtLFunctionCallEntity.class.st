@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtLFunctionCallEntity >> arguments [
-	^ NeoJSONObject fromString: (self rawData at: 'arguments')
+	^ STONJSON fromString: (self rawData at: 'arguments')
 ]
 
 { #category : #accessing }

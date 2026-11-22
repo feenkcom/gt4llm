@@ -105,16 +105,16 @@ GtLExampleWithResultStatus >> llmJsonObject [
 	| data |
 	
 	data := NeoJSONObject new
-		at: #className put: self exampleWithResult methodClass name asString;
-		at: #selector put: self exampleWithResult selector asString;
-		at: #status put: self statusText;
-		at: #objectId put: self objectId;
+		at: 'className' put: self exampleWithResult methodClass name asString;
+		at: 'selector' put: self exampleWithResult selector asString;
+		at: 'status' put: self statusText;
+		at: 'objectId' put: self objectId;
 		yourself.
 		
 	(self isErrorResult or: [ self isFailureResult ]) ifTrue: [
-		data at: #errorDetails put: (NeoJSONObject new
-			at: #errorMessage put: self normalizedErrorMessage;
-			at: #errorClass put: self exampleWithResult returnValue class name asString;
+		data at: 'errorDetails' put: (NeoJSONObject new
+			at: 'errorMessage' put: self normalizedErrorMessage;
+			at: 'errorClass' put: self exampleWithResult returnValue class name asString;
 			yourself) ].
 		
 	^ data
