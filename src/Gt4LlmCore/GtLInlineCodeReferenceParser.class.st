@@ -2,7 +2,8 @@ Class {
 	#name : #GtLInlineCodeReferenceParser,
 	#superclass : #GtLInlineCodeReferenceGrammar,
 	#instVars : [
-		'styler'
+		'styler',
+		'existingFileReference'
 	],
 	#category : #'Gt4LlmCore-UI'
 }
@@ -42,6 +43,50 @@ GtLInlineCodeReferenceParser >> classReference [
 ]
 
 { #category : #grammar }
+GtLInlineCodeReferenceParser >> existingFileReference [
+	^ super noise
+		>=> [ :context :parse | 
+			| position reference |
+			position := context position.
+			reference := self existingFileReferenceFor: parse value.
+			reference
+				ifNil: [ context position: position.
+					PP2Failure message: 'existing file or directory expected' context: context ] ]
+]
+
+{ #category : #private }
+GtLInlineCodeReferenceParser >> existingFileReferenceFor: source [
+	| path reference |
+	path := source trimBoth.
+	path isEmpty ifTrue: [ ^ nil ].
+	(path first = $~
+		and: [ path size = 1
+				or: [ path second = $/ or: [ path second = FileSystem disk delimiter ] ] ])
+		ifTrue: [ path := path
+					copyReplaceFrom: 1
+					to: 1
+					with: FileLocator home asFileReference fullName ].
+	^ [ reference := path asFileReference.
+	reference exists ifTrue: [ reference asAbsolute ] ]
+		on: FileSystemError
+		do: [ :error | nil ]
+]
+
+{ #category : #grammar }
+GtLInlineCodeReferenceParser >> filePath [
+	^ existingFileReference
+		==> [ :reference | 
+			[ :codeText :appendButton | 
+			| label |
+			label := codeText asString trimBoth.
+			appendButton
+				value: (styler
+						coderButtonAttributeWithLabel: [ label ]
+						valid: true
+						withTool: [ GtInspectorTool forObject: reference ]) ] ]
+]
+
+{ #category : #grammar }
 GtLInlineCodeReferenceParser >> methodReference [
 	^ super methodReference
 		==> [ :parts | 
@@ -49,7 +94,8 @@ GtLInlineCodeReferenceParser >> methodReference [
 			behavior := parts first.
 			method := behavior
 					ifNotNil: [ (parts second ifNil: [ behavior ] ifNotNil: [ behavior class ])
-							lookupSelector: parts fourth ].
+							compiledMethodAt: parts fourth
+							ifAbsent: [ nil ] ].
 			method
 				ifNil: [ [ :codeText :appendButton | 
 					styler styleInlineSmalltalk: codeText source: codeText asString.
@@ -74,6 +120,11 @@ GtLInlineCodeReferenceParser >> noise [
 { #category : #grammar }
 GtLInlineCodeReferenceParser >> selector [
 	^ super selector ==> #asSymbol
+]
+
+{ #category : #accessing }
+GtLInlineCodeReferenceParser >> start [
+	^ methodReference / self filePath / classReference / symbol / noise
 ]
 
 { #category : #accessing }

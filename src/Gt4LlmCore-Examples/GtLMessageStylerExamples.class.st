@@ -912,6 +912,21 @@ GtLMessageStylerExamples >> headerWithSymbolAnnotation [
 
 ]
 
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineBinaryMethodReferenceButton [
+	<gtExample>
+	<return: #BlText>
+	| source text |
+	source := '`SmallInteger>>#+`'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self
+		assert: (self inlineButtonLabelsAndPositionsIn: text)
+		equals: {{'SmallInteger>>#+'.
+					source size}}.
+	^ text
+]
+
 { #category : #private }
 GtLMessageStylerExamples >> inlineButtonLabelsAndPositionsIn: aText [
 	| buttons |
@@ -924,6 +939,32 @@ GtLMessageStylerExamples >> inlineButtonLabelsAndPositionsIn: aText [
 				add: {attribute stencil build label asString.
 						end} ].
 	^ buttons asArray
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineClassReferenceButtonOpensClassCoder [
+	<gtExample>
+	^ self
+		inlineReferenceScripterFor: '`Point`'
+		label: 'Point'
+		assertTool: [ :tool | 
+			self assert: (tool isKindOf: GtClassCoderTool).
+			self assert: tool observedClass equals: Point ]
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineClassSideMethodReferenceButton [
+	<gtExample>
+	<return: #BlText>
+	| source text |
+	source := '`Point class>>#x:y:`'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self
+		assert: (self inlineButtonLabelsAndPositionsIn: text)
+		equals: {{'Point class>>#x:y:'.
+					source size}}.
+	^ text
 ]
 
 { #category : #'examples - markdown' }
@@ -975,47 +1016,6 @@ GtLMessageStylerExamples >> inlineCodeReferenceButtons [
 ]
 
 { #category : #examples }
-GtLMessageStylerExamples >> inlineCodeReferenceButtonsOpenTools [
-	<gtExample>
-	| source editor scripter buttons openedTools |
-	source := '`Point` `asString` `Point class>>#x:y:`'.
-	editor := BrEditor new
-			aptitude: BrGlamorousRegularEditorAptitude;
-			beReadOnlyWithSelection;
-			hExact: 800;
-			vFitContent;
-			text: (GtLMessageStyler new privateStyle: source asRopedText);
-			yourself.
-	scripter := BlScripter new element: editor.
-	buttons := (editor query // BrButton) all.
-	self
-		assert: (buttons collect: [ :button | button label asString ]) asArray
-		equals: #('Point' '#asString' 'Point class>>#x:y:').
-
-	openedTools := OrderedCollection new.
-	buttons
-		with: #(inlineClassButton inlineSymbolButton inlineMethodButton)
-		do: [ :button :id | 
-			button id: id.
-			button
-				when: GtPhlowObjectToSpawn
-				do: [ :event | 
-					openedTools add: event tool.
-					event consumed: true ].
-			scripter clickStep: [ :step | step // id ] ].
-	self
-		assert: (openedTools collect: #class) asArray
-		equals: {GtClassCoderTool.
-				GtPhlowCompositeTool.
-				GtMethodCoderTool}.
-	self assert: openedTools first observedClass equals: Point.
-	self assert: (openedTools second object isKindOf: GtSearchReferencesFilter).
-	self assert: openedTools second object object equals: #asString.
-	self assert: openedTools third compiledMethod selector equals: #x:y:.
-	^ scripter
-]
-
-{ #category : #examples }
 GtLMessageStylerExamples >> inlineCodeWithoutReferenceButtons [
 	<gtExample>
 	<return: #BlText>
@@ -1031,24 +1031,190 @@ GtLMessageStylerExamples >> inlineCodeWithoutReferenceButtons [
 ]
 
 { #category : #examples }
-GtLMessageStylerExamples >> inlineMethodReferenceButtons [
+GtLMessageStylerExamples >> inlineDirectoryPathOpensFileReference [
 	<gtExample>
-	<return: #BlText>
-	| references source text lastPosition |
-	references := #('Point class>>#x:y:' 'Array>>at:put:' 'SmallInteger>>#+').
-	source := '`' , references first , '` and `` ' , references second
-			, ' `` and `' , references third , '`'.
+	| path source text editor scripter openedTool |
+	path := '.' asFileReference asAbsolute fullName.
+	source := 'Open `' , path , '`'.
 	text := GtLMessageStyler new privateStyle: source asRopedText.
 	self assert: text asString equals: source.
-	lastPosition := 2 + references first size.
 	self
 		assert: (self inlineButtonLabelsAndPositionsIn: text)
-		equals: {{'Point class>>#x:y:'.
-					lastPosition}.
-				{'Object>>#at:put:'.
-					lastPosition + ' and `` ' size + references second size + ' ``' size}.
-				{'SmallInteger>>#+'.
-					text size}}.
+		equals: {{path.
+					source size}}.
+
+	editor := BrEditor new
+			aptitude: BrGlamorousRegularEditorAptitude;
+			beReadOnlyWithSelection;
+			hExact: 800;
+			vFitContent;
+			text: text;
+			yourself.
+	scripter := BlScripter new element: editor.
+	(editor query // BrButton) all first
+		when: GtPhlowObjectToSpawn
+		do: [ :event | 
+			openedTool := event tool.
+			event consumed: true ].
+	scripter clickStep: [ :step | step // BrButton ].
+	self assert: (openedTool isKindOf: GtInspectorTool).
+	self assert: openedTool object equals: path asFileReference.
+	self assert: openedTool object isDirectory.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineDotOpensWorkingDirectory [
+	<gtExample>
+	| source text attribute button scripter tool |
+	source := '`.`'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self
+		assert: (self inlineButtonLabelsAndPositionsIn: text)
+		equals: {{'.'.
+					source size}}.
+	attribute := (text attributesAt: text size)
+			detect: [ :each | each isKindOf: GtButtonAttribute ].
+	button := attribute stencil build.
+	scripter := BlScripter new element: button.
+	button
+		when: GtPhlowObjectToSpawn
+		do: [ :event | 
+			tool := event tool.
+			event consumed: true ].
+	scripter clickStep: [ :step | step label: 'Open the working directory' ].
+	self assert: (tool isKindOf: GtInspectorTool).
+	self assert: tool object equals: FileSystem workingDirectory asAbsolute.
+	^ scripter
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineFilePathOpensFileReference [
+	<gtExample>
+	| file path source text editor scripter openedTool |
+	file := FileReference newTempFilePrefix: 'gt inline ... file ' suffix: '.txt'.
+	[ file writeStreamDo: [ :stream | stream nextPutAll: 'Example file' ].
+	path := file fullName.
+	source := 'Open `` ' , path , ' ``'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self
+		assert: (self inlineButtonLabelsAndPositionsIn: text)
+		equals: {{path.
+					source size}}.
+	self
+		assert: ((text attributesAt: source size)
+				anySatisfy: [ :attribute | attribute isKindOf: BrTextHideAttribute ]).
+
+	editor := BrEditor new
+			aptitude: BrGlamorousRegularEditorAptitude;
+			beReadOnlyWithSelection;
+			hExact: 800;
+			vFitContent;
+			text: text;
+			yourself.
+	scripter := BlScripter new element: editor.
+	(editor query // BrButton) all first
+		when: GtPhlowObjectToSpawn
+		do: [ :event | 
+			openedTool := event tool.
+			event consumed: true ].
+	scripter clickStep: [ :step | step // BrButton ].
+	self assert: (openedTool isKindOf: GtInspectorTool).
+	self assert: openedTool object equals: file asAbsolute.
+	^ scripter ] ensure: [ file ensureDelete ]
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineHomeShorthandOpensHome [
+	<gtExample>
+	| home scripter |
+	home := FileLocator home asFileReference asAbsolute.
+	{'~'.
+		'~' , home fileSystem delimiter asString}
+		do: [ :path | 
+			| source text attribute button tool |
+			source := '`' , path , '`'.
+			text := GtLMessageStyler new privateStyle: source asRopedText.
+			self
+				assert: (self inlineButtonLabelsAndPositionsIn: text)
+				equals: {{path.
+							source size}}.
+			attribute := (text attributesAt: text size)
+					detect: [ :each | each isKindOf: GtButtonAttribute ].
+			button := attribute stencil build.
+			scripter := BlScripter new element: button.
+			button
+				when: GtPhlowObjectToSpawn
+				do: [ :event | 
+					tool := event tool.
+					event consumed: true ].
+			scripter clickStep: [ :step | step label: 'Open the home directory' ].
+			self assert: (tool isKindOf: GtInspectorTool).
+			self assert: tool object equals: home ].
+	^ scripter
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineInheritedMethodReferenceHasNoButton [
+	<gtExample>
+	<return: #BlText>
+	| source text |
+	source := '`` Array>>at:put: ``'.
+	self assert: (Array lookupSelector: #at:put:) notNil.
+	self assert: (Array includesSelector: #at:put:) not.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: text asString equals: source.
+	self assert: (self inlineButtonLabelsAndPositionsIn: text) isEmpty.
+	^ text
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineMethodReferenceButtonOpensMethodCoder [
+	<gtExample>
+	^ self
+		inlineReferenceScripterFor: '`Point class>>#x:y:`'
+		label: 'Point class>>#x:y:'
+		assertTool: [ :tool | 
+			self assert: (tool isKindOf: GtMethodCoderTool).
+			self assert: tool compiledMethod == (Point class >> #x:y:) ]
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineMethodReferencesTakePrecedenceOverFiles [
+	<gtExample>
+	| parser probes |
+	parser := GtLInlineCodeReferenceParser forStyler: GtLMessageStyler new.
+	probes := OrderedCollection new.
+	(parser productionAt: #existingFileReference)
+		child: #any asPParser star flatten end
+				==> [ :path | 
+					probes add: path.
+					FileSystem workingDirectory ].
+	parser optimize.
+	parser parse: 'Point class>>#x:y:'.
+	parser parse: 'Array>>at:put:'.
+	self assert: probes isEmpty.
+	parser parse: 'file path'.
+	self assert: probes asArray equals: #('file path').
+	^ parser
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineMissingFilePathStaysVisible [
+	<gtExample>
+	<return: #BlText>
+	| file source text |
+	file := FileReference
+			newTempFilePrefix: 'gt-missing-inline-file-'
+			suffix: '.txt'.
+	source := '`' , file fullName , '`'.
+	text := GtLMessageStyler new privateStyle: source asRopedText.
+	self assert: (self inlineButtonLabelsAndPositionsIn: text) isEmpty.
+	self
+		assert: ((text attributesAt: 2)
+				anySatisfy: [ :attribute | attribute isKindOf: BrTextHideAttribute ]) not.
+	self assert: text asString equals: source.
 	^ text
 ]
 
@@ -1125,6 +1291,31 @@ GtLMessageStylerExamples >> inlineReferenceParserIsReused [
 	^ parser
 ]
 
+{ #category : #private }
+GtLMessageStylerExamples >> inlineReferenceScripterFor: source label: expectedLabel assertTool: assertion [
+	| editor scripter buttons tool |
+	editor := BrEditor new
+			aptitude: BrGlamorousRegularEditorAptitude;
+			beReadOnlyWithSelection;
+			hExact: 800;
+			vFitContent;
+			text: (GtLMessageStyler new privateStyle: source asRopedText);
+			yourself.
+	scripter := BlScripter new element: editor.
+	buttons := (editor query // BrButton) all.
+	self
+		assert: (buttons collect: [ :button | button label asString ]) asArray
+		equals: {expectedLabel}.
+	buttons first
+		when: GtPhlowObjectToSpawn
+		do: [ :event | 
+			tool := event tool.
+			event consumed: true ].
+	scripter clickStep: [ :step | step // BrButton ].
+	assertion value: tool.
+	^ scripter
+]
+
 { #category : #examples }
 GtLMessageStylerExamples >> inlineSmalltalkStylesValidSyntax [
 	<gtExample>
@@ -1145,6 +1336,18 @@ GtLMessageStylerExamples >> inlineSmalltalkStylesValidSyntax [
 				not.
 	self assert: (self inlineButtonLabelsAndPositionsIn: text) isEmpty.
 	^ text
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> inlineSymbolReferenceButtonOpensReferences [
+	<gtExample>
+	^ self
+		inlineReferenceScripterFor: '`asString`'
+		label: '#asString'
+		assertTool: [ :tool | 
+			self assert: (tool isKindOf: GtPhlowCompositeTool).
+			self assert: (tool object isKindOf: GtSearchReferencesFilter).
+			self assert: tool object object equals: #asString ]
 ]
 
 { #category : #examples }
