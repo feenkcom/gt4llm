@@ -18,11 +18,11 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupDataViewSerializat
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #pages) isNotEmpty.
-	pagesData := jsonData at: #pages.
-	self assert: ((pagesData first at: #pageTitle) includesSubstring: 'Warmup: understanding the Money classes').
-	self assert: (pagesData first includesKey: #pageUid).
-	self assert: (pagesData first includesKey: #databaseId).
+	self assert: (jsonData at: 'pages') isNotEmpty.
+	pagesData := jsonData at: 'pages'.
+	self assert: ((pagesData first at: 'pageTitle') includesSubstring: 'Warmup: understanding the Money classes').
+	self assert: (pagesData first includesKey: 'pageUid').
+	self assert: (pagesData first includesKey: 'databaseId').
 	
 	^ dataBlock
 ]

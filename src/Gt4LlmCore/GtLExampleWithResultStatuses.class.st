@@ -107,13 +107,13 @@ GtLExampleWithResultStatuses >> llmJsonObject [
 	<return: #NeoJSONObject>
 	
 	^ NeoJSONObject new
-		at: #total put: self totalCount;
-		at: #successes put: self successResultCount;
-		at: #failures put: self failureResultCount;
-		at: #errors put: self errorResultCount;
-		at: #skips put: self skippedCount;
-		at: #notFound put: self notFoundClassNames;
-		at: #details
+		at: 'total' put: self totalCount;
+		at: 'successes' put: self successResultCount;
+		at: 'failures' put: self failureResultCount;
+		at: 'errors' put: self errorResultCount;
+		at: 'skips' put: self skippedCount;
+		at: 'notFound' put: self notFoundClassNames;
+		at: 'details'
 			put: (self exampleWithStatuses 
 				collect: [ :each | each llmJsonObject ] as: Array);
 		yourself

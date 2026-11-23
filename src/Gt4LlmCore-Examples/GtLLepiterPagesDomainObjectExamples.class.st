@@ -23,9 +23,9 @@ GtLLepiterPagesDomainObjectExamples >> lepiterPagesDomainObjectDataViewSerializa
 	
 	firstPage := pagesData first.
 	expected := {
-		#pageTitle -> 'Warmup: understanding the Money classes'.
-		#pageUid -> (LeDatabase gtBook pageNamed: 'Warmup: understanding the Money classes') uid asString36.
-		#databaseId -> LeDatabase gtBook uuidString
+		'pageTitle' -> 'Warmup: understanding the Money classes'.
+		'pageUid' -> (LeDatabase gtBook pageNamed: 'Warmup: understanding the Money classes') uid asString36.
+		'databaseId' -> LeDatabase gtBook uuidString
 	} asDictionary.
 	self assert: firstPage equals: expected.
 	

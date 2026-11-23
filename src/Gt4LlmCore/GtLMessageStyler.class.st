@@ -8,7 +8,8 @@ Class {
 		'lastId',
 		'expanded',
 		'elements',
-		'objectRegistry'
+		'objectRegistry',
+		'inlineReferenceParser'
 	],
 	#category : #'Gt4LlmCore-UI'
 }
@@ -48,6 +49,49 @@ GtLMessageStyler class >> textLinkButtonPadding: additionalPadding margin: addit
 			c horizontal fitContent.
 			c vertical fitContent. ].
 	^ button
+]
+
+{ #category : #styling }
+GtLMessageStyler >> coderButtonAttributeWithLabel: aLabelBlock valid: isValid withTool: aBlock [
+	| anId |
+	anId := LeTextSnippetAttributeLabelElementId indexed: self nextUniqueId.
+	^ GtButtonAttribute new
+		beAppend;
+		stencil: [ | button |
+			button := LeSnippetStylerVisitor
+					textLinkButtonPadding: (BlInsets top: 2)
+					margin: BlInsets empty
+					valid: isValid.
+			button aptitude glamorousCodeFont.
+			button
+				id: anId;
+				beSmallSize;
+				label: aLabelBlock value;
+				action: [ :aButton | aButton phlow spawnTool: (aBlock cull: aButton) ].
+
+			button viewModel
+				when: BlClickEvent
+				do: [ :anEvent | 
+					anEvent modifiers isPrimaryModifier
+						ifTrue: [ | aTool aSpace |
+							aTool := aBlock cull: button.
+							aSpace := BlSpace new.
+							aSpace title: self gtDisplayString.
+							aSpace icon: aTool icon.
+							aSpace extent: 1200 @ 600.
+							aSpace root background: Color transparent.
+							aSpace inPager: aTool.
+							aSpace withSceneDriller.
+							aSpace showFrom: button ] ].
+			button viewModel
+				when: BlMouseEnterEvent
+				do: [ :anEvent | 
+					anEvent consumed: true.
+					anEvent modifiers isPrimaryModifier
+						ifTrue: [ anEvent target mouseCursor: BlCopyCursor new ]
+						ifFalse: [ anEvent target mouseCursor: nil ].
+					anEvent target requestFocus ].
+			button ]
 ]
 
 { #category : #accessing }
@@ -113,6 +157,13 @@ GtLMessageStyler >> initialize [
 	lastId := 0.
 	elements := Dictionary new.
 	expanded := Dictionary new
+]
+
+{ #category : #private }
+GtLMessageStyler >> inlineReferenceParser [
+	^ inlineReferenceParser
+		ifNil: [ inlineReferenceParser := (GtLInlineCodeReferenceParser forStyler: self)
+					optimize ]
 ]
 
 { #category : #generated }
@@ -310,45 +361,45 @@ GtLMessageStyler >> styleAutoHiding: anInterval text: aSubText [
 
 { #category : #generated }
 GtLMessageStyler >> styleAutoHidingAnnotation: anAnnotation [
-	| anAttribute aMarkerAttribute aStartPositionToHide aStopPositionToHide anAnnotationTextToHide aSurroundingTextToRespondToCursor aStartPositionToReactToCursor aStopPositionToReactToCursor |
 	anAnnotation isDefined ifFalse: [ ^ self ].
+	self
+		styleAutoHidingFrom: anAnnotation parent startPosition
+		to: anAnnotation parent stopPosition
+]
 
-	aStartPositionToHide := anAnnotation parent startPosition max: 1.
-	aStopPositionToHide := anAnnotation parent stopPosition min: self text size.
-	aStartPositionToReactToCursor := aStartPositionToHide - 2 max: 1.
-	aStopPositionToReactToCursor := aStopPositionToHide + 1 min: self text size.
+{ #category : #styling }
+GtLMessageStyler >> styleAutoHidingFrom: firstPosition to: lastPosition [
+	| hide marker first last markup nearbyText |
+	first := firstPosition max: 1.
+	last := lastPosition min: self text size.
+	markup := self text from: first to: last.
+	nearbyText := self text
+			from: (first - 2 max: 1)
+			to: (last + 1 min: self text size).
 
-	anAnnotationTextToHide := self text
-			from: aStartPositionToHide
-			to: aStopPositionToHide.
-	aSurroundingTextToRespondToCursor := self text
-			from: aStartPositionToReactToCursor
-			to: aStopPositionToReactToCursor.
+	marker := BrTextInvisibleMarkerAttribute new.
+	hide := BrTextHideAttribute new.
+	markup
+		attribute: marker;
+		attribute: hide.
 
-	aMarkerAttribute := BrTextInvisibleMarkerAttribute new.	"so that we will be able to find where to add adornment attribute dynamically"
-	anAnnotationTextToHide attribute: aMarkerAttribute.
-
-	anAttribute := BrTextHideAttribute new.
-
-	anAnnotationTextToHide attribute: anAttribute.
-
-	aSurroundingTextToRespondToCursor
-		onCursorEnter: [  "we have a reference to the attribute instance. find its interval dynamically":aTextEditor | 
-			aTextEditor text
-				findAttribute: aMarkerAttribute
-				indicesDo: [ :aStart :anEnd | 
-					aTextEditor text
-						clearAttributes: aStart
-						to: anEnd
-						if: [ :eachAttribute | eachAttribute == anAttribute ] ] ]
-		leave: [ :aTextEditor | 
-			aTextEditor text
-				findAttribute: aMarkerAttribute
-				indicesDo: [ :aStart :anEnd | 
-					aTextEditor text
-						attribute: anAttribute
-						from: aStart
-						to: anEnd ] ]
+	nearbyText
+		onCursorEnter: [ :editor | 
+			editor text
+				findAttribute: marker
+				indicesDo: [ :start :end | 
+					editor text
+						clearAttributes: start
+						to: end
+						if: [ :attribute | attribute == hide ] ] ]
+		leave: [ :editor | 
+			editor text
+				findAttribute: marker
+				indicesDo: [ :start :end | 
+					editor text
+						attribute: hide
+						from: start
+						to: end ] ]
 ]
 
 { #category : #accessing }
@@ -365,60 +416,21 @@ GtLMessageStyler >> styleBold: aBoldNode [
 
 { #category : #private }
 GtLMessageStyler >> styleButton: anAnnotation for: object defaultLabel: aLabelBlock withTool: aBlock [
-	"Style the buttons for gtClass and gtMethod annotations"
-
-	| attribute anId isValid |
-	anId := LeTextSnippetAttributeLabelElementId indexed: self nextUniqueId.
+	| attribute isValid |
 	isValid := anAnnotation nameNode
-		ifNil: [ true ]
-		ifNotNil: [ :node | node isDefined ].
-
-	attribute := GtButtonAttribute new
-			beAppend;
-			stencil: [ | button label |
-				label := object
-						ifNil: [ anAnnotation nameNode
-								ifNil: [ '' ]
-								ifNotNil: [ :name | (name value ifNil: [ name ]) source ] ]
-						ifNotNil: [ :obj | 
-							anAnnotation labelNode
-								ifNil: [ aLabelBlock value: obj ]
-								ifNotNil: [ :node | node labelFor: obj ] ].
-				button := LeSnippetStylerVisitor
-						textLinkButtonPadding: (BlInsets top: 2)
-						margin: BlInsets empty
-						valid: isValid.
-				button aptitude glamorousCodeFont.
-				button
-					id: anId;
-					beSmallSize;
-					label: label;
-					action: [ :aButton | aButton phlow spawnTool: (aBlock cull: aButton) ].
-
-				button viewModel
-					when: BlClickEvent
-					do: [ :anEvent | 
-						anEvent modifiers isPrimaryModifier
-							ifTrue: [ | aTool aSpace |
-								aTool := aBlock cull: button.
-								aSpace := BlSpace new.
-								aSpace title: self gtDisplayString.
-								aSpace icon: aTool icon.
-								aSpace extent: 1200 @ 600.
-								aSpace root background: Color transparent.
-								aSpace inPager: aTool.
-								aSpace withSceneDriller.
-								aSpace showFrom: button ] ].
-				button viewModel
-					when: BlMouseEnterEvent
-					do: [ :anEvent | 
-						anEvent consumed: true.
-						anEvent modifiers isPrimaryModifier
-							ifTrue: [ anEvent target mouseCursor: BlCopyCursor new ]
-							ifFalse: [ anEvent target mouseCursor: nil ].
-						anEvent target requestFocus ].
-				button ].
-
+			ifNil: [ true ]
+			ifNotNil: [ :node | node isDefined ].
+	attribute := self
+			coderButtonAttributeWithLabel: [ object
+					ifNil: [ anAnnotation nameNode
+							ifNil: [ '' ]
+							ifNotNil: [ :name | (name value ifNil: [ name ]) source ] ]
+					ifNotNil: [ :obj | 
+						anAnnotation labelNode
+							ifNil: [ aLabelBlock value: obj ]
+							ifNotNil: [ :node | node labelFor: obj ] ] ]
+			valid: isValid
+			withTool: aBlock.
 	self text
 		attribute: attribute
 		from: anAnnotation parent startPosition
@@ -684,6 +696,37 @@ GtLMessageStyler >> styleHeader: aHeaderNode [
 						right: 0) ]
 ]
 
+{ #category : #styling }
+GtLMessageStyler >> styleInlineReferencesIn: code startingAt: firstPosition buttonAfter: closingBacktick [
+	| action codeText |
+	code isEmpty ifTrue: [ ^ false ].
+	action := self inlineReferenceParser parse: code.
+	action ifNil: [ ^ false ].
+	codeText := self text from: firstPosition to: firstPosition + code size - 1.
+	^ action
+		value: codeText
+		value: [ :attribute | 
+			self text
+				attribute: attribute
+				from: closingBacktick
+				to: closingBacktick.
+			true ]
+]
+
+{ #category : #styling }
+GtLMessageStyler >> styleInlineSmalltalk: aText source: source [
+	| ast |
+	source trimBoth isEmpty ifTrue: [ ^ self ].
+	ast := [ GtPharoParser
+			parse: source
+			startingAt: GtPharoParser startingStateForMethodSequence ]
+			on: SmaCCParserError
+			do: [ :error | ^ self ].
+	GtPharoStyler new
+		coderViewModel: (GtPharoSnippetCoder forSource: source) asCoderViewModel;
+		style: aText ast: ast
+]
+
 { #category : #accessing }
 GtLMessageStyler >> styleItalic: anItalicNode [
 	(self text
@@ -809,25 +852,12 @@ GtLMessageStyler >> styleSymbolButton: aSymbolAnnotation [
 	aSymbol := aSymbolAnnotation symbolValue.
 	aSymbol ifNil: [ ^ self ].
 
-	attribute := GtButtonAttribute new
-			beAppend;
-			stencil: [ | button |
-				button := LeSnippetStylerVisitor
-						textLinkButtonPadding: (BlInsets top: 2)
-						margin: BlInsets empty
-						valid: true.
-				button aptitude glamorousCodeFont.
-				button
-					beSmallSize;
-					label: '#' , aSymbolAnnotation symbolName;
-					action: [ :aButton | aButton phlow spawnObject: aSymbol gtReferences ].
-				button ].
+	attribute := self symbolButtonAttributeFor: aSymbol.
 
 	self text
 		attribute: attribute
 		from: aSymbolAnnotation parent startPosition
 		to: aSymbolAnnotation parent stopPosition
-
 ]
 
 { #category : #tables }
@@ -836,6 +866,23 @@ GtLMessageStyler >> styleTableCellText: aText ast: aCell [
 	text := aText.
 	self accept: aCell.
 	^ aText
+]
+
+{ #category : #styling }
+GtLMessageStyler >> symbolButtonAttributeFor: aSymbol [
+	^ GtButtonAttribute new
+		beAppend;
+		stencil: [ | button |
+			button := LeSnippetStylerVisitor
+					textLinkButtonPadding: (BlInsets top: 2)
+					margin: BlInsets empty
+					valid: true.
+			button aptitude glamorousCodeFont.
+			button
+				beSmallSize;
+				label: '#' , aSymbol;
+				action: [ :aButton | aButton phlow spawnObject: aSymbol gtReferences ].
+			button ]
 ]
 
 { #category : #tables }
@@ -1063,16 +1110,22 @@ GtLMessageStyler >> visitHeader: aHeader [
 
 { #category : #generated }
 GtLMessageStyler >> visitInlineCode: aCodeNode [
-	| size |
-	size := (aCodeNode code source at: 2) = $` ifTrue: [ 2 ] ifFalse: [ 1 ].
+	| source size |
+	source := aCodeNode code source.
+	size := (source at: 2) = $` ifTrue: [ 2 ] ifFalse: [ 1 ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFontAndSmallSize;
 		highlight: BrAntColors gray3.
-	self
-		styleAutoHiding: (aCodeNode startPosition
-				to: aCodeNode startPosition + size - 1)
-		and: (aCodeNode stopPosition - size + 1 to: aCodeNode stopPosition)
-		whenOutside: aCodeNode sourceInterval.
+	(self
+		styleInlineReferencesIn: (source copyFrom: size + 1 to: source size - size)
+		startingAt: aCodeNode startPosition + size
+		buttonAfter: aCodeNode stopPosition)
+		ifTrue: [ self styleAutoHidingFrom: aCodeNode startPosition to: aCodeNode stopPosition ]
+		ifFalse: [ self
+				styleAutoHiding: (aCodeNode startPosition
+						to: aCodeNode startPosition + size - 1)
+				and: (aCodeNode stopPosition - size + 1 to: aCodeNode stopPosition)
+				whenOutside: aCodeNode sourceInterval ].
 	^ self visitContent: aCodeNode
 ]
 

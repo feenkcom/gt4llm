@@ -64,3 +64,11 @@ GtLClassChangeHistoriesGroup >> methodHistories [
 		addItems: (self items flatCollect: [ :aClassHistory | aClassHistory methodHistories items ]);
 		yourself
 ]
+
+{ #category : #accessing }
+GtLClassChangeHistoriesGroup >> variableHistories [
+	^ GtLVariableChangeHistoriesGroup new
+		addItems: (self items
+				flatCollect: [ :aClassHistory | aClassHistory variableChangeHistories items ]);
+		yourself
+]

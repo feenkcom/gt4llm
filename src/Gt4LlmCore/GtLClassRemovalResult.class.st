@@ -117,6 +117,11 @@ GtLClassRemovalResult >> removedClassNameDescription [
 ]
 
 { #category : #accessing }
+GtLClassRemovalResult >> removedVariableNamesFor: aVariableType [
+	^ aVariableType namesIn: self removedClass
+]
+
+{ #category : #accessing }
 GtLClassRemovalResult >> status [
 	^ status
 ]
