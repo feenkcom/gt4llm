@@ -19,6 +19,11 @@ GtLCodeChangeResult class >> removalIcon [
 	^ self iconNamed: #changeRemove
 ]
 
+{ #category : #accessing }
+GtLCodeChangeResult >> addedVariableNamesFor: aVariableType [
+	^ #()
+]
+
 { #category : #testing }
 GtLCodeChangeResult >> isClassChangeResult [
 	^ false
@@ -42,4 +47,19 @@ GtLCodeChangeResult >> isErrorDomainObject [
 { #category : #testing }
 GtLCodeChangeResult >> isMethodChangeResult [
 	^ false
+]
+
+{ #category : #testing }
+GtLCodeChangeResult >> isVariableAdditionResult [
+	^ false
+]
+
+{ #category : #testing }
+GtLCodeChangeResult >> isVariableRemovalResult [
+	^ false
+]
+
+{ #category : #accessing }
+GtLCodeChangeResult >> removedVariableNamesFor: aVariableType [
+	^ #()
 ]
