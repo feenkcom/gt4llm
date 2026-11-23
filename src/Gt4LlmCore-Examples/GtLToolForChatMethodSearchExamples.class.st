@@ -17,8 +17,8 @@ GtLToolForChatMethodSearchExamples >> methodSearchDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	
 	jsonData := dataBlock llmJsonData.
-	self assert: (jsonData at: #foundMethods) isNotEmpty.
-	self assert: (jsonData includesKey: #mayHaveMore).
+	self assert: (jsonData at: 'foundMethods') isNotEmpty.
+	self assert: (jsonData includesKey: 'mayHaveMore').
 	
 	^ dataBlock
 ]
@@ -51,7 +51,7 @@ GtLToolForChatMethodSearchExamples >> methodSearchReturnsMatches [
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLMethodsSearchResult).
 	self assert: (targetObject foundMethods anySatisfy: [ :each |
-		each methodClassName = #GtLToolForChatMethodSearchExamples ]).
+		each methodClassName = 'GtLToolForChatMethodSearchExamples' ]).
 	^ call
 ]
 

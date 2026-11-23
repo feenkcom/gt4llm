@@ -198,3 +198,8 @@ GtLClassChangeHistory >> latestBehaviourChange [
 GtLClassChangeHistory >> methodHistories [
 	^ methodHistories
 ]
+
+{ #category : #accessing }
+GtLClassChangeHistory >> variableChangeHistories [
+	^ self behaviourChangeHistory variableChangeHistories
+]

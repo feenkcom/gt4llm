@@ -116,3 +116,63 @@ GtLClassDefinitionChangeHistory >> isLatestChangeRemoval [
 	latestChange := self changes latestChange.
 	^ latestChange changeResult isClassRemovalResult
 ]
+
+{ #category : #private }
+GtLClassDefinitionChangeHistory >> newVariableChangeHistoryFor: aVariableChangeResult [
+	^ GtLVariableChangeHistory new
+		variableName: aVariableChangeResult variableName;
+		variableType: aVariableChangeResult variableType;
+		classDefinitionHistory: self;
+		yourself
+]
+
+{ #category : #accessing }
+GtLClassDefinitionChangeHistory >> variableChangeHistories [
+	| histories |
+	histories := OrderedDictionary new.
+	self changes
+		do: [ :aClassChange | 
+			(self variableChangesFrom: aClassChange)
+				do: [ :aVariableChange | 
+					| aVariableChangeResult |
+					aVariableChangeResult := aVariableChange changeResult.
+					(histories
+						at: {aVariableChangeResult variableType.
+								aVariableChangeResult variableName}
+						ifAbsentPut: [ self newVariableChangeHistoryFor: aVariableChangeResult ])
+						addChange: aVariableChange ] ].
+	^ GtLVariableChangeHistoriesGroup new
+		addItems: histories values;
+		yourself
+]
+
+{ #category : #private }
+GtLClassDefinitionChangeHistory >> variableChangesFrom: aClassChange [
+	| aClassChangeResult variableChanges |
+	aClassChangeResult := aClassChange changeResult.
+	variableChanges := OrderedCollection new.
+	GtLVariableType all
+		do: [ :aVariableType | 
+			variableChanges
+				addAll: (self
+						variableChangesOf: GtLVariableAdditionResult
+						named: (aClassChangeResult addedVariableNamesFor: aVariableType)
+						type: aVariableType
+						from: aClassChange);
+				addAll: (self
+						variableChangesOf: GtLVariableRemovalResult
+						named: (aClassChangeResult removedVariableNamesFor: aVariableType)
+						type: aVariableType
+						from: aClassChange) ].
+	^ variableChanges
+]
+
+{ #category : #private }
+GtLClassDefinitionChangeHistory >> variableChangesOf: aVariableChangeResultClass named: someVariableNames type: aVariableType from: aClassChange [
+	^ someVariableNames
+		collect: [ :aVariableName | 
+			(aVariableChangeResultClass
+				named: aVariableName
+				type: aVariableType
+				from: aClassChange) asSummarizerCodeChange ]
+]
