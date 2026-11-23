@@ -86,11 +86,6 @@ GtLInlineCodeReferenceParser >> filePath [
 						withTool: [ GtInspectorTool forObject: reference ]) ] ]
 ]
 
-{ #category : #testing }
-GtLInlineCodeReferenceParser >> hasFilePathProduction [
-	^ existingFileReference notNil
-]
-
 { #category : #grammar }
 GtLInlineCodeReferenceParser >> methodReference [
 	^ super methodReference
@@ -99,7 +94,8 @@ GtLInlineCodeReferenceParser >> methodReference [
 			behavior := parts first.
 			method := behavior
 					ifNotNil: [ (parts second ifNil: [ behavior ] ifNotNil: [ behavior class ])
-							lookupSelector: parts fourth ].
+							compiledMethodAt: parts fourth
+							ifAbsent: [ nil ] ].
 			method
 				ifNil: [ [ :codeText :appendButton | 
 					styler styleInlineSmalltalk: codeText source: codeText asString.
@@ -128,7 +124,7 @@ GtLInlineCodeReferenceParser >> selector [
 
 { #category : #accessing }
 GtLInlineCodeReferenceParser >> start [
-	^ self filePath / super start
+	^ methodReference / self filePath / classReference / symbol / noise
 ]
 
 { #category : #accessing }
