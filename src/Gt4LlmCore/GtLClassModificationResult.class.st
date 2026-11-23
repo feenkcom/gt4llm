@@ -9,6 +9,14 @@ Class {
 }
 
 { #category : #accessing }
+GtLClassModificationResult >> addedVariableNamesFor: aVariableType [
+	| originalNames |
+	originalNames := self originalVariableNamesFor: aVariableType.
+	^ (aVariableType namesIn: self updatedClass)
+		reject: [ :each | originalNames includes: each ]
+]
+
+{ #category : #accessing }
 GtLClassModificationResult >> affectedBehaviour [
 	^ updatedClass
 ]
@@ -240,6 +248,13 @@ GtLClassModificationResult >> originalPackageName [
 	^ self originalClass ifNotNil: [ :c | c packageName ]
 ]
 
+{ #category : #accessing }
+GtLClassModificationResult >> originalVariableNamesFor: aVariableType [
+	^ self originalClass
+		ifNil: [ #() ]
+		ifNotNil: [ :aDescription | aVariableType namesIn: aDescription ]
+]
+
 { #category : #'accessing - delegated' }
 GtLClassModificationResult >> packageName [
 	^ self updatedClass packageName
@@ -274,6 +289,14 @@ GtLClassModificationResult >> printOn: aStream [
 			uc packageName ifNotNil: [ :pn |
 				aStream nextPutAll: ' — ';
 					nextPutAll: pn ] ] ]
+]
+
+{ #category : #accessing }
+GtLClassModificationResult >> removedVariableNamesFor: aVariableType [
+	| updatedNames |
+	updatedNames := aVariableType namesIn: self updatedClass.
+	^ (self originalVariableNamesFor: aVariableType)
+		reject: [ :each | updatedNames includes: each ]
 ]
 
 { #category : #'accessing - delegated' }

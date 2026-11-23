@@ -109,6 +109,16 @@ GtLSummarizerCodeChange >> isMethodRemovalResult [
 	^ self changeResult isMethodRemovalResult
 ]
 
+{ #category : #testing }
+GtLSummarizerCodeChange >> isVariableAdditionResult [
+	^ self changeResult isVariableAdditionResult
+]
+
+{ #category : #testing }
+GtLSummarizerCodeChange >> isVariableRemovalResult [
+	^ self changeResult isVariableRemovalResult
+]
+
 { #category : #accessing }
 GtLSummarizerCodeChange >> label [
 	^ label
