@@ -13,12 +13,17 @@ Class {
 
 { #category : #'instance creation' }
 GtLMethodsSearchResult class >> fromReferences: aCollection [
-	| matchesArray limited |
-	matchesArray := aCollection asArray.
-	limited := matchesArray first: (200 min: matchesArray size).
+	"A match can be a copy that a class gets from a trait; it is reported, once, as the method that defines it. A cached search can still hold a method of a removed class, which cannot be requested"
+
+	| references |
+	references := ((aCollection asArray
+			reject: [ :each | each methodClass isObsolete ])
+			collect: [ :each | GtLMethodReference fromDefinitionOf: each ])
+			asOrderedCollection.
+	references removeDuplicates.
 	^ self new
-		foundMethods: (limited collect: [ :each | GtLMethodReference fromCompiledMethod: each ]);
-		mayHaveMore: matchesArray size > 200;
+		foundMethods: (references asArray first: (200 min: references size));
+		mayHaveMore: references size > 200;
 		yourself
 ]
 

@@ -92,12 +92,15 @@ GtLCodeSnapshot >> initialize [
 
 { #category : #private }
 GtLCodeSnapshot >> localMethodNamed: aSelector inClassNamed: aClassName classSide: aBoolean [
-	"Return the method defined locally (not inherited) by the class or metaclass, or nil"
+	"Return the method defined by the class or metaclass itself (not inherited and not provided by a trait), or nil"
 
-	| aBehavior |
+	| aBehavior aSymbol |
 	aBehavior := (self classNamed: aClassName) ifNil: [ ^ nil ].
 	aBoolean ifTrue: [ aBehavior := aBehavior classSide ].
-	^ aBehavior compiledMethodAt: aSelector asSymbol ifAbsent: [ nil ]
+	aSymbol := aSelector asSymbol.
+	^ (aBehavior includesLocalSelector: aSymbol)
+		ifTrue: [ aBehavior >> aSymbol ]
+		ifFalse: [ nil ]
 ]
 
 { #category : #accessing }

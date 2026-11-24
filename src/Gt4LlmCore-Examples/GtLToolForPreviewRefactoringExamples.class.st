@@ -115,6 +115,30 @@ GtLToolForPreviewRefactoringExamples >> previewAddMethod [
 ]
 
 { #category : #examples }
+GtLToolForPreviewRefactoringExamples >> previewOverrideOfTraitProvidedMethod [
+	"A method that a class only gets from a trait is added to the class, not modified"
+
+	<gtExample>
+	| call preview |
+	call := self
+			previewTransformations: {Dictionary new
+						at: 'AddMethod'
+							put: (Dictionary new
+									at: 'methodClassName' put: GtLExampleTraitUser name asString;
+									at: 'protocolName' put: 'examples';
+									at: 'sourceCodeOfMethodToAdd' put: 'traitMethod ^ 7';
+									yourself);
+						yourself}.
+	preview := call result targetObject.
+	self assert: preview class equals: GtLRefactoringPreview.
+	self assert: preview changes size equals: 1.
+	self assert: preview changes first kind equals: 'added method'.
+	self assert: preview isApplied not.
+	self assert: (GtLExampleTraitUser includesLocalSelector: #traitMethod) not.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForPreviewRefactoringExamples >> previewPushUpMethod [
 	<gtExample>
 	| objectStorage call targetObject |
@@ -138,6 +162,92 @@ GtLToolForPreviewRefactoringExamples >> previewPushUpMethod [
 				includesSelector: #argumentsWithTransformations:) not.
 	self assert: (self class includesSelector: #argumentsWithTransformations:).
 	^call
+]
+
+{ #category : #examples }
+GtLToolForPreviewRefactoringExamples >> previewPushUpOfTraitProvidedMethod [
+	"A method that a class gets from a trait cannot be pushed up from that class"
+
+	<gtExample>
+	| call |
+	call := self
+			previewTransformations: {self
+						pushUpMethod: 'traitMethod'
+						from: GtLExampleTraitUser name asString
+						to: 'Object'}.
+	self
+		assertProblem: call result targetObject
+		withErrorMessage: 'Invalid transformations: GtLExampleTraitUser>>#traitMethod is not defined in its own class: it is provided by a trait. Its source is TGtLExampleTrait>>#traitMethod'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForPreviewRefactoringExamples >> previewRemovalOfInheritedMethod [
+	"An inherited method is reported as a problem instead of failing the refactoring preconditions"
+
+	<gtExample>
+	| call definingReference |
+	call := self
+			previewTransformations: {self removeMethod: 'printString' from: 'GtLToolForPreviewRefactoringExamples'}.
+	definingReference := GtLMethodReference
+			fromCompiledMethod: (GtLToolForPreviewRefactoringExamples lookupSelector: #printString).
+	self
+		assertProblem: call result targetObject
+		withErrorMessage: 'Invalid transformations: GtLToolForPreviewRefactoringExamples>>#printString is not defined in its own class: it is inherited. Its source is '
+				, definingReference methodSignature.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForPreviewRefactoringExamples >> previewRemovalOfTraitMethod [
+	"A method can be removed from the trait that defines it"
+
+	<gtExample>
+	| call preview |
+	call := self
+			previewTransformations: {self removeMethod: 'traitMethod' from: TGtLExampleTrait name asString}.
+	preview := call result model.
+	self assert: (preview isKindOf: GtLRefactoringPreview).
+	self assert: preview isApplied not.
+	self assert: (TGtLExampleTrait includesSelector: #traitMethod).
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForPreviewRefactoringExamples >> previewRemovalOfTraitProvidedMethod [
+	<gtExample>
+	| call |
+	call := self
+			previewTransformations: {self removeMethod: 'traitMethod' from: GtLExampleTraitUser name asString}.
+	self
+		assertProblem: call result targetObject
+		withErrorMessage: 'Invalid transformations: GtLExampleTraitUser>>#traitMethod is not defined in its own class: it is provided by a trait. Its source is TGtLExampleTrait>>#traitMethod'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForPreviewRefactoringExamples >> previewRemovalWithoutClassName [
+	<gtExample>
+	| call |
+	call := self
+			previewTransformations: {Dictionary new
+						at: 'RemoveMethod'
+							put: (Dictionary new
+									at: 'methodNameToRemove' put: 'printString';
+									yourself);
+						yourself}.
+	self
+		assertProblem: call result targetObject
+		withErrorMessage: 'Invalid transformations: Missing class name'.
+	^ call
+]
+
+{ #category : #helpers }
+GtLToolForPreviewRefactoringExamples >> previewTransformations: aCollection [
+	^ self
+		executeTool: GtLToolForPreviewRefactoring new
+		withArguments: (self argumentsWithTransformations: aCollection)
+		inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new)
 ]
 
 { #category : #examples }
@@ -210,16 +320,14 @@ GtLToolForPreviewRefactoringExamples >> previewWithMethodNotImplemented [
 	<gtExample>
 	| call |
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self
-						argumentsWithTransformations: (Array with: (self
-										pushUpMethod: 'unknownSelector42'
-										from: 'GtLToolForPreviewRefactoringExamples'
-										to: 'GtLAbstractMagritteFunctionToolExamples')))
-				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
-	self assertProblem: call result targetObject
-		withErrorMessage: 'Invalid transformations: GtLToolForPreviewRefactoringExamples does not implement #unknownSelector42'.
-	^call
+			previewTransformations: {self
+						pushUpMethod: 'unknownSelector42'
+						from: 'GtLToolForPreviewRefactoringExamples'
+						to: 'GtLAbstractMagritteFunctionToolExamples'}.
+	self
+		assertProblem: call result targetObject
+		withErrorMessage: 'Invalid transformations: GtLToolForPreviewRefactoringExamples>>#unknownSelector42 is not found'.
+	^ call
 ]
 
 { #category : #examples }
@@ -260,17 +368,15 @@ GtLToolForPreviewRefactoringExamples >> previewWithSeveralInvalidTransformations
 	<gtExample>
 	| call |
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self argumentsWithTransformations: (Array
-								with: self pushUpInstanceVariableOfUnknownClassTransformation
-								with: (self
-										pushUpMethod: 'unknownSelector42'
-										from: 'GtLToolForPreviewRefactoringExamples'
-										to: 'GtLAbstractMagritteFunctionToolExamples')))
-				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
-	self assertProblem: call result targetObject
-		withErrorMessage: 'Invalid transformations: Class not found: ClassThatDoesNotExist; GtLToolForPreviewRefactoringExamples does not implement #unknownSelector42'.
-	^call
+			previewTransformations: {self pushUpInstanceVariableOfUnknownClassTransformation.
+					self
+						pushUpMethod: 'unknownSelector42'
+						from: 'GtLToolForPreviewRefactoringExamples'
+						to: 'GtLAbstractMagritteFunctionToolExamples'}.
+	self
+		assertProblem: call result targetObject
+		withErrorMessage: 'Invalid transformations: Class not found: ClassThatDoesNotExist; GtLToolForPreviewRefactoringExamples>>#unknownSelector42 is not found'.
+	^ call
 ]
 
 { #category : #examples }
@@ -325,6 +431,17 @@ GtLToolForPreviewRefactoringExamples >> pushUpMethod: aSelectorString from: aCla
 					at: 'methodClassName' put: aClassName;
 					at: 'methodNameToPushUp' put: aSelectorString;
 					at: 'targetClassName' put: aTargetClassName;
+					yourself);
+		yourself
+]
+
+{ #category : #helpers }
+GtLToolForPreviewRefactoringExamples >> removeMethod: aSelectorString from: aClassName [
+	^ Dictionary new
+		at: 'RemoveMethod'
+			put: (Dictionary new
+					at: 'methodClassName' put: aClassName;
+					at: 'methodNameToRemove' put: aSelectorString;
 					yourself);
 		yourself
 ]

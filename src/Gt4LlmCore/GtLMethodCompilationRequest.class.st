@@ -98,7 +98,7 @@ GtLMethodCompilationRequest >> protocolDescription [
 	^ MAStringDescription new
 		label: 'Protocol';
 		accessor: #protocol;
-		comment: 'Optional. Omit it when modifying an existing method: the method keeps its current protocol. Changing the protocol of an extension method (a protocol starting with *) moves the method to a different package. Provide a protocol only for a new method, or to deliberately change the protocol of an existing method.';
+		comment: 'Required for a new method, including one that overrides an inherited or trait-provided method; without it the new method is not compiled. Omit it when modifying an existing method: the method keeps its current protocol. Changing the protocol of an extension method (a protocol starting with *) moves the method to a different package.';
 		yourself
 ]
 

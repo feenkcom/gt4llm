@@ -101,10 +101,12 @@ GtLMagritteToolForMethodCompilation >> compileMethodFromRequest: request [
 GtLMagritteToolForMethodCompilation >> description [
 	^ 'Compiles the provided method source code in the specified class or metaclass and reports the result.
 
-Arguments:
-- methodRequest: object with methodClassName, sourceCode, classSide and an optional protocol
+A method provided by a trait is defined in the trait: compile it in the trait to change it for every class that uses the trait. Compiling it in a class that uses the trait adds an overriding method to that class only.
 
-The protocol is optional. Omit it when modifying an existing method: the method keeps its current protocol. Do not guess a protocol for an existing method; changing the protocol of an extension method (a protocol starting with ''*'') moves it to a different package. Provide a protocol only for a new method, or to deliberately change the protocol of an existing method.
+Arguments:
+- methodRequest: object with methodClassName, sourceCode, classSide and protocol
+
+Provide a protocol for a new method, including one that overrides an inherited or trait-provided method; without one the new method is not compiled. Omit the protocol when modifying an existing method: the method keeps its current protocol. Do not guess a protocol for an existing method; changing the protocol of an extension method (a protocol starting with ''*'') moves it to a different package.
 
 Example JSON arguments (modifying an existing method):
 {
@@ -127,7 +129,8 @@ Example JSON arguments (new method):
 
 Example JSON response:
 {
-  "status": "compiled"
+  "status": "compiled",
+  "targetMethodReference": {"methodClassName": "MyClass", "methodName": "myMethod", "classSide": false}
 }'
 ]
 

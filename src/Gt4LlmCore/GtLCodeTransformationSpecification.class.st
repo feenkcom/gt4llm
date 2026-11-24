@@ -71,23 +71,28 @@ GtLCodeTransformationSpecification >> gtProblems [
 
 { #category : #validation }
 GtLCodeTransformationSpecification >> gtProblemsWithClassNamed: aString [
-	^(Smalltalk globals classNamed: aString) isNil
-		ifTrue: 
-			[Array
-				with: (GtLTransformationProblem description: 'Class not found: ' , aString)]
-		ifFalse: [#()]
+	aString isEmptyOrNil
+		ifTrue: [ ^ {GtLTransformationProblem description: 'Missing class name'} ].
+	^ (Smalltalk globals classNamed: aString) isNil
+		ifTrue: [ {GtLTransformationProblem description: 'Class not found: ' , aString} ]
+		ifFalse: [ #() ]
 ]
 
 { #category : #validation }
 GtLCodeTransformationSpecification >> gtProblemsWithMethod: aSelectorString inClassNamed: aClassName [
+	"The method must be defined in the class itself, as for the method tools: a transformation of an inherited method or of a copy provided by a trait would not change the class"
+
 	| class |
-	class := Smalltalk globals classNamed: aClassName.
-	class isNil ifTrue: [^self gtProblemsWithClassNamed: aClassName].
-	^(class includesSelector: aSelectorString asSymbol)
-		ifTrue: [#()]
-		ifFalse: 
-			[Array with: (GtLTransformationProblem
-						description: aClassName , ' does not implement #' , aSelectorString)]
+	class := aClassName isEmptyOrNil
+			ifFalse: [ Smalltalk globals classNamed: aClassName ].
+	class isNil ifTrue: [ ^ self gtProblemsWithClassNamed: aClassName ].
+	^ (GtLMethodReference new
+		methodClassName: class instanceSide name;
+		methodName: aSelectorString;
+		classSide: class isClassSide;
+		yourself)
+		compiledMethodIfPresent: [ :aMethod | #() ]
+		ifMissing: [ :anErrorResult | {GtLTransformationProblem description: anErrorResult errorMessage} ]
 ]
 
 { #category : #accessing }

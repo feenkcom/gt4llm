@@ -9,7 +9,9 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForMethodsRemoval >> description [
-	^ 'Removes multiple methods across classes and reports each result.
+	^ 'Removes multiple methods across classes and reports each result, in the order of the methods argument.
+
+Only methods defined in the given class itself (or in its metaclass when classSide is true) are removed. Methods inherited from a superclass or provided by a trait are not removed; their result is an error that names the method that defines them, or the conflicting trait methods. Removing a method from a trait removes it, and its aliases, from every class that uses the trait, except where a class overrides it.
 
 Arguments:
 - methods: array of method descriptors with methodClassName, methodName, and classSide
@@ -25,8 +27,8 @@ Example JSON arguments:
 Example JSON response:
 {
   "methods": [
-    {"status": "removed"},
-    {"status": "removed"}
+    {"status": "removed", "targetMethodReference": {"methodClassName": "MyClass", "methodName": "method1", "classSide": false}},
+    {"status": "removed", "targetMethodReference": {"methodClassName": "MyClass", "methodName": "method2", "classSide": true}}
   ]
 }'
 ]
@@ -88,22 +90,6 @@ GtLMagritteToolForMethodsRemoval >> removeMethodFromDescriptor: methodDescriptor
  removedMethod: removedMethod;
  status: ''removed'';
  yourself'>
-	^ methodDescriptor
-		compiledMethodIfPresent: [ :compiledMethod |
-			| methodWithSource behavior classDescription |
-			methodWithSource := GtLMethodWithSource fromCompiledMethod: compiledMethod.
-			behavior := compiledMethod methodClass.
-			classDescription := GtLClassDefinitionDescription fromClass: behavior.
-			[ behavior removeSelector: compiledMethod selector ]
-				on: Error
-				do: [ :ex |
-					^ GtLExceptionDomainObject new
-						freeze: ex;
-						errorReason: 'Error while removing method' ].
-			GtLMethodRemovalResult new
-				targetClass: classDescription;
-				removedMethod: methodWithSource;
-				status: 'removed';
-				yourself ]
-		ifMissing: [ :errorResult | errorResult ]
+	^ GtLMagritteToolForMethodRemoval new
+		removeMethodFromDescriptor: methodDescriptor
 ]
