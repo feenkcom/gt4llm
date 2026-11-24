@@ -6,7 +6,8 @@ Class {
 	#superclass : #GtLClassChangeResult,
 	#instVars : [
 		'status',
-		'removedClass'
+		'removedClass',
+		'referencesCount'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -37,9 +38,11 @@ GtLClassRemovalResult >> gtDetailsFor: aView [
 	^ aView columnedList
 		title: 'Details';
 		priority: 10;
-		items: [
-			{'Removed class' -> self removedClassName.
-			 'Status' -> self status} ];
+		items: [ {'Removed class' -> self removedClassName.
+				'Status' -> self status}
+				, (self referencesCount
+						ifNil: [ #() ]
+						ifNotNil: [ :aCount | {'References count' -> aCount} ]) ];
 		column: 'Property' text: [ :assoc | assoc key ];
 		column: 'Value' text: [ :assoc | assoc value ];
 		send: [ :assoc | assoc value ]
@@ -90,6 +93,25 @@ GtLClassRemovalResult >> printOn: aStream [
 		self removedClassName ifNotNil: [ :name | aStream nextPutAll: name ].
 		aStream nextPutAll: ' — '.
 		self status ifNotNil: [ :s | aStream nextPutAll: s ] ]
+]
+
+{ #category : #accessing }
+GtLClassRemovalResult >> referencesCount [
+	^ referencesCount
+]
+
+{ #category : #accessing }
+GtLClassRemovalResult >> referencesCount: anInteger [
+	referencesCount := anInteger
+]
+
+{ #category : #magritte }
+GtLClassRemovalResult >> referencesCountDescription [
+	<magritteDescription>
+	^ MANumberDescription new
+		label: 'References count';
+		accessor: #referencesCount;
+		comment: 'The number of methods that still reference the removed class or trait. Null in results that do not count references, such as those of applied refactorings.'
 ]
 
 { #category : #accessing }
