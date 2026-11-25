@@ -42,7 +42,10 @@ GtLClassDefinitionChangeHistory >> gtDiffFor: aView [
 		to: [ self latestChange changeResult updatedDefinitionWithCommentString ];
 		fromLabel: 'Initial version:';
 		toLabel: 'Changed version:';
-		styler: GtCodeDiffRBTextStyler new
+		styler: [ :aSource | 
+			GtPharoStyler new
+				coderViewModel: (GtPharoSnippetCoder forSource: aSource) asCoderViewModel;
+				yourself ]
 ]
 
 { #category : #'gt - extensions' }
@@ -55,7 +58,10 @@ GtLClassDefinitionChangeHistory >> gtDiffWithCurrentVersionFor: aView [
 		to: [ self latestChange changeResult updatedDefinitionWithCommentString ];
 		fromLabel: 'Image content:';
 		toLabel: 'Change content:';
-		styler: GtCodeDiffRBTextStyler new
+		styler: [ :aSource | 
+			GtPharoStyler new
+				coderViewModel: (GtPharoSnippetCoder forSource: aSource) asCoderViewModel;
+				yourself ]
 ]
 
 { #category : #'gt - extensions' }
