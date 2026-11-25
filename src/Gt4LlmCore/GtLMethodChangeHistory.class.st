@@ -72,13 +72,25 @@ GtLMethodChangeHistory >> gtDiffFor: aView [
 	^ aView diff
 		title: 'Diff';
 		priority: 5;
-		from: [ 
-			self initialChange changeResult oldStateMethodSourceCode ];
-		to: [ 
-			self latestChange changeResult newStateMethodSourceCode ];
+		from: [ self initialChange changeResult oldStateMethodSourceCode ];
+		to: [ self latestChange changeResult newStateMethodSourceCode ];
 		fromLabel: 'Initial version:';
 		toLabel: 'Changed version:';
-		styler: GtCodeDiffRBTextStyler new
+		styler: [ :aSource | 
+			| aBehavior aCoder |
+			aBehavior := self methodReference
+					ifNil: [ UndefinedObject ]
+					ifNotNil: [ :aReference | 
+						aReference
+							behaviorIfPresent: [ :aClass | aClass ]
+							ifMissing: [ :anError | UndefinedObject ] ].
+			aCoder := GtPharoMethodCoder new
+					behavior: aBehavior;
+					sourceCodeSynchronously: (GtCoderExplicitStringSource new source: aSource);
+					yourself.
+			GtPharoStyler new
+				coderViewModel: aCoder asCoderViewModel;
+				yourself ]
 ]
 
 { #category : #'gt - extensions' }
