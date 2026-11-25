@@ -46,14 +46,14 @@ GtLRemoteExamplesReportDomainObject >> llmRawDataViewFor: aDataView [
 	
 	^ aDataView jsonObject: [ :json |
 		self errorMessages
-			ifNotEmpty: [ :aCollection | json at: #errors put: aCollection ].
-		self results ifNotEmpty: [ :aCollection | json at: #results put: aCollection ].
+			ifNotEmpty: [ :aCollection | json at: 'errors' put: aCollection ].
+		self results ifNotEmpty: [ :aCollection | json at: 'results' put: aCollection ].
 		self exception
 			ifNotNil: [ json
-					at: #error
+					at: 'error'
 					put: (Dictionary new
-							at: #message put: self exception messageText;
-							at: #stackTrace put: self stackTrace;
+							at: 'message' put: self exception messageText;
+							at: 'stackTrace' put: self stackTrace;
 							yourself) ] ]
 ]
 
