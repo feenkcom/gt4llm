@@ -331,7 +331,6 @@ GtLMagritteToolForClassRemovalExamples >> removeClassUsingTrait [
 	call := self performRemovalOf: 'GtLClassRemovalExamplesTraitUser'.
 
 	self assert: (call result targetObject isKindOf: GtLClassRemovalResult).
-	self assert: call result targetObject referencesCount equals: 0.
 	self
 		assert: (Smalltalk globals includesKey: #GtLClassRemovalExamplesTraitUser) not.
 	self assert: (Smalltalk globals at: #TGtLClassRemovalExamplesTrait) == aTrait.
@@ -402,8 +401,7 @@ GtLMagritteToolForClassRemovalExamples >> removeExistingClassDataViewSerializati
 
 	expectedJson := {'removedClassName'
 				-> 'GtLMagritteToolForClassRemovalExamplesTemporary'.
-			'status' -> 'removed'.
-			'referencesCount' -> 0} asDictionary.
+			'status' -> 'removed'} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 
 	^ dataBlock
@@ -459,7 +457,7 @@ GtLMagritteToolForClassRemovalExamples >> removeNonClassGlobal [
 
 { #category : #examples }
 GtLMagritteToolForClassRemovalExamples >> removeReferencedClass [
-	"Only methods of other classes count: the methods of the removed class are removed with it"
+	"Methods of other classes that reference the class do not prevent its removal; they are left as they are"
 
 	<gtExample>
 	| call result aTarget aReferencer |
@@ -494,7 +492,6 @@ GtLMagritteToolForClassRemovalExamples >> removeReferencedClass [
 	self assert: (result isKindOf: GtLClassRemovalResult).
 	self assert: result removedClassName equals: #GtLClassRemovalExamplesTarget.
 	self assert: result status equals: 'removed'.
-	self assert: result referencesCount equals: 3.
 	self
 		assert: (Smalltalk globals includesKey: #GtLClassRemovalExamplesTarget) not.
 	self assert: (aReferencer includesSelector: #target) ]

@@ -14,11 +14,9 @@ GtLClassRemovalResultExamples >> classRemovalResultCreation [
 	result := GtLClassRemovalResult new
 			removedClass: (GtLClassDefinitionDescription new currentClassName: 'MyTestClass');
 			status: 'removed';
-			referencesCount: 2;
 			yourself.
 	self assert: result removedClassName equals: 'MyTestClass'.
 	self assert: result status equals: 'removed'.
-	self assert: result referencesCount equals: 2.
 	self assertResultIsClass: result.
 	self assertResultIsClassRemoval: result.
 	^ result
@@ -37,8 +35,7 @@ GtLClassRemovalResultExamples >> classRemovalResultDataViewSerialization [
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 
 	expectedJson := {'removedClassName' -> 'MyTestClass'.
-			'status' -> 'removed'.
-			'referencesCount' -> 2} asDictionary.
+			'status' -> 'removed'} asDictionary.
 	self assertDataBlock: dataBlock hasLlmJsonData: expectedJson.
 
 	^ dataBlock
