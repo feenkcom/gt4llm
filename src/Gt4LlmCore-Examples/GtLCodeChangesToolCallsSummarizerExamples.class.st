@@ -400,12 +400,16 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerIgnoresPreviewsAndFailedA
 						inContext: aContext).
 			toolCalls
 				add: (self performApplyRefactoringOf: anAppliedPreviewCall inContext: aContext).
-			self assert: toolCalls last result model class equals: GtLProblemDomainObject.
+			self
+				assert: (self modelOf: toolCalls last) class
+				equals: GtLProblemDomainObject.
 			toolCalls
 				add: (self
 						performApplyRefactoringWithObjectId: 'unknown-object-id'
 						inContext: aContext).
-			self assert: toolCalls last result model class equals: GtLMissingDomainObject.
+			self
+				assert: (self modelOf: toolCalls last) class
+				equals: GtLMissingDomainObject.
 			self assert: (aLeafClass includesSelector: #neverApplied) not.
 
 			summarizer := self codeChangesSummarizerForToolCalls: toolCalls.
@@ -440,7 +444,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedAddClassRefact
 									superclass: aRootClass
 									slotNames: 'first'}
 						inContext: aContext).
-			aPreview := toolCalls last result model.
+			aPreview := self modelOf: toolCalls last.
 			self assert: aPreview refactoringName equals: 'Add class'.
 			self
 				assert: aPreview refactoringDescription
@@ -491,7 +495,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedAddMethodRefac
 				add: (self
 						performPreviewRefactoring: {self addMethodTransformationIn: aLeafClass source: 'summarizedMethod ^ 42'}
 						inContext: aContext).
-			aPreview := toolCalls last result model.
+			aPreview := self modelOf: toolCalls last.
 			self assert: aPreview refactoringName equals: 'Add method'.
 			self
 				assert: (aPreview refactoringDescription
@@ -499,7 +503,9 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedAddMethodRefac
 			toolCalls
 				add: (self performApplyRefactoringOf: toolCalls last inContext: aContext).
 			self assert: (aLeafClass includesSelector: #summarizedMethod).
-			self assert: toolCalls last result model refactoringName equals: 'Add method'.
+			self
+				assert: (self modelOf: toolCalls last) refactoringName
+				equals: 'Add method'.
 
 			summarizer := self codeChangesSummarizerForToolCalls: toolCalls.
 			self assert: summarizer relevantToolCalls size equals: 1.
@@ -542,7 +548,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedPushUpInstance
 				add: (self
 						performPreviewRefactoring: {self pushUpInstanceVariableTransformationOf: #instVar3 to: aRootClass}
 						inContext: aContext).
-			aPreview := toolCalls last result model.
+			aPreview := self modelOf: toolCalls last.
 			self assert: aPreview refactoringName equals: 'Push up instance variable'.
 			self
 				assert: aPreview refactoringDescription
@@ -611,7 +617,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedPushUpMethodRe
 									from: aLeafClass
 									to: aRootClass}
 						inContext: aContext).
-			aPreview := toolCalls last result model.
+			aPreview := self modelOf: toolCalls last.
 			self assert: aPreview refactoringName equals: 'Push up method'.
 			self
 				assert: aPreview refactoringDescription
@@ -668,7 +674,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedRemoveMethodRe
 				add: (self
 						performPreviewRefactoring: {self removeMethodTransformationOf: #summarizedMethod in: aLeafClass}
 						inContext: aContext).
-			aPreview := toolCalls last result model.
+			aPreview := self modelOf: toolCalls last.
 			self assert: aPreview refactoringName equals: 'Remove method'.
 			self
 				assert: aPreview refactoringDescription
@@ -719,7 +725,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithAppliedRewrite [
 						to: '`@receiver method2'
 						inClass: aRootClass
 						inContext: aContext).
-			aPreview := toolCalls last result model.
+			aPreview := self modelOf: toolCalls last.
 			self assert: aPreview refactoringName equals: 'Rewrite'.
 			self
 				assert: aPreview refactoringDescription
@@ -879,7 +885,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithPartiallyAppliedRefac
 			aTemporaryClass removeFromSystem.
 			toolCalls
 				add: (self performApplyRefactoringOf: toolCalls last inContext: aContext).
-			anAppliedRefactoring := toolCalls last result model.
+			anAppliedRefactoring := self modelOf: toolCalls last.
 			self assert: anAppliedRefactoring status equals: 'failed'.
 			self assert: anAppliedRefactoring hasFailed.
 			self assert: (aLeafClass includesSelector: #appliedBeforeFailure).
@@ -938,9 +944,11 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithSeveralAppliedRefacto
 									from: aLeafClass
 									to: aRootClass}
 						inContext: aContext).
-			self assert: toolCalls last result model refactoringName equals: pushUpName.
 			self
-				assert: toolCalls last result model refactoringDescription
+				assert: (self modelOf: toolCalls last) refactoringName
+				equals: pushUpName.
+			self
+				assert: (self modelOf: toolCalls last) refactoringDescription
 				equals: 'Push up slot instVar3 to ' , aRootClass name
 						, '; Push up method summarizedMethod from ' , aLeafClass name , ' to '
 						, aRootClass name.
@@ -948,7 +956,7 @@ GtLCodeChangesToolCallsSummarizerExamples >> summarizerWithSeveralAppliedRefacto
 					performApplyRefactoringOf: toolCalls last
 					inContext: aContext.
 			toolCalls add: pushUpApplyCall.
-			self assert: pushUpApplyCall result model codeChangeResults size equals: 4.	"3. Rewrite the pushed up method"
+			self assert: (self modelOf: pushUpApplyCall) codeChangeResults size equals: 4.	"3. Rewrite the pushed up method"
 			toolCalls
 				add: (self
 						performPreviewRewriteFrom: '`@receiver method1'

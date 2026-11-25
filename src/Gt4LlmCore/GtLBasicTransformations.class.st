@@ -38,6 +38,17 @@ GtLBasicTransformations >> asRefactoringIn: namespace [
 	^ composite
 ]
 
+{ #category : #accessing }
+GtLBasicTransformations >> changeGroupNames [
+	"All changes are reported in one preview, in the groups of all my transformations"
+
+	| names |
+	names := OrderedCollection new.
+	(self transformations ifNil: [ #() ])
+		do: [ :each | each changeGroupNames do: [ :aName | names addIfNotPresent: aName ] ].
+	^ names asArray
+]
+
 { #category : #views }
 GtLBasicTransformations >> gtChangesFor: aView [
 	<gtView>

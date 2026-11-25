@@ -71,6 +71,11 @@ GtLClassRemovalResult >> isClassRemovalResult [
 	^ true
 ]
 
+{ #category : #refactoring }
+GtLClassRemovalResult >> llmChangeKind [
+	^ 'removed class'
+]
+
 { #category : #'llm views' }
 GtLClassRemovalResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>

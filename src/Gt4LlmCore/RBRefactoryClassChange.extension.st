@@ -34,3 +34,13 @@ RBRefactoryClassChange >> gtLlmMatchesMethodChangeResult: aCodeChangeResult sele
 		and: [ aReference isClassSide = self isMeta
 				and: [ aReference methodName asString = aSelector asString ] ]
 ]
+
+{ #category : #'*Gt4LlmCore' }
+RBRefactoryClassChange >> gtLlmNewChangeEntry [
+	"A class-level change, such as a slot or package change, is described by its change string: the class name alone does not say what changes"
+
+	^ GtLRefactoringClassChangeEntry new
+		className: self changeClassName asString;
+		changeDescription: self changeString asString;
+		yourself
+]

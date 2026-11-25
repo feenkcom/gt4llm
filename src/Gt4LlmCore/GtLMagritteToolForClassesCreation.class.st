@@ -24,19 +24,19 @@ Trait names usually starts with "T".
 Example JSON arguments:
 {
   "classes": [
-    {"targetClassName": "MyClass", "superclassName": "Object", "package": "MyPackage", "packageTag": "MyTag", "traitComposition": "{TMyTrait}"},
+    {"targetClassName": "MyClass", "superclassName": "Object", "package": "MyPackage", "packageTag": "MyTag", "traitCompositionString": "{TMyTrait}"},
     {"targetClassName": "MySubclass", "superclassName": "MyClass", "package": "MyPackage", "instanceVariables": "value", "classInstanceVariables": "valueTwo"}
   ],
   "traits": [
-    {"targetTraitName": "TMyTrait", "package": "MyPackage", "packageTag": "MyTag", "traitComposition": "{}"},
-    {"targetTraitName": "TMyTraitTwo", "package": "MyPackage", "instanceVariables": "value", "classInstanceVariables": "valueTwo", "traitComposition": "{TMyTrait}"}
+    {"targetTraitName": "TMyTrait", "package": "MyPackage", "packageTag": "MyTag", "traitCompositionString": "{}"},
+    {"targetTraitName": "TMyTraitTwo", "package": "MyPackage", "instanceVariables": "value", "classInstanceVariables": "valueTwo", "traitCompositionString": "{TMyTrait}"}
   ]
 }
 
 Example JSON response:
 {
   "classes": [
-    {"currentClassName": "MyClass", "superclassName": "Object", "packageName": "MyPackage", "packageTag": "MyTag", "instanceSlotNames": [], "classSlotNames": [], "classVariableNames": [], "traitCompositionString": "{TMyTrait}"},
+    {"currentClassName": "MyClass", "superclassName": "Object", "packageName": "MyPackage", "instanceSlotNames": [], "classSlotNames": [], "classVariableNames": [], "traitCompositionString": "{TMyTrait}"},
     {"currentClassName": "MySubclass", "superclassName": "MyClass", "packageName": "MyPackage", "instanceSlotNames": ["value"], "classSlotNames": [ "valueTwo" ], "traitCompositionString": "{}"}
   ],
   "traits": [

@@ -36,30 +36,34 @@ GtLRefactoringPreviewExamples >> namedRefactoringPreview [
 
 { #category : #examples }
 GtLRefactoringPreviewExamples >> namedRefactoringPreviewSerialization [
+	"With includeSources, each listed change of the report has its new source"
+
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
-	| dataBlock |
-	dataBlock := (self namedRefactoringPreview llmDataViewsFor: GtLDataView new)
+	| report dataBlock |
+	report := GtLRefactoringPreviewReport
+			refactoring: self namedRefactoringPreview
+			displayOptions: (GtLRefactoringDisplayOptions new includeSources: true).
+	dataBlock := (report llmDataViewsFor: GtLDataView new)
 			serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	self
 		assertDataBlock: dataBlock
 		hasLlmJsonData: (Dictionary new
-				at: 'changes'
-					put: (NeoJSONArray
-							with: (NeoJSONObject new
-									at: 'changeDescription'
-										put: 'Add GtLRefactoringPreviewExamples>>#previewedMethod';
-									at: 'kind' put: 'added method';
-									at: 'target' put: 'GtLRefactoringPreviewExamples>>#previewedMethod';
-									at: 'newSource' put: 'previewedMethod ^ 42';
-									yourself));
-				at: 'changesCount' put: 1;
-				at: 'objectId' put: 'example-object-id';
-				at: 'applied' put: false;
 				at: 'refactoringName' put: 'Add method';
 				at: 'refactoringDescription'
 					put: 'Add method previewedMethod ^ 42 in class GtLRefactoringPreviewExamples protocol examples';
+				at: 'changesCount' put: 1;
+				at: 'objectId' put: 'example-object-id';
+				at: 'status' put: 'not applied';
+				at: 'changes'
+					put: {NeoJSONObject new
+								at: 'changeDescription'
+									put: 'Add GtLRefactoringPreviewExamples>>#previewedMethod';
+								at: 'kind' put: 'added method';
+								at: 'target' put: 'GtLRefactoringPreviewExamples>>#previewedMethod';
+								at: 'newSource' put: 'previewedMethod ^ 42';
+								yourself};
 				yourself).
 	^ dataBlock
 ]
@@ -127,16 +131,21 @@ GtLRefactoringPreviewExamples >> refactoringPreview [
 
 { #category : #'examples - views' }
 GtLRefactoringPreviewExamples >> refactoringPreviewMainDataView [
+	"The tools answer a report of the preview: its LLM data view is the JSON of the response"
+
 	<gtExample>
 	<return: #GtLCompositeDataView>
 	| mainDataView |
-	mainDataView := self refactoringPreview llmDataViewsFor: GtLDataView new.
+	mainDataView := (GtLRefactoringPreviewReport
+			refactoring: self refactoringPreview
+			displayOptions: GtLRefactoringDisplayOptions new)
+			llmDataViewsFor: GtLDataView new.
 	self
 		assertCompositeDataView: mainDataView
 		hasTitle: 'Object views'
 		viewsCount: 1.
-	self assertCompositeView: mainDataView hasMagritteDataViewWithDataKey: nil.
-	^mainDataView
+	self assertCompositeView: mainDataView hasJsonDataViewWithDataKey: nil.
+	^ mainDataView
 ]
 
 { #category : #examples }
@@ -158,7 +167,7 @@ GtLRefactoringPreviewExamples >> refactoringPreviewPrintString [
 
 { #category : #examples }
 GtLRefactoringPreviewExamples >> refactoringPreviewSerialization [
-	"A preview created without a refactoring name and description serializes them as null"
+	"The report of a preview created without a refactoring name and description leaves them out. By default the changes are listed without their sources"
 
 	<gtExample>
 	<return: #GtLPrimitiveMessageDataBlock>
@@ -166,20 +175,16 @@ GtLRefactoringPreviewExamples >> refactoringPreviewSerialization [
 	dataBlock := self refactoringPreviewMainDataView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
 	expected := Dictionary new
-			at: 'changes'
-				put: (NeoJSONArray
-						with: (NeoJSONObject new
-								at: 'changeDescription'
-									put: 'Add GtLRefactoringPreviewExamples>>#previewedMethod';
-								at: 'kind' put: 'added method';
-								at: 'target' put: 'GtLRefactoringPreviewExamples>>#previewedMethod';
-								at: 'newSource' put: 'previewedMethod ^ 42';
-								yourself));
 			at: 'changesCount' put: 1;
 			at: 'objectId' put: 'example-object-id';
-			at: 'applied' put: false;
-			at: 'refactoringName' put: nil;
-			at: 'refactoringDescription' put: nil;
+			at: 'status' put: 'not applied';
+			at: 'changes'
+				put: {NeoJSONObject new
+							at: 'changeDescription'
+								put: 'Add GtLRefactoringPreviewExamples>>#previewedMethod';
+							at: 'kind' put: 'added method';
+							at: 'target' put: 'GtLRefactoringPreviewExamples>>#previewedMethod';
+							yourself};
 			yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	^ dataBlock

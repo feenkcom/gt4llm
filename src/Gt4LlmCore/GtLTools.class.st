@@ -32,7 +32,7 @@ GtLTools class >> gt [
 		, self gtExamplesRun , self gtObjectsExecution
 ]
 
-{ #category : #defaults }
+{ #category : #accessing }
 GtLTools class >> gtCodeChange [
 	^ self
 		withAll: {GtLMagritteToolForClassesCreation new.
@@ -40,17 +40,19 @@ GtLTools class >> gtCodeChange [
 				GtLMagritteToolForClassCommentChange new.
 				GtLMagritteToolForMethodsCompilation new.
 				GtLMagritteToolForMethodsRemoval new.
-				GtLMagritteToolForClassRemoval new} asOrderedCollection
+				GtLMagritteToolForClassRemoval new.
+				GtLMagritteToolForClassRename new} asOrderedCollection
 ]
 
 { #category : #defaults }
 GtLTools class >> gtCodeRefactoring [
-	^self
+	^ self
 		withAll: (Array
 				with: GtLToolForListTransformations new
 				with: GtLToolForPreviewRefactoring new
 				with: GtLToolForApplyRefactoring new
-				with: GtLToolForPreviewRewrite new) asOrderedCollection
+				with: GtLToolForPreviewRewrite new
+				with: GtLToolForRefactoringChanges new) asOrderedCollection
 ]
 
 { #category : #defaults }

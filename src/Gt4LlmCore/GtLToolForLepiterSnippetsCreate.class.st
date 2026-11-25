@@ -9,6 +9,8 @@ Class {
 
 { #category : #private }
 GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
+	"Answer the page id in the form the other Lepiter tools take, as it was given"
+
 	| pageUidString pageUid snippet snippetValidation parentSnippetUidString parentSnippetUid parentSnippets |
 	pageUidString := snippetArguments pageUid.
 	(pageUidString isNil or: [ pageUidString trimBoth isEmpty ])
@@ -28,20 +30,23 @@ GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
 				ifPresent: [ :page | 
 					[ snippet := snippetArguments buildSnippetFor: self.
 					parentSnippetUidString := snippetArguments parentSnippetUid.
-					parentSnippetUidString := parentSnippetUidString ifNil: [ '' ] ifNotNil: [ :string | string asString trimBoth ].
+					parentSnippetUidString := parentSnippetUidString
+							ifNil: [ '' ]
+							ifNotNil: [ :string | string asString trimBoth ].
 					parentSnippetUidString isEmpty
 						ifTrue: [ page addSnippet: snippet ]
-						ifFalse: [
-							parentSnippetUid := LeUID new.
+						ifFalse: [ parentSnippetUid := LeUID new.
 							[ parentSnippetUid uidString: parentSnippetUidString ]
 								on: Error
-								do: [ :error |
+								do: [ :error | 
 									^ GtLExceptionDomainObject new
 										freeze: error;
 										errorReason: 'Invalid parent snippet uid' ].
-							parentSnippets := page allChildrenSnippetsMatching: [ :each | each uid = parentSnippetUid ].
-							parentSnippets ifEmpty: [ ^ GtLProblemDomainObject new
-								description: 'Could not locate parent snippet with id ' , parentSnippetUid uidString ].
+							parentSnippets := page
+									allChildrenSnippetsMatching: [ :each | each uid = parentSnippetUid ].
+							parentSnippets
+								ifEmpty: [ ^ GtLProblemDomainObject new
+										description: 'Could not locate parent snippet with id ' , parentSnippetUid uidString ].
 							parentSnippets anyOne addSnippet: snippet ] ]
 						on: Error
 						do: [ :error | 
@@ -49,10 +54,10 @@ GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
 								freeze: error;
 								errorReason: 'Error while creating snippet' ] ]
 				ifAbsent: [ ^ GtLProblemDomainObject new
-						description: 'Could not locate page with id ' , pageUid asString ].
+						description: 'Could not locate page with id ' , pageUidString ].
 			^ GtLLepiterSnippetDomainObject new
 				status: 'created';
-				pageUid: pageUid asString;
+				pageUid: pageUid asString36;
 				snippetUid: snippet uidString;
 				snippet: snippet ]
 ]

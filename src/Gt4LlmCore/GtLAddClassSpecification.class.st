@@ -21,6 +21,11 @@ GtLAddClassSpecification class >> jsonSchemaLabel [
 	^ 'AddClass'
 ]
 
+{ #category : #accessing }
+GtLAddClassSpecification >> addedClassName [
+	^ newClassName
+]
+
 { #category : #'as yet unclassified' }
 GtLAddClassSpecification >> asRefactoringIn: aNamespace [
 	| refactoring |
@@ -37,7 +42,7 @@ GtLAddClassSpecification >> asRefactoringIn: aNamespace [
 { #category : #'as yet unclassified' }
 GtLAddClassSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'The "Add class" transformation adds a class into the system. The transformation must provide the className, packageName, and slotNames.'
+		comment: 'Adds the class newClassName, a subclass of superclassName, to the package packageName, in the package tag tagName when given. slotNames are its instance variable names, separated by spaces.'
 ]
 
 { #category : #printing }
@@ -104,10 +109,9 @@ GtLAddClassSpecification >> slotNames: anObject [
 { #category : #description }
 GtLAddClassSpecification >> slotNamesDescription [
 	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #slotNames";
-		  classes: {String}"
+	^ MAStringDescription new
+		accessor: #slotNames;
+		comment: 'The instance variable names, separated by spaces.'
 ]
 
 { #category : #accessing }
@@ -142,7 +146,12 @@ GtLAddClassSpecification >> tagName: anObject [
 { #category : #description }
 GtLAddClassSpecification >> tagNameDescription [
 	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #tagName
+	^ MAStringDescription new
+		accessor: #tagName;
+		comment: 'The package tag of the class.'
+]
+
+{ #category : #accessing }
+GtLAddClassSpecification >> usedClassNames [
+	^ {superclassName} reject: [ :each | each isNil ]
 ]

@@ -86,7 +86,8 @@ GtLRefactoringCodeChangesExamples >> codeSnapshotIgnoresTraitProvidedMethods [
 { #category : #'examples - refactorings' }
 GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 	"When a change fails, the applied refactoring is marked as failed,
-	holds the frozen exception and describes the changes applied before the error"
+	holds the frozen exception and describes the changes applied before the error.
+	The preview counts as applied, so that its changes are not applied twice"
 
 	<gtExample>
 	^ self
@@ -109,7 +110,8 @@ GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 			self assert: anAppliedRefactoring status equals: 'failed'.
 			self assert: anAppliedRefactoring hasFailed.
 			self assert: anAppliedRefactoring undoChange isNil.
-			self assert: anAppliedRefactoring preview isApplied not.
+			self assert: anAppliedRefactoring preview isApplied.
+			self assert: anAppliedRefactoring preview applicationStatus equals: 'failed'.
 			self assert: anAppliedRefactoring exception isErrorDomainObject.
 			self assert: anAppliedRefactoring errorMessage notNil.
 			self assert: (aLeafClass includesSelector: #appliedBeforeError).
@@ -223,9 +225,10 @@ GtLRefactoringCodeChangesExamples >> pushUpMethod [
 			self assert: aRemoval removedMethod sourceCode equals: 'pushedUpMethod ^ 42'.
 
 			self
-				assert: anAppliedRefactoring codeChanges asArray
-				equals: {'added method ' , aRootClass name , '>>#pushedUpMethod'.
-						'removed method ' , aLeafClass name , '>>#pushedUpMethod'}.
+				assert: (anAppliedRefactoring codeChangeResults
+						collect: [ :each | each llmChangeKind -> each llmChangeTarget ]) asArray
+				equals: {'added method' -> (aRootClass name , '>>#pushedUpMethod').
+						'removed method' -> (aLeafClass name , '>>#pushedUpMethod')}.
 			anAppliedRefactoring ]
 ]
 
@@ -396,9 +399,8 @@ GtLRefactoringCodeChangesExamples >> renameClass [
 			self assert: aRename class equals: GtLClassModificationResult.
 			self assert: aRename originalClass currentClassName equals: anOldName.
 			self assert: aRename updatedClass currentClassName equals: aNewName.
-			self
-				assert: (anAppliedRefactoring kindOfCodeChange: aRename)
-				equals: 'renamed class'.
+			self assert: aRename llmChangeKind equals: 'renamed class'.
+			self assert: aRename llmChangeTarget equals: anOldName , ' to ' , aNewName.
 
 			aReference := anAppliedRefactoring codeChangeResults second.
 			self assert: aReference class equals: GtLMethodCompilationResult.
@@ -409,22 +411,18 @@ GtLRefactoringCodeChangesExamples >> renameClass [
 			self
 				assert: aReference newMethod sourceCode
 				equals: 'leafClass ^ ' , aNewName.
-
-			self
-				assert: anAppliedRefactoring codeChanges first
-				equals: 'renamed class ' , anOldName , ' to ' , aNewName.
 			anAppliedRefactoring ]
 ]
 
 { #category : #private }
 GtLRefactoringCodeChangesExamples >> resultsOf: anAppliedRefactoring ofKind: aKindString [
 	^ anAppliedRefactoring codeChangeResults
-		select: [ :each | (anAppliedRefactoring kindOfCodeChange: each) = aKindString ]
+		select: [ :each | each llmChangeKind = aKindString ]
 ]
 
 { #category : #'examples - summarizer' }
 GtLRefactoringCodeChangesExamples >> summarizerWithAppliedRefactoring [
-	"An applyRefactoring tool call is summarized through the code change results of the applied refactoring"
+	"An applyRefactoring tool call answers a report of the result; it is summarized through the code change results of the result"
 
 	<gtExample>
 	^ self
@@ -449,7 +447,8 @@ GtLRefactoringCodeChangesExamples >> summarizerWithAppliedRefactoring [
 			GtLToolForApplyRefactoring new
 				performToolCall: aToolCall
 				inContext: (GtLToolExecutionContext new objectStorage: anObjectStorage).
-			self assert: aToolCall result model class equals: GtLAppliedRefactoring.
+			self assert: aToolCall result model class equals: GtLRefactoringResultReport.
+			self assert: (self modelOf: aToolCall) class equals: GtLRefactoringResult.
 
 			aGroup := GtLMessagesGroup new.
 			aGroup add: (self toolMessageFrom: aToolCall).

@@ -1,3 +1,6 @@
+"
+I am the previewRewrite tool: I preview an RBParseTreeRewriter rewrite of the methods of a class and/or a package, store the preview ({{gtClass:GtLRefactoringPreview}}) so that applyRefactoring can apply it, and answer a report of it ({{gtClass:GtLRefactoringPreviewReport}}). A rewrite can change many methods, so its preview groups them; its display options ({{gtClass:GtLRewriteDisplayOptions}}) include the sources by default.
+"
 Class {
 	#name : #GtLToolForPreviewRewrite,
 	#superclass : #GtLAbstractMagritteFunctionTool,
@@ -7,26 +10,36 @@ Class {
 { #category : #descriptions }
 GtLToolForPreviewRewrite >> classNameDescription [
 	<magritteDescription>
-	^(MAStringDescription new)
+	^ MAStringDescription new
 		label: 'Class name';
 		accessor: #className;
-		comment: 'The class whose instance- and class-side methods are rewritten. May be empty when packageName is given.';
+		comment: 'The class whose instance-side and class-side methods are rewritten, or empty. With packageName too, the methods of both are rewritten.';
 		beRequired
 ]
 
 { #category : #accessing }
 GtLToolForPreviewRewrite >> description [
-	^ 'Previews an AST rewrite (search and replace) on the methods of a class and/or a package using RBParseTreeRewriter pattern syntax, without applying it. Patterns use a backquote for variables (`var), `@ for any expression (`@expr), `# for literals and `. for statements. Set isMethodPattern to true when from and to are whole method patterns. Pass className, packageName or both; leave the other one empty. Pass the objectId from the result to applyRefactoring to execute the changes.
+	^ 'Previews an AST rewrite (search and replace) of the methods of a class, a package or both, without applying it, and stores the preview: pass its objectId to applyRefactoring to apply it. Patterns use the RBParseTreeRewriter syntax: `var matches a variable, `@expr any expression, `#lit a literal and `.stmt a statement.
 
-The result has the refactoringName Rewrite and a refactoringDescription with the patterns and the scope of the rewrite.
+The response has refactoringName, refactoringDescription, changesCount, objectId, status (not applied) and methodChanges, the rewritten methods, as in previewRefactoring, also when none matches. getRefactoringChanges lists the ones the response does not.
 
-Each change in the result has a changeDescription, a kind (modified method for rewritten methods), a target (e.g. MyClass>>#baz) and the newSource of the rewritten method.
+Invalid arguments answer an errorMessage; an error while rewriting, such as a pattern that does not parse, answers an errorReason.
 
 Example JSON arguments:
-{"from": "`@receiver foo", "to": "`@receiver bar", "isMethodPattern": false, "className": "MyClass", "packageName": ""}
+{"from": "`@receiver foo", "to": "`@receiver bar", "isMethodPattern": false, "className": "MyClass", "packageName": "", "displayOptions": {"methodsLimit": 50}}
 
 Example JSON response:
-{"refactoringName": "Rewrite", "refactoringDescription": "Rewrite `@receiver foo → `@receiver bar in class MyClass", "changes": [{"changeDescription": "Add MyClass>>#baz", "kind": "modified method", "target": "MyClass>>#baz", "newSource": "baz ^ self bar"}], "changesCount": 1, "objectId": "abc123", "applied": false}'
+{"refactoringName": "Rewrite", "refactoringDescription": "Rewrite `@receiver foo → `@receiver bar in class MyClass", "changesCount": 1, "objectId": "abc123", "status": "not applied", "methodChanges": {"totalCount": 1, "displayedCount": 1, "kindCounts": {"modified method": 1}, "methods": [{"kind": "modified method", "methodClassName": "MyClass", "methodName": "baz", "classSide": false, "newSource": "baz ^ self bar"}]}}'
+]
+
+{ #category : #descriptions }
+GtLToolForPreviewRewrite >> displayOptionsDescription [
+	<magritteDescription>
+	^ MAToOneRelationDescription new
+		label: 'Display options';
+		accessor: #displayOptions;
+		classes: {GtLRewriteDisplayOptions};
+		beOptional
 ]
 
 { #category : #descriptions }
@@ -92,25 +105,28 @@ GtLToolForPreviewRewrite >> name [
 { #category : #descriptions }
 GtLToolForPreviewRewrite >> packageNameDescription [
 	<magritteDescription>
-	^(MAStringDescription new)
+	^ MAStringDescription new
 		label: 'Package name';
 		accessor: #packageName;
-		comment: 'The package whose methods are rewritten. May be empty when className is given.';
+		comment: 'The package whose methods are rewritten, or empty. With className too, the methods of both are rewritten.';
 		beRequired
 ]
 
 { #category : #private }
-GtLToolForPreviewRewrite >> previewNamespace: aNamespace description: aDescriptionString inContext: anExecutionContext [
+GtLToolForPreviewRewrite >> previewNamespace: aNamespace description: aDescriptionString displayOptions: aDisplayOptions inContext: anExecutionContext [
+	"Store the preview and answer a report of it. A rewrite can change many methods: they are listed in a group"
+
 	| preview |
 	preview := GtLRefactoringPreview
 			namespace: aNamespace
 			refactoringName: 'Rewrite'
-			refactoringDescription: aDescriptionString.
+			refactoringDescription: aDescriptionString
+			changeGroupNames: #('methodChanges').
 	preview
 		objectId: (anExecutionContext objectStorage
 				addNewObject: preview
 				reason: (GtLStoredObjectStringReason text: 'Rewrite preview')).
-	^ preview
+	^ preview reportFor: aDisplayOptions
 ]
 
 { #category : #private }
@@ -130,10 +146,14 @@ GtLToolForPreviewRewrite >> privatePerformToolCall: aToolCall inContext: anExecu
 			ifMissing: [ :aDomainObject | ^ aDomainObject ].
 	namespace := [ self rewrite: methods with: (self rewriterFor: arguments) ]
 			on: Error
-			do: [ :anError | ^ GtLExceptionDomainObject freeze: anError ].
+			do: [ :anError | 
+				^ (GtLExceptionDomainObject freeze: anError)
+					errorReason: 'Error while previewing the rewrite';
+					yourself ].
 	^ self
 		previewNamespace: namespace
 		description: (self rewriteDescriptionFor: arguments)
+		displayOptions: (GtLRewriteDisplayOptions fromArguments: arguments)
 		inContext: anExecutionContext
 ]
 
@@ -150,36 +170,26 @@ GtLToolForPreviewRewrite >> rewrite: aCollection with: aRewriter [
 
 { #category : #private }
 GtLToolForPreviewRewrite >> rewriteDescriptionFor: aDictionary [
-	"Return a description of the rewrite, such as 'Rewrite `@receiver foo → `@receiver bar in class MyClass'"
+	"Return a description of the rewrite, such as 'Rewrite `@receiver foo → `@receiver bar in class MyClass'. The JSON schema requires all these arguments"
 
-	| className packageName scope |
-	className := (aDictionary at: 'className' ifAbsent: [ '' ]) asString trimBoth.
-	packageName := (aDictionary at: 'packageName' ifAbsent: [ '' ]) asString
-			trimBoth.
-	scope := String
-			streamContents: [ :aStream | 
-				className
-					ifNotEmpty: [ aStream
-							nextPutAll: 'class ';
-							nextPutAll: className ].
-				(className notEmpty and: [ packageName notEmpty ])
-					ifTrue: [ aStream nextPutAll: ' and ' ].
-				packageName
-					ifNotEmpty: [ aStream
-							nextPutAll: 'package ';
-							nextPutAll: packageName ] ].
+	| className packageName scopes |
+	className := (aDictionary at: 'className') trimBoth.
+	packageName := (aDictionary at: 'packageName') trimBoth.
+	scopes := OrderedCollection new.
+	className ifNotEmpty: [ scopes add: 'class ' , className ].
+	packageName ifNotEmpty: [ scopes add: 'package ' , packageName ].
 	^ String
 		streamContents: [ :aStream | 
 			aStream
 				nextPutAll: 'Rewrite ';
-				nextPutAll: (aDictionary at: 'from') asString trimBoth;
+				nextPutAll: (aDictionary at: 'from') trimBoth;
 				nextPutAll: ' → ';
-				nextPutAll: (aDictionary at: 'to') asString trimBoth.
-			scope
+				nextPutAll: (aDictionary at: 'to') trimBoth.
+			scopes
 				ifNotEmpty: [ aStream
 						nextPutAll: ' in ';
-						nextPutAll: scope ].
-			(aDictionary at: 'isMethodPattern' ifAbsent: [ false ]) == true
+						nextPutAll: (' and ' join: scopes) ].
+			(aDictionary at: 'isMethodPattern')
 				ifTrue: [ aStream nextPutAll: ' (method pattern)' ] ]
 ]
 

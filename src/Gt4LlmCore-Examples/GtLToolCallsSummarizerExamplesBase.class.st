@@ -56,12 +56,23 @@ GtLToolCallsSummarizerExamplesBase >> fixedExecutionDetailsFrom: aStartDateAndTi
 	^ details
 ]
 
+{ #category : #support }
+GtLToolCallsSummarizerExamplesBase >> modelOf: aToolCall [
+	"Return what aToolCall answered. The refactoring tools answer a report: return the preview or result it reports on"
+
+	| anObject |
+	anObject := aToolCall result targetObject.
+	^ (anObject isKindOf: GtLRefactoringReport)
+		ifTrue: [ anObject refactoring ]
+		ifFalse: [ anObject ]
+]
+
 { #category : #'utilities - refactorings' }
 GtLToolCallsSummarizerExamplesBase >> performApplyRefactoringOf: aPreviewToolCall inContext: anExecutionContext [
 	"Apply the refactoring previewed by aPreviewToolCall (a previewRefactoring or previewRewrite tool call)"
 
 	^ self
-		performApplyRefactoringWithObjectId: aPreviewToolCall result targetObject objectId
+		performApplyRefactoringWithObjectId: (self modelOf: aPreviewToolCall) objectId
 		inContext: anExecutionContext
 ]
 

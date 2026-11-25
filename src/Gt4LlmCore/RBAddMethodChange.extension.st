@@ -30,6 +30,15 @@ RBAddMethodChange >> gtLlmMatchesCodeChangeResult: aCodeChangeResult [
 ]
 
 { #category : #'*Gt4LlmCore' }
+RBAddMethodChange >> gtLlmNewChangeEntry [
+	^ GtLRefactoringMethodChangeEntry new
+		methodClassName: self changeClassName asString;
+		methodName: self selector asString;
+		classSide: self isMeta = true;
+		yourself
+]
+
+{ #category : #'*Gt4LlmCore' }
 RBAddMethodChange >> gtLlmNewSource [
 	^ self source asString
 ]

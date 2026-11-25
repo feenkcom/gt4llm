@@ -30,8 +30,40 @@ RBRefactoryChange >> gtLlmMatchesCodeChangeResult: aCodeChangeResult [
 ]
 
 { #category : #'*Gt4LlmCore' }
+RBRefactoryChange >> gtLlmNewChangeEntry [
+	"Return the entry that lists me in the groups of changes of a refactoring report"
+
+	^ GtLRefactoringOtherChangeEntry new
+		target: self gtLlmChangeTarget asString;
+		yourself
+]
+
+{ #category : #'*Gt4LlmCore' }
 RBRefactoryChange >> gtLlmNewSource [
 	"Return the code or text introduced by this change, or nil if the change does not carry any"
 
 	^ nil
+]
+
+{ #category : #'*Gt4LlmCore' }
+RBRefactoryChange >> gtLlmPreviewChanges [
+	"Return the refactoring changes (GtLRefactoringChange) that describe me in a refactoring preview"
+
+	^ {GtLRefactoringChange fromChange: self}
+]
+
+{ #category : #'*Gt4LlmCore' }
+RBRefactoryChange >> gtLlmTargetOfSnippet: aSnippet [
+	"Name a changed Lepiter snippet by its uid and page"
+
+	^ String
+		streamContents: [ :aStream | 
+			aStream
+				nextPutAll: 'snippet ';
+				nextPutAll: aSnippet uid uidString.
+			aSnippet page
+				ifNotNil: [ :aPage | 
+					aStream
+						nextPutAll: ' in page ';
+						nextPutAll: aPage title asString ] ]
 ]

@@ -51,31 +51,54 @@ GtLClassDefinitionDescriptionExamples >> classDefinitionDescriptionSerialization
 ]
 
 { #category : #examples }
-GtLClassDefinitionDescriptionExamples >> fromClassWithClassVariables [
+GtLClassDefinitionDescriptionExamples >> fluidDefinitionFromClassIsLikePharos [
+	"Without traits or class-side slots, and with few slots, the definition of a class or trait is the one Pharo prints"
+
 	<gtExample>
-	| description aClass |
-	"Use a class with class variables"
-	aClass := Boolean.
-	description := GtLClassDefinitionDescription fromClass: aClass.
-	self assert: description currentClassName equals: aClass name.
-	self assert: description superclassName equals: aClass superclass name.
-	self assert: description packageName equals: aClass package name.
-	self assert: description classVariableNames isCollection.
+	<return: #GtLClassDefinitionDescription>
+	| aDescription |
+	aDescription := GtLClassDefinitionDescription fromClass: GtLAgent.
+	self assert: aDescription isTrait not.
+	self
+		assert: aDescription asDefinitionString
+		equals: (ClassDefinitionPrinter fluid for: GtLAgent) definitionString.
+	self
+		assert: (GtLClassDefinitionDescription fromClass: TGtLWithChat) asDefinitionString
+		equals: (ClassDefinitionPrinter fluid for: TGtLWithChat) definitionString.
+	^ aDescription
+]
+
+{ #category : #examples }
+GtLClassDefinitionDescriptionExamples >> fromClassWithClassVariables [
+	"The class variables of the class are in the description and in its definition"
+
+	<gtExample>
+	| description |
+	description := GtLClassDefinitionDescription fromClass: GtLMcpServer.
+	self
+		assert: (description classVariableNames collect: [ :each | each asString ]) asArray
+		equals: #('Current').
+	self assert: description packageTagName equals: 'Mcp'.
+	self
+		assert: (description asDefinitionString
+				includesSubstring: 'sharedVariables: { #Current };').
 	^ description
 ]
 
 { #category : #examples }
 GtLClassDefinitionDescriptionExamples >> fromClassWithTraits [
+	"The trait composition of the class is in the description and in its definition"
+
 	<gtExample>
-	| description aClass |
-	"Use a class that uses traits to test trait composition"
-	aClass := TGtAssert users anyOne.
-	description := GtLClassDefinitionDescription fromClass: aClass.
-	self assert: description currentClassName equals: aClass name.
-	self assert: description superclassName equals: aClass superclass name.
-	self assert: description packageName equals: aClass package name.
-	self assert: description traitCompositionString isString.
-	self assert: description traitCompositionString notEmpty.
+	| description |
+	description := GtLClassDefinitionDescription fromClass: GtLChat.
+	self assert: description isTrait not.
+	self
+		assert: description traitCompositionString
+		equals: 'TGtLWithInstructionSectionAPI'.
+	self
+		assert: (description asDefinitionString
+				includesSubstring: 'traits: TGtLWithInstructionSectionAPI;').
 	^ description
 ]
 

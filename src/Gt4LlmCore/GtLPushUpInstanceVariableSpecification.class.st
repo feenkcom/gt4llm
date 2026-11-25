@@ -28,7 +28,7 @@ GtLPushUpInstanceVariableSpecification >> asRefactoringIn: aGtRBNamespace [
 { #category : #'as yet unclassified' }
 GtLPushUpInstanceVariableSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'The "Push up instance variable" transformation pushes up an instance variable definition from subclasses into a target superclass. The transformation must provide the variableClassName and variableNameToPushUp. The variablClassName specifies the superclass that will define variableNameToPushUp after the transformation is executed.'
+		comment: 'Moves the instance variable variableNameToPushUp from the subclasses that define it into their superclass variableClassName.'
 ]
 
 { #category : #'as yet unclassified' }
@@ -50,7 +50,7 @@ GtLPushUpInstanceVariableSpecification >> variableClassNameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		accessor: #variableClassName;
-		comment: 'The name of the target superclass to which the variable is to be pushed';
+		comment: 'The superclass that defines the variable afterwards.';
 		beRequired
 ]
 
@@ -69,7 +69,7 @@ GtLPushUpInstanceVariableSpecification >> variableNameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		accessor: #variableNameToPushUp;
-		comment: 'The name of the variable to push up';
+		comment: 'The name of the variable to push up.';
 		beRequired
 ]
 

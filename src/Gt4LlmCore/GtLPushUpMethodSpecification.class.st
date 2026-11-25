@@ -30,7 +30,7 @@ GtLPushUpMethodSpecification >> asRefactoringIn: aNamespace [
 { #category : #'as yet unclassified' }
 GtLPushUpMethodSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'The "Push up method" transformation pushes up a method from a subclass to a direct or indirect superclass. If the method exists in other sibling subclasses of the superclass and is equivalently defined, the method will be removed from the sibling subclasses too. The transformation must provide the methodClassName, methodNameToPushUp and targetClassName. The methodClassName is the name of a subclass that implements the methodNameToPushUp. The methodNameToPushUp is the version of the method that is being pushed up to the superclass. The targetClassName is the name of the superclass to which to push.'
+		comment: 'Moves the method methodNameToPushUp from the class methodClassName to targetClassName, a direct or indirect superclass. Equivalent copies of the method in sibling subclasses are removed too.'
 ]
 
 { #category : #printing }
@@ -63,10 +63,10 @@ GtLPushUpMethodSpecification >> initialize [
 { #category : #descriptions }
 GtLPushUpMethodSpecification >> methodClassNameDescription [
 	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #methodClassName;
-		  comment: 'The class of the method to be pushed up. This is required and must not be empty.'
+	^ MAStringDescription new
+		accessor: #methodClassName;
+		comment: 'The class that defines the method.';
+		beRequired
 ]
 
 { #category : #accessing }
@@ -76,7 +76,7 @@ GtLPushUpMethodSpecification >> methodNameToPushUp [
 
 { #category : #accessing }
 GtLPushUpMethodSpecification >> methodNameToPushUp: aString [
-	selectors add: aString
+	selectors := OrderedCollection with: aString
 ]
 
 { #category : #accessing }
@@ -86,17 +86,17 @@ GtLPushUpMethodSpecification >> selector [
 
 { #category : #accessing }
 GtLPushUpMethodSpecification >> selector: aString [
-	selectors add: aString
+	selectors := OrderedCollection with: aString
 ]
 
 { #category : #description }
 GtLPushUpMethodSpecification >> selectorDescription [
 	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  label: 'Method name to push up';
-		  accessor: #methodNameToPushUp;
-	  	comment: 'The name of the method to push up'
+	^ MAStringDescription new
+		label: 'Method name to push up';
+		accessor: #methodNameToPushUp;
+		comment: 'The name of the method to push up.';
+		beRequired
 ]
 
 { #category : #accessing }
@@ -122,8 +122,13 @@ GtLPushUpMethodSpecification >> targetClassName: anObject [
 { #category : #description }
 GtLPushUpMethodSpecification >> targetClassNameDescription [
 	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #targetClassName;
-		  comment: 'The name of the class in which to push up the methods'
+	^ MAStringDescription new
+		accessor: #targetClassName;
+		comment: 'The superclass to move the method to.';
+		beRequired
+]
+
+{ #category : #accessing }
+GtLPushUpMethodSpecification >> usedClassNames [
+	^ super usedClassNames , ({targetClassName} reject: [ :each | each isNil ])
 ]
