@@ -448,6 +448,30 @@ GtLToolForPreviewRefactoringExamples >> pushUpMethod: aSelectorString from: aCla
 		yourself
 ]
 
+{ #category : #examples }
+GtLToolForPreviewRefactoringExamples >> refuseInvalidAddClass [
+	"The names of an added class are checked before the refactoring engine runs, and all the problems are named"
+
+	<gtExample>
+	| call |
+	call := self
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self
+					argumentsWithTransformations: {Dictionary new
+								at: 'AddClass'
+									put: (Dictionary new
+											at: 'newClassName' put: 'Object';
+											at: 'superclassName' put: 'GtLNoSuchSuperclass';
+											at: 'packageName' put: ' ';
+											yourself);
+								yourself})
+			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+	self
+		assertProblem: (self modelOf: call)
+		withErrorMessage: 'Invalid transformations: Object is already the name of a class or global variable; Class not found: GtLNoSuchSuperclass; Missing package name'.
+	^ call
+]
+
 { #category : #helpers }
 GtLToolForPreviewRefactoringExamples >> removeMethod: aSelectorString from: aClassName [
 	^ Dictionary new

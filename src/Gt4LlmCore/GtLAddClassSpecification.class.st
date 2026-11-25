@@ -28,15 +28,23 @@ GtLAddClassSpecification >> addedClassName [
 
 { #category : #'as yet unclassified' }
 GtLAddClassSpecification >> asRefactoringIn: aNamespace [
-	| refactoring |
-	refactoring := GtRBAddClassWithVarsRefactoring
-			model: aNamespace
-			addClass: newClassName asSymbol
-			superclass: superclassName asSymbol
-			subclasses: {}
-			category: packageName asSymbol.
-	slotNames notEmpty ifTrue: [ refactoring instanceVariableNames: (Character space split: slotNames) ].
-	^ refactoring
+	^ (GtRBAddClassWithVarsRefactoring
+		model: aNamespace
+		addClass: newClassName asSymbol
+		superclass: superclassName asSymbol
+		subclasses: {}
+		category: self category asSymbol)
+		instanceVariableNames: self slotNameList;
+		yourself
+]
+
+{ #category : #accessing }
+GtLAddClassSpecification >> category [
+	"RB takes the package and the tag of the new class as one category, Package-Tag"
+
+	^ self hasTag
+		ifTrue: [ packageName trimBoth , '-' , tagName trimBoth ]
+		ifFalse: [ packageName trimBoth ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -52,10 +60,53 @@ GtLAddClassSpecification >> gtDisplayOn: aStream [
 		nextPutAll: newClassName asString;
 		nextPutAll: ' as subclass of ';
 		nextPutAll: superclassName asString.
-	(slotNames isNil or: [ slotNames isEmpty ])
-		ifFalse: [ aStream
+	self slotNameList
+		ifNotEmpty: [ :someNames | 
+			aStream
 				nextPutAll: ' with slots ';
-				nextPutAll: slotNames asString ]
+				nextPutAll: (' ' join: someNames) ].
+	self hasTag
+		ifTrue: [ aStream
+				nextPutAll: ' in tag ';
+				nextPutAll: tagName trimBoth ]
+]
+
+{ #category : #validation }
+GtLAddClassSpecification >> gtProblems [
+	^ self gtProblemsAfterAdding: #()
+]
+
+{ #category : #validation }
+GtLAddClassSpecification >> gtProblemsAfterAdding: someClassNames [
+	"RB reports most of these problems as a failed precondition, so check them first. The superclass may be added by an earlier transformation of the same call"
+
+	| problems |
+	problems := OrderedCollection new.
+	newClassName isEmptyOrNil
+		ifTrue: [ problems add: 'Missing new class name' ]
+		ifFalse: [ (RBCondition isValidClassName: newClassName asString) check
+				ifFalse: [ problems
+						add: newClassName
+								, ' is not a valid class name: it must start with an uppercase letter and contain only letters, digits and underscores' ].
+			((Smalltalk globals includesKey: newClassName asSymbol)
+				or: [ someClassNames includes: newClassName asString ])
+				ifTrue: [ problems
+						add: newClassName , ' is already the name of a class or global variable' ] ].
+	superclassName isEmptyOrNil
+		ifTrue: [ problems add: 'Missing superclass name' ]
+		ifFalse: [ ((Smalltalk globals classNamed: superclassName) isNil
+				and: [ (someClassNames includes: superclassName asString) not ])
+				ifTrue: [ problems add: 'Class not found: ' , superclassName ] ].
+	(packageName isNil or: [ packageName trimBoth isEmpty ])
+		ifTrue: [ problems add: 'Missing package name' ].
+	^ problems
+		collect: [ :each | GtLTransformationProblem description: each ]
+		as: Array
+]
+
+{ #category : #testing }
+GtLAddClassSpecification >> hasTag [
+	^ tagName notNil and: [ tagName trimBoth notEmpty ]
 ]
 
 { #category : #accessing }
@@ -94,6 +145,13 @@ GtLAddClassSpecification >> packageNameDescription [
 	 ^ MAStringDescription new
 		  accessor: #packageName;
 		  beRequired
+]
+
+{ #category : #accessing }
+GtLAddClassSpecification >> slotNameList [
+	"The slot names are optional and separated by any whitespace"
+
+	^ slotNames ifNil: [ #() ] ifNotNil: [ :aString | aString substrings asArray ]
 ]
 
 { #category : #accessing }

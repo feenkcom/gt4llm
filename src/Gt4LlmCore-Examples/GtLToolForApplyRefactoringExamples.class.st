@@ -69,6 +69,49 @@ GtLToolForApplyRefactoringExamples >> applyAddClass [
 ]
 
 { #category : #examples }
+GtLToolForApplyRefactoringExamples >> applyAddClassInTag [
+	"An added class can go to a tag of its package; without slotNames, it has no slots"
+
+	<gtExample>
+	^ self
+		withDummyHierarchyDo: [ :aRootClass :aLeafClass | 
+			| objectStorage objectId newClassName call newClass previewedDefinition appliedDefinition |
+			newClassName := aRootClass name , 'Tagged'.
+			objectStorage := GtLObjectStorage new.
+			objectId := self
+					previewTransformation: (Dictionary new
+							at: 'AddClass'
+								put: (Dictionary new
+										at: 'newClassName' put: newClassName;
+										at: 'superclassName' put: 'Object';
+										at: 'packageName' put: aRootClass package name asString;
+										at: 'tagName' put: 'Support';
+										yourself);
+							yourself)
+					in: objectStorage.
+			previewedDefinition := (objectStorage objectAt: objectId) changes first
+					newSource.
+			self assert: (previewedDefinition includesSubstring: 'tag: ''Support''').
+			self assert: (previewedDefinition includesSubstring: 'slots: {}').
+			self
+				assert: (objectStorage objectAt: objectId) refactoringDescription
+				equals: 'Add class ' , newClassName , ' as subclass of Object in tag Support'.
+			call := self
+					executeTool: GtLToolForApplyRefactoring new
+					withArguments: (self argumentsWithObjectId: objectId)
+					inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+			self assert: (self modelOf: call) status equals: 'applied'.
+			newClass := Smalltalk globals classNamed: newClassName.
+			self assert: newClass package equals: aRootClass package.
+			self assert: newClass packageTag name equals: 'Support'.
+			self assert: newClass instVarNames isEmpty.
+			appliedDefinition := ((self modelOf: call) codeChangeResults
+					detect: [ :each | each isKindOf: GtLClassModificationResult ]) llmNewSource.
+			self assert: appliedDefinition equals: previewedDefinition.
+			call ]
+]
+
+{ #category : #examples }
 GtLToolForApplyRefactoringExamples >> applyAddMethod [
 	<gtExample>
 	^ self
