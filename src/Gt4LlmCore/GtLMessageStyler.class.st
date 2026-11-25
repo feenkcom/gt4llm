@@ -26,28 +26,36 @@ GtLMessageStyler class >> textLinkButtonPadding: additionalPadding margin: addit
 GtLMessageStyler class >> textLinkButtonPadding: additionalPadding margin: additionalMargin valid: isValid [
 	"Answer a button used for in-text links in Lepiter.
 	This sets a common font, size, color and style for the button"
-	| color button |
 
+	| color button |
 	button := BrButton new.
 	button connector beVisualSource.
 
-	color := isValid 
-		ifTrue: [ BrGlamorousColors linkColor ]
-		ifFalse: [ BrGlamorousColors linkWithErrorColor ].
+	color := isValid
+			ifTrue: [ button theme link color ]
+			ifFalse: [ button theme link errorColor ].
 
-	button 
-		addAptitude: (BrGlamorousButtonLabelAptitude new 
-			defaultColor: color;
-			hoveredColor: color muchDarker);
+	button
+		addAptitude: (BrGlamorousButtonLabelAptitude new
+				defaultColor: color;
+				hoveredColor: (color transformColor: [ :aColor | aColor muchDarker ]));
 		placeholderAlignment: #alignBottom;
-		padding: (BlInsets top: 0 left: 0 bottom: -1 right: 0) + additionalPadding;
-		margin: (BlInsets top: 0 left: 0 bottom: 0 right: 0) + additionalMargin;
+		padding: (BlInsets
+				top: 0
+				left: 0
+				bottom: -1
+				right: 0) + additionalPadding;
+		margin: (BlInsets
+				top: 0
+				left: 0
+				bottom: 0
+				right: 0) + additionalMargin;
 		icon: BrGlamorousVectorIcons inspect;
 		beNoneSize;
 		layout: BlLinearLayout horizontal;
-		constraintsDo: [ :c |
+		constraintsDo: [ :c | 
 			c horizontal fitContent.
-			c vertical fitContent. ].
+			c vertical fitContent ].
 	^ button
 ]
 
@@ -58,7 +66,7 @@ GtLMessageStyler >> coderButtonAttributeWithLabel: aLabelBlock valid: isValid wi
 	^ GtButtonAttribute new
 		beAppend;
 		stencil: [ | button |
-			button := LeSnippetStylerVisitor
+			button := self class
 					textLinkButtonPadding: (BlInsets top: 2)
 					margin: BlInsets empty
 					valid: isValid.
@@ -458,7 +466,7 @@ GtLMessageStyler >> styleButton: anAnnotation forValuable: aValuable defaultLabe
 	attribute := GtButtonAttribute new
 			beAppend;
 			stencil: [ | button |
-				button := LeSnippetStylerVisitor
+				button := self class
 						textLinkButtonPadding: (BlInsets top: 2)
 						margin: BlInsets empty.
 				button aptitude glamorousCodeFont.
@@ -476,11 +484,13 @@ GtLMessageStyler >> styleButton: anAnnotation forValuable: aValuable defaultLabe
 									label: '?';
 									enabled: false ];
 							whenError: [ :theButton :anError | 
-								| aLabel |
-								aLabel := (anError messageText ifEmpty: [ anError printString ])
-										asRopedText.
-								aLabel foreground: BrGlamorousColors errorBackgroundColor.
-								theButton label: aLabel.
+								| anErrorColor |
+								anErrorColor := theButton theme link errorColor.
+								theButton aptitude
+									defaultColor: anErrorColor;
+									hoveredColor: (anErrorColor transformColor: [ :aColor | aColor muchDarker ]).
+								theButton
+									label: (anError messageText ifEmpty: [ anError printString ]) asRopedText.
 								theButton action: [ :aButton | aButton phlow spawnObject: anError ].
 								theButton enabled: true ];
 							whenSuccess: [ :theButton :anObject | 
@@ -634,10 +644,9 @@ GtLMessageStyler >> styleExternalLink: anExternalLink [
 			from: anExternalLink startPosition
 			to: anExternalLink stopPosition.
 
-	(anExternalLink isKindOf: LeExternalUrlLinkNode) ifTrue: [
-			linkText italic foreground: BrGlamorousColors textMarkupColor.
-			^ self
-	].
+	(anExternalLink isKindOf: LeExternalUrlLinkNode)
+		ifTrue: [ linkText italic foreground: self theme markup foreground.
+			^ self ].
 
 	self styleLinkText: linkText valid: (self isValidLink: anExternalLink url).
 	self styleAutoHiding: anExternalLink sourceInterval text: linkText.
@@ -743,24 +752,23 @@ GtLMessageStyler >> styleItalic: anItalicNode [
 { #category : #generated }
 GtLMessageStyler >> styleLinkText: aSubText valid: hasValidTarget [
 	"Set the colour of the source markup text"
+
 	| aColor |
 	aColor := hasValidTarget
-		ifTrue: [ BrGlamorousColors textMarkupColor ]
-		ifFalse: [ BrGlamorousColors linkWithErrorColor ].
-	
-	aSubText foreground: aColor.
+			ifTrue: [ self theme markup foreground ]
+			ifFalse: [ self theme link errorColor ].
+
+	aSubText foreground: aColor
 ]
 
 { #category : #accessing }
 GtLMessageStyler >> styleName: anAnnotation [
 	| nameNode aLinkColor |
-
-	(nameNode := anAnnotation nameNode)
-		ifNil: [ ^ self ].
+	(nameNode := anAnnotation nameNode) ifNil: [ ^ self ].
 
 	aLinkColor := nameNode isDefined
-		ifTrue: [ BrGlamorousColors textMarkupColor ]
-		ifFalse: [ BrGlamorousColors linkWithErrorColor ].
+			ifTrue: [ self theme markup foreground ]
+			ifFalse: [ self theme link errorColor ].
 
 	(self text from: nameNode startPosition to: nameNode stopPosition)
 		foreground: aLinkColor
@@ -873,7 +881,7 @@ GtLMessageStyler >> symbolButtonAttributeFor: aSymbol [
 	^ GtButtonAttribute new
 		beAppend;
 		stencil: [ | button |
-			button := LeSnippetStylerVisitor
+			button := self class
 					textLinkButtonPadding: (BlInsets top: 2)
 					margin: BlInsets empty
 					valid: true.
@@ -1009,13 +1017,13 @@ GtLMessageStyler >> visitCodeBlock: aCodeNode [
 	(self text
 		from: aCodeNode begin startPosition
 		to: aCodeNode beginWithLanguageStopPosition)
-		attributes: {BlTextForegroundAttribute paint: Color lightGray}.
+		attributes: {BlTextForegroundAttribute paint: self theme markup codeFenceForeground}.
 	(self text from: aCodeNode end startPosition to: aCodeNode end stopPosition)
-		attributes: {BlTextForegroundAttribute paint: Color lightGray}.
+		attributes: {BlTextForegroundAttribute paint: self theme markup codeFenceForeground}.
 	(self text
 		from: aCodeNode beginWithLanguageStopPosition + 1
 		to: aCodeNode end startPosition - 1)
-		attributes: {BlTextUnderlayAttribute paint: BrGlamorousColors neutralBackgroundColor}.
+		attributes: {BlTextUnderlayAttribute paint: self theme markup background}.
 	aCodeNode isForSmalltalk
 		ifTrue: [ self styleCodeBlockWithSmalltalkSnippet: aCodeNode ].
 	aCodeNode language value = 'smalltalk-method'
@@ -1096,10 +1104,9 @@ GtLMessageStyler >> visitFileReferenceAnnotation: aFileReferenceAnnotation [
 		from: aFileReferenceAnnotation parent startPosition
 		to: aFileReferenceAnnotation parent stopPosition)
 		glamorousCodeFont;
-		foreground: BrGlamorousColors textMarkupColor.
+		foreground: self theme markup foreground.
 
 	^ aFileReferenceAnnotation
-
 ]
 
 { #category : #generated }
@@ -1115,7 +1122,7 @@ GtLMessageStyler >> visitInlineCode: aCodeNode [
 	size := (source at: 2) = $` ifTrue: [ 2 ] ifFalse: [ 1 ].
 	(self text from: aCodeNode startPosition to: aCodeNode stopPosition)
 		glamorousCodeFontAndSmallSize;
-		highlight: BrAntColors gray3.
+		highlight: self theme markup background.
 	(self
 		styleInlineReferencesIn: (source copyFrom: size + 1 to: source size - size)
 		startingAt: aCodeNode startPosition + size
@@ -1163,8 +1170,8 @@ GtLMessageStyler >> visitObjectReferenceAnnotation: anObjectAnnotation [
 			object := nil ].
 
 	aLinkColor := isValid
-			ifTrue: [ BrGlamorousColors textMarkupColor ]
-			ifFalse: [ BrGlamorousColors linkWithErrorColor ].
+			ifTrue: [ self theme markup foreground ]
+			ifFalse: [ self theme link errorColor ].
 	(self text
 		from: anObjectAnnotation parent startPosition
 		to: anObjectAnnotation parent stopPosition) foreground: aLinkColor.
@@ -1209,7 +1216,7 @@ GtLMessageStyler >> visitPageAnnotation: aPageAnnotation [
 	attribute := GtButtonAttribute new
 			beAppend;
 			stencil: [ | button |
-				button := LeSnippetStylerVisitor
+				button := self class
 						textLinkButtonPadding: (BlInsets top: 2)
 						margin: BlInsets empty
 						valid: page isNotNil.
@@ -1255,14 +1262,13 @@ GtLMessageStyler >> visitSymbolAnnotation: aSymbolAnnotation [
 	(self text
 		from: aSymbolAnnotation parent startPosition
 		to: aSymbolAnnotation parent stopPosition)
-		foreground: BrGlamorousColors textMarkupColor.
+		foreground: self theme markup foreground.
 
 	(aSymbolAnnotation hasSymbolNameSpecified and: [ aSymbolAnnotation isDefined ])
 		ifTrue: [ self styleAutoHidingAnnotation: aSymbolAnnotation ].
 	self styleSymbolButton: aSymbolAnnotation.
 
 	^ aSymbolAnnotation
-
 ]
 
 { #category : #visiting }

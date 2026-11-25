@@ -186,7 +186,7 @@ GtLMessageStylerExamples >> gtExampleRenderedResultLink [
 { #category : #examples }
 GtLMessageStylerExamples >> gtExampleRenderedResultLinkError [
 	<gtExample>
-	| source text annotation styler attribute button scripter |
+	| source text annotation styler attribute button scripter aTheme anAttribute |
 	source := '{{gtExample:GtLMessageStylerExamples>>exampleAnnotationValue|label=#printString}}'.
 	text := source asRopedText.
 	styler := GtLMessageStyler new.
@@ -212,6 +212,12 @@ GtLMessageStylerExamples >> gtExampleRenderedResultLinkError [
 					and: [ element label asString includesSubstring: 'Example result unavailable' ] ]
 			timeout: 5 seconds;
 		play.
+	aTheme := button theme.
+	anAttribute := (button label attributesAt: 1)
+			detect: [ :each | each isKindOf: BlTextForegroundAttribute ].
+	self
+		assert: (anAttribute paint blocResolveColorForTheme: aTheme)
+		equals: (aTheme link errorColor blocResolveColorForTheme: aTheme).
 	^ scripter
 ]
 
@@ -339,11 +345,12 @@ GtLMessageStylerExamples >> gtFileReferenceStyling [
 		assert: ((text attributesAt: index)
 				anySatisfy: [ :each | each isKindOf: BlFontFamilyAttribute ]).
 	self
-		assert: (((text attributesAt: index) select: [ :each | each isKindOf: BlTextForegroundAttribute ])
-				anySatisfy: [ :each | each paint = BrGlamorousColors textMarkupColor ]).
-	self assert: (self hasAttribute: BlFontFamilyAttribute in: (text from: 1 to: 4)) not.
+		assert: (((text attributesAt: index)
+				select: [ :each | each isKindOf: BlTextForegroundAttribute ])
+				anySatisfy: [ :each | each paint = BlTheme default markup foreground ]).
+	self
+		assert: (self hasAttribute: BlFontFamilyAttribute in: (text from: 1 to: 4)) not.
 	^ text
-
 ]
 
 { #category : #'examples - gtObject' }
@@ -353,24 +360,22 @@ GtLMessageStylerExamples >> gtObjectStylingWithFallbackLabel [
 	| storage text styler range foregroundAttr |
 	storage := GtLObjectStorage new.
 	text := '{{gtObject:id=0000000000000000000000000|fallbackLabelString=''missing Widget''}}'
-				asRopedText.
+			asRopedText.
 	styler := GtLMessageStyler new objectRegistry: storage.
 	styler privateStyle: text.
 	range := 1 to: text size.
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: BlTextForegroundAttribute]]).
+						anySatisfy: [ :a | a isKindOf: BlTextForegroundAttribute ] ]).
 	foregroundAttr := (text attributesAt: 1)
-				detect: [:a | a isKindOf: BlTextForegroundAttribute].
-	self assert: foregroundAttr paint
-		equals: BrGlamorousColors linkWithErrorColor.
+			detect: [ :a | a isKindOf: BlTextForegroundAttribute ].
+	self assert: foregroundAttr paint equals: styler theme link errorColor.
 	self
-		assert: (range anySatisfy: 
-					[:i |
-					(text attributesAt: i) anySatisfy: [:a | a isKindOf: GtButtonAttribute]]).
-	^text
+		assert: (range
+				anySatisfy: [ :i | (text attributesAt: i) anySatisfy: [ :a | a isKindOf: GtButtonAttribute ] ]).
+	^ text
 ]
 
 { #category : #running }
@@ -434,21 +439,19 @@ GtLMessageStylerExamples >> gtObjectStylingWithMissingObject [
 	styler privateStyle: text.
 	range := 1 to: text size.
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: BlTextForegroundAttribute]]).
+						anySatisfy: [ :a | a isKindOf: BlTextForegroundAttribute ] ]).
 	foregroundAttr := (text attributesAt: 1)
-				detect: [:a | a isKindOf: BlTextForegroundAttribute].
-	self assert: foregroundAttr paint
-		equals: BrGlamorousColors linkWithErrorColor.
+			detect: [ :a | a isKindOf: BlTextForegroundAttribute ].
+	self assert: foregroundAttr paint equals: styler theme link errorColor.
 	self
-		assert: (range anySatisfy: 
-					[:i |
+		assert: (range
+				anySatisfy: [ :i | 
 					(text attributesAt: i)
-						anySatisfy: [:a | a isKindOf: GtCachedTextExpandButtonAttribute]])
-				not.
-	^text
+						anySatisfy: [ :a | a isKindOf: GtCachedTextExpandButtonAttribute ] ]) not.
+	^ text
 ]
 
 { #category : #examples }
@@ -813,10 +816,10 @@ GtLMessageStylerExamples >> gtSymbolStyling [
 	self assert: (self hasAttribute: GtButtonAttribute in: text).
 	self assert: (self hasAttribute: BrTextHideAttribute in: text).
 	self
-		assert: (((text attributesAt: (source indexOf: ${)) select: [ :each | each isKindOf: BlTextForegroundAttribute ])
-				anySatisfy: [ :each | each paint = BrGlamorousColors textMarkupColor ]).
+		assert: (((text attributesAt: (source indexOf: ${))
+				select: [ :each | each isKindOf: BlTextForegroundAttribute ])
+				anySatisfy: [ :each | each paint = BlTheme default markup foreground ]).
 	^ text
-
 ]
 
 { #category : #'examples - annotations' }
@@ -884,11 +887,12 @@ GtLMessageStylerExamples >> gtViewPragmaStylingWithoutFullName [
 				(text attributesAt: index)
 					anySatisfy: [ :attribute | attribute isKindOf: GtCachedTextExpandButtonAttribute ] ].
 	self assert: hasExpand not.
-	buttonAttribute := (text attributesAt: start) detect: [ :a | a isKindOf: GtButtonAttribute ]
+	buttonAttribute := (text attributesAt: start)
+			detect: [ :a | a isKindOf: GtButtonAttribute ]
 			ifNone: [ self assert: false ].
 	button := (buttonAttribute instVarNamed: 'stencilBuilder') build.
 	buttonColor := (button userData at: #brickLook) defaultColor.
-	self assert: buttonColor equals: BrGlamorousColors linkWithErrorColor.
+	self assert: buttonColor equals: button theme link errorColor.
 	^ text
 ]
 
@@ -1402,6 +1406,30 @@ GtLMessageStylerExamples >> italicDelimitersAreHiddenInitially [
 						anySatisfy: [ :attribute | attribute isKindOf: BrTextAdornmentDynamicAttribute ])
 						not ].
 	^ text
+]
+
+{ #category : #examples }
+GtLMessageStylerExamples >> markupUnderlaysFollowTheme [
+	<gtExample>
+	<return: #BlText>
+	| source aText |
+	source := '`1 + 2`' , String lf , String lf , '```text' , String lf
+			, 'some text' , String lf , '```'.
+	aText := GtLMessageStyler new privateStyle: source asRopedText.
+	{BrGlamorousLightTheme new.
+		BrGlamorousDarkTheme new}
+		do: [ :aTheme | 
+			#('1 + 2' 'some text')
+				do: [ :aCode | 
+					| anUnderlay aStyleBuilder |
+					anUnderlay := (aText attributesAt: (source indexOfSubCollection: aCode))
+							detect: [ :each | each isKindOf: BlTextUnderlayAttribute ].
+					aStyleBuilder := BlTextFontAndStyleBuilder new.
+					anUnderlay applyOnFontAndStyleBuilder: aStyleBuilder theme: aTheme.
+					self
+						assert: aStyleBuilder background
+						equals: aTheme markup background rawColor ] ].
+	^ aText
 ]
 
 { #category : #private }

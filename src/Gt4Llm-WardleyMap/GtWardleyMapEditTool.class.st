@@ -58,7 +58,7 @@ GtWardleyMapEditTool >> privatePerformToolCall: aToolCall inContext: anExecution
 	| arguments changes pageUidString snippetUidString pageUid snippetUid snippets snippet map |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
 	pageUidString := arguments
-			at: #pageUid
+			at: 'pageUid'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 					arguments: arguments;
 					missingArgument: 'pageUid' ].
@@ -69,7 +69,7 @@ GtWardleyMapEditTool >> privatePerformToolCall: aToolCall inContext: anExecution
 					freeze: error;
 					errorReason: 'Invalid page uid' ].
 	snippetUidString := (arguments
-			at: #snippetUid
+			at: 'snippetUid'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 					arguments: arguments;
 					missingArgument: 'snippetUid' ]) trimBoth.
@@ -81,7 +81,7 @@ GtWardleyMapEditTool >> privatePerformToolCall: aToolCall inContext: anExecution
 				freeze: error;
 				errorReason: 'Invalid snippet uid' ].
 	changes := arguments
-			at: #changes
+			at: 'changes'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 					arguments: arguments;
 					missingArgument: 'changes' ].

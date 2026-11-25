@@ -104,7 +104,7 @@ GtLRemoveClassSpecification >> gtProblems [
 									aBehavior instanceSide name})} ].
 	(Smalltalk specialObjectsArray identityIncludes: aBehavior)
 		ifTrue: [ ^ {self
-					problemDescribedBy: aBehavior name , ' is needed by the virtual machine and cannot be removed.'} ].
+					problemDescribedBy: aBehavior name asString , ' is needed by the virtual machine and cannot be removed.'} ].
 	^ self dependencyProblemsOf: aBehavior
 ]
 
