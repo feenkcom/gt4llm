@@ -10,10 +10,10 @@ RBAddMethodChange >> gtLlmAddChangeTargetsTo: aChangeTargets [
 
 { #category : #'*Gt4LlmCore' }
 RBAddMethodChange >> gtLlmChangeKind [
-	"The kind is computed against the current image, so it should be asked before the change is applied"
+	"The kind is computed against the current image, so it should be asked before the change is applied. Overriding a method that the class only gets from a trait adds a method"
 
 	^ (self changeClass
-		ifNotNil: [ :aClass | aClass includesSelector: self selector ]
+		ifNotNil: [ :aClass | aClass includesLocalSelector: self selector ]
 		ifNil: [ false ]) ifTrue: [ 'modified method' ] ifFalse: [ 'added method' ]
 ]
 

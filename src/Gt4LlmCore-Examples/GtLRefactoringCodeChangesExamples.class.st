@@ -62,6 +62,27 @@ GtLRefactoringCodeChangesExamples >> classChangesShareTheCodeChangeOfTheirClass 
 			aPreview ]
 ]
 
+{ #category : #examples }
+GtLRefactoringCodeChangesExamples >> codeSnapshotIgnoresTraitProvidedMethods [
+	"A code snapshot only captures methods that a class or trait defines itself, not the copies a class gets from a trait"
+
+	<gtExample>
+	| snapshot |
+	snapshot := GtLCodeSnapshot new.
+	self
+		assert: (snapshot
+				localMethodNamed: #traitMethod
+				inClassNamed: GtLExampleTraitUser name
+				classSide: false) isNil.
+	self
+		assert: (snapshot
+				localMethodNamed: #traitMethod
+				inClassNamed: TGtLExampleTrait name
+				classSide: false)
+		equals: TGtLExampleTrait >> #traitMethod.
+	^ snapshot
+]
+
 { #category : #'examples - refactorings' }
 GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 	"When a change fails, the applied refactoring is marked as failed,
@@ -100,6 +121,32 @@ GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 				assert: anAddition targetMethodReference methodSignature
 				equals: aLeafClass name asString , '>>#appliedBeforeError'.
 			anAppliedRefactoring ]
+]
+
+{ #category : #examples }
+GtLRefactoringCodeChangesExamples >> overrideOfTraitMethodIsReportedAsAddition [
+	"Compiling a trait method in a class that uses the trait adds a method to the class; it does not modify the trait method"
+
+	<gtExample>
+	^ GtLTraitMethodExamplesSubjects new
+		during: [ :subjects | 
+			GtRefactoryChangeManager
+				isolatedInstanceDuring: [ | aNamespace anAppliedRefactoring anAddition |
+					aNamespace := GtRBNamespace new.
+					(aNamespace classFor: subjects traitUser)
+						compile: 'traitMethod ^ 7'
+						classified: #examples.
+					anAppliedRefactoring := self applyNamespace: aNamespace.
+
+					self assert: anAppliedRefactoring status equals: 'applied'.
+					self assert: subjects traitUser new traitMethod equals: 7.
+					self assert: anAppliedRefactoring codeChangeResults size equals: 1.
+					anAddition := anAppliedRefactoring codeChangeResults first.
+					self assert: anAddition isMethodAdditionResult.
+					self
+						assert: anAddition targetMethodReference methodSignature
+						equals: subjects traitUser name asString , '>>#traitMethod'.
+					anAppliedRefactoring ] ]
 ]
 
 { #category : #'examples - refactorings' }
@@ -293,6 +340,33 @@ GtLRefactoringCodeChangesExamples >> removeClass [
 						collect: [ :each | each targetMethodReference methodName asSymbol ]) asSet
 				equals: aClassSideSelectors.
 			anAppliedRefactoring ]
+]
+
+{ #category : #examples }
+GtLRefactoringCodeChangesExamples >> removeTraitMethodReportsOnlyTheTraitMethod [
+	"Removing a method from a trait reports the removal from the trait, not from each class that uses the trait"
+
+	<gtExample>
+	^ GtLTraitMethodExamplesSubjects new
+		during: [ :subjects | 
+			GtRefactoryChangeManager
+				isolatedInstanceDuring: [ | aNamespace anAppliedRefactoring aMethodRemovals |
+					aNamespace := GtLRemoveMethodSpecification new
+							methodClassName: subjects trait name;
+							methodNameToRemove: 'traitMethod';
+							namespaceWithAppliedRefactoring.
+					anAppliedRefactoring := self applyNamespace: aNamespace.
+
+					self assert: anAppliedRefactoring status equals: 'applied'.
+					self assert: (subjects traitUser canUnderstand: #traitMethod) not.
+					aMethodRemovals := self
+							resultsOf: anAppliedRefactoring
+							ofKind: 'removed method'.
+					self assert: anAppliedRefactoring codeChangeResults size equals: 1.
+					self
+						assert: aMethodRemovals first targetMethodReference methodSignature
+						equals: subjects trait name asString , '>>#traitMethod'.
+					anAppliedRefactoring ] ]
 ]
 
 { #category : #'examples - refactorings' }

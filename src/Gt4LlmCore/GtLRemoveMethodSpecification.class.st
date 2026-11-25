@@ -43,6 +43,11 @@ GtLRemoveMethodSpecification >> gtDisplayOn: aStream [
 		nextPutAll: className
 ]
 
+{ #category : #validation }
+GtLRemoveMethodSpecification >> gtProblems [
+	^ self gtProblemsWithMethod: methodNameToRemove inClassNamed: methodClassName
+]
+
 { #category : #descriptions }
 GtLRemoveMethodSpecification >> methodClassNameDescription [
 	<magritteDescription>

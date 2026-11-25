@@ -15,12 +15,14 @@ Class {
 
 { #category : #io }
 GtLACPStdioTransport >> acceptChunk: aString [
- | index line |
- buffer := buffer, aString.
- [ (index := buffer indexOf: Character lf) > 0 ] whileTrue: [
-  line := (buffer copyFrom: 1 to: index - 1) trimBoth.
-  buffer := buffer copyFrom: index + 1 to: buffer size.
-  line isEmpty ifFalse: [ connection receive: (STONJSON fromString: line) ] ]
+	| start delimiter line |
+	buffer := buffer , aString.
+	start := 1.
+	[ [ (delimiter := buffer indexOf: Character lf startingAt: start) > 0 ]
+		whileTrue: [ line := (buffer copyFrom: start to: delimiter - 1) trimBoth.
+			start := delimiter + 1.
+			line isEmpty ifFalse: [ connection receive: (STONJSON fromString: line) ] ] ]
+		ensure: [ start > 1 ifTrue: [ buffer := buffer copyFrom: start to: buffer size ] ]
 ]
 
 { #category : #accessing }

@@ -245,8 +245,33 @@ GtLMagritteToolForMethodCompilationExamples >> compileMethodWithSyntaxError [
 ]
 
 { #category : #examples }
+GtLMagritteToolForMethodCompilationExamples >> compileNewClassSideTraitMethodWithoutProtocol [
+	"The error for a new method without a protocol names it as the request does, also on the class side of a trait"
+
+	<gtExample>
+	^ GtLTraitMethodExamplesSubjects new
+		during: [ :subjects | 
+			| call targetObject |
+			call := self
+					executeTool: GtLMagritteToolForMethodCompilation new
+					withArguments: {'methodRequest'
+								-> {'methodClassName' -> subjects trait name asString.
+										'sourceCode' -> 'newClassTraitMethod ^ 2'.
+										'classSide' -> true} asDictionary} asDictionary.
+			targetObject := call result targetObject.
+			self assert: targetObject class equals: GtLMissingArgumentDomainObject.
+			self
+				assert: targetObject errorMessage
+				equals: ('{1} class>>#newClassTraitMethod is a new method: provide a protocol for it'
+						format: {subjects trait name}).
+			self
+				assert: (subjects trait classSide includesLocalSelector: #newClassTraitMethod) not.
+			call ]
+]
+
+{ #category : #examples }
 GtLMagritteToolForMethodCompilationExamples >> compileNewMethodWithoutProtocol [
-	"A new method compiled without a protocol is classified as 'as yet unclassified'"
+	"A new method needs a protocol, otherwise it would end up as yet unclassified; it is not compiled"
 
 	<gtExample>
 	| selector targetClass |
@@ -262,13 +287,63 @@ GtLMagritteToolForMethodCompilationExamples >> compileNewMethodWithoutProtocol [
 								'sourceCode' -> 'gtMagritteCompiledExampleUnclassified ^ 42'.
 								'classSide' -> false} asDictionary} asDictionary.
 	targetObject := call result targetObject.
-	self assert: (targetObject isKindOf: GtLMethodCompilationResult).
-	self assert: targetObject status equals: 'compiled'.
-	self assert: targetObject oldMethod isNil.
+	self assert: targetObject class equals: GtLMissingArgumentDomainObject.
+	self assert: targetObject missingArgument equals: 'protocol'.
 	self
-		assert: (targetClass >> selector) protocolName
-		equals: #'as yet unclassified'.
+		assert: targetObject errorMessage
+		equals: 'GtLMagritteToolForMethodCompilationExamples>>#gtMagritteCompiledExampleUnclassified is a new method: provide a protocol for it'.
+	self assert: (targetClass includesSelector: selector) not.
 	^ call ]
 		ensure: [ (targetClass includesSelector: selector)
 				ifTrue: [ targetClass removeSelector: selector ] ]
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodCompilationExamples >> compileOverridingTraitMethod [
+	"Compiling a trait method in a class that uses the trait adds a new overriding method; the trait keeps its method"
+
+	<gtExample>
+	^ GtLTraitMethodExamplesSubjects new
+		during: [ :subjects | 
+			| call targetObject |
+			call := self
+					executeTool: GtLMagritteToolForMethodCompilation new
+					withArguments: {'methodRequest'
+								-> {'methodClassName' -> subjects traitUser name asString.
+										'sourceCode' -> 'traitMethod ^ 7'.
+										'protocol' -> 'examples'.
+										'classSide' -> false} asDictionary} asDictionary.
+			targetObject := call result targetObject.
+			self assert: (targetObject isKindOf: GtLMethodCompilationResult).
+			self assert: targetObject status equals: 'compiled'.
+			self assert: targetObject oldMethod isNil.
+			self
+				assert: targetObject newMethod methodReference methodClassName
+				equals: subjects traitUser name asString.
+			self assert: (subjects traitUser includesLocalSelector: #traitMethod).
+			self assert: subjects traitUser new traitMethod equals: 7.
+			self assert: subjects composedTraitUser new traitMethod equals: 42.
+			call ]
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodCompilationExamples >> compileOverridingTraitMethodWithoutProtocol [
+	"An override of a trait method is a new method of the class, so it needs a protocol; without one it is not compiled"
+
+	<gtExample>
+	^ GtLTraitMethodExamplesSubjects new
+		during: [ :subjects | 
+			| call targetObject |
+			call := self
+					executeTool: GtLMagritteToolForMethodCompilation new
+					withArguments: {'methodRequest'
+								-> {'methodClassName' -> subjects traitUser name asString.
+										'sourceCode' -> 'traitMethod ^ 7'.
+										'classSide' -> false} asDictionary} asDictionary.
+			targetObject := call result targetObject.
+			self assert: targetObject class equals: GtLMissingArgumentDomainObject.
+			self assert: targetObject missingArgument equals: 'protocol'.
+			self assert: (subjects traitUser includesLocalSelector: #traitMethod) not.
+			self assert: subjects traitUser new traitMethod equals: 42.
+			call ]
 ]

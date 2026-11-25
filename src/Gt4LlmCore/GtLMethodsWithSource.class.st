@@ -11,12 +11,14 @@ Class {
 GtLMethodsWithSource >> gtMethodsFor: aView [
 	<gtView>
 	<gtLlmView>
-	(self methods anySatisfy: [:each | each isKindOf: GtLMissingDomainObject]) ifTrue: [ ^ aView empty ].
+	(self methods
+		anySatisfy: [ :each | each isKindOf: GtLErroneousConditionDomainObject ])
+		ifTrue: [ ^ aView empty ].
 	^ aView forward
 		title: 'Methods';
 		priority: 1;
-		object: [ GtSearchFixedMethodsFilter new methods: (self methods 
-			collect: [ :each | each compiledMethod ]) ];
+		object: [ GtSearchFixedMethodsFilter new
+				methods: (self methods collect: [ :each | each compiledMethod ]) ];
 		view: #gtItemsFor:
 ]
 
@@ -51,9 +53,11 @@ GtLMethodsWithSource >> methods: aCollection [
 { #category : #accessing }
 GtLMethodsWithSource >> methodsDescription [
 	<magritteDescription>
-	
-	 ^ MAToManyRelationDescription new
-			accessor: #methods;
-			classes: {GtLMethodWithSource};
-			beRequired
+	^ MAToManyRelationDescription new
+		accessor: #methods;
+		classes: {GtLMethodWithSource.
+				GtLNotSourceSearchableMethod.
+				GtLMissingDomainObject.
+				GtLMissingArgumentDomainObject};
+		beRequired
 ]

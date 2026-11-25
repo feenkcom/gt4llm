@@ -129,6 +129,16 @@ GtLMethodRemovalResult >> targetMethod [
 	^ self removedMethod 
 ]
 
+{ #category : #magritte }
+GtLMethodRemovalResult >> targetMethodReferenceDescription [
+	<magritteDescription>
+	^ MAToOneRelationDescription new
+		label: 'Removed method';
+		accessor: #targetMethodReference;
+		classes: {GtLMethodReference};
+		beRequired
+]
+
 { #category : #accessing }
 GtLMethodRemovalResult >> targetMethodSourceCode [
 

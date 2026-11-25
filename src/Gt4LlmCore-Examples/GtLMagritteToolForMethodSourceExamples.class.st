@@ -5,6 +5,29 @@ Class {
 }
 
 { #category : #examples }
+GtLMagritteToolForMethodSourceExamples >> methodSourceForClassSideTraitMethod [
+	<gtExample>
+	| call targetObject |
+	call := self
+			executeTool: GtLMagritteToolForMethodSource new
+			withArguments: {'methodDescriptor'
+						-> {'methodClassName' -> TGtLExampleTrait name asString.
+								'methodName' -> 'classTraitMethod'.
+								'classSide' -> true} asDictionary} asDictionary.
+	targetObject := call result targetObject.
+
+	self assert: (targetObject isKindOf: GtLMethodWithSource).
+	self
+		assert: targetObject methodReference methodClassName
+		equals: TGtLExampleTrait name asString.
+	self assert: targetObject methodReference isClassSide.
+	self
+		assert: targetObject sourceCode
+		equals: (TGtLExampleTrait classSide >> #classTraitMethod) sourceCode.
+	^ call
+]
+
+{ #category : #examples }
 GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingClassSideMethod [
 	<gtExample>
 	| call targetObject |
@@ -61,6 +84,58 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForExistingInstanceSideMet
 	self
 		assert: targetObject methodReference classSide
 		equals: false.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodSourceExamples >> methodSourceForInheritedClassSideMethod [
+	<gtExample>
+	| call targetObject expectedSignature definingReference |
+	call := self
+			executeTool: GtLMagritteToolForMethodSource new
+			withArguments: {'methodDescriptor'
+						-> {'methodClassName' -> 'GtLMagritteToolForMethodSourceExamples'.
+								'methodName' -> 'new'.
+								'classSide' -> true} asDictionary} asDictionary.
+	targetObject := call result targetObject.
+	expectedSignature := 'GtLMagritteToolForMethodSourceExamples class>>#new'.
+	definingReference := GtLMethodReference
+			fromCompiledMethod: (GtLMagritteToolForMethodSourceExamples class lookupSelector: #new).
+
+	self
+		assertMissingObject: targetObject
+		withObjectName: expectedSignature
+		errorMessage: expectedSignature
+				, ' is not defined in its own class: it is inherited. Its source is '
+				, definingReference methodSignature.
+	self assert: (targetObject isKindOf: GtLMissingInheritedMethodDomainObject).
+	self assert: targetObject definingMethodReference equals: definingReference.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodSourceExamples >> methodSourceForInheritedInstanceSideMethod [
+	<gtExample>
+	| call targetObject expectedSignature definingReference |
+	call := self
+			executeTool: GtLMagritteToolForMethodSource new
+			withArguments: {'methodDescriptor'
+						-> {'methodClassName' -> 'GtLMagritteToolForMethodSourceExamples'.
+								'methodName' -> 'printString'.
+								'classSide' -> false} asDictionary} asDictionary.
+	targetObject := call result targetObject.
+	expectedSignature := 'GtLMagritteToolForMethodSourceExamples>>#printString'.
+	definingReference := GtLMethodReference
+			fromCompiledMethod: (GtLMagritteToolForMethodSourceExamples lookupSelector: #printString).
+
+	self
+		assertMissingObject: targetObject
+		withObjectName: expectedSignature
+		errorMessage: expectedSignature
+				, ' is not defined in its own class: it is inherited. Its source is '
+				, definingReference methodSignature.
+	self assert: (targetObject isKindOf: GtLMissingInheritedMethodDomainObject).
+	self assert: targetObject definingMethodReference equals: definingReference.
 	^ call
 ]
 
@@ -136,6 +211,31 @@ GtLMagritteToolForMethodSourceExamples >> methodSourceForMissingMethodName [
 		withPropertyNames: #('methodName') 
 		path: #('methodDescriptor') 
 		errorMessage: '@[methodDescriptor] required properties missing [methodName]'.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodSourceExamples >> methodSourceForTraitProvidedMethod [
+	"The source of a method provided by a trait is not returned for the class that uses the trait"
+
+	<gtExample>
+	| call targetObject expectedSignature |
+	call := self
+			executeTool: GtLMagritteToolForMethodSource new
+			withArguments: {'methodDescriptor'
+						-> {'methodClassName' -> GtLExampleTraitUser name asString.
+								'methodName' -> 'traitMethod'.
+								'classSide' -> false} asDictionary} asDictionary.
+	targetObject := call result targetObject.
+	expectedSignature := GtLExampleTraitUser name asString , '>>#traitMethod'.
+
+	self
+		assertMissingObject: targetObject
+		withObjectName: expectedSignature
+		errorMessage: expectedSignature
+				, ' is not defined in its own class: it is provided by a trait. Its source is '
+				, TGtLExampleTrait name asString , '>>#traitMethod'.
+	self assert: targetObject class equals: GtLMissingTraitMethodDomainObject.
 	^ call
 ]
 
