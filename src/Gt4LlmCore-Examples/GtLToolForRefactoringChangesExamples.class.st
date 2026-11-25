@@ -48,8 +48,9 @@ GtLToolForRefactoringChangesExamples >> listChangesOfAFlatPreview [
 											at: 'AddMethod'
 												put: (Dictionary new
 														at: 'methodClassName' put: self class name asString;
-														at: 'protocolName' put: 'examples';
-														at: 'sourceCodeOfMethodToAdd' put: 'listedMethod ^ 42';
+														at: 'classSide' put: false;
+														at: 'protocol' put: 'examples';
+														at: 'sourceCode' put: 'listedMethod ^ 42';
 														yourself);
 											yourself};
 							yourself)

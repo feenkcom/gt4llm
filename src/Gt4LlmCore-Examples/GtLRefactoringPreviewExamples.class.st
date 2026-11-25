@@ -13,7 +13,7 @@ GtLRefactoringPreviewExamples >> namedRefactoringPreview [
 	| specification transformations preview |
 	specification := GtLAddMethodSpecification new
 			methodClassName: 'GtLRefactoringPreviewExamples';
-			protocolName: 'examples';
+			protocol: 'examples';
 			sourceCode: 'previewedMethod ^ 42';
 			yourself.
 	transformations := GtLCodeTransformations new
@@ -110,7 +110,7 @@ GtLRefactoringPreviewExamples >> refactoringPreview [
 	| specification transformations preview |
 	specification := GtLAddMethodSpecification new
 			methodClassName: 'GtLRefactoringPreviewExamples';
-			protocolName: 'examples';
+			protocol: 'examples';
 			sourceCode: 'previewedMethod ^ 42';
 			yourself.
 	transformations := GtLCodeTransformations new

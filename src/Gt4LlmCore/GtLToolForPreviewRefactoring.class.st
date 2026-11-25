@@ -19,7 +19,7 @@ Each group has a totalCount, a displayedCount, kindCounts and, when its limit cu
 Invalid transformations answer an errorMessage; an error of the refactoring engine answers an errorReason.
 
 Example JSON arguments:
-{"transformations": [{"PushUpMethod": {"methodClassName": "MySubclass", "methodNameToPushUp": "foo", "targetClassName": "MySuperclass"}}], "displayOptions": {"includeSources": true}}
+{"transformations": [{"PushUpMethod": {"methodClassName": "MySubclass", "classSide": false, "methodNameToPushUp": "foo", "targetClassName": "MySuperclass"}}], "displayOptions": {"includeSources": true}}
 
 Example JSON response:
 {"refactoringName": "Push up method", "refactoringDescription": "Push up method foo from MySubclass to MySuperclass", "changesCount": 2, "objectId": "abc123", "status": "not applied", "changes": [{"changeDescription": "Add MySuperclass>>#foo", "kind": "added method", "target": "MySuperclass>>#foo", "newSource": "foo ^ 42"}, {"changeDescription": "Remove MySubclass>>#foo", "kind": "removed method", "target": "MySubclass>>#foo"}]}

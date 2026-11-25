@@ -29,6 +29,7 @@ GtLMethodCompilationRequest >> classSideDescription [
 	^ MABooleanDescription new
 		label: 'Class side';
 		accessor: #classSide;
+		comment: 'True for a method of the class side.';
 		beRequired
 ]
 
@@ -66,6 +67,7 @@ GtLMethodCompilationRequest >> methodClassNameDescription [
 	^ MAStringDescription new
 		label: 'Class name';
 		accessor: #methodClassName;
+		comment: 'The name of the class or trait, without " class": classSide tells the side.';
 		beRequired
 ]
 
@@ -118,5 +120,6 @@ GtLMethodCompilationRequest >> sourceCodeDescription [
 	^ MAStringDescription new
 		label: 'Source code';
 		accessor: #sourceCode;
+		comment: 'The whole method: its selector, arguments and body, without the class name.';
 		beRequired
 ]

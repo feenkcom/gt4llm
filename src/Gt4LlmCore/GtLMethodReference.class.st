@@ -88,10 +88,10 @@ GtLMethodReference >> classSide: anObject [
 { #category : #descriptions }
 GtLMethodReference >> classSideDescription [
 	<magritteDescription>
-	
 	^ MABooleanDescription new
 		label: 'Class side';
 		accessor: #classSide;
+		comment: 'True for a method of the class side.';
 		beRequired
 ]
 
@@ -228,10 +228,10 @@ GtLMethodReference >> methodClassName: anObject [
 { #category : #descriptions }
 GtLMethodReference >> methodClassNameDescription [
 	<magritteDescription>
-	
 	^ MAStringDescription new
 		label: 'Class name';
 		accessor: #methodClassName;
+		comment: 'The name of the class or trait, without " class": classSide tells the side.';
 		beRequired
 ]
 
@@ -248,10 +248,10 @@ GtLMethodReference >> methodName: anObject [
 { #category : #descriptions }
 GtLMethodReference >> methodNameDescription [
 	<magritteDescription>
-	
 	^ MAStringDescription new
 		label: 'Method name';
 		accessor: #methodName;
+		comment: 'The selector of the method, such as at:put:.';
 		beRequired
 ]
 

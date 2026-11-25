@@ -20,17 +20,19 @@ GtLPushUpMethodSpecification class >> jsonSchemaLabel [
 
 { #category : #'as yet unclassified' }
 GtLPushUpMethodSpecification >> asRefactoringIn: aNamespace [
+	"A class-side method moves to the class side of the target"
+
 	^ GtPushUpMethodRefactoring
 		model: aNamespace
 		pullUp: (selectors collect: #asSymbol)
-		from: methodClassName asSymbol
-		to: targetClassName asSymbol
+		from: self behaviorName asSymbol
+		to: (self behaviorNameOf: targetClassName) asSymbol
 ]
 
 { #category : #'as yet unclassified' }
 GtLPushUpMethodSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'Moves the method methodNameToPushUp from the class methodClassName to targetClassName, a direct or indirect superclass. Equivalent copies of the method in sibling subclasses are removed too.'
+		comment: 'Moves the method methodNameToPushUp from the class methodClassName to targetClassName, a direct or indirect superclass; with classSide true, from and to their class sides. Equivalent copies of the method in sibling subclasses are removed too.'
 ]
 
 { #category : #printing }
@@ -39,34 +41,24 @@ GtLPushUpMethodSpecification >> gtDisplayOn: aStream [
 		nextPutAll: 'Push up method ';
 		nextPutAll: (', ' join: (self selectors collect: [ :each | each asString ]));
 		nextPutAll: ' from ';
-		nextPutAll: methodClassName asString.
+		nextPutAll: self behaviorName.
 	targetClassName
 		ifNotNil: [ :aClassName | 
 			aStream
 				nextPutAll: ' to ';
-				nextPutAll: aClassName asString ]
+				nextPutAll: (self behaviorNameOf: aClassName) ]
 ]
 
 { #category : #validation }
 GtLPushUpMethodSpecification >> gtProblems [
-	^(selectors
-		flatCollect: [:each | self gtProblemsWithMethod: each inClassNamed: methodClassName])
-			, (self gtProblemsWithClassNamed: targetClassName)
+	^ (selectors flatCollect: [ :each | self gtProblemsWithMethodNamed: each ])
+		, (self gtProblemsWithClassNamed: targetClassName)
 ]
 
 { #category : #'as yet unclassified' }
 GtLPushUpMethodSpecification >> initialize [
 	super initialize.
 	selectors := OrderedCollection new
-]
-
-{ #category : #descriptions }
-GtLPushUpMethodSpecification >> methodClassNameDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		accessor: #methodClassName;
-		comment: 'The class that defines the method.';
-		beRequired
 ]
 
 { #category : #accessing }
@@ -95,7 +87,7 @@ GtLPushUpMethodSpecification >> selectorDescription [
 	^ MAStringDescription new
 		label: 'Method name to push up';
 		accessor: #methodNameToPushUp;
-		comment: 'The name of the method to push up.';
+		comment: 'The selector of the method to push up.';
 		beRequired
 ]
 
@@ -124,7 +116,7 @@ GtLPushUpMethodSpecification >> targetClassNameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		accessor: #targetClassName;
-		comment: 'The superclass to move the method to.';
+		comment: 'The superclass to move the method to, without " class": classSide tells the side.';
 		beRequired
 ]
 

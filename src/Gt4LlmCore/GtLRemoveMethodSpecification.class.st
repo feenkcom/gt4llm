@@ -22,48 +22,36 @@ GtLRemoveMethodSpecification >> asRefactoringIn: aNamespace [
 	^ RBRemoveMethodRefactoring
 		model: aNamespace
 		selector: methodNameToRemove asSymbol
-		from: methodClassName asSymbol
+		from: self behaviorName asSymbol
 ]
 
 { #category : #magritte }
 GtLRemoveMethodSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'Removes the method methodNameToRemove from the class methodClassName.'
+		comment: 'Removes the method methodNameToRemove from the class methodClassName, or from its class side when classSide is true.'
 ]
 
 { #category : #printing }
 GtLRemoveMethodSpecification >> gtDisplayOn: aStream [
-	| selectorString className |
-	selectorString := (self methodNameToRemove ifNil: [ '<selector>' ]) asString.
-	className := self methodClassName ifNil: [ '<class>' ].
 	aStream
 		nextPutAll: 'Remove method ';
-		nextPutAll: selectorString;
+		nextPutAll: (methodNameToRemove ifNil: [ '<selector>' ]) asString;
 		nextPutAll: ' from class ';
-		nextPutAll: className
+		nextPutAll: (methodClassName ifNil: [ '<class>' ] ifNotNil: [ self behaviorName ])
 ]
 
 { #category : #validation }
 GtLRemoveMethodSpecification >> gtProblems [
-	^ self gtProblemsWithMethod: methodNameToRemove inClassNamed: methodClassName
-]
-
-{ #category : #descriptions }
-GtLRemoveMethodSpecification >> methodClassNameDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		accessor: #methodClassName;
-		comment: 'The class that defines the method.';
-		beRequired
+	^ self gtProblemsWithMethodNamed: methodNameToRemove
 ]
 
 { #category : #magritte }
 GtLRemoveMethodSpecification >> methodNameDescription [
 	<magritteDescription>
 	^ MAStringDescription new
-		label: 'Method name';
+		label: 'Method name to remove';
 		accessor: #methodNameToRemove;
-		comment: 'The name of the method to remove.';
+		comment: 'The selector of the method to remove.';
 		beRequired
 ]
 

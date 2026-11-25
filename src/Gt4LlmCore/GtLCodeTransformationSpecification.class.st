@@ -113,23 +113,6 @@ GtLCodeTransformationSpecification >> gtProblemsWithClassNamed: aString [
 		ifFalse: [ #() ]
 ]
 
-{ #category : #validation }
-GtLCodeTransformationSpecification >> gtProblemsWithMethod: aSelectorString inClassNamed: aClassName [
-	"The method must be defined in the class itself, as for the method tools: a transformation of an inherited method or of a copy provided by a trait would not change the class"
-
-	| class |
-	class := aClassName isEmptyOrNil
-			ifFalse: [ Smalltalk globals classNamed: aClassName ].
-	class isNil ifTrue: [ ^ self gtProblemsWithClassNamed: aClassName ].
-	^ (GtLMethodReference new
-		methodClassName: class instanceSide name;
-		methodName: aSelectorString;
-		classSide: class isClassSide;
-		yourself)
-		compiledMethodIfPresent: [ :aMethod | #() ]
-		ifMissing: [ :anErrorResult | {GtLTransformationProblem description: anErrorResult errorMessage} ]
-]
-
 { #category : #accessing }
 GtLCodeTransformationSpecification >> namespaceWithAppliedRefactoring [
 	| namespace composite |

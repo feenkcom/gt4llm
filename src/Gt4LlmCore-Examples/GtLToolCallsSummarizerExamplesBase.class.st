@@ -29,8 +29,9 @@ GtLToolCallsSummarizerExamplesBase >> addMethodTransformationIn: aClass source: 
 		at: 'AddMethod'
 			put: (Dictionary new
 					at: 'methodClassName' put: aClass name asString;
-					at: 'protocolName' put: 'examples';
-					at: 'sourceCodeOfMethodToAdd' put: aSourceString;
+					at: 'classSide' put: false;
+					at: 'protocol' put: 'examples';
+					at: 'sourceCode' put: aSourceString;
 					yourself);
 		yourself
 ]
@@ -217,6 +218,7 @@ GtLToolCallsSummarizerExamplesBase >> pushUpMethodTransformationOf: aSelector fr
 		at: 'PushUpMethod'
 			put: (Dictionary new
 					at: 'methodClassName' put: aClass name asString;
+					at: 'classSide' put: false;
 					at: 'methodNameToPushUp' put: aSelector asString;
 					at: 'targetClassName' put: aSuperclass name asString;
 					yourself);
@@ -229,6 +231,7 @@ GtLToolCallsSummarizerExamplesBase >> removeMethodTransformationOf: aSelector in
 		at: 'RemoveMethod'
 			put: (Dictionary new
 					at: 'methodClassName' put: aClass name asString;
+					at: 'classSide' put: false;
 					at: 'methodNameToRemove' put: aSelector asString;
 					yourself);
 		yourself

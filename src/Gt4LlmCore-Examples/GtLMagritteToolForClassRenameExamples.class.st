@@ -570,6 +570,7 @@ GtLMagritteToolForClassRenameExamples >> renameWithRemovedMethodResponse [
 									at: 'RemoveMethod'
 										put: (Dictionary new
 												at: 'methodClassName' put: self targetName;
+												at: 'classSide' put: false;
 												at: 'methodNameToRemove' put: 'itself';
 												yourself);
 									yourself.

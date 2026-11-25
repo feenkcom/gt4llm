@@ -22,12 +22,13 @@ GtLToolForApplyRefactoringExamples >> addClassTransformationNamed: aClassName in
 
 { #category : #helpers }
 GtLToolForApplyRefactoringExamples >> addMethodTransformationTo: aClassName [
-	^(Dictionary new)
+	^ Dictionary new
 		at: 'AddMethod'
-			put: ((Dictionary new)
+			put: (Dictionary new
 					at: 'methodClassName' put: aClassName;
-					at: 'protocolName' put: 'examples';
-					at: 'sourceCodeOfMethodToAdd' put: 'appliedRefactoringMethod ^ 42';
+					at: 'classSide' put: false;
+					at: 'protocol' put: 'examples';
+					at: 'sourceCode' put: 'appliedRefactoringMethod ^ 42';
 					yourself);
 		yourself
 ]
@@ -300,6 +301,7 @@ GtLToolForApplyRefactoringExamples >> applyPushUpMethodResponse [
 							at: 'PushUpMethod'
 								put: (Dictionary new
 										at: 'methodClassName' put: aLeafClass name asString;
+										at: 'classSide' put: false;
 										at: 'methodNameToPushUp' put: 'pushedUpMethod';
 										at: 'targetClassName' put: aRootClass name asString;
 										yourself);

@@ -134,31 +134,32 @@ GtLRenameClassSpecificationExamples >> transformationsOnTheRenamedClassComeFirst
 
 	<gtExample>
 	| addMethod rename afterRename onNewName onClassSide beforeRename |
-	addMethod := [ :aClassName | 
+	addMethod := [ :aClassName :isClassSide | 
 		GtLAddMethodSpecification new
 			methodClassName: aClassName;
-			protocolName: 'examples';
+			classSide: isClassSide;
+			protocol: 'examples';
 			sourceCode: 'addedMethod ^ 42';
 			yourself ].
 	rename := self validSpecification.
 	afterRename := GtLCodeTransformations new
 			transformations: {rename.
-					addMethod value: 'GtLRenameClassSpecificationExamples'}.
+					addMethod value: 'GtLRenameClassSpecificationExamples' value: false}.
 	self
 		assert: (afterRename orderProblems collect: [ :each | each description ]) asArray
 		equals: #('AddMethod on GtLRenameClassSpecificationExamples comes after the RenameClass of GtLRenameClassSpecificationExamples: put it before the RenameClass, with the current name').
 	onClassSide := GtLCodeTransformations new
 			transformations: {rename.
-					addMethod value: 'GtLRenameClassSpecificationExamples class'}.
+					addMethod value: 'GtLRenameClassSpecificationExamples' value: true}.
 	self assert: onClassSide orderProblems size equals: 1.
 	onNewName := GtLCodeTransformations new
 			transformations: {rename.
-					addMethod value: 'GtLRenameClassSpecificationExamplesRenamed'}.
+					addMethod value: 'GtLRenameClassSpecificationExamplesRenamed' value: false}.
 	self
 		assert: (onNewName orderProblems collect: [ :each | each description ]) asArray
 		equals: #('AddMethod names GtLRenameClassSpecificationExamplesRenamed, the new name of GtLRenameClassSpecificationExamples: put it before the RenameClass, with the current name GtLRenameClassSpecificationExamples').
 	beforeRename := GtLCodeTransformations new
-			transformations: {addMethod value: 'GtLRenameClassSpecificationExamples'.
+			transformations: {addMethod value: 'GtLRenameClassSpecificationExamples' value: false.
 					rename}.
 	self assert: beforeRename gtProblems isEmpty.
 	^ afterRename

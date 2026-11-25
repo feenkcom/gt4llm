@@ -22,12 +22,13 @@ GtLToolForPreviewRefactoringExamples >> addClassTransformation [
 
 { #category : #helpers }
 GtLToolForPreviewRefactoringExamples >> addMethodTransformation [
-	^(Dictionary new)
+	^ Dictionary new
 		at: 'AddMethod'
-			put: ((Dictionary new)
+			put: (Dictionary new
 					at: 'methodClassName' put: 'GtLToolForPreviewRefactoringExamples';
-					at: 'protocolName' put: 'examples';
-					at: 'sourceCodeOfMethodToAdd' put: 'previewedMethod ^ 42';
+					at: 'classSide' put: false;
+					at: 'protocol' put: 'examples';
+					at: 'sourceCode' put: 'previewedMethod ^ 42';
 					yourself);
 		yourself
 ]
@@ -73,8 +74,9 @@ GtLToolForPreviewRefactoringExamples >> previewAddClassWithMethod [
 			at: 'AddMethod'
 				put: (Dictionary new
 						at: 'methodClassName' put: 'GtLPreviewedExampleClass';
-						at: 'protocolName' put: 'accessing';
-						at: 'sourceCodeOfMethodToAdd' put: 'first ^ first';
+						at: 'classSide' put: false;
+						at: 'protocol' put: 'accessing';
+						at: 'sourceCode' put: 'first ^ first';
 						yourself);
 			yourself.
 	call := self
@@ -119,6 +121,39 @@ GtLToolForPreviewRefactoringExamples >> previewAddMethod [
 ]
 
 { #category : #examples }
+GtLToolForPreviewRefactoringExamples >> previewClassSideMethods [
+	"classSide names the class side of methodClassName, as in the method tools"
+
+	<gtExample>
+	| call preview |
+	call := self
+			previewTransformations: {Dictionary new
+						at: 'AddMethod'
+							put: (Dictionary new
+									at: 'methodClassName' put: 'GtLRewriteFixture';
+									at: 'classSide' put: true;
+									at: 'sourceCode' put: 'classSideProbe ^ 1';
+									at: 'protocol' put: 'examples';
+									yourself);
+						yourself.
+					Dictionary new
+						at: 'RemoveMethod'
+							put: (Dictionary new
+									at: 'methodClassName' put: 'GtLMcpServer';
+									at: 'classSide' put: true;
+									at: 'methodNameToRemove' put: 'current';
+									yourself);
+						yourself}.
+	preview := self modelOf: call.
+	self
+		assert: (preview changes collect: [ :each | each kind -> each target ]) asArray
+		equals: {'added method' -> 'GtLRewriteFixture class>>#classSideProbe'.
+				'removed method' -> 'GtLMcpServer class>>#current'}.
+	self assert: (GtLMcpServer class includesSelector: #current).
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForPreviewRefactoringExamples >> previewOverrideOfTraitProvidedMethod [
 	"A method that a class only gets from a trait is added to the class, not modified"
 
@@ -129,8 +164,9 @@ GtLToolForPreviewRefactoringExamples >> previewOverrideOfTraitProvidedMethod [
 						at: 'AddMethod'
 							put: (Dictionary new
 									at: 'methodClassName' put: GtLExampleTraitUser name asString;
-									at: 'protocolName' put: 'examples';
-									at: 'sourceCodeOfMethodToAdd' put: 'traitMethod ^ 7';
+									at: 'classSide' put: false;
+									at: 'protocol' put: 'examples';
+									at: 'sourceCode' put: 'traitMethod ^ 7';
 									yourself);
 						yourself}.
 	preview := self modelOf: call.
@@ -249,6 +285,30 @@ GtLToolForPreviewRefactoringExamples >> previewRemovalWithoutClassName [
 	^ call
 ]
 
+{ #category : #examples }
+GtLToolForPreviewRefactoringExamples >> previewReplacedMethodKeepsItsProtocol [
+	"Without a protocol, a replaced method keeps the one it has, as with compileMethods: an extension method stays in its package"
+
+	<gtExample>
+	| call preview |
+	call := self
+			previewTransformations: {Dictionary new
+						at: 'AddMethod'
+							put: (Dictionary new
+									at: 'methodClassName' put: 'GtLRewriteFixture';
+									at: 'classSide' put: false;
+									at: 'sourceCode' put: 'valueOf: anObject ^ anObject';
+									yourself);
+						yourself}.
+	preview := self modelOf: call.
+	self assert: preview changes size equals: 1.
+	self assert: preview changes first kind equals: 'modified method'.
+	self
+		assert: preview changes first change protocols asArray
+		equals: {(GtLRewriteFixture >> #valueOf:) protocolName}.
+	^ call
+]
+
 { #category : #helpers }
 GtLToolForPreviewRefactoringExamples >> previewTransformations: aCollection [
 	^ self
@@ -274,21 +334,25 @@ GtLToolForPreviewRefactoringExamples >> previewWithEmptyTransformations [
 
 { #category : #examples }
 GtLToolForPreviewRefactoringExamples >> previewWithFailingRefactoring [
+	"An error of the refactoring engine, here a precondition the transformations do not check, answers the frozen exception with an errorReason"
+
 	<gtExample>
-	| transformation call |
-	transformation := self addMethodTransformation.
-	(transformation at: 'AddMethod')
-		at: 'sourceCodeOfMethodToAdd'
-		put: 'previewedMethod ^ ^'.
+	| call |
 	call := self
-			executeTool: GtLToolForPreviewRefactoring new
-			withArguments: (self
-					argumentsWithTransformations: (Array with: transformation))
-			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+			previewTransformations: {Dictionary new
+						at: 'PushUpInstanceVariable'
+							put: (Dictionary new
+									at: 'variableClassName' put: 'GtLRewriteFixture';
+									at: 'variableNameToPushUp' put: 'noSuchVariable';
+									yourself);
+						yourself}.
 	self
 		assertExceptionDomainObject: (self modelOf: call)
 		withExceptionClass: RBRefactoringError
-		messageSubstring: 'cannot be parsed'.
+		messageSubstring: 'is not defined'.
+	self
+		assert: (self modelOf: call) errorReason
+		equals: 'Error while previewing the refactoring'.
 	^ call
 ]
 
@@ -438,10 +502,11 @@ GtLToolForPreviewRefactoringExamples >> pushUpInstanceVariableOfUnknownClassTran
 
 { #category : #helpers }
 GtLToolForPreviewRefactoringExamples >> pushUpMethod: aSelectorString from: aClassName to: aTargetClassName [
-	^(Dictionary new)
+	^ Dictionary new
 		at: 'PushUpMethod'
-			put: ((Dictionary new)
+			put: (Dictionary new
 					at: 'methodClassName' put: aClassName;
+					at: 'classSide' put: false;
 					at: 'methodNameToPushUp' put: aSelectorString;
 					at: 'targetClassName' put: aTargetClassName;
 					yourself);
@@ -472,12 +537,42 @@ GtLToolForPreviewRefactoringExamples >> refuseInvalidAddClass [
 	^ call
 ]
 
+{ #category : #examples }
+GtLToolForPreviewRefactoringExamples >> refuseInvalidAddMethod [
+	"AddMethod checks the method as compileMethods does: a new method needs a protocol, and the source must parse"
+
+	<gtExample>
+	| addMethod newMethodCall syntaxErrorCall |
+	addMethod := [ :aSource :aProtocol | 
+		| fields |
+		fields := Dictionary new
+				at: 'methodClassName' put: 'GtLRewriteFixture';
+				at: 'classSide' put: false;
+				at: 'sourceCode' put: aSource;
+				yourself.
+		aProtocol ifNotNil: [ fields at: 'protocol' put: aProtocol ].
+		self
+			previewTransformations: {Dictionary new
+						at: 'AddMethod' put: fields;
+						yourself} ].
+	newMethodCall := addMethod value: 'brandNewMethod ^ 1' value: nil.
+	self
+		assertProblem: (self modelOf: newMethodCall)
+		withErrorMessage: 'Invalid transformations: GtLRewriteFixture>>#brandNewMethod is a new method: provide a protocol for it'.
+	syntaxErrorCall := addMethod value: 'brokenMethod ^ (' value: 'examples'.
+	self
+		assert: ((self modelOf: syntaxErrorCall) errorMessage
+				beginsWith: 'Invalid transformations: Syntax error while parsing the given method source code').
+	^ newMethodCall
+]
+
 { #category : #helpers }
 GtLToolForPreviewRefactoringExamples >> removeMethod: aSelectorString from: aClassName [
 	^ Dictionary new
 		at: 'RemoveMethod'
 			put: (Dictionary new
 					at: 'methodClassName' put: aClassName;
+					at: 'classSide' put: false;
 					at: 'methodNameToRemove' put: aSelectorString;
 					yourself);
 		yourself
