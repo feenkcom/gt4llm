@@ -24,3 +24,12 @@ RBRemoveMethodChange >> gtLlmMatchesCodeChangeResult: aCodeChangeResult [
 		gtLlmMatchesMethodChangeResult: aCodeChangeResult
 		selector: self selector
 ]
+
+{ #category : #'*Gt4LlmCore' }
+RBRemoveMethodChange >> gtLlmNewChangeEntry [
+	^ GtLRefactoringMethodChangeEntry new
+		methodClassName: self changeClassName asString;
+		methodName: self selector asString;
+		classSide: self isMeta = true;
+		yourself
+]

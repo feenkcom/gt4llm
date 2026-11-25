@@ -73,61 +73,48 @@ GtLPackageChangeHistoriesBuilder >> addExtraChangeForPackageMoveFor: aCodeChange
 
 { #category : #'private - building' }
 GtLPackageChangeHistoriesBuilder >> buildClassHistoriesFor: aCollectionOfChanges forPackageNamed: aPackageName forPackageTagNamed: aPackageTagName [
-	"Build class histories from the given changes, grouped by class name"
+	"Build class histories from the given changes, grouped by class name.
+	A class rename belongs to the histories of both names: it removes the old name and adds the new one"
+
 	| classHistoriesByClassName methodHistoriesByReference histories |
-	
 	classHistoriesByClassName := Dictionary new.
-	methodHistoriesByReference := Dictionary new.
-	
-	"Process method changes"
-	(aCollectionOfChanges select: [ :each | each isMethodChangeResult ]) do: [ :each |
-		| changeResult methodReference className classHistory methodHistory |
-		changeResult := each changeResult.
-		methodReference := changeResult targetMethodReference.
-		className := methodReference methodClassName.
-		
-		"Get or create class history"
-		classHistory := classHistoriesByClassName
-			at: className
-			ifAbsentPut: [ 
-				GtLClassInPackageTagChangeHistory new
-					targetClassName: className;
-					targetPackageName: aPackageName;
-					targetPackageTagName: aPackageTagName;
-					yourself ].
-		
-		"Get or create method history"
-		methodHistory := methodHistoriesByReference
-			at: methodReference
-			ifAbsentPut: [ 
-				| newHistory |
-				newHistory := GtLMethodInPackageTagChangeHistory new
-					methodReference: methodReference;
-					targetPackageName: aPackageName;
-					targetPackageTagName: aPackageTagName;
-					yourself.
-				classHistory addMethodHistory: newHistory.
-				newHistory ].
-		methodHistory addChange: each ].
-	
-	"Process class changes"
-	(aCollectionOfChanges select: [ :each | each isClassChangeResult ]) do: [ :each |
-		| changeResult className classHistory |
-		changeResult := each changeResult.
-		className := changeResult targetClassName asString.
-		
-		"Get or create class history"
-		classHistory := classHistoriesByClassName
-			at: className
-			ifAbsentPut: [ 
-				GtLClassInPackageTagChangeHistory new
-					targetClassName: className;
-					targetPackageName: aPackageName;
-					targetPackageTagName: aPackageTagName;
-					yourself ].
-		
-		classHistory addBehaviourChange: each ].
-	
+	methodHistoriesByReference := Dictionary new.	"Process method changes"
+	(aCollectionOfChanges select: [ :each | each isMethodChangeResult ])
+		do: [ :each | 
+			| changeResult methodReference className classHistory methodHistory |
+			changeResult := each changeResult.
+			methodReference := changeResult targetMethodReference.
+			className := methodReference methodClassName.	"Get or create class history"
+			classHistory := classHistoriesByClassName
+					at: className
+					ifAbsentPut: [ GtLClassInPackageTagChangeHistory new
+							targetClassName: className;
+							targetPackageName: aPackageName;
+							targetPackageTagName: aPackageTagName;
+							yourself ].	"Get or create method history"
+			methodHistory := methodHistoriesByReference
+					at: methodReference
+					ifAbsentPut: [ | newHistory |
+						newHistory := GtLMethodInPackageTagChangeHistory new
+								methodReference: methodReference;
+								targetPackageName: aPackageName;
+								targetPackageTagName: aPackageTagName;
+								yourself.
+						classHistory addMethodHistory: newHistory.
+						newHistory ].
+			methodHistory addChange: each ].	"Process class changes"
+	(aCollectionOfChanges select: [ :each | each isClassChangeResult ])
+		do: [ :each | 
+			each changeResult historyClassNames
+				do: [ :className | 
+					(classHistoriesByClassName
+						at: className
+						ifAbsentPut: [ GtLClassInPackageTagChangeHistory new
+								targetClassName: className;
+								targetPackageName: aPackageName;
+								targetPackageTagName: aPackageTagName;
+								yourself ]) addBehaviourChange: each ] ].
+
 	histories := GtLClassChangeHistoriesGroup new.
 	classHistoriesByClassName valuesDo: [ :each | histories addHistory: each ].
 	^ histories

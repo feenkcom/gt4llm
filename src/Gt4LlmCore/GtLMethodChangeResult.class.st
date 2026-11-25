@@ -84,6 +84,29 @@ GtLMethodChangeResult >> isMethodRemovalResult [
 	^ false
 ]
 
+{ #category : #refactoring }
+GtLMethodChangeResult >> llmChangeEntry [
+	^ GtLRefactoringMethodChangeEntry new
+		methodClassName: self targetMethodReference methodClassName asString;
+		methodName: self targetMethodReference methodName asString;
+		classSide: self targetMethodReference isClassSide;
+		kind: self llmChangeKind;
+		newSource: (self isMethodRemovalResult ifFalse: [ self newStateMethodSourceCode ]);
+		yourself
+]
+
+{ #category : #refactoring }
+GtLMethodChangeResult >> llmChangeKind [
+	self isMethodRemovalResult ifTrue: [ ^ 'removed method' ].
+	self isMethodAdditionResult ifTrue: [ ^ 'added method' ].
+	^ 'modified method'
+]
+
+{ #category : #refactoring }
+GtLMethodChangeResult >> llmChangeTarget [
+	^ self targetMethodReference methodSignature
+]
+
 { #category : #accessing }
 GtLMethodChangeResult >> newStateMethodSourceCode [
 	self subclassResponsibility

@@ -41,6 +41,8 @@ GtLToolForPreviewRefactoringExamples >> argumentsWithTransformations: aCollectio
 
 { #category : #examples }
 GtLToolForPreviewRefactoringExamples >> previewAddClass [
+	"The new source of an added class is its fluid definition, as the applied refactoring reports it"
+
 	<gtExample>
 	| call targetObject |
 	call := self
@@ -48,7 +50,7 @@ GtLToolForPreviewRefactoringExamples >> previewAddClass [
 			withArguments: (self
 					argumentsWithTransformations: (Array with: self addClassTransformation))
 			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
-	targetObject := call result targetObject.
+	targetObject := self modelOf: call.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self assert: targetObject changes size equals: 1.
 	self
@@ -56,7 +58,9 @@ GtLToolForPreviewRefactoringExamples >> previewAddClass [
 		equals: 'Define GtLPreviewedExampleClass'.
 	self
 		assert: targetObject changes first newSource
-		equals: 'Object subclass: #GtLPreviewedExampleClass instanceVariableNames: ''first second'' classVariableNames: '''' poolDictionaries: '''' category: ''Gt4LlmCore-Examples'''.
+		equals: 'Object << #GtLPreviewedExampleClass' , String cr , String tab
+				, 'slots: { #first . #second };' , String cr , String tab
+				, 'package: ''Gt4LlmCore-Examples'''.
 	self assert: (Smalltalk globals includesKey: #GtLPreviewedExampleClass) not.
 	^ call
 ]
@@ -78,7 +82,7 @@ GtLToolForPreviewRefactoringExamples >> previewAddClassWithMethod [
 			withArguments: (self
 					argumentsWithTransformations: (Array with: self addClassTransformation with: methodTransformation))
 			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
-	targetObject := call result targetObject.
+	targetObject := self modelOf: call.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self
 		assert: (targetObject changes collect: [ :each | each changeDescription ]) asArray
@@ -99,7 +103,7 @@ GtLToolForPreviewRefactoringExamples >> previewAddMethod [
 			withArguments: (self
 					argumentsWithTransformations: (Array with: self addMethodTransformation))
 			inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	targetObject := call result targetObject.
+	targetObject := self modelOf: call.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self assert: targetObject changes size equals: 1.
 	self
@@ -129,7 +133,7 @@ GtLToolForPreviewRefactoringExamples >> previewOverrideOfTraitProvidedMethod [
 									at: 'sourceCodeOfMethodToAdd' put: 'traitMethod ^ 7';
 									yourself);
 						yourself}.
-	preview := call result targetObject.
+	preview := self modelOf: call.
 	self assert: preview class equals: GtLRefactoringPreview.
 	self assert: preview changes size equals: 1.
 	self assert: preview changes first kind equals: 'added method'.
@@ -144,24 +148,24 @@ GtLToolForPreviewRefactoringExamples >> previewPushUpMethod [
 	| objectStorage call targetObject |
 	objectStorage := GtLObjectStorage new.
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self
-						argumentsWithTransformations: (Array with: (self
-										pushUpMethod: 'argumentsWithTransformations:'
-										from: 'GtLToolForPreviewRefactoringExamples'
-										to: 'GtLAbstractMagritteFunctionToolExamples')))
-				inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
-	targetObject := call result targetObject.
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self
+					argumentsWithTransformations: (Array
+							with: (self
+									pushUpMethod: 'argumentsWithTransformations:'
+									from: 'GtLToolForPreviewRefactoringExamples'
+									to: 'GtLAbstractMagritteFunctionToolExamples')))
+			inContext: (GtLToolExecutionContext new objectStorage: objectStorage).
+	targetObject := self modelOf: call.
 	self assert: targetObject class equals: GtLRefactoringPreview.
 	self assert: targetObject changes notEmpty.
 	self assert: targetObject isApplied not.
-	self
-		assert: (objectStorage objectAt: targetObject objectId) == targetObject.
+	self assert: (objectStorage objectAt: targetObject objectId) == targetObject.
 	self
 		assert: (GtLAbstractMagritteFunctionToolExamples
 				includesSelector: #argumentsWithTransformations:) not.
 	self assert: (self class includesSelector: #argumentsWithTransformations:).
-	^call
+	^ call
 ]
 
 { #category : #examples }
@@ -176,7 +180,7 @@ GtLToolForPreviewRefactoringExamples >> previewPushUpOfTraitProvidedMethod [
 						from: GtLExampleTraitUser name asString
 						to: 'Object'}.
 	self
-		assertProblem: call result targetObject
+		assertProblem: (self modelOf: call)
 		withErrorMessage: 'Invalid transformations: GtLExampleTraitUser>>#traitMethod is not defined in its own class: it is provided by a trait. Its source is TGtLExampleTrait>>#traitMethod'.
 	^ call
 ]
@@ -192,7 +196,7 @@ GtLToolForPreviewRefactoringExamples >> previewRemovalOfInheritedMethod [
 	definingReference := GtLMethodReference
 			fromCompiledMethod: (GtLToolForPreviewRefactoringExamples lookupSelector: #printString).
 	self
-		assertProblem: call result targetObject
+		assertProblem: (self modelOf: call)
 		withErrorMessage: 'Invalid transformations: GtLToolForPreviewRefactoringExamples>>#printString is not defined in its own class: it is inherited. Its source is '
 				, definingReference methodSignature.
 	^ call
@@ -206,7 +210,7 @@ GtLToolForPreviewRefactoringExamples >> previewRemovalOfTraitMethod [
 	| call preview |
 	call := self
 			previewTransformations: {self removeMethod: 'traitMethod' from: TGtLExampleTrait name asString}.
-	preview := call result model.
+	preview := self modelOf: call.
 	self assert: (preview isKindOf: GtLRefactoringPreview).
 	self assert: preview isApplied not.
 	self assert: (TGtLExampleTrait includesSelector: #traitMethod).
@@ -220,13 +224,15 @@ GtLToolForPreviewRefactoringExamples >> previewRemovalOfTraitProvidedMethod [
 	call := self
 			previewTransformations: {self removeMethod: 'traitMethod' from: GtLExampleTraitUser name asString}.
 	self
-		assertProblem: call result targetObject
+		assertProblem: (self modelOf: call)
 		withErrorMessage: 'Invalid transformations: GtLExampleTraitUser>>#traitMethod is not defined in its own class: it is provided by a trait. Its source is TGtLExampleTrait>>#traitMethod'.
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForPreviewRefactoringExamples >> previewRemovalWithoutClassName [
+	"The class name is a required field of the transformation: the JSON schema refuses the transformation without it"
+
 	<gtExample>
 	| call |
 	call := self
@@ -237,8 +243,9 @@ GtLToolForPreviewRefactoringExamples >> previewRemovalWithoutClassName [
 									yourself);
 						yourself}.
 	self
-		assertProblem: call result targetObject
-		withErrorMessage: 'Invalid transformations: Missing class name'.
+		assertJSONSchemaValidationError: (self modelOf: call)
+		withPath: #('transformations' 1)
+		errorMessage: '@[transformations/1] anyOf expected'.
 	^ call
 ]
 
@@ -255,14 +262,14 @@ GtLToolForPreviewRefactoringExamples >> previewWithEmptyTransformations [
 	<gtExample>
 	| call |
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self argumentsWithTransformations: #())
-				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self argumentsWithTransformations: #())
+			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
 	self
-		assertMissingArgument: call result targetObject
+		assertMissingArgument: (self modelOf: call)
 		withArgumentName: 'transformations'
 		errorMessage: 'Missing argument called transformations'.
-	^call
+	^ call
 ]
 
 { #category : #examples }
@@ -270,18 +277,19 @@ GtLToolForPreviewRefactoringExamples >> previewWithFailingRefactoring [
 	<gtExample>
 	| transformation call |
 	transformation := self addMethodTransformation.
-	(transformation at: 'AddMethod') at: 'sourceCodeOfMethodToAdd'
+	(transformation at: 'AddMethod')
+		at: 'sourceCodeOfMethodToAdd'
 		put: 'previewedMethod ^ ^'.
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self
-						argumentsWithTransformations: (Array with: transformation))
-				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self
+					argumentsWithTransformations: (Array with: transformation))
+			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
 	self
-		assertExceptionDomainObject: call result targetObject
+		assertExceptionDomainObject: (self modelOf: call)
 		withExceptionClass: RBRefactoringError
 		messageSubstring: 'cannot be parsed'.
-	^call
+	^ call
 ]
 
 { #category : #examples }
@@ -289,13 +297,14 @@ GtLToolForPreviewRefactoringExamples >> previewWithInvalidTransformations [
 	<gtExample>
 	| call |
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self argumentsWithTransformations: (Array
-								with: self pushUpInstanceVariableOfUnknownClassTransformation))
-				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
-	self assertProblem: call result targetObject
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self
+					argumentsWithTransformations: (Array with: self pushUpInstanceVariableOfUnknownClassTransformation))
+			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+	self
+		assertProblem: (self modelOf: call)
 		withErrorMessage: 'Invalid transformations: Class not found: ClassThatDoesNotExist'.
-	^call
+	^ call
 ]
 
 { #category : #examples }
@@ -303,16 +312,18 @@ GtLToolForPreviewRefactoringExamples >> previewWithMethodInUnknownClass [
 	<gtExample>
 	| call |
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self
-						argumentsWithTransformations: (Array with: (self
-										pushUpMethod: 'unknownSelector42'
-										from: 'ClassThatDoesNotExist'
-										to: 'GtLAbstractMagritteFunctionToolExamples')))
-				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
-	self assertProblem: call result targetObject
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self
+					argumentsWithTransformations: (Array
+							with: (self
+									pushUpMethod: 'unknownSelector42'
+									from: 'ClassThatDoesNotExist'
+									to: 'GtLAbstractMagritteFunctionToolExamples')))
+			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+	self
+		assertProblem: (self modelOf: call)
 		withErrorMessage: 'Invalid transformations: Class not found: ClassThatDoesNotExist'.
-	^call
+	^ call
 ]
 
 { #category : #examples }
@@ -325,7 +336,7 @@ GtLToolForPreviewRefactoringExamples >> previewWithMethodNotImplemented [
 						from: 'GtLToolForPreviewRefactoringExamples'
 						to: 'GtLAbstractMagritteFunctionToolExamples'}.
 	self
-		assertProblem: call result targetObject
+		assertProblem: (self modelOf: call)
 		withErrorMessage: 'Invalid transformations: GtLToolForPreviewRefactoringExamples>>#unknownSelector42 is not found'.
 	^ call
 ]
@@ -335,15 +346,15 @@ GtLToolForPreviewRefactoringExamples >> previewWithMissingTransformations [
 	<gtExample>
 	| call |
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: Dictionary new
-				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: Dictionary new
+			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
 	self
-		assertMissingRequiredProperties: call result targetObject
+		assertMissingRequiredProperties: (self modelOf: call)
 		withPropertyNames: #('transformations')
 		path: #(nil)
 		errorMessage: 'required properties missing [transformations]'.
-	^call
+	^ call
 ]
 
 { #category : #examples }
@@ -351,16 +362,18 @@ GtLToolForPreviewRefactoringExamples >> previewWithPushUpMethodToUnknownClass [
 	<gtExample>
 	| call |
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self
-						argumentsWithTransformations: (Array with: (self
-										pushUpMethod: 'argumentsWithTransformations:'
-										from: 'GtLToolForPreviewRefactoringExamples'
-										to: 'ClassThatDoesNotExist')))
-				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
-	self assertProblem: call result targetObject
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self
+					argumentsWithTransformations: (Array
+							with: (self
+									pushUpMethod: 'argumentsWithTransformations:'
+									from: 'GtLToolForPreviewRefactoringExamples'
+									to: 'ClassThatDoesNotExist')))
+			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+	self
+		assertProblem: (self modelOf: call)
 		withErrorMessage: 'Invalid transformations: Class not found: ClassThatDoesNotExist'.
-	^call
+	^ call
 ]
 
 { #category : #examples }
@@ -374,7 +387,7 @@ GtLToolForPreviewRefactoringExamples >> previewWithSeveralInvalidTransformations
 						from: 'GtLToolForPreviewRefactoringExamples'
 						to: 'GtLAbstractMagritteFunctionToolExamples'}.
 	self
-		assertProblem: call result targetObject
+		assertProblem: (self modelOf: call)
 		withErrorMessage: 'Invalid transformations: Class not found: ClassThatDoesNotExist; GtLToolForPreviewRefactoringExamples>>#unknownSelector42 is not found'.
 	^ call
 ]
@@ -383,33 +396,33 @@ GtLToolForPreviewRefactoringExamples >> previewWithSeveralInvalidTransformations
 GtLToolForPreviewRefactoringExamples >> previewWithUnknownTransformation [
 	<gtExample>
 	| transformation call |
-	transformation := (Dictionary new)
-				at: 'RenameEverything' put: Dictionary new;
-				yourself.
+	transformation := Dictionary new
+			at: 'RenameEverything' put: Dictionary new;
+			yourself.
 	call := self
-				executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self
-						argumentsWithTransformations: (Array with: transformation))
-				inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self
+					argumentsWithTransformations: (Array with: transformation))
+			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
 	self
-		assertJSONSchemaValidationError: call result targetObject
+		assertJSONSchemaValidationError: (self modelOf: call)
 		withPath: #('transformations' 1)
 		errorMessage: '@[transformations/1] anyOf expected'.
-	^call
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForPreviewRefactoringExamples >> previewWithoutObjectStorage [
 	<gtExample>
 	| call |
-	call := self executeTool: GtLToolForPreviewRefactoring new
-				withArguments: (self
-						argumentsWithTransformations: (Array with: self addMethodTransformation)).
+	call := self
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self argumentsWithTransformations: (Array with: self addMethodTransformation)).
 	self
-		assertMissingInformation: call result targetObject
+		assertMissingInformation: (self modelOf: call)
 		withModelName: 'objectStorage'
 		errorMessage: 'Missing objectStorage'.
-	^call
+	^ call
 ]
 
 { #category : #helpers }
@@ -433,6 +446,30 @@ GtLToolForPreviewRefactoringExamples >> pushUpMethod: aSelectorString from: aCla
 					at: 'targetClassName' put: aTargetClassName;
 					yourself);
 		yourself
+]
+
+{ #category : #examples }
+GtLToolForPreviewRefactoringExamples >> refuseInvalidAddClass [
+	"The names of an added class are checked before the refactoring engine runs, and all the problems are named"
+
+	<gtExample>
+	| call |
+	call := self
+			executeTool: GtLToolForPreviewRefactoring new
+			withArguments: (self
+					argumentsWithTransformations: {Dictionary new
+								at: 'AddClass'
+									put: (Dictionary new
+											at: 'newClassName' put: 'Object';
+											at: 'superclassName' put: 'GtLNoSuchSuperclass';
+											at: 'packageName' put: ' ';
+											yourself);
+								yourself})
+			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+	self
+		assertProblem: (self modelOf: call)
+		withErrorMessage: 'Invalid transformations: Object is already the name of a class or global variable; Class not found: GtLNoSuchSuperclass; Missing package name'.
+	^ call
 ]
 
 { #category : #helpers }

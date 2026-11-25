@@ -67,7 +67,7 @@ GtLRemoteExampleReportDomainObjectExamples >> examplesReportWithErrorsDataViewSe
 	self assert: dataBlock isNotNil.
 	
 	expected := Dictionary new
-		at: #errors put: #('Error 1' 'Error 2');
+		at: 'errors' put: #('Error 1' 'Error 2');
 		yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
 	

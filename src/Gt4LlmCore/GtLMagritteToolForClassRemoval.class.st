@@ -42,7 +42,7 @@ GtLMagritteToolForClassRemoval >> description [
 
 The removal is refused while the class has subclasses, while the trait is used by classes or traits (also when used only on the class side), or while the shared pool is used by classes or traits. The response then names these classes and what to do first. Classes needed by the virtual machine are never removed.
 
-Methods that reference the class do not prevent its removal. The response reports in referencesCount how many methods of other classes still reference it. If you want to update those methods, find them with classReferences before the removal: afterwards it no longer finds the class.
+Methods that reference the class do not prevent its removal. If you want to update those methods, find them with classReferences before the removal: afterwards it no longer finds the class.
 
 Example JSON arguments:
 {
@@ -52,8 +52,7 @@ Example JSON arguments:
 Example JSON response:
 {
   "removedClassName": "MyClass",
-  "status": "removed",
-  "referencesCount": 0
+  "status": "removed"
 }
 
 Example JSON response when the removal is refused:
@@ -107,23 +106,20 @@ GtLMagritteToolForClassRemoval >> removalError: anExceptionDomainObject forClass
 
 { #category : #private }
 GtLMagritteToolForClassRemoval >> removeClass: aClass with: aSpecification [
-	"Take the name and count the references before the removal: afterwards the class is obsolete"
+	"Take the name before the removal: afterwards the class is obsolete"
 
-	| className referencesCount appliedRefactoring |
+	| className result |
 	className := aClass name.
-	referencesCount := (aSpecification externalReferencesTo: aClass) size.
-	appliedRefactoring := [ self applySpecification: aSpecification ]
+	result := [ self applySpecification: aSpecification ]
 			on: Error
 			do: [ :anError | 
 				^ self
 					removalError: (GtLExceptionDomainObject freeze: anError)
 					forClassNamed: className ].
-	appliedRefactoring hasFailed
-		ifTrue: [ ^ self removalError: appliedRefactoring exception forClassNamed: className ].
-	^ (self
+	result hasFailed
+		ifTrue: [ ^ self removalError: result exception forClassNamed: className ].
+	^ self
 		classRemovalResultNamed: className
-		in: appliedRefactoring
-		ifNone: [ ^ self missingRemovalResultForClassNamed: className ])
-		referencesCount: referencesCount;
-		yourself
+		in: result
+		ifNone: [ self missingRemovalResultForClassNamed: className ]
 ]

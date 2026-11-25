@@ -20,37 +20,58 @@ GtLAddMethodSpecification class >> jsonSchemaLabel [
 
 { #category : #'as yet unclassified' }
 GtLAddMethodSpecification >> asRefactoringIn: aNamespace [
+	"Without a protocol, the method is unclassified"
+
 	^ GtRBAddMethodRefactoring
 		model: aNamespace
 		sourceCode: sourceCode
 		in: methodClassName
-		withProtocol: protocolName
+		withProtocol: (protocolName ifNil: [ Protocol unclassified ])
 ]
 
 { #category : #'as yet unclassified' }
 GtLAddMethodSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'The "Add method" transformation adds a method to a class. The transformation must provide the methodClassName, the sourceCode, and protocolName for the new method. The sourceCode should include the entire method, including the name and parameters.'
+		comment: 'Adds a method to the class methodClassName, in the protocol protocolName. sourceCodeOfMethodToAdd is the whole method: its selector, arguments and body. A method with the same selector is replaced.'
 ]
 
 { #category : #'as yet unclassified' }
 GtLAddMethodSpecification >> gtDisplayOn: aStream [
 	aStream
 		nextPutAll: 'Add method ';
-		nextPutAll: (sourceCode lines first);
+		nextPutAll: ((sourceCode ifNil: [ '' ]) lines
+				ifEmpty: [ '' ]
+				ifNotEmpty: [ :someLines | someLines first ]);
 		nextPutAll: ' in class ';
-		nextPutAll: methodClassName;
-		nextPutAll: ' protocol ';
-		nextPutAll: protocolName
+		nextPutAll: (methodClassName ifNil: [ '' ]).
+	protocolName
+		ifNotNil: [ aStream
+				nextPutAll: ' protocol ';
+				nextPutAll: protocolName ]
+]
+
+{ #category : #accessing }
+GtLAddMethodSpecification >> gtProblems [
+	^ self gtProblemsAfterAdding: #()
+]
+
+{ #category : #accessing }
+GtLAddMethodSpecification >> gtProblemsAfterAdding: someClassNames [
+	"The class can be added by an earlier transformation of the same call"
+
+	(methodClassName notNil
+		and: [ someClassNames includes: (self class instanceSideNameOf: methodClassName) ])
+		ifTrue: [ ^ #() ].
+	^ self gtProblemsWithClassNamed: methodClassName
 ]
 
 { #category : #descriptions }
 GtLAddMethodSpecification >> methodClassNameDescription [
 	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #methodClassName;
-		  comment: 'The class of the method to be added. This is required and must not be empty.'
+	^ MAStringDescription new
+		accessor: #methodClassName;
+		comment: 'The class to add the method to; for a class-side method, the class name followed by " class", e.g. MyClass class.';
+		beRequired
 ]
 
 { #category : #accessing }
@@ -66,9 +87,9 @@ GtLAddMethodSpecification >> protocolName: anObject [
 { #category : #descriptions }
 GtLAddMethodSpecification >> protocolNameDescription [
 	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #protocolName
+	^ MAStringDescription new
+		accessor: #protocolName;
+		comment: 'The protocol of the method, such as accessing. Without it, the method is unclassified.'
 ]
 
 { #category : #accessing }
@@ -84,10 +105,10 @@ GtLAddMethodSpecification >> sourceCode: anObject [
 { #category : #descriptions }
 GtLAddMethodSpecification >> sourceCodeDescription [
 	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #sourceCodeOfMethodToAdd;
-		  comment: 'The method source code in plain text; do not include the name of the class as the beginning'
+	^ MAStringDescription new
+		accessor: #sourceCodeOfMethodToAdd;
+		comment: 'The source code of the method, starting with its selector, without the class name.';
+		beRequired
 ]
 
 { #category : #accessing }

@@ -1,13 +1,13 @@
 "
-I describe one basic change of a refactoring preview (see GtLRefactoringPreview) for an LLM.
+I describe one basic change of a refactoring preview (see {{gtClass:GtLRefactoringPreview}}).
 
-I keep the RB change I describe in `change`; it is not serialized. The other properties are computed from it when I am created, against the current image, so I should be created before the change is applied:
+I keep the RB change I describe in `change`. The other properties are computed from it when I am created, against the current image, so I should be created before the change is applied:
 - `changeDescription`: the RB change string, e.g. 'Remove MyClass>>#foo';
 - `kind`: a short label such as 'added method', 'modified method', 'removed method', 'added slot', 'removed slot', 'changed superclass', 'changed class comment', 'added class' or 'removed class';
 - `target`: the method, variable, class or package affected, e.g. 'MyClass>>#foo';
-- `newSource`: the method source, class definition or class comment introduced by the change, or nil for changes that carry no code, such as removals.
+- `newSource`: the method source, class definition, class comment or snippet text introduced by the change, or nil for changes that carry no code, such as removals.
 
-The kind, target and new source come from the gtLlmChangeKind, gtLlmChangeTarget and gtLlmNewSource extension methods of the RB change classes.
+The kind, target and new source come from the gtLlmChangeKind, gtLlmChangeTarget and gtLlmNewSource extension methods of the RB change classes. A preview that lists its changes one by one writes me with {{gtMethod:GtLRefactoringChange>>#llmJsonObjectIncludingSources:}}; a preview that groups them lists my {{gtMethod:GtLRefactoringChange>>#asChangeEntry}}.
 "
 Class {
 	#name : #GtLRefactoringChange,
@@ -19,16 +19,11 @@ Class {
 		'target',
 		'change',
 		'applied',
-		'codeChangeResult'
+		'codeChangeResult',
+		'matchingChange'
 	],
 	#category : #Gt4LlmCore
 }
-
-{ #category : #'instance creation' }
-GtLRefactoringChange class >> changeDescription: aDescriptionString newSource: aSourceString [
-	^self new initializeChangeDescription: aDescriptionString
-		newSource: aSourceString
-]
 
 { #category : #'instance creation' }
 GtLRefactoringChange class >> fromChange: aRefactoryChange [
@@ -36,6 +31,16 @@ GtLRefactoringChange class >> fromChange: aRefactoryChange [
 	against the current image, so this should be called before the change is applied"
 
 	^ self new initializeFromChange: aRefactoryChange
+]
+
+{ #category : #'instance creation' }
+GtLRefactoringChange class >> fromChange: aRefactoryChange matchingChange: aMatchingChange [
+	"Describe aRefactoryChange, but name its target and match its code change result through aMatchingChange.
+	A change nested in a class rename keeps the old class name until it is executed; aMatchingChange is the same change under the new name"
+
+	^ self new
+		initializeFromChange: aRefactoryChange
+		matchingChange: aMatchingChange
 ]
 
 { #category : #accessing }
@@ -52,9 +57,21 @@ GtLRefactoringChange >> appliedDiffNote [
 		, aTarget , ', which can be more than this change.'
 ]
 
+{ #category : #converting }
+GtLRefactoringChange >> asChangeEntry [
+	"Return the entry that lists me in the groups of changes of a report"
+
+	^ (self matchingChange
+		ifNil: [ GtLRefactoringOtherChangeEntry new target: target asString ]
+		ifNotNil: [ :aChange | aChange gtLlmNewChangeEntry ])
+		kind: kind;
+		newSource: newSource;
+		yourself
+]
+
 { #category : #accessing }
 GtLRefactoringChange >> change [
-	"Return the RB change described by me, or nil if I was created from strings"
+	"Return the RB change I describe"
 
 	^ change
 ]
@@ -62,16 +79,6 @@ GtLRefactoringChange >> change [
 { #category : #accessing }
 GtLRefactoringChange >> changeDescription [
 	^changeDescription
-]
-
-{ #category : #descriptions }
-GtLRefactoringChange >> changeDescriptionDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Change description';
-		accessor: #changeDescription;
-		priority: 10;
-		beRequired
 ]
 
 { #category : #accessing }
@@ -190,18 +197,19 @@ GtLRefactoringChange >> hasNewSource [
 ]
 
 { #category : #initialization }
-GtLRefactoringChange >> initializeChangeDescription: aDescriptionString newSource: aSourceString [
-	changeDescription := aDescriptionString.
-	newSource := aSourceString
-]
-
-{ #category : #initialization }
 GtLRefactoringChange >> initializeFromChange: aRefactoryChange [
 	change := aRefactoryChange.
 	changeDescription := aRefactoryChange changeString asString.
 	kind := aRefactoryChange gtLlmChangeKind.
 	target := aRefactoryChange gtLlmChangeTarget.
 	newSource := aRefactoryChange gtLlmNewSource
+]
+
+{ #category : #initialization }
+GtLRefactoringChange >> initializeFromChange: aRefactoryChange matchingChange: aMatchingChange [
+	self initializeFromChange: aRefactoryChange.
+	matchingChange := aMatchingChange.
+	target := aMatchingChange gtLlmChangeTarget
 ]
 
 { #category : #accessing }
@@ -218,20 +226,18 @@ GtLRefactoringChange >> kind [
 	^ kind
 ]
 
-{ #category : #descriptions }
-GtLRefactoringChange >> kindDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Kind';
-		accessor: #kind;
-		comment: 'The kind of change, such as added method, removed method, added slot or removed class';
-		priority: 20
-]
+{ #category : #converting }
+GtLRefactoringChange >> llmJsonObjectIncludingSources: aBoolean [
+	"Describe me in a preview that lists its changes one by one. Properties without a value are left out, and so is the new source when it is not wanted"
 
-{ #category : #'llm views' }
-GtLRefactoringChange >> llmRawDataViewFor: aDataView [
-	<gtLlmDataView>
-	^aDataView magritteObject: [self]
+	| json |
+	json := NeoJSONObject new.
+	json at: 'changeDescription' put: changeDescription.
+	kind ifNotNil: [ :aKind | json at: 'kind' put: aKind ].
+	target ifNotNil: [ :aTarget | json at: 'target' put: aTarget asString ].
+	(aBoolean and: [ newSource notNil ])
+		ifTrue: [ json at: 'newSource' put: newSource ].
+	^ json
 ]
 
 { #category : #applying }
@@ -241,7 +247,7 @@ GtLRefactoringChange >> markAppliedWithCodeChangeResults: aCollectionOfCodeChang
 	Several of my siblings can share a code change result, for example when several slots of the same class change"
 
 	applied := true.
-	codeChangeResult := change
+	codeChangeResult := self matchingChange
 			ifNotNil: [ :aChange | 
 				aCollectionOfCodeChangeResults
 					detect: [ :each | aChange gtLlmMatchesCodeChangeResult: each ]
@@ -249,18 +255,15 @@ GtLRefactoringChange >> markAppliedWithCodeChangeResults: aCollectionOfCodeChang
 ]
 
 { #category : #accessing }
-GtLRefactoringChange >> newSource [
-	^newSource
+GtLRefactoringChange >> matchingChange [
+	"Return the change that names my target and matches my code change result"
+
+	^ matchingChange ifNil: [ change ]
 ]
 
-{ #category : #descriptions }
-GtLRefactoringChange >> newSourceDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'New source';
-		accessor: #newSource;
-		comment: 'The method source, class definition or class comment introduced by the change; null when the change carries no code';
-		priority: 40
+{ #category : #accessing }
+GtLRefactoringChange >> newSource [
+	^newSource
 ]
 
 { #category : #accessing }
@@ -268,14 +271,4 @@ GtLRefactoringChange >> target [
 	"Return the method, variable, class or package affected by the change, such as 'MyClass>>#foo'"
 
 	^ target
-]
-
-{ #category : #descriptions }
-GtLRefactoringChange >> targetDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'Target';
-		accessor: #target;
-		comment: 'The method, variable, class or package affected by the change';
-		priority: 30
 ]

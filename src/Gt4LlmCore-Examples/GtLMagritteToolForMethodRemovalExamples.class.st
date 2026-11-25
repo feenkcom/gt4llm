@@ -56,7 +56,7 @@ GtLMagritteToolForMethodRemovalExamples >> removeClassSideMethod [
 	self assert: targetObject removedMethod isClassSide.
 	self
 		assert: targetObject targetClass currentClassName
-		equals: class name asString.
+		equals: class name.
 	self assert: (class class includesSelector: methodSelector) not ]
 		ensure: [ self removeClassNamedIfPresent: self subjectClassName ].
 	^ call

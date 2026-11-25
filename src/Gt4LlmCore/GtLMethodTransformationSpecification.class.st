@@ -16,3 +16,8 @@ GtLMethodTransformationSpecification >> methodClassName [
 GtLMethodTransformationSpecification >> methodClassName: anObject [
 	methodClassName := anObject
 ]
+
+{ #category : #accessing }
+GtLMethodTransformationSpecification >> usedClassNames [
+	^ {methodClassName} reject: [ :each | each isNil ]
+]

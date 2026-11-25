@@ -28,7 +28,7 @@ GtLRemoveMethodSpecification >> asRefactoringIn: aNamespace [
 { #category : #magritte }
 GtLRemoveMethodSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'The "Remove method" transformation removes a method identified by methodNameToRemove from the class named methodClassName. Only use it in case code needs to be removed.'
+		comment: 'Removes the method methodNameToRemove from the class methodClassName.'
 ]
 
 { #category : #printing }
@@ -51,20 +51,20 @@ GtLRemoveMethodSpecification >> gtProblems [
 { #category : #descriptions }
 GtLRemoveMethodSpecification >> methodClassNameDescription [
 	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #methodClassName;
-		  comment: 'The class holding the method to be removed. This is required and must not be empty.'
+	^ MAStringDescription new
+		accessor: #methodClassName;
+		comment: 'The class that defines the method.';
+		beRequired
 ]
 
 { #category : #magritte }
 GtLRemoveMethodSpecification >> methodNameDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Method name';
 		accessor: #methodNameToRemove;
-		comment: 'The name of the method to remove.'
+		comment: 'The name of the method to remove.';
+		beRequired
 ]
 
 { #category : #accessing }

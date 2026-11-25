@@ -67,16 +67,6 @@ GtLRemoveClassSpecification >> descriptionContainer [
 		comment: 'The "Remove class" transformation removes the class or trait named classNameToRemove. It is refused while the class has subclasses, while the trait is used by classes or traits, or while the shared pool is used by classes or traits. Methods that reference the class do not prevent its removal.'
 ]
 
-{ #category : #accessing }
-GtLRemoveClassSpecification >> externalReferencesTo: aBehavior [
-	| aBinding |
-	aBinding := aBehavior binding.
-	^ (GtPharoIndex current globalVariableReferencesTo: aBinding)
-		select: [ :each | 
-			each methodClass instanceSide ~~ aBehavior
-				and: [ each refersToLiteral: aBinding ] ]
-]
-
 { #category : #printing }
 GtLRemoveClassSpecification >> gtDisplayOn: aStream [
 	aStream
@@ -104,7 +94,7 @@ GtLRemoveClassSpecification >> gtProblems [
 									aBehavior instanceSide name})} ].
 	(Smalltalk specialObjectsArray identityIncludes: aBehavior)
 		ifTrue: [ ^ {self
-					problemDescribedBy: aBehavior name , ' is needed by the virtual machine and cannot be removed.'} ].
+					problemDescribedBy: aBehavior name asString , ' is needed by the virtual machine and cannot be removed.'} ].
 	^ self dependencyProblemsOf: aBehavior
 ]
 

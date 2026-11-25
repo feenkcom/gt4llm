@@ -106,12 +106,9 @@ GtLRefactoringCodeChangesBuilder >> classDescriptionBeforeFor: aMethodReference 
 
 { #category : #private }
 GtLRefactoringCodeChangesBuilder >> definitionKeyOf: aClassDescription [
-	"Return what identifies the definition of a class, without its comment.
-	The definition string does not include the class side slots and the package tag."
+	"Return what identifies the definition of a class, without its comment: its definition string, which has the class-side slots and the package tag"
 
-	^ {aClassDescription asDefinitionString.
-		aClassDescription classSlotNames asArray.
-		aClassDescription packageTagName}
+	^ aClassDescription asDefinitionString
 ]
 
 { #category : #initialization }
