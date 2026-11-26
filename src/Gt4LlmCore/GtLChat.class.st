@@ -347,11 +347,13 @@ GtLChat >> format: anObject [
 GtLChat >> gtCopySnippetSerialisationFor: anAction [
 	"Copy the serialisation of the receiver's Lepiter snippet to the clipboard.
 	This can then be pasted as a snippet from a lepiter page."
-	<gtAction>
 
+	<gtAction>
+	(LePasteSnippetCommandItem respondsTo: #enabled)
+		ifFalse: [ ^ anAction noAction ].
 	LePasteSnippetCommandItem enabled ifFalse: [ ^ anAction noAction ].
 	^ anAction button
-		icon: BrGlamorousVectorIcons copyToClipboard;
+		icon: (GtPhlowGlamorousVectorIconNameStencil new iconName: #copyToClipboard);
 		tooltip: 'Copy the snippet definition to the clipboard';
 		action: [ :button | self copyLepiterSerialisationToClipboard ]
 ]
@@ -492,7 +494,7 @@ GtLChat >> gtMessagesFor: aView [
 GtLChat >> gtProviderFor: anAction [
 	<gtAction>
 	^ anAction button
-		icon: BrGlamorousVectorIcons inspect;
+		icon: (GtPhlowGlamorousVectorIconNameStencil new iconName: #inspect);
 		label: 'Provider';
 		tooltip: 'Spawn the provider';
 		action: [ :button | button phlow spawnObject: provider ]
@@ -504,10 +506,10 @@ GtLChat >> gtRegistryInspectChatActionFor: anAction context: aPhlowContext [
 	^ anAction button
 		id: #'chat--inspect';
 		target: GtLChatRegistryActionTarget;
-		icon: BrGlamorousVectorIcons inspect;
+		icon: (GtPhlowGlamorousVectorIconNameStencil new iconName: #inspect);
 		tooltip: 'Inspect';
 		menuItemPreview: [ self gtLimitedDisplayString ];
-		menuItemGroup: BrMenuItemGroupConfiguration navigation;
+		menuItemGroup: GtRemotePhlowMenuItemGroupConfiguration navigation;
 		action: [ :aButton | aButton phlow spawnObject: self ]
 ]
 
@@ -520,10 +522,10 @@ GtLChat >> gtRegistryRemoveChatActionFor: anAction context: aPhlowContext [
 	^ anAction button
 		id: #'chat--remove';
 		target: GtLChatRegistryActionTarget;
-		icon: BrGlamorousVectorIcons bin;
+		icon: (GtPhlowGlamorousVectorIconNameStencil new iconName: #bin);
 		tooltip: 'Remove';
 		menuItemPreview: [ self gtLimitedDisplayString ];
-		menuItemGroup: BrMenuItemGroupConfiguration removal;
+		menuItemGroup: GtRemotePhlowMenuItemGroupConfiguration removal;
 		action: [ :aButton | aRegistry removeChat: self ]
 ]
 
