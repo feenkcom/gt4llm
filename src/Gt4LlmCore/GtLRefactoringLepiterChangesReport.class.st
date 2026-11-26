@@ -13,7 +13,7 @@ Class {
 
 { #category : #private }
 GtLRefactoringLepiterChangesReport class >> groupsOf: aCollection by: aBlock [
-	"Return the elements grouped by the value of aBlock, compared by identity, as associations in the order in which the groups first appear"
+	"Return the elements grouped by the value of aBlock, compared by equality, as associations in the order in which the groups first appear"
 
 	| groups |
 	groups := OrderedCollection new.
@@ -22,7 +22,7 @@ GtLRefactoringLepiterChangesReport class >> groupsOf: aCollection by: aBlock [
 			| aKey |
 			aKey := aBlock value: each.
 			(groups
-				detect: [ :aGroup | aGroup key == aKey ]
+				detect: [ :aGroup | aGroup key = aKey ]
 				ifNone: [ groups add: aKey -> OrderedCollection new ]) value add: each ].
 	^ groups
 ]
@@ -91,25 +91,29 @@ GtLRefactoringLepiterChangesReport >> gtEntriesFor: aView [
 			text: [ :each | each kind ]
 			width: 120;
 		column: 'Database'
-			text: [ :each | each database ifNil: [ '' ] ifNotNil: [ :aDatabase | aDatabase databaseName ] ]
+			text: [ :each | each databaseName ifNil: [ '' ] ]
 			width: 200;
-		column: 'Page title'
-			text: [ :each | each page ifNil: [ '' ] ifNotNil: [ :aPage | aPage title ] ];
-		column: 'Snippet' text: [ :each | each snippetUid ]
+		column: 'Page title' text: [ :each | each pageTitle ifNil: [ '' ] ];
+		column: 'Snippet' text: [ :each | each snippetUid ifNil: [ '' ] ]
 ]
 
 { #category : #initialization }
 GtLRefactoringLepiterChangesReport >> initializeEntries: aCollectionOfSnippetEntries limit: anInteger includeSources: aBoolean [
-	"Order the snippets by database, page and position in the page. The first anInteger snippets in that order are listed"
+	"Order the snippets by database, page and position in the page, as the entries recorded them. The first anInteger snippets in that order are listed"
 
 	limit := anInteger.
 	includeSources := aBoolean.
 	databaseReports := self class
-			sortedReports: ((self class groupsOf: aCollectionOfSnippetEntries by: [ :each | each database ])
+			sortedReports: ((self class
+					groupsOf: aCollectionOfSnippetEntries
+					by: [ :each | 
+						{each databaseId.
+							each databaseName} ])
 					collect: [ :each | 
 						GtLRefactoringLepiterDatabaseReport
 							report: self
-							database: each key
+							databaseId: each key first
+							databaseName: each key second
 							entries: each value ]).
 	entries := (databaseReports flatCollect: [ :each | each entries ]) asArray
 ]

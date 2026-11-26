@@ -121,8 +121,6 @@ GtLToolForRefactoringChanges >> problemWithGroup: aGroupName of: aRefactoring id
 
 	(aRefactoring changeGroupNames includes: aGroupName) ifTrue: [ ^ nil ].
 	aGroupName = 'otherChanges' ifTrue: [ ^ nil ].
-	(aGroupName = 'lepiterChanges' and: [ aRefactoring hasUnknownLepiterChanges ])
-		ifTrue: [ ^ 'the Lepiter changes are not known after a failed apply' ].
 	^ anObjectId , ' has no ' , aGroupName , '; its groups are '
 		, (', ' join: aRefactoring changeGroupNames)
 ]

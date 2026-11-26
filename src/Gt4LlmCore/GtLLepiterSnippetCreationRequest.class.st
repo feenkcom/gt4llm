@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'pageUid',
-		'parentSnippetUid'
+		'parentSnippetUid',
+		'databaseId'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -35,6 +36,26 @@ GtLLepiterSnippetCreationRequest >> buildSnippetFor: aTool [
 ]
 
 { #category : #accessing }
+GtLLepiterSnippetCreationRequest >> databaseId [
+	^ databaseId
+]
+
+{ #category : #accessing }
+GtLLepiterSnippetCreationRequest >> databaseId: aString [
+	databaseId := aString
+]
+
+{ #category : #magritte }
+GtLLepiterSnippetCreationRequest >> databaseIdDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Database id';
+		comment: 'Optional id of the database of the page, as lepiterKnowledgeBases lists it. Needed only when the page id is in several databases.';
+		accessor: #databaseId;
+		yourself
+]
+
+{ #category : #accessing }
 GtLLepiterSnippetCreationRequest >> pageUid [
 	^ pageUid
 ]
@@ -47,10 +68,11 @@ GtLLepiterSnippetCreationRequest >> pageUid: aString [
 { #category : #magritte }
 GtLLepiterSnippetCreationRequest >> pageUidDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Page uid';
-		accessor: #pageUid
+		accessor: #pageUid;
+		comment: 'The id of the page (base 36), as getLepiterPageContents and searchForLepiterPages give it.';
+		beRequired
 ]
 
 { #category : #accessing }

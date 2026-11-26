@@ -83,6 +83,45 @@ GtLRefactoringCodeChangesExamples >> codeSnapshotIgnoresTraitProvidedMethods [
 	^ snapshot
 ]
 
+{ #category : #examples }
+GtLRefactoringCodeChangesExamples >> failedApplyRecordsLepiterChangesMadeBefore [
+	"Applying fails after a Le change was made: the result is failed, and the snippet change is still recorded from the snapshots and linked to its Le change, so the Lepiter group lists it"
+
+	<gtExample>
+	| aPage aSnippet anOtherEnvironment anOtherClass aNamespace anApplied aResult json |
+	aPage := LePage named: 'Changed before a failure'.
+	LeDatabase new addPage: aPage.
+	aSnippet := LeTextSnippet string: 'Old text'.
+	aPage addSnippet: aSnippet.
+	anOtherEnvironment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	[ anOtherClass := anOtherEnvironment anyDummyLeafClass realClass.
+	aNamespace := GtRBNamespace new.
+	aNamespace changes
+		addChange: (LeSnippetChange new
+				snippet: aSnippet;
+				newSource: 'New text';
+				yourself).
+	(aNamespace classFor: anOtherClass)
+		compile: 'failingMethod ^ 2'
+		classified: #examples ] ensure: [ anOtherEnvironment removeFromSystem ].
+	anApplied := GtRefactoryChangeManager
+			isolatedInstanceDuring: [ self applyNamespace: aNamespace ].
+	self assert: anApplied status equals: 'failed'.
+	self assert: aSnippet string equals: 'New text'.
+	self assert: anApplied lepiterChangeResults size equals: 1.
+	aResult := anApplied lepiterChangeResults first.
+	self assert: aResult oldSnippet contentString equals: 'Old text'.
+	self assert: aResult newSnippet contentString equals: 'New text'.
+	self assert: anApplied preview changes first codeChangeResult == aResult.
+	anApplied preview changeGroupNames: #('methodChanges' 'lepiterChanges').
+	json := (GtLRefactoringResultReport
+			refactoring: anApplied
+			displayOptions: GtLRefactoringResultDisplayOptions new) llmJsonObject.
+	self assert: (json at: 'status') equals: 'failed'.
+	self assert: ((json at: 'lepiterChanges') at: 'totalSnippetsCount') equals: 1.
+	^ anApplied
+]
+
 { #category : #'examples - refactorings' }
 GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 	"When a change fails, the applied refactoring is marked as failed,
@@ -123,6 +162,102 @@ GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 				assert: anAddition targetMethodReference methodSignature
 				equals: aLeafClass name asString , '>>#appliedBeforeError'.
 			anAppliedRefactoring ]
+]
+
+{ #category : #'examples - lepiter' }
+GtLRefactoringCodeChangesExamples >> lepiterChangesAreRecordedFromSnapshots [
+	"Hand-made Le changes (refactorings produce only modifications today): a removal of a snippet with a child, a modification and an addition, on an in-memory database. The removal also reports the child, linked to the removed snippet. Each Le change is linked to the result of its own snippet.
+	The preview recorded its entries and view targets before applying, so they still name the removed snippet. A page report lists the snippets in their order before the change, and the added snippet after them"
+
+	<gtExample>
+	| aPage removed child modified added aNamespace aPreview anAppliedRefactoring results removal childRemoval aPageReport |
+	aPage := LePage named: 'Snippets to change'.
+	LeDatabase new addPage: aPage.
+	removed := LeTextSnippet string: 'Remove me'.
+	aPage addSnippet: removed.
+	child := LePharoSnippet code: '1 + 2'.
+	removed addSnippet: child.
+	modified := LeTextSnippet string: 'Old text'.
+	aPage addSnippet: modified.
+	added := LeTextSnippet string: 'New text'.
+	aNamespace := GtRBNamespace new.
+	aNamespace changes
+		addChange: (LeRemoveSnippetChange new snippet: removed);
+		addChange: (LeSnippetChange new
+				snippet: modified;
+				newSource: 'New text';
+				yourself);
+		addChange: (LeAddSnippetChange new
+				parent: aPage;
+				snippet: added;
+				yourself).
+	aPreview := (GtLRefactoringPreview namespace: aNamespace)
+			objectId: 'example-object-id';
+			yourself.
+	self assert: aPreview changes size equals: 3.
+	self assert: aPreview changeEntries last snippetUid isNil.
+	anAppliedRefactoring := GtRefactoryChangeManager
+			isolatedInstanceDuring: [ aPreview apply ].
+	self assert: anAppliedRefactoring status equals: 'applied'.
+	self assert: anAppliedRefactoring codeChangeResults isEmpty.
+	results := anAppliedRefactoring lepiterChangeResults.
+	self
+		assert: (results collect: [ :each | each llmChangeKind ]) asArray
+		equals: #('removed snippet' 'removed snippet' 'modified snippet' 'added snippet').
+	removal := results first.
+	childRemoval := results second.
+	self assert: removal removedSnippet contentString equals: 'Remove me'.
+	self assert: removal removedChildResults asArray equals: {childRemoval}.
+	self
+		assert: childRemoval removedWithSnippet
+		equals: removal targetSnippetReference.
+	self assert: childRemoval removedSnippet contentString equals: '1 + 2'.
+	self assert: results third oldSnippet contentString equals: 'Old text'.
+	self assert: results fourth newSnippet contentString equals: 'New text'.
+	self assert: results fourth newSnippet position equals: 2.
+	self
+		assert: (aPreview changes collect: [ :each | each codeChangeResult ]) asArray
+		equals: {removal.
+				results third.
+				results fourth}.
+	self
+		assert: (aPreview changes collect: [ :each | each gtViewChangeTarget ]) asArray
+		equals: ({removal.
+				results third.
+				results fourth} collect: [ :each | each gtViewChangeTarget ]).
+	self assert: aPreview changeEntries first pageUid equals: aPage uidString.
+	self assert: aPreview changeEntries first position equals: 1.
+	self
+		assert: (anAppliedRefactoring changeEntries collect: [ :each | each groupKind ]) asSet
+				asArray
+		equals: #(#lepiter).
+	self
+		assert: (anAppliedRefactoring changeEntries collect: [ :each | each snippetUid ])
+				asArray
+		equals: {removed uid uidString.
+				child uid uidString.
+				modified uid uidString.
+				added uid uidString}.
+	aPageReport := GtLRefactoringLepiterPageReport
+			report: nil
+			pageUid: aPage uidString
+			pageTitle: aPage title
+			entries: anAppliedRefactoring changeEntries reversed.
+	self
+		assert: (aPageReport entries collect: [ :each | each snippetUid ]) asArray
+		equals: {removed uid uidString.
+				child uid uidString.
+				modified uid uidString.
+				added uid uidString}.
+	self
+		assert: ((anAppliedRefactoring report llmJsonObject at: 'codeChanges')
+				collect: [ :each | each at: 'kind' ])
+		equals: #('removed snippet' 'removed snippet' 'modified snippet' 'added snippet').
+	self
+		assert: aPage children asArray
+		equals: {modified.
+				added}.
+	^ anAppliedRefactoring
 ]
 
 { #category : #examples }
@@ -299,6 +434,44 @@ GtLRefactoringCodeChangesExamples >> refactoringChangesAreLinkedToCodeChanges [
 						diffElementWithNote: aSlotRemoval appliedDiffNote
 						diffElement: aSlotRemoval codeChangeResult asDiffElement) notNil.
 			aPreview ]
+]
+
+{ #category : #examples }
+GtLRefactoringCodeChangesExamples >> removalsOfAParentAndItsChildLinkToTheParent [
+	"Removing a child and its parent gives the same results in both orders: the descendants, depth first, are linked to the outermost removed snippet"
+
+	<gtExample>
+	^ #(true false)
+		collect: [ :isChildFirst | 
+			| aPage aParent aChild aGrandChild theRemovals aNamespace anApplied aParentResult |
+			aPage := LePage named: 'Nested removals'.
+			LeDatabase new addPage: aPage.
+			aParent := LeTextSnippet string: 'Parent'.
+			aPage addSnippet: aParent.
+			aChild := LeTextSnippet string: 'Child'.
+			aParent addSnippet: aChild.
+			aGrandChild := LePharoSnippet code: '1 + 2'.
+			aChild addSnippet: aGrandChild.
+			theRemovals := {LeRemoveSnippetChange new snippet: aChild.
+					LeRemoveSnippetChange new snippet: aParent}.
+			isChildFirst ifFalse: [ theRemovals := theRemovals reversed ].
+			aNamespace := GtRBNamespace new.
+			theRemovals do: [ :each | aNamespace changes addChange: each ].
+			anApplied := GtRefactoryChangeManager
+					isolatedInstanceDuring: [ (GtLRefactoringPreview namespace: aNamespace) apply ].
+			self assert: anApplied status equals: 'applied'.
+			self assert: anApplied lepiterChangeResults size equals: 3.
+			aParentResult := anApplied lepiterChangeResults
+					detect: [ :each | each removedSnippet contentString = 'Parent' ].
+			self
+				assert: (aParentResult removedChildResults
+						collect: [ :each | each removedSnippet contentString ]) asArray
+				equals: #('Child' '1 + 2').
+			self
+				assert: (aParentResult removedChildResults
+						allSatisfy: [ :each | each removedWithSnippet = aParentResult targetSnippetReference ]).
+			self assert: aPage children isEmpty.
+			anApplied ]
 ]
 
 { #category : #'examples - refactorings' }

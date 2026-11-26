@@ -17,6 +17,11 @@ GtLLepiterEditTextSnippetTransformationSpecification class >> jsonSchemaLabel [
 	^ 'EditTextSnippet'
 ]
 
+{ #category : #accessing }
+GtLLepiterEditTextSnippetTransformationSpecification class >> refactoringName [
+	^ 'Edit text snippet'
+]
+
 { #category : #refactoring }
 GtLLepiterEditTextSnippetTransformationSpecification >> asRefactoringIn: aNamespace [
 	aNamespace changes

@@ -17,10 +17,15 @@ GtLLepiterAddTextSnippetTransformationSpecification class >> jsonSchemaLabel [
 	^ 'AddTextSnippet'
 ]
 
+{ #category : #accessing }
+GtLLepiterAddTextSnippetTransformationSpecification class >> refactoringName [
+	^ 'Add text snippet'
+]
+
 { #category : #'as yet unclassified' }
 GtLLepiterAddTextSnippetTransformationSpecification >> asRefactoringIn: aNamespace [
 	aNamespace changes
-		addChange: (LeAddSnippetChange text: newSnippetText in: self page).
+		addChange: (LeAddSnippetChange text: newSnippetText content in: self page).
 	^ nil
 ]
 

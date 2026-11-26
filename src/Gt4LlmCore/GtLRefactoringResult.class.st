@@ -3,8 +3,9 @@ I am the result of applying a {{gtClass:GtLRefactoringPreview}}, with the applyR
 
 Once RB changes are applied they compute their diffs against the already changed image, so they no longer show what changed. Therefore I keep:
 - `codeChangeResults`: {{gtClass:GtLCodeChangeResult}} objects (method compilations and removals, class modifications, comment changes and removals) built by {{gtClass:GtLRefactoringCodeChangesBuilder}} from snapshots taken before and after applying the changes. The {{gtClass:GtLCodeChangesToolCallsSummarizer}} uses them to summarize refactorings like any other code change;
+- `lepiterChangeResults`: {{gtClass:GtLLepiterSnippetChangeResult}} objects (snippet additions, modifications and removals, removed descendants included) built by the same builder from snapshots of the snippets of the Le changes. They are kept apart from the code change results, which the summarizer and the histories take as class and method changes; my change entries and my Code changes view list both;
 - `undoChange`: the RB change that reverts the applied changes, as answered by {{gtMethod:GtRefactoryChangeManager>>#performChangeReturningUndo:}}. It is also recorded in the global undo history;
-- `exception`: when applying the changes raised an error, the frozen exception. My status is then 'failed', there is no undo change and the code change results describe the changes applied before the error;
+- `exception`: when applying the changes raised an error, the first frozen exception. My status is then 'failed', there is no undo change, and the code and Lepiter change results describe the changes applied before the error;
 - `preview`: the preview I was applied from.
 
 I can be large, so the tools do not answer me: they answer a {{gtClass:GtLRefactoringResultReport}} of me, built for the display options of the call. My own views show all my changes; {{gtMethod:GtLRefactoringResult>>#gtReportFor:}} shows a report with the default display options.
@@ -16,6 +17,7 @@ Class {
 		'preview',
 		'undoChange',
 		'codeChangeResults',
+		'lepiterChangeResults',
 		'exception',
 		'objectId'
 	],
@@ -23,41 +25,39 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtLRefactoringResult class >> preview: aRefactoringPreview undoChange: anUndoChange codeChangeResults: aCollection exception: anExceptionDomainObject [
+GtLRefactoringResult class >> preview: aRefactoringPreview undoChange: anUndoChange codeChangeResults: aCollection lepiterChangeResults: aCollectionOfSnippetResults exception: anExceptionDomainObject [
 	"anUndoChange is the change that reverts the applied changes (nil if applying failed).
-	aCollection holds the GtLCodeChangeResult objects describing what changed.
+	aCollection holds the GtLCodeChangeResult objects describing what changed in the code, aCollectionOfSnippetResults the GtLLepiterSnippetChangeResult objects describing what changed in Lepiter.
 	anExceptionDomainObject is nil, or the frozen exception raised while applying the changes."
 
 	^ self new
 		initializePreview: aRefactoringPreview
 		undoChange: anUndoChange
 		codeChangeResults: aCollection
+		lepiterChangeResults: aCollectionOfSnippetResults
 		exception: anExceptionDomainObject
 ]
 
 { #category : #accessing }
-GtLRefactoringResult >> changeEntries [
-	"Return the entries that list the applied changes in the groups of a report.
-	The class and method changes are the code change results. The Lepiter changes are the previewed ones, unless they are not known"
+GtLRefactoringResult >> allChangeResults [
+	"Return the code change results, then the Lepiter snippet change results"
 
-	| entries |
-	entries := (self codeChangeResults collect: [ :each | each llmChangeEntry ])
-			asOrderedCollection.
-	self hasUnknownLepiterChanges
-		ifFalse: [ entries
-				addAll: ((self refactoringChanges collect: [ :each | each asChangeEntry ])
-						select: [ :each | each groupKind = #lepiter ]) ].
-	^ entries asArray
+	^ self codeChangeResults , self lepiterChangeResults
+]
+
+{ #category : #accessing }
+GtLRefactoringResult >> changeEntries [
+	"Return the entries that list the applied changes in the groups of a report: the code change results and the Lepiter snippet change results. Both are built from snapshots, also after a failure, when they describe the changes made before the error"
+
+	^ (self allChangeResults collect: [ :each | each llmChangeEntry ]) asArray
 ]
 
 { #category : #accessing }
 GtLRefactoringResult >> changeGroupNames [
-	"My changes are listed in the groups of my preview, except the Lepiter changes when they are not known"
+	"My changes are listed in the groups of my preview"
 
 	preview ifNil: [ ^ #() ].
-	^ self hasUnknownLepiterChanges
-		ifTrue: [ preview changeGroupNames copyWithout: 'lepiterChanges' ]
-		ifFalse: [ preview changeGroupNames ]
+	^ preview changeGroupNames
 ]
 
 { #category : #accessing }
@@ -93,21 +93,21 @@ GtLRefactoringResult >> groupsChanges [
 
 { #category : #views }
 GtLRefactoringResult >> gtChangesFor: aView [
-	"The code changes (GtLCodeChangeResult) describe what the refactoring changed in the image. They are the main view; the refactoring changes (GtLRefactoringChange) that produced them are shown by #gtRefactoringChangesFor:"
+	"The change results (GtLCodeChangeResult and GtLLepiterSnippetChangeResult) describe what the refactoring changed in the image and in Lepiter. They are the main view; the refactoring changes (GtLRefactoringChange) that produced them are shown by #gtRefactoringChangesFor:"
 
 	<gtView>
 	<gtLlmView>
 	^ aView columnedList
 		title: 'Code changes';
 		priority: 1;
-		items: [ self codeChangeResults ];
+		items: [ self allChangeResults ];
 		column: ''
 			stencil: [ :each | each gtViewChangeIcon asElement ]
 			width: 26;
 		column: 'Change'
 			text: [ :each | each llmChangeKind ]
 			width: 160;
-		column: 'Target' text: [ :each | each llmChangeTarget ];
+		column: 'Target' text: [ :each | each gtViewChangeTarget ];
 		send: [ :each | each ];
 		actionButtonIcon: BrGlamorousVectorIcons inspect
 			tooltip: 'Inspect the preview'
@@ -170,6 +170,8 @@ GtLRefactoringResult >> gtStatusFor: aView [
 				add: 'Status' -> self status;
 				add: 'Changes count' -> self changesCount;
 				add: 'Code changes' -> self codeChangeResults size.
+			self lepiterChangeResults
+				ifNotEmpty: [ :aCollection | items add: 'Lepiter changes' -> aCollection size ].
 			self hasFailed ifTrue: [ items add: 'Error' -> exception ].
 			undoChange ifNotNil: [ items add: 'Undo change' -> undoChange ].
 			items ];
@@ -185,19 +187,12 @@ GtLRefactoringResult >> hasFailed [
 	^ exception notNil
 ]
 
-{ #category : #testing }
-GtLRefactoringResult >> hasUnknownLepiterChanges [
-	"After a failure, the snippets that changed are not known: the Lepiter changes of the preview may not all have been made"
-
-	^ self hasFailed
-		and: [ preview notNil and: [ preview changeGroupNames includes: 'lepiterChanges' ] ]
-]
-
 { #category : #initialization }
-GtLRefactoringResult >> initializePreview: aRefactoringPreview undoChange: anUndoChange codeChangeResults: aCollection exception: anExceptionDomainObject [
+GtLRefactoringResult >> initializePreview: aRefactoringPreview undoChange: anUndoChange codeChangeResults: aCollection lepiterChangeResults: aCollectionOfSnippetResults exception: anExceptionDomainObject [
 	preview := aRefactoringPreview.
 	undoChange := anUndoChange.
 	codeChangeResults := aCollection asArray.
+	lepiterChangeResults := aCollectionOfSnippetResults asArray.
 	exception := anExceptionDomainObject
 ]
 
@@ -206,6 +201,13 @@ GtLRefactoringResult >> isErrorDomainObject [
 	"I am a result even when applying the changes failed: I then describe the changes applied before the error"
 
 	^ false
+]
+
+{ #category : #accessing }
+GtLRefactoringResult >> lepiterChangeResults [
+	"Return the GtLLepiterSnippetChangeResult objects describing the snippets added, changed or removed by the refactoring, removed descendants included. They are kept apart from the code change results, which the summaries and histories take as class and method changes"
+
+	^ lepiterChangeResults ifNil: [ #() ]
 ]
 
 { #category : #accessing }

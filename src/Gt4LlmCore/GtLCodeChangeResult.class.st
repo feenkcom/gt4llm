@@ -1,23 +1,8 @@
 Class {
 	#name : #GtLCodeChangeResult,
-	#superclass : #Object,
+	#superclass : #GtLChangeResult,
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
-
-{ #category : #'accessing - icons' }
-GtLCodeChangeResult class >> additionIcon [
-	^ self iconNamed: #changeAdd
-]
-
-{ #category : #'accessing - icons' }
-GtLCodeChangeResult class >> modificationIcon [
-	^ self iconNamed: #changeUpdate
-]
-
-{ #category : #'accessing - icons' }
-GtLCodeChangeResult class >> removalIcon [
-	^ self iconNamed: #changeRemove
-]
 
 { #category : #accessing }
 GtLCodeChangeResult >> addedVariableNamesFor: aVariableType [
@@ -41,11 +26,6 @@ GtLCodeChangeResult >> isClassRemovalResult [
 
 { #category : #testing }
 GtLCodeChangeResult >> isClassRenameResult [
-	^ false
-]
-
-{ #category : #testing }
-GtLCodeChangeResult >> isErrorDomainObject [
 	^ false
 ]
 
