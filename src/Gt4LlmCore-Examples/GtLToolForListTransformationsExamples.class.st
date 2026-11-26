@@ -25,7 +25,7 @@ GtLToolForListTransformationsExamples >> listTransformations [
 	self assert: targetObject class equals: GtLTransformationsSchema.
 	self
 		assert: (self transformationNamesIn: targetObject schema)
-		equals: #('AddClass' 'AddMethod' 'PushUpInstanceVariable' 'PushUpMethod' 'RemoveMethod' 'RenameClass')
+		equals: #('AddClass' 'AddMethod' 'PushUpInstanceVariable' 'PushUpMethod' 'RemoveMethod' 'RenameClass' 'RenameClassVariable' 'RenameInstanceVariable')
 				asSet.
 	self
 		assert: ((self transformationNamesIn: targetObject schema)
@@ -44,7 +44,7 @@ GtLToolForListTransformationsExamples >> listTransformationsSchemaEntries [
 	self
 		assert: (entries collect: [ :each | targetObject nameOfTransformationSchema: each ])
 				asSet
-		equals: #('AddClass' 'AddMethod' 'PushUpInstanceVariable' 'PushUpMethod' 'RemoveMethod' 'RenameClass')
+		equals: #('AddClass' 'AddMethod' 'PushUpInstanceVariable' 'PushUpMethod' 'RemoveMethod' 'RenameClass' 'RenameClassVariable' 'RenameInstanceVariable')
 				asSet.
 	self
 		assert: (entries

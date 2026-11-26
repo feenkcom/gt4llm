@@ -199,7 +199,7 @@ GtLRefactoringChange >> hasNewSource [
 { #category : #initialization }
 GtLRefactoringChange >> initializeFromChange: aRefactoryChange [
 	change := aRefactoryChange.
-	changeDescription := aRefactoryChange changeString asString.
+	changeDescription := aRefactoryChange gtLlmChangeDescription.
 	kind := aRefactoryChange gtLlmChangeKind.
 	target := aRefactoryChange gtLlmChangeTarget.
 	newSource := aRefactoryChange gtLlmNewSource

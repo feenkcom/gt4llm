@@ -74,6 +74,13 @@ GtLRefactoringDefinitionChange >> className [
 	^ className
 ]
 
+{ #category : #accessing }
+GtLRefactoringDefinitionChange >> gtLlmChangeDescription [
+	"Described like the RB changes, see RBRefactoryChange>>#gtLlmChangeDescription"
+
+	^ self changeString
+]
+
 { #category : #llm }
 GtLRefactoringDefinitionChange >> gtLlmChangeKind [
 	^ 'changed class'

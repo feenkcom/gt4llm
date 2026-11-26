@@ -1,5 +1,5 @@
 "
-I am the RenameClass transformation of previewRefactoring, also used by the renameClass tool ({{gtClass:GtLMagritteToolForClassRename}}). I rename a class or trait with {{gtClass:GtRBRenameClassRefactoring}}, which rewrites its references in methods, baselines and Lepiter snippets. My preview lists its changes in the class, method and Lepiter groups ({{gtMethod:GtLRenameClassSpecification>>#changeGroupNames}}), as a rename can change many methods and snippets. {{gtMethod:GtLRenameClassSpecification>>#gtProblems}} checks the names first, as RB reports every problem as an invalid class name.
+I am the RenameClass transformation of previewRefactoring, also used by the renameClass tool ({{gtClass:GtLMagritteToolForClassRename}}). I rename a class or trait with {{gtClass:GtRBRenameClassRefactoring}}, which rewrites its references in methods, baselines and Lepiter snippets. My preview lists its changes in the class, method and Lepiter groups ({{gtMethod:GtLRenameClassSpecification>>#changeGroupNames}}), as a rename can change many methods and snippets. {{gtMethod:GtLRenameClassSpecification>>#gtParameterProblems}} and {{gtMethod:GtLRenameClassSpecification>>#gtPreconditionProblems}} check the names first, as RB reports every problem as an invalid class name.
 "
 Class {
 	#name : #GtLRenameClassSpecification,
@@ -86,26 +86,42 @@ GtLRenameClassSpecification >> gtDisplayOn: aStream [
 ]
 
 { #category : #validation }
-GtLRenameClassSpecification >> gtProblems [
+GtLRenameClassSpecification >> gtParameterProblems [
+	className isEmptyOrNil
+		ifTrue: [ ^ {self parameterProblem: 'Missing class name'} ].
+	(className asString endsWith: ' class')
+		ifTrue: [ ^ {self
+					parameterProblem: ('{1} is the class side of {2}. Rename {2} instead.'
+							format: {className.
+									self class instanceSideNameOf: className})} ].
+	newClassName isEmptyOrNil
+		ifTrue: [ ^ {self parameterProblem: 'Missing new class name'} ].
+	newClassName asString = className asString
+		ifTrue: [ ^ {self
+					parameterProblem: 'The new class name is the current name of the class: ' , newClassName} ].
+	(RBCondition isValidClassName: newClassName asString) check
+		ifFalse: [ ^ {self
+					parameterProblem: newClassName
+							, ' is not a valid class name: it must start with an uppercase letter and contain only letters, digits and underscores'} ].
+	^ #()
+]
+
+{ #category : #validation }
+GtLRenameClassSpecification >> gtPreconditionProblems [
 	"RB answers 'X is not a valid class name' for all these problems, so check them first"
 
 	| aBehavior |
 	aBehavior := self
-			classToRenameIfAbsent: [ ^ {self
-						problemDescribedBy: (className isEmptyOrNil
-								ifTrue: [ 'Missing class name' ]
-								ifFalse: [ 'Class not found: ' , className ])} ].
+			classToRenameIfAbsent: [ ^ {self preconditionProblem: 'Class not found: ' , className} ].
 	aBehavior name asString = className asString
 		ifFalse: [ ^ {self
-					problemDescribedBy: ('{1} is another name of {2}. Rename a class by its own name.'
+					preconditionProblem: ('{1} is another name of {2}. Rename a class by its own name.'
 							format: {className.
 									aBehavior name})} ].
-	aBehavior isClassSide
+	(Smalltalk globals includesKey: newClassName asSymbol)
 		ifTrue: [ ^ {self
-					problemDescribedBy: ('{1} is the class side of {2}. Rename {2} instead.'
-							format: {aBehavior name.
-									aBehavior instanceSide name})} ].
-	^ self newClassNameProblems
+					preconditionProblem: newClassName , ' is already the name of a class or global variable'} ].
+	^ #()
 ]
 
 { #category : #accessing }
@@ -126,28 +142,6 @@ GtLRenameClassSpecification >> newClassNameDescription [
 		accessor: #newClassName;
 		comment: 'The new name of the class or trait.';
 		beRequired
-]
-
-{ #category : #validation }
-GtLRenameClassSpecification >> newClassNameProblems [
-	newClassName isEmptyOrNil
-		ifTrue: [ ^ {self problemDescribedBy: 'Missing new class name'} ].
-	newClassName asString = className asString
-		ifTrue: [ ^ {self
-					problemDescribedBy: 'The new class name is the current name of the class: ' , newClassName} ].
-	(RBCondition isValidClassName: newClassName asString) check
-		ifFalse: [ ^ {self
-					problemDescribedBy: newClassName
-							, ' is not a valid class name: it must start with an uppercase letter and contain only letters, digits and underscores'} ].
-	(Smalltalk globals includesKey: newClassName asSymbol)
-		ifTrue: [ ^ {self
-					problemDescribedBy: newClassName , ' is already the name of a class or global variable'} ].
-	^ #()
-]
-
-{ #category : #private }
-GtLRenameClassSpecification >> problemDescribedBy: aString [
-	^ GtLTransformationProblem description: aString
 ]
 
 { #category : #accessing }

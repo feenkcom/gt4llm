@@ -69,6 +69,37 @@ GtLRefactoringPreviewExamples >> namedRefactoringPreviewSerialization [
 ]
 
 { #category : #examples }
+GtLRefactoringPreviewExamples >> previewOfARenamedVariableListsItsMethods [
+	"RB nests the methods that a variable rename rewrites in the rename change. A preview lists the rename, then each rewritten method. The refactoring only runs in its namespace: nothing is applied"
+
+	<gtExample>
+	<return: #GtLRefactoringPreview>
+	| namespace preview |
+	namespace := GtRBNamespace new.
+	(GtRenameInstanceVariableRefactoring
+		model: namespace
+		rename: 'changeDescription'
+		to: 'renamedChangeDescription'
+		in: (namespace classNamed: #GtLRefactoringChange)) primitiveExecute.
+	preview := GtLRefactoringPreview namespace: namespace.
+	self assert: preview changes first kind equals: 'renamed slot'.
+	self assert: preview changes first target equals: 'GtLRefactoringChange'.
+	self assert: preview changes size > 1.
+	self
+		assert: (preview changes allButFirst collect: [ :each | each kind ]) asSet asArray
+		equals: #('modified method').
+	self
+		assert: (preview changes allButFirst
+				collect: [ :each | each newSource includesSubstring: 'renamedChangeDescription' ])
+				asSet asArray
+		equals: #(true).
+	self
+		assert: (preview changes
+				anySatisfy: [ :each | each target = 'GtLRefactoringChange>>#changeDescription' ]).
+	^ preview
+]
+
+{ #category : #examples }
 GtLRefactoringPreviewExamples >> pushUpMethodPreview [
 	"A push up previews slot and method changes. Each change keeps its RB change,
 	has a kind and a target, and only the added method has a new source.

@@ -9,6 +9,13 @@ RBRefactoryChange >> gtLlmAddChangeTargetsTo: aChangeTargets [
 ]
 
 { #category : #'*Gt4LlmCore' }
+RBRefactoryChange >> gtLlmChangeDescription [
+	"Return the description of this change in a refactoring preview. It is computed against the current image, as the kind, so it should be asked before the change is applied"
+
+	^ self changeString asString
+]
+
+{ #category : #'*Gt4LlmCore' }
 RBRefactoryChange >> gtLlmChangeKind [
 	"Return a short label of the kind of this change, used to describe refactoring previews to an LLM"
 

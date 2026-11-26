@@ -74,27 +74,32 @@ GtLRemoveClassSpecification >> gtDisplayOn: aStream [
 		nextPutAll: (self classNameToRemove ifNil: [ '<class>' ]) asString
 ]
 
-{ #category : #accessing }
-GtLRemoveClassSpecification >> gtProblems [
+{ #category : #validation }
+GtLRemoveClassSpecification >> gtParameterProblems [
+	classNameToRemove isEmptyOrNil
+		ifTrue: [ ^ {self parameterProblem: 'Missing class name'} ].
+	(classNameToRemove asString endsWith: ' class')
+		ifTrue: [ ^ {self
+					parameterProblem: ('{1} is the class side of {2}. Remove {2} instead.'
+							format: {classNameToRemove.
+									self class instanceSideNameOf: classNameToRemove})} ].
+	^ #()
+]
+
+{ #category : #validation }
+GtLRemoveClassSpecification >> gtPreconditionProblems [
 	| aBehavior |
 	aBehavior := self
-			classToRemoveIfAbsent: [ ^ {self
-						problemDescribedBy: (classNameToRemove isEmptyOrNil
-								ifTrue: [ 'Missing class name' ]
-								ifFalse: [ 'Class not found: ' , classNameToRemove ])} ].
+			classToRemoveIfAbsent: [ ^ {self preconditionProblem: 'Class not found: ' , classNameToRemove} ].
 	aBehavior name asString = classNameToRemove asString
 		ifFalse: [ ^ {self
-					problemDescribedBy: ('{1} is another name of {2}. Remove a class by its own name.'
+					preconditionProblem: ('{1} is another name of {2}. Remove a class by its own name.'
 							format: {classNameToRemove.
 									aBehavior name})} ].
-	aBehavior isClassSide
-		ifTrue: [ ^ {self
-					problemDescribedBy: ('{1} is the class side of {2}. Remove {2} instead.'
-							format: {aBehavior name.
-									aBehavior instanceSide name})} ].
 	(Smalltalk specialObjectsArray identityIncludes: aBehavior)
 		ifTrue: [ ^ {self
-					problemDescribedBy: aBehavior name asString , ' is needed by the virtual machine and cannot be removed.'} ].
+					preconditionProblem: aBehavior name asString
+							, ' is needed by the virtual machine and cannot be removed.'} ].
 	^ self dependencyProblemsOf: aBehavior
 ]
 
@@ -116,15 +121,10 @@ GtLRemoveClassSpecification >> maximumListedNames [
 ]
 
 { #category : #private }
-GtLRemoveClassSpecification >> problemDescribedBy: aString [
-	^ GtLTransformationProblem description: aString
-]
-
-{ #category : #private }
 GtLRemoveClassSpecification >> problemDescribedBy: aTemplateString for: aBehavior users: someBehaviors [
 	someBehaviors ifEmpty: [ ^ nil ].
 	^ self
-		problemDescribedBy: (aTemplateString
+		preconditionProblem: (aTemplateString
 				format: {aBehavior name.
 						self listOfNamesOf: someBehaviors})
 ]

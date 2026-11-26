@@ -72,14 +72,7 @@ GtLAddClassSpecification >> gtDisplayOn: aStream [
 ]
 
 { #category : #validation }
-GtLAddClassSpecification >> gtProblems [
-	^ self gtProblemsAfterAdding: #()
-]
-
-{ #category : #validation }
-GtLAddClassSpecification >> gtProblemsAfterAdding: someClassNames [
-	"RB reports most of these problems as a failed precondition, so check them first. The superclass may be added by an earlier transformation of the same call"
-
+GtLAddClassSpecification >> gtParameterProblems [
 	| problems |
 	problems := OrderedCollection new.
 	newClassName isEmptyOrNil
@@ -87,21 +80,27 @@ GtLAddClassSpecification >> gtProblemsAfterAdding: someClassNames [
 		ifFalse: [ (RBCondition isValidClassName: newClassName asString) check
 				ifFalse: [ problems
 						add: newClassName
-								, ' is not a valid class name: it must start with an uppercase letter and contain only letters, digits and underscores' ].
-			((Smalltalk globals includesKey: newClassName asSymbol)
-				or: [ someClassNames includes: newClassName asString ])
-				ifTrue: [ problems
-						add: newClassName , ' is already the name of a class or global variable' ] ].
-	superclassName isEmptyOrNil
-		ifTrue: [ problems add: 'Missing superclass name' ]
-		ifFalse: [ ((Smalltalk globals classNamed: superclassName) isNil
-				and: [ (someClassNames includes: superclassName asString) not ])
-				ifTrue: [ problems add: 'Class not found: ' , superclassName ] ].
+								, ' is not a valid class name: it must start with an uppercase letter and contain only letters, digits and underscores' ] ].
+	superclassName isEmptyOrNil ifTrue: [ problems add: 'Missing superclass name' ].
 	(packageName isNil or: [ packageName trimBoth isEmpty ])
 		ifTrue: [ problems add: 'Missing package name' ].
-	^ problems
-		collect: [ :each | GtLTransformationProblem description: each ]
-		as: Array
+	^ problems collect: [ :each | self parameterProblem: each ] as: Array
+]
+
+{ #category : #validation }
+GtLAddClassSpecification >> gtPreconditionProblemsAfterAdding: someClassNames [
+	"RB reports most of these problems as a failed precondition, so check them first. The superclass may be added by an earlier transformation of the same call"
+
+	| problems |
+	problems := OrderedCollection new.
+	((Smalltalk globals includesKey: newClassName asSymbol)
+		or: [ someClassNames includes: newClassName asString ])
+		ifTrue: [ problems
+				add: newClassName , ' is already the name of a class or global variable' ].
+	((Smalltalk globals classNamed: superclassName) isNil
+		and: [ (someClassNames includes: superclassName asString) not ])
+		ifTrue: [ problems add: 'Class not found: ' , superclassName ].
+	^ problems collect: [ :each | self preconditionProblem: each ] as: Array
 ]
 
 { #category : #testing }

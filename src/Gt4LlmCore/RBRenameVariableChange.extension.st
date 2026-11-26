@@ -25,3 +25,15 @@ RBRenameVariableChange >> gtLlmMatchesCodeChangeResult: aCodeChangeResult [
 	^ aCodeChangeResult isClassChangeResult
 		and: [ aCodeChangeResult targetClassName asString = self changeClassName asString ]
 ]
+
+{ #category : #'*Gt4LlmCore' }
+RBRenameVariableChange >> gtLlmPreviewChanges [
+	"Describe the rename and the methods it rewrites, which are nested in it"
+
+	^ {GtLRefactoringChange fromChange: self}
+		, (self changes
+				flatCollect: [ :eachChange | 
+					eachChange gtBasicChanges
+						collect: [ :eachBasicChange | GtLRefactoringChange fromChange: eachBasicChange ] ])
+				asArray
+]

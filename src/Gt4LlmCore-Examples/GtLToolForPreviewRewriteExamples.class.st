@@ -59,7 +59,7 @@ GtLToolForPreviewRewriteExamples >> previewRewriteInClass [
 	self assert: targetObject changes size equals: 1.
 	self
 		assert: targetObject changes first changeDescription
-		equals: 'Add GtLRewriteFixture>>#valueOf:'.	"The formatter output varies (for example '^anObject' or '^ anObject'), so only the rewritten message is checked"
+		equals: 'Modify GtLRewriteFixture>>#valueOf:'.	"The formatter output varies (for example '^anObject' or '^ anObject'), so only the rewritten message is checked"
 	self
 		assert: (targetObject changes first newSource
 				includesSubstring: 'rewrittenFixtureMessage').
@@ -104,7 +104,7 @@ GtLToolForPreviewRewriteExamples >> previewRewriteInClassAndPackage [
 	self assert: targetObject changes size equals: 1.
 	self
 		assert: targetObject changes first changeDescription
-		equals: 'Add GtLRewriteFixture>>#valueOf:'.
+		equals: 'Modify GtLRewriteFixture>>#valueOf:'.
 	^ call
 ]
 
@@ -128,7 +128,7 @@ GtLToolForPreviewRewriteExamples >> previewRewriteInPackage [
 			self assert: targetObject changes size equals: 1.
 			self
 				assert: targetObject changes first changeDescription
-				equals: 'Add ' , aRootClass name , '>>#valueOf:'.
+				equals: 'Modify ' , aRootClass name , '>>#valueOf:'.
 			call ]
 ]
 
@@ -195,7 +195,7 @@ GtLToolForPreviewRewriteExamples >> previewRewriteWithMethodPattern [
 	self assert: targetObject changes size equals: 1.
 	self
 		assert: targetObject changes first changeDescription
-		equals: 'Add GtLRewriteFixture>>#sizeOf:'.
+		equals: 'Modify GtLRewriteFixture>>#sizeOf:'.
 	self
 		assert: targetObject changes first newSource lines asArray
 		equals: #('sizeOf: aCollection' '	^ 0').
