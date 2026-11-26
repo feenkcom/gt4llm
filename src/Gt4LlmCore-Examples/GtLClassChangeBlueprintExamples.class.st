@@ -100,8 +100,8 @@ GtLClassChangeBlueprintExamples >> blueprintView [
 	self assert: view stencilBuilder build classHistory == history.
 	emptyHistory := GtLClassChangeHistory new targetClassName: self targetClassName.
 	self
-		assert: (emptyHistory gtClassBlueprintFor: GtPhlowView empty) class
-		equals: GtPhlowView empty class.
+		assert: ((emptyHistory gtClassBlueprintFor: GtPhlowView empty)
+				isKindOf: GtPhlowCanvassableView).
 	^ view
 ]
 
