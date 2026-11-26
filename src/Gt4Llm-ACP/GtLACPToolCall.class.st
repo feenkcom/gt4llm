@@ -107,7 +107,7 @@ GtLACPToolCall >> gtMcpToolMessageFor: aView [
     asElementDo: [ :element |
      element
       addAptitude: BrShadowAptitude new;
-      background: Color white;
+      background: element theme default contentBackground;
       margin: (BlInsets all: 10) ] ]
 ]
 
