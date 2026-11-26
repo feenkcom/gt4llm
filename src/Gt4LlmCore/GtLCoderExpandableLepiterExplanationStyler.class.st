@@ -43,36 +43,33 @@ GtLCoderExpandableLepiterExplanationStyler >> stylePageNameInStringMessage: aMes
 { #category : #private }
 GtLCoderExpandableLepiterExplanationStyler >> styleSameStrings: aStringLiteralNodel [
 	| aStringMarker aStringHighlightAttribute theStringOccurences |
-	
 	aStringMarker := BrTextInvisibleMarkerAttribute new.
-	aStringHighlightAttribute := (GtPharoDynamicHighlightAttribute paint: BrGlamorousColors neutralBackgroundColor).
+	aStringHighlightAttribute := GtPharoDynamicHighlightAttribute
+			paint: self theme editor occurrenceHighlight.
 
 	theStringOccurences := OrderedCollection new.
-	
-	aStringLiteralNodel topParent 
-		allNodesOfType: aStringLiteralNodel class
-		do: [ :aNode |
-			aNode string = aStringLiteralNodel string 
-				ifTrue: [ theStringOccurences add: aNode ] ].
-		
-	theStringOccurences size <= 1
-		ifTrue: [ ^ self ].
 
-	theStringOccurences do: [ :eachNode | 
-		(text
-			from: eachNode startPosition
-			to: eachNode stopPosition)
+	aStringLiteralNodel topParent
+		allNodesOfType: aStringLiteralNodel class
+		do: [ :aNode | 
+			aNode string = aStringLiteralNodel string
+				ifTrue: [ theStringOccurences add: aNode ] ].
+
+	theStringOccurences size <= 1 ifTrue: [ ^ self ].
+
+	theStringOccurences
+		do: [ :eachNode | 
+			(text from: eachNode startPosition to: eachNode stopPosition)
 				attribute: aStringMarker;
 				onCursorEnter: [ :aTextEditor :anEvent | 
-					aTextEditor text
-						findAttribute: aStringMarker
-						indicesDo: [ :aVariableStart :aVariableEnd |
-							aTextEditor text
-								attribute: aStringHighlightAttribute
-								from: aVariableStart
-								to: aVariableEnd ] ]
-				leave: [ :aTextEditor :anEvent |
-					aTextEditor text removeAttribute: aStringHighlightAttribute ] ] 
+						aTextEditor text
+							findAttribute: aStringMarker
+							indicesDo: [ :aVariableStart :aVariableEnd | 
+								aTextEditor text
+									attribute: aStringHighlightAttribute
+									from: aVariableStart
+									to: aVariableEnd ] ]
+					leave: [ :aTextEditor :anEvent | aTextEditor text removeAttribute: aStringHighlightAttribute ] ]
 ]
 
 { #category : #visiting }

@@ -61,7 +61,7 @@ GtLACPWorkGraphRowElement >> buildMarker [
 		addChild: (BlElement new
 				id: #'acp-work-graph-marker';
 				size: 8 @ 8;
-				position: (row lane x - 4) @ 12;
+				relocate: (row lane x - 4) @ 12;
 				geometry: BlCircleGeometry new;
 				background: row lane color;
 				border: (BlBorder paint: row lane color width: 2);
