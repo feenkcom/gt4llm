@@ -17,6 +17,16 @@ GtLCodeTransformations >> allowedTransformationClasses [
 			select: #isConcrete
 ]
 
+{ #category : #converting }
+GtLCodeTransformations >> applyRefactoring [
+	"A refactoring can change a method more than once: a method rename adds the renamed implementor and then rewrites its sends of the selector, and changes the old implementor before removing it. Keep only the last change of each method, as the image ends up with it, so that the preview, the result and the undo change each method once"
+
+	| namespace |
+	namespace := super applyRefactoring.
+	namespace gtCleanupChanges.
+	^ namespace
+]
+
 { #category : #'api - ui' }
 GtLCodeTransformations >> contentOneLineMultiLabelSummaryWith: aBuilder [
 	self transformations
