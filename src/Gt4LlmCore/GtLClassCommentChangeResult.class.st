@@ -47,6 +47,7 @@ GtLClassCommentChangeResult >> changedClassNameDescription [
 GtLClassCommentChangeResult >> gtDiffFor: aView [
 	<gtView>
 	<gtCodeChangeView>
+	<gtLlmView>
 	^ aView diff
 		title: 'Diff';
 		priority: 5;
@@ -70,6 +71,16 @@ GtLClassCommentChangeResult >> gtViewChangeIcon [
 { #category : #testing }
 GtLClassCommentChangeResult >> isClassCommentChangeResult [
 	^ true
+]
+
+{ #category : #refactoring }
+GtLClassCommentChangeResult >> llmChangeKind [
+	^ 'changed class comment'
+]
+
+{ #category : #refactoring }
+GtLClassCommentChangeResult >> llmNewSource [
+	^ self newClassComment
 ]
 
 { #category : #'llm - views' }

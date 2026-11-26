@@ -11,3 +11,10 @@ RBRemoveClassChange >> gtLlmAddChangeTargetsTo: aChangeTargets [
 RBRemoveClassChange >> gtLlmChangeKind [
 	^ 'removed class'
 ]
+
+{ #category : #'*Gt4LlmCore' }
+RBRemoveClassChange >> gtLlmNewChangeEntry [
+	^ GtLRefactoringClassChangeEntry new
+		className: self changeClassName asString;
+		yourself
+]

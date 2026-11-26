@@ -8,6 +8,8 @@ Class {
 GtLMagritteToolForMethodSource >> description [
 	^ 'Gets source code for a method. Arguments must provide a methodDescriptor object with methodClassName, methodName, and classSide values.
 
+methodClassName may name a class or a trait; classSide true means its class side. Only a method defined by that class or trait itself is returned. For an inherited method or a copy provided by a trait, the result is an error whose definingMethodReference names the method that holds the source; ask for that method instead. For a method that a trait requires, definingMethodReference names the requirement in the trait. For a trait conflict, conflictingMethodReferences lists the conflicting methods, and conflictLocationReference, when present, names where they conflict.
+
 Example JSON arguments:
 {
   "methodDescriptor": {"methodClassName": "Collection", "methodName": "withAll:", "classSide": true}

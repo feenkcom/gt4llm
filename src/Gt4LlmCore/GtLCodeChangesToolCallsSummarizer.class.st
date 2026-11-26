@@ -32,6 +32,11 @@ GtLCodeChangesToolCallsSummarizer >> addCodeChangesFrom: aToolCall [
 
 { #category : #private }
 GtLCodeChangesToolCallsSummarizer >> addCodeChangesFromModel: aModel toolCall: aToolCall [
+	(aModel isKindOf: GtLRefactoringReport)
+		ifTrue: [  "The refactoring tools answer a report of their preview or result"^ self
+				addCodeChangesFromModel: aModel refactoring
+				toolCall: aToolCall ].
+
 	(aModel isKindOf: GtLClassesCreationResult)
 		ifTrue: [ ^ self
 				addCodeChangesLabeled: 'Created class/trait'
@@ -85,10 +90,9 @@ GtLCodeChangesToolCallsSummarizer >> addCodeChangesFromModel: aModel toolCall: a
 				from: aModel successfulMethodsRemovalResult
 				toolCall: aToolCall ].
 
-	(aModel isKindOf: GtLAppliedRefactoring)
-		ifTrue: [  
-				"Also covers failed refactorings: they report the changes applied before the error"
-				^ self addCodeChanges: (aModel codeChangeResults
+	(aModel isKindOf: GtLRefactoringResult)
+		ifTrue: [  "Also covers failed refactorings: they report the changes applied before the error"^ self
+				addCodeChanges: (aModel codeChangeResults
 						collect: [ :each | 
 							self
 								codeChangeEntryLabel: (self refactoringLabelFor: each in: aModel)
@@ -104,54 +108,42 @@ GtLCodeChangesToolCallsSummarizer >> addCodeChangesLabeled: aLabel from: aCollec
 
 { #category : #accessing }
 GtLCodeChangesToolCallsSummarizer >> classChangeHistories [
-	"Group code changes by class name, including both method and class-level changes"
+	"Group code changes by class name, including both method and class-level changes.
+	A class rename belongs to the histories of both names: it removes the old name and adds the new one"
+
 	| historiesByClassName methodHistoriesByReference group |
 	historiesByClassName := Dictionary new.
-	methodHistoriesByReference := Dictionary new.
-	
-	"Process method changes"
-	self methodChangeResults do: [ :each |
-		| changeResult methodReference methodHistory className classHistory |
-		changeResult := each changeResult.
-		methodReference := changeResult targetMethodReference.
-		className := methodReference methodClassName.
-		
-		"Get or create class history"
-		classHistory := historiesByClassName
-			at: className
-			ifAbsentPut: [ GtLClassChangeHistory new
-				targetClassName: className;
-				yourself ].
-		
-		"Get or create method history within the class"
-		methodHistory := methodHistoriesByReference
-			at: methodReference
-			ifAbsentPut: [ 
-				| newHistory |
-				newHistory := GtLMethodChangeHistory new
-					methodReference: methodReference;
-					yourself.
-				classHistory addMethodHistory: newHistory.
-				newHistory ].
-		methodHistory addChange: each ].
-	
-	"Process class definition changes (additions, modifications, removals) and comment changes"
-	(self classChangeResults) 
-		do: [ :each |
-			| changeResult className classHistory |
+	methodHistoriesByReference := Dictionary new.	"Process method changes"
+	self methodChangeResults
+		do: [ :each | 
+			| changeResult methodReference methodHistory className classHistory |
 			changeResult := each changeResult.
-			className := changeResult targetClassName asString.
-		
-			"Get or create class history"
+			methodReference := changeResult targetMethodReference.
+			className := methodReference methodClassName.	"Get or create class history"
 			classHistory := historiesByClassName
-				at: className
-				ifAbsentPut: [ GtLClassChangeHistory new
-					targetClassName: className;
-					yourself ].
-		
-			"Add as a definition change"
-			classHistory addBehaviourChange: each ].
-	
+					at: className
+					ifAbsentPut: [ GtLClassChangeHistory new
+							targetClassName: className;
+							yourself ].	"Get or create method history within the class"
+			methodHistory := methodHistoriesByReference
+					at: methodReference
+					ifAbsentPut: [ | newHistory |
+						newHistory := GtLMethodChangeHistory new
+								methodReference: methodReference;
+								yourself.
+						classHistory addMethodHistory: newHistory.
+						newHistory ].
+			methodHistory addChange: each ].	"Process class definition changes (additions, modifications, removals) and comment changes"
+	self classChangeResults
+		do: [ :each | 
+			each changeResult historyClassNames
+				do: [ :className | 
+					(historiesByClassName
+						at: className
+						ifAbsentPut: [ GtLClassChangeHistory new
+								targetClassName: className;
+								yourself ]) addBehaviourChange: each ] ].
+
 	group := GtLClassChangeHistoriesGroup new.
 	historiesByClassName valuesDo: [ :each | group addHistory: each ].
 	^ group
@@ -272,7 +264,7 @@ GtLCodeChangesToolCallsSummarizer >> initializeWithToolCalls: aToolCallGroup [
 
 { #category : #testing }
 GtLCodeChangesToolCallsSummarizer >> isCodeChangeToolCall: aToolCall [
-	^ #(createClass createClassesAndTraits changeClassOrTraitSignature changeClassOrTraitComment removeClass compileMethod compileMethods removeMethod removeMethods applyRefactoring)
+	^ #(createClass createClassesAndTraits changeClassOrTraitSignature changeClassOrTraitComment removeClass renameClass compileMethod compileMethods removeMethod removeMethods applyRefactoring)
 		includes: aToolCall name asSymbol
 ]
 
@@ -320,7 +312,7 @@ GtLCodeChangesToolCallsSummarizer >> refactoringLabelFor: aCodeChangeResult in: 
 	or 'Refactoring: added method' when the name of the refactoring is unknown"
 
 	| aKind |
-	aKind := anAppliedRefactoring kindOfCodeChange: aCodeChangeResult.
+	aKind := aCodeChangeResult llmChangeKind.
 	^ anAppliedRefactoring refactoringName
 		ifNil: [ 'Refactoring: ' , aKind ]
 		ifNotNil: [ :aName | 

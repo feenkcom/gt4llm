@@ -20,17 +20,19 @@ GtLPushUpMethodSpecification class >> jsonSchemaLabel [
 
 { #category : #'as yet unclassified' }
 GtLPushUpMethodSpecification >> asRefactoringIn: aNamespace [
+	"A class-side method moves to the class side of the target"
+
 	^ GtPushUpMethodRefactoring
 		model: aNamespace
 		pullUp: (selectors collect: #asSymbol)
-		from: methodClassName asSymbol
-		to: targetClassName asSymbol
+		from: self behaviorName asSymbol
+		to: (self behaviorNameOf: targetClassName) asSymbol
 ]
 
 { #category : #'as yet unclassified' }
 GtLPushUpMethodSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'The "Push up method" transformation pushes up a method from a subclass to a direct or indirect superclass. If the method exists in other sibling subclasses of the superclass and is equivalently defined, the method will be removed from the sibling subclasses too. The transformation must provide the methodClassName, methodNameToPushUp and targetClassName. The methodClassName is the name of a subclass that implements the methodNameToPushUp. The methodNameToPushUp is the version of the method that is being pushed up to the superclass. The targetClassName is the name of the superclass to which to push.'
+		comment: 'Moves the method methodNameToPushUp from the class methodClassName to targetClassName, a direct or indirect superclass; with classSide true, from and to their class sides. Equivalent copies of the method in sibling subclasses are removed too.'
 ]
 
 { #category : #printing }
@@ -39,34 +41,24 @@ GtLPushUpMethodSpecification >> gtDisplayOn: aStream [
 		nextPutAll: 'Push up method ';
 		nextPutAll: (', ' join: (self selectors collect: [ :each | each asString ]));
 		nextPutAll: ' from ';
-		nextPutAll: methodClassName asString.
+		nextPutAll: self behaviorName.
 	targetClassName
 		ifNotNil: [ :aClassName | 
 			aStream
 				nextPutAll: ' to ';
-				nextPutAll: aClassName asString ]
+				nextPutAll: (self behaviorNameOf: aClassName) ]
 ]
 
 { #category : #validation }
 GtLPushUpMethodSpecification >> gtProblems [
-	^(selectors
-		flatCollect: [:each | self gtProblemsWithMethod: each inClassNamed: methodClassName])
-			, (self gtProblemsWithClassNamed: targetClassName)
+	^ (selectors flatCollect: [ :each | self gtProblemsWithMethodNamed: each ])
+		, (self gtProblemsWithClassNamed: targetClassName)
 ]
 
 { #category : #'as yet unclassified' }
 GtLPushUpMethodSpecification >> initialize [
 	super initialize.
 	selectors := OrderedCollection new
-]
-
-{ #category : #descriptions }
-GtLPushUpMethodSpecification >> methodClassNameDescription [
-	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #methodClassName;
-		  comment: 'The class of the method to be pushed up. This is required and must not be empty.'
 ]
 
 { #category : #accessing }
@@ -76,7 +68,7 @@ GtLPushUpMethodSpecification >> methodNameToPushUp [
 
 { #category : #accessing }
 GtLPushUpMethodSpecification >> methodNameToPushUp: aString [
-	selectors add: aString
+	selectors := OrderedCollection with: aString
 ]
 
 { #category : #accessing }
@@ -86,17 +78,17 @@ GtLPushUpMethodSpecification >> selector [
 
 { #category : #accessing }
 GtLPushUpMethodSpecification >> selector: aString [
-	selectors add: aString
+	selectors := OrderedCollection with: aString
 ]
 
 { #category : #description }
 GtLPushUpMethodSpecification >> selectorDescription [
 	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  label: 'Method name to push up';
-		  accessor: #methodNameToPushUp;
-	  	comment: 'The name of the method to push up'
+	^ MAStringDescription new
+		label: 'Method name to push up';
+		accessor: #methodNameToPushUp;
+		comment: 'The selector of the method to push up.';
+		beRequired
 ]
 
 { #category : #accessing }
@@ -122,8 +114,13 @@ GtLPushUpMethodSpecification >> targetClassName: anObject [
 { #category : #description }
 GtLPushUpMethodSpecification >> targetClassNameDescription [
 	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #targetClassName;
-		  comment: 'The name of the class in which to push up the methods'
+	^ MAStringDescription new
+		accessor: #targetClassName;
+		comment: 'The superclass to move the method to, without " class": classSide tells the side.';
+		beRequired
+]
+
+{ #category : #accessing }
+GtLPushUpMethodSpecification >> usedClassNames [
+	^ super usedClassNames , ({targetClassName} reject: [ :each | each isNil ])
 ]

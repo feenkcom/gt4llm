@@ -50,16 +50,33 @@ GtLMethodsRemovalResultExamples >> methodsRemovalResultDataViewSerialization [
 	domainObject := self methodsRemovalResultCreation.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
-	
+
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
-	
+
 	expected := Dictionary new
-		at: 'methods' put: (NeoJSONArray withAll: {
-			NeoJSONObject new at: 'status' put: 'removed'; yourself.
-			NeoJSONObject new at: 'status' put: 'removed'; yourself });
-		yourself.
+			at: 'methods'
+				put: (NeoJSONArray
+						withAll: {NeoJSONObject new
+									at: 'status' put: 'removed';
+									at: 'targetMethodReference'
+										put: (NeoJSONObject new
+												at: 'methodClassName' put: 'SampleClass';
+												at: 'methodName' put: 'method1';
+												at: 'classSide' put: false;
+												yourself);
+									yourself.
+								NeoJSONObject new
+									at: 'status' put: 'removed';
+									at: 'targetMethodReference'
+										put: (NeoJSONObject new
+												at: 'methodClassName' put: 'SampleClass';
+												at: 'methodName' put: 'method2';
+												at: 'classSide' put: true;
+												yourself);
+									yourself});
+			yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
-	
+
 	^ dataBlock
 ]

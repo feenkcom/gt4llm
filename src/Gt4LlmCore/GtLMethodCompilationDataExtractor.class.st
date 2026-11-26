@@ -8,6 +8,7 @@ Class {
 		'request',
 		'targetClass',
 		'sourceCode',
+		'selector',
 		'protocol',
 		'oldMethodWithSource'
 	],
@@ -19,7 +20,7 @@ GtLMethodCompilationDataExtractor >> extractAllIfError: errorBlock [
 	self extractTargetClassIfError: errorBlock.
 	self extractSourceCodeIfError: errorBlock.
 	self extractOldMethodWithSourceIfError: errorBlock.
-	self extractProtocol
+	self extractProtocolIfError: errorBlock
 ]
 
 { #category : #extracting }
@@ -37,21 +38,20 @@ GtLMethodCompilationDataExtractor >> extractOldMethodWithSourceIfError: errorBlo
 							protocolName: self requestedProtocol;
 							sourceCode: sourceCode;
 							description: 'Syntax error while parsing the given method source code') ].
-	(methodNode notNil
-		and: [ methodNode selector notNil
-				and: [ targetClass includesSelector: methodNode selector ] ])
+	selector := methodNode ifNotNil: [ methodNode selector ].
+	(selector notNil and: [ targetClass includesLocalSelector: selector ])
 		ifTrue: [ oldMethodWithSource := GtLMethodWithSource
-					fromCompiledMethod: targetClass >> methodNode selector ]
+					fromCompiledMethod: targetClass >> selector ]
 		ifFalse: [ oldMethodWithSource := nil ]
 ]
 
 { #category : #extracting }
-GtLMethodCompilationDataExtractor >> extractProtocol [
-	"Use the requested protocol if one was given. Otherwise an existing method keeps its protocol (so an extension method stays in its package), and a new method is put in 'as yet unclassified'."
+GtLMethodCompilationDataExtractor >> extractProtocolIfError: errorBlock [
+	"An existing method keeps its protocol unless another one is requested, so that an extension method stays in its package. A new method needs a protocol, otherwise it would end up as yet unclassified"
 
 	protocol := self requestedProtocol
 			ifNil: [ oldMethodWithSource
-					ifNil: [ 'as yet unclassified' ]
+					ifNil: [ ^ errorBlock value: self missingProtocolDomainObject ]
 					ifNotNil: [ :anOldMethod | anOldMethod compiledMethod protocolName ] ]
 ]
 
@@ -91,6 +91,20 @@ GtLMethodCompilationDataExtractor >> gtDetailsFor: aView [
 		column: 'Property' text: #key;
 		column: 'Value' text: #value;
 		send: #value
+]
+
+{ #category : #private }
+GtLMethodCompilationDataExtractor >> missingProtocolDomainObject [
+	^ GtLMissingArgumentDomainObject new
+		arguments: nil;
+		missingArgument: 'protocol';
+		errorMessage: ('{1} is a new method: provide a protocol for it'
+				format: {(GtLMethodReference new
+							methodClassName: targetClass instanceSide name;
+							methodName: selector;
+							classSide: targetClass isClassSide;
+							yourself) methodSignature});
+		yourself
 ]
 
 { #category : #accessing }

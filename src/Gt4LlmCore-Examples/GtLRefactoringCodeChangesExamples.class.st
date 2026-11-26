@@ -62,10 +62,32 @@ GtLRefactoringCodeChangesExamples >> classChangesShareTheCodeChangeOfTheirClass 
 			aPreview ]
 ]
 
+{ #category : #examples }
+GtLRefactoringCodeChangesExamples >> codeSnapshotIgnoresTraitProvidedMethods [
+	"A code snapshot only captures methods that a class or trait defines itself, not the copies a class gets from a trait"
+
+	<gtExample>
+	| snapshot |
+	snapshot := GtLCodeSnapshot new.
+	self
+		assert: (snapshot
+				localMethodNamed: #traitMethod
+				inClassNamed: GtLExampleTraitUser name
+				classSide: false) isNil.
+	self
+		assert: (snapshot
+				localMethodNamed: #traitMethod
+				inClassNamed: TGtLExampleTrait name
+				classSide: false)
+		equals: TGtLExampleTrait >> #traitMethod.
+	^ snapshot
+]
+
 { #category : #'examples - refactorings' }
 GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 	"When a change fails, the applied refactoring is marked as failed,
-	holds the frozen exception and describes the changes applied before the error"
+	holds the frozen exception and describes the changes applied before the error.
+	The preview counts as applied, so that its changes are not applied twice"
 
 	<gtExample>
 	^ self
@@ -88,7 +110,8 @@ GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 			self assert: anAppliedRefactoring status equals: 'failed'.
 			self assert: anAppliedRefactoring hasFailed.
 			self assert: anAppliedRefactoring undoChange isNil.
-			self assert: anAppliedRefactoring preview isApplied not.
+			self assert: anAppliedRefactoring preview isApplied.
+			self assert: anAppliedRefactoring preview applicationStatus equals: 'failed'.
 			self assert: anAppliedRefactoring exception isErrorDomainObject.
 			self assert: anAppliedRefactoring errorMessage notNil.
 			self assert: (aLeafClass includesSelector: #appliedBeforeError).
@@ -100,6 +123,32 @@ GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 				assert: anAddition targetMethodReference methodSignature
 				equals: aLeafClass name asString , '>>#appliedBeforeError'.
 			anAppliedRefactoring ]
+]
+
+{ #category : #examples }
+GtLRefactoringCodeChangesExamples >> overrideOfTraitMethodIsReportedAsAddition [
+	"Compiling a trait method in a class that uses the trait adds a method to the class; it does not modify the trait method"
+
+	<gtExample>
+	^ GtLTraitMethodExamplesSubjects new
+		during: [ :subjects | 
+			GtRefactoryChangeManager
+				isolatedInstanceDuring: [ | aNamespace anAppliedRefactoring anAddition |
+					aNamespace := GtRBNamespace new.
+					(aNamespace classFor: subjects traitUser)
+						compile: 'traitMethod ^ 7'
+						classified: #examples.
+					anAppliedRefactoring := self applyNamespace: aNamespace.
+
+					self assert: anAppliedRefactoring status equals: 'applied'.
+					self assert: subjects traitUser new traitMethod equals: 7.
+					self assert: anAppliedRefactoring codeChangeResults size equals: 1.
+					anAddition := anAppliedRefactoring codeChangeResults first.
+					self assert: anAddition isMethodAdditionResult.
+					self
+						assert: anAddition targetMethodReference methodSignature
+						equals: subjects traitUser name asString , '>>#traitMethod'.
+					anAppliedRefactoring ] ]
 ]
 
 { #category : #'examples - refactorings' }
@@ -176,9 +225,10 @@ GtLRefactoringCodeChangesExamples >> pushUpMethod [
 			self assert: aRemoval removedMethod sourceCode equals: 'pushedUpMethod ^ 42'.
 
 			self
-				assert: anAppliedRefactoring codeChanges asArray
-				equals: {'added method ' , aRootClass name , '>>#pushedUpMethod'.
-						'removed method ' , aLeafClass name , '>>#pushedUpMethod'}.
+				assert: (anAppliedRefactoring codeChangeResults
+						collect: [ :each | each llmChangeKind -> each llmChangeTarget ]) asArray
+				equals: {'added method' -> (aRootClass name , '>>#pushedUpMethod').
+						'removed method' -> (aLeafClass name , '>>#pushedUpMethod')}.
 			anAppliedRefactoring ]
 ]
 
@@ -295,6 +345,33 @@ GtLRefactoringCodeChangesExamples >> removeClass [
 			anAppliedRefactoring ]
 ]
 
+{ #category : #examples }
+GtLRefactoringCodeChangesExamples >> removeTraitMethodReportsOnlyTheTraitMethod [
+	"Removing a method from a trait reports the removal from the trait, not from each class that uses the trait"
+
+	<gtExample>
+	^ GtLTraitMethodExamplesSubjects new
+		during: [ :subjects | 
+			GtRefactoryChangeManager
+				isolatedInstanceDuring: [ | aNamespace anAppliedRefactoring aMethodRemovals |
+					aNamespace := GtLRemoveMethodSpecification new
+							methodClassName: subjects trait name;
+							methodNameToRemove: 'traitMethod';
+							namespaceWithAppliedRefactoring.
+					anAppliedRefactoring := self applyNamespace: aNamespace.
+
+					self assert: anAppliedRefactoring status equals: 'applied'.
+					self assert: (subjects traitUser canUnderstand: #traitMethod) not.
+					aMethodRemovals := self
+							resultsOf: anAppliedRefactoring
+							ofKind: 'removed method'.
+					self assert: anAppliedRefactoring codeChangeResults size equals: 1.
+					self
+						assert: aMethodRemovals first targetMethodReference methodSignature
+						equals: subjects trait name asString , '>>#traitMethod'.
+					anAppliedRefactoring ] ]
+]
+
 { #category : #'examples - refactorings' }
 GtLRefactoringCodeChangesExamples >> renameClass [
 	"Renaming a class is a single class modification plus the rewritten references;
@@ -322,9 +399,8 @@ GtLRefactoringCodeChangesExamples >> renameClass [
 			self assert: aRename class equals: GtLClassModificationResult.
 			self assert: aRename originalClass currentClassName equals: anOldName.
 			self assert: aRename updatedClass currentClassName equals: aNewName.
-			self
-				assert: (anAppliedRefactoring kindOfCodeChange: aRename)
-				equals: 'renamed class'.
+			self assert: aRename llmChangeKind equals: 'renamed class'.
+			self assert: aRename llmChangeTarget equals: anOldName , ' to ' , aNewName.
 
 			aReference := anAppliedRefactoring codeChangeResults second.
 			self assert: aReference class equals: GtLMethodCompilationResult.
@@ -335,22 +411,18 @@ GtLRefactoringCodeChangesExamples >> renameClass [
 			self
 				assert: aReference newMethod sourceCode
 				equals: 'leafClass ^ ' , aNewName.
-
-			self
-				assert: anAppliedRefactoring codeChanges first
-				equals: 'renamed class ' , anOldName , ' to ' , aNewName.
 			anAppliedRefactoring ]
 ]
 
 { #category : #private }
 GtLRefactoringCodeChangesExamples >> resultsOf: anAppliedRefactoring ofKind: aKindString [
 	^ anAppliedRefactoring codeChangeResults
-		select: [ :each | (anAppliedRefactoring kindOfCodeChange: each) = aKindString ]
+		select: [ :each | each llmChangeKind = aKindString ]
 ]
 
 { #category : #'examples - summarizer' }
 GtLRefactoringCodeChangesExamples >> summarizerWithAppliedRefactoring [
-	"An applyRefactoring tool call is summarized through the code change results of the applied refactoring"
+	"An applyRefactoring tool call answers a report of the result; it is summarized through the code change results of the result"
 
 	<gtExample>
 	^ self
@@ -375,7 +447,8 @@ GtLRefactoringCodeChangesExamples >> summarizerWithAppliedRefactoring [
 			GtLToolForApplyRefactoring new
 				performToolCall: aToolCall
 				inContext: (GtLToolExecutionContext new objectStorage: anObjectStorage).
-			self assert: aToolCall result model class equals: GtLAppliedRefactoring.
+			self assert: aToolCall result model class equals: GtLRefactoringResultReport.
+			self assert: (self modelOf: aToolCall) class equals: GtLRefactoringResult.
 
 			aGroup := GtLMessagesGroup new.
 			aGroup add: (self toolMessageFrom: aToolCall).

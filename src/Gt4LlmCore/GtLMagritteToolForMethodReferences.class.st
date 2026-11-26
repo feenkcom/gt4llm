@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForMethodReferences >> description [
-	^ 'Search the image for the senders of the given selector.
+	^ 'Search the image for the senders of the given selector. Each method is listed once, at the class or trait that defines it; classes that get it from a trait are not listed.
 
 Arguments:
 - methodName: string
@@ -20,15 +20,15 @@ Return values:
 
 Example JSON arguments:
 {
-  "methodName": "value"
+  "methodName": "privatePerformToolCall:inContext:"
 }
 
 Example JSON response:
 {
   "foundMethods": [
     {
-      "methodClassName": "Object",
-      "methodName": "value",
+      "methodClassName": "GtLAbstractMagritteFunctionTool",
+      "methodName": "performToolCall:inContext:",
       "classSide": false
     }
   ],

@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #accessing }
+GtLVariableTransformationSpecification >> usedClassNames [
+	^ {variableClassName} reject: [ :each | each isNil ]
+]
+
+{ #category : #accessing }
 GtLVariableTransformationSpecification >> variableClassName [
 	^ variableClassName
 ]

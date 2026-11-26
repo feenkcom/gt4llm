@@ -116,13 +116,22 @@ GtMagriteJSONSchemaCreationVisitor >> visitDateAndTimeDescription: aDateTimeDesc
 ]
 
 { #category : #visiting }
-GtMagriteJSONSchemaCreationVisitor >> visitNumberDescription: aBooleanDescription [
+GtMagriteJSONSchemaCreationVisitor >> visitNumberDescription: aNumberDescription [
+	"The schema has the minimum and maximum of the description, when it has them"
+
 	| schema |
 	schema := NeoJSONObject new
-		at: 'type' put: 'number';
-		yourself.
-	aBooleanDescription hasComment ifTrue: [
-		schema at: 'description' put: aBooleanDescription comment ].
+			at: 'type'
+				put: (aNumberDescription isIntegerInJsonSchema
+						ifTrue: [ 'integer' ]
+						ifFalse: [ 'number' ]);
+			yourself.
+	aNumberDescription hasComment
+		ifTrue: [ schema at: 'description' put: aNumberDescription comment ].
+	aNumberDescription min
+		ifNotNil: [ :aMinimum | schema at: 'minimum' put: aMinimum ].
+	aNumberDescription max
+		ifNotNil: [ :aMaximum | schema at: 'maximum' put: aMaximum ].
 	^ currentSchema := schema
 ]
 

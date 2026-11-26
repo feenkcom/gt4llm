@@ -20,31 +20,32 @@ GtLPushDownMethodSpecification class >> jsonSchemaLabel [
 
 { #category : #'as yet unclassified' }
 GtLPushDownMethodSpecification >> asRefactoringIn: aNamespace [
+	"RB pushes down a collection of selectors"
+
 	^ RBPushDownMethodRefactoring
 		model: aNamespace
-		pushDown: methodNameToPushDown
-		from: methodClassName
+		pushDown: {methodNameToPushDown asSymbol}
+		from: self behaviorName asSymbol
 ]
 
 { #category : #'as yet unclassified' }
 GtLPushDownMethodSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'The "Push down method" transformation pushes down one method from a super class to subclasses. The transformation must provide the methodClassName and methodNameToPushDown. The methodClassName is the name of the superclass that implements the methodNameToPushDown. The methodNameToPushDown is the version of the method that is being pushed down to the subclasses.'
+		comment: 'Moves the method methodNameToPushDown from the class methodClassName down to its direct subclasses, or from and to their class sides when classSide is true. Each subclass that does not define the method gets a copy of it; a subclass that defines it keeps its own. The method is then removed from methodClassName. Refused when methodClassName is not abstract, or when a subclass sends the method to super.'
+]
+
+{ #category : #printing }
+GtLPushDownMethodSpecification >> gtDisplayOn: aStream [
+	aStream
+		nextPutAll: 'Push down method ';
+		nextPutAll: (methodNameToPushDown ifNil: [ '<selector>' ]) asString;
+		nextPutAll: ' from ';
+		nextPutAll: (methodClassName ifNil: [ '<class>' ] ifNotNil: [ self behaviorName ])
 ]
 
 { #category : #validation }
 GtLPushDownMethodSpecification >> gtProblems [
-	^self gtProblemsWithMethod: methodNameToPushDown
-		inClassNamed: methodClassName
-]
-
-{ #category : #descriptions }
-GtLPushDownMethodSpecification >> methodClassNameDescription [
-	<magritteDescription>
-	
-	 ^ MAStringDescription new
-		  accessor: #methodClassName;
-		  comment: 'The class of the method to be pushed down. This is required and must not be empty.'
+	^ self gtProblemsWithMethodNamed: methodNameToPushDown
 ]
 
 { #category : #'as yet unclassified' }
@@ -61,8 +62,8 @@ GtLPushDownMethodSpecification >> methodNameToPushDown: aString [
 GtLPushDownMethodSpecification >> methodNameToPushDownDescription [
 	<magritteDescription>
 	^ MAStringDescription new
-		label: 'Name of the method to push down';
+		label: 'Method name to push down';
 		accessor: #methodNameToPushDown;
-		comment: 'The name of method to push down. This is required and must not be empty.';
+		comment: 'The selector of the method to push down.';
 		beRequired
 ]

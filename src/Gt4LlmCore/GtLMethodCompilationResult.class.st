@@ -192,12 +192,10 @@ GtLMethodCompilationResult >> targetMethod [
 { #category : #accessing }
 GtLMethodCompilationResult >> targetMethodReferenceDescription [
 	<magritteDescription>
-	
 	^ MAToOneRelationDescription new
-			accessor: #targetMethodReference;
-			classes: {
-				GtLMethodCompilationRequest };
-			beRequired
+		accessor: #targetMethodReference;
+		classes: {GtLMethodReference};
+		beRequired
 ]
 
 { #category : #accessing }

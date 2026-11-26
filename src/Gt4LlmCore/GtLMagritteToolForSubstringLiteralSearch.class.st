@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForSubstringLiteralSearch >> description [
-	^ 'Searches for methods by substring literal match.
+	^ 'Searches for methods by substring literal match. Each method is listed once, at the class or trait that defines it; classes that get it from a trait are not listed.
 
 Arguments:
 - query: string
@@ -27,8 +27,8 @@ Example JSON response:
 {
   "foundMethods": [
     {
-      "methodClassName": "GtLToolForSubstringLiteralSearch",
-      "methodName": "privatePerformToolCall:inContext:",
+      "methodClassName": "GtLMagritteToolForSubstringLiteralSearch",
+      "methodName": "name",
       "classSide": false
     }
   ],

@@ -29,8 +29,9 @@ GtLToolCallsSummarizerExamplesBase >> addMethodTransformationIn: aClass source: 
 		at: 'AddMethod'
 			put: (Dictionary new
 					at: 'methodClassName' put: aClass name asString;
-					at: 'protocolName' put: 'examples';
-					at: 'sourceCodeOfMethodToAdd' put: aSourceString;
+					at: 'classSide' put: false;
+					at: 'protocol' put: 'examples';
+					at: 'sourceCode' put: aSourceString;
 					yourself);
 		yourself
 ]
@@ -56,12 +57,23 @@ GtLToolCallsSummarizerExamplesBase >> fixedExecutionDetailsFrom: aStartDateAndTi
 	^ details
 ]
 
+{ #category : #support }
+GtLToolCallsSummarizerExamplesBase >> modelOf: aToolCall [
+	"Return what aToolCall answered. The refactoring tools answer a report: return the preview or result it reports on"
+
+	| anObject |
+	anObject := aToolCall result targetObject.
+	^ (anObject isKindOf: GtLRefactoringReport)
+		ifTrue: [ anObject refactoring ]
+		ifFalse: [ anObject ]
+]
+
 { #category : #'utilities - refactorings' }
 GtLToolCallsSummarizerExamplesBase >> performApplyRefactoringOf: aPreviewToolCall inContext: anExecutionContext [
 	"Apply the refactoring previewed by aPreviewToolCall (a previewRefactoring or previewRewrite tool call)"
 
 	^ self
-		performApplyRefactoringWithObjectId: aPreviewToolCall result targetObject objectId
+		performApplyRefactoringWithObjectId: (self modelOf: aPreviewToolCall) objectId
 		inContext: anExecutionContext
 ]
 
@@ -206,6 +218,7 @@ GtLToolCallsSummarizerExamplesBase >> pushUpMethodTransformationOf: aSelector fr
 		at: 'PushUpMethod'
 			put: (Dictionary new
 					at: 'methodClassName' put: aClass name asString;
+					at: 'classSide' put: false;
 					at: 'methodNameToPushUp' put: aSelector asString;
 					at: 'targetClassName' put: aSuperclass name asString;
 					yourself);
@@ -218,6 +231,7 @@ GtLToolCallsSummarizerExamplesBase >> removeMethodTransformationOf: aSelector in
 		at: 'RemoveMethod'
 			put: (Dictionary new
 					at: 'methodClassName' put: aClass name asString;
+					at: 'classSide' put: false;
 					at: 'methodNameToRemove' put: aSelector asString;
 					yourself);
 		yourself

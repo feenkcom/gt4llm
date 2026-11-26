@@ -37,9 +37,8 @@ GtLClassRemovalResult >> gtDetailsFor: aView [
 	^ aView columnedList
 		title: 'Details';
 		priority: 10;
-		items: [
-			{'Removed class' -> self removedClassName.
-			 'Status' -> self status} ];
+		items: [ {'Removed class' -> self removedClassName.
+				'Status' -> self status} ];
 		column: 'Property' text: [ :assoc | assoc key ];
 		column: 'Value' text: [ :assoc | assoc value ];
 		send: [ :assoc | assoc value ]
@@ -66,6 +65,11 @@ GtLClassRemovalResult >> gtViewChangeIcon [
 { #category : #testing }
 GtLClassRemovalResult >> isClassRemovalResult [
 	^ true
+]
+
+{ #category : #refactoring }
+GtLClassRemovalResult >> llmChangeKind [
+	^ 'removed class'
 ]
 
 { #category : #'llm views' }

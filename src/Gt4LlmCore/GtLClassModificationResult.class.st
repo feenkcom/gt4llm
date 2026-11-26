@@ -105,6 +105,15 @@ GtLClassModificationResult >> currentClassNameDescription [
 		yourself
 ]
 
+{ #category : #testing }
+GtLClassModificationResult >> definitionChangedBeyondName [
+	| renamedOriginal |
+	renamedOriginal := self originalClass copy
+			currentClassName: self updatedClass currentClassName;
+			yourself.
+	^ renamedOriginal asDefinitionString ~= self updatedDefinitionString
+]
+
 { #category : #views }
 GtLClassModificationResult >> gtClassCoderViewFor: aView [
 	<gtView>
@@ -178,6 +187,16 @@ GtLClassModificationResult >> gtViewChangeIcon [
 	^ self class modificationIcon
 ]
 
+{ #category : #accessing }
+GtLClassModificationResult >> historyClassNames [
+	"A rename belongs to the histories of both names: it removes the old name and adds the new one"
+
+	self isClassRenameResult
+		ifTrue: [ ^ {self originalClassName.
+				self targetClassName asString} ].
+	^ super historyClassNames
+]
+
 { #category : #'accessing - delegated' }
 GtLClassModificationResult >> instanceSlotNames [
 	^ self updatedClass instanceSlotNames
@@ -209,6 +228,48 @@ GtLClassModificationResult >> isClassModificationResult [
 	^ self originalClass notNil
 ]
 
+{ #category : #testing }
+GtLClassModificationResult >> isClassRenameResult [
+	^ self originalClass notNil
+		and: [ self updatedClass notNil
+				and: [ self originalClassName ~= self currentClassName asString ] ]
+]
+
+{ #category : #refactoring }
+GtLClassModificationResult >> llmChangeEntry [
+	"A renamed class is listed under both names. Its new definition is listed only when it changed by more than the name, as when the same refactoring also added a slot"
+
+	| anEntry |
+	self isClassRenameResult ifFalse: [ ^ super llmChangeEntry ].
+	anEntry := GtLRefactoringClassChangeEntry new
+			className: self originalClassName;
+			newClassName: self targetClassName asString;
+			kind: self llmChangeKind;
+			yourself.
+	self definitionChangedBeyondName
+		ifTrue: [ anEntry newSource: self llmNewSource ].
+	^ anEntry
+]
+
+{ #category : #refactoring }
+GtLClassModificationResult >> llmChangeKind [
+	self isClassAdditionResult ifTrue: [ ^ 'added class' ].
+	self isClassRenameResult ifTrue: [ ^ 'renamed class' ].
+	^ 'changed class'
+]
+
+{ #category : #refactoring }
+GtLClassModificationResult >> llmChangeTarget [
+	self isClassRenameResult
+		ifTrue: [ ^ self originalClassName , ' to ' , self targetClassName asString ].
+	^ super llmChangeTarget
+]
+
+{ #category : #refactoring }
+GtLClassModificationResult >> llmNewSource [
+	^ self updatedDefinitionString
+]
+
 { #category : #'llm views' }
 GtLClassModificationResult >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>
@@ -224,6 +285,11 @@ GtLClassModificationResult >> originalClass [
 { #category : #accessing }
 GtLClassModificationResult >> originalClass: aGtLClassDefinitionDescription [
 	originalClass := aGtLClassDefinitionDescription
+]
+
+{ #category : #accessing }
+GtLClassModificationResult >> originalClassName [
+	^ self originalClass ifNotNil: [ :aClass | aClass currentClassName asString ]
 ]
 
 { #category : #accessing }

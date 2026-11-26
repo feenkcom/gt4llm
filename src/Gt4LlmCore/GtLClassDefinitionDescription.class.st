@@ -10,7 +10,8 @@ Class {
 		'classSlotNames',
 		'classVariableNames',
 		'traitCompositionString',
-		'packageTagName'
+		'packageTagName',
+		'isTrait'
 	],
 	#category : #'Gt4LlmCore-Magritte Objects'
 }
@@ -22,25 +23,8 @@ GtLClassDefinitionDescription class >> fromClass: aClass [
 
 { #category : #converting }
 GtLClassDefinitionDescription >> asDefinitionString [
-	"Return a string representing the class definition."
 	<return: #String>
-	^ String streamContents: [ :stream |
-		stream nextPutAll: (self superclassName ifNil: [ 'nil' ]).
-		stream nextPutAll: ' subclass: '.
-		stream store: self currentClassName asSymbol.
-		self traitCompositionString = '{}' ifFalse: [
-			stream cr; tab.
-			stream nextPutAll: 'uses: '.
-			stream nextPutAll: self traitCompositionString ].
-		stream cr; tab.
-		stream nextPutAll: 'instanceVariableNames: '.
-		stream store: (' ' join: self instanceSlotNames).
-		stream cr; tab.
-		stream nextPutAll: 'classVariableNames: '.
-		stream store: (' ' join: self classVariableNames).
-		stream cr; tab.
-		stream nextPutAll: 'package: '.
-		stream store: self packageName ]
+	^ self definitionPrinter definitionString
 ]
 
 { #category : #converting }
@@ -137,6 +121,21 @@ GtLClassDefinitionDescription >> currentClassNameDescription [
 		yourself
 ]
 
+{ #category : #printing }
+GtLClassDefinitionDescription >> definitionPrinter [
+	^ GtLClassDefinitionPrinter new
+		className: self currentClassName;
+		superclassName: self superclassName;
+		isTrait: self isTrait;
+		traitCompositionString: self traitCompositionString;
+		slotNames: self instanceSlotNames;
+		classVariableNames: self classVariableNames;
+		classSlotNames: self classSlotNames;
+		tagName: self packageTagName;
+		packageName: self packageName;
+		yourself
+]
+
 { #category : #views }
 GtLClassDefinitionDescription >> gtClassCoderViewFor: aView [
 	<gtView>
@@ -206,15 +205,14 @@ GtLClassDefinitionDescription >> initializeFromClass: aClass [
  traitCompositionString: ''{}'''>
 	self
 		currentClassName: aClass name;
-		superclassName: (aClass superclass 
-			ifNil: [ nil ] 
-			ifNotNil: [ :aSuperclass | aSuperclass name ]);
+		isTrait: aClass isTrait;
+		superclassName: (aClass superclass ifNil: [ nil ] ifNotNil: [ :aSuperclass | aSuperclass name ]);
 		comment: aClass instanceSide comment;
 		packageName: aClass package name;
 		packageTagName: (aClass packageTag isRoot ifTrue: [ nil ] ifFalse: [ aClass packageTag name ]);
-		instanceSlotNames: (aClass instanceVariables collect: [:each | each name]);
-		classSlotNames: (aClass class slotNames);
-		classVariableNames: (aClass classVariables collect: [:each | each name ]);
+		instanceSlotNames: (aClass instanceVariables collect: [ :each | each name ]);
+		classSlotNames: aClass class slotNames;
+		classVariableNames: (aClass classVariables collect: [ :each | each name ]);
 		traitCompositionString: aClass traitCompositionString
 ]
 
@@ -237,6 +235,16 @@ GtLClassDefinitionDescription >> instanceSlotNamesDescription [
 		classes: { String };
 		beRequired;
 		yourself
+]
+
+{ #category : #accessing }
+GtLClassDefinitionDescription >> isTrait [
+	^ isTrait ifNil: [ false ]
+]
+
+{ #category : #accessing }
+GtLClassDefinitionDescription >> isTrait: aBoolean [
+	isTrait := aBoolean
 ]
 
 { #category : #accessing }

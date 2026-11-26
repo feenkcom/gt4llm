@@ -9,7 +9,7 @@ Class {
 
 { #category : #accessing }
 GtLMagritteToolForMethodImplementors >> description [
-	^ 'Gets a method by name and returns a list of methods that implement it.
+	^ 'Gets a method by name and returns a list of methods that implement it. Each method is listed once, at the class or trait that defines it; classes that get it from a trait are not listed.
 
 Arguments:
 - methodName: string

@@ -14,7 +14,7 @@ GtLACPStoredSessionFixtures >> assertViewsFor: objects [
 			object class allMethods
 				do: [ :method | 
 					((method pragmaAt: #gtView) notNil
-						and: [ method methodClass package name = 'Gt4Llm-ACP' ])
+						and: [ method methodClass package name = #'Gt4Llm-ACP' ])
 						ifTrue: [ | result |
 							result := GtPhlowViewTester new
 									testView: (object perform: method selector with: GtPhlowView empty).

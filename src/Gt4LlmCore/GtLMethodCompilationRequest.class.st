@@ -29,6 +29,7 @@ GtLMethodCompilationRequest >> classSideDescription [
 	^ MABooleanDescription new
 		label: 'Class side';
 		accessor: #classSide;
+		comment: 'True for a method of the class side.';
 		beRequired
 ]
 
@@ -66,6 +67,7 @@ GtLMethodCompilationRequest >> methodClassNameDescription [
 	^ MAStringDescription new
 		label: 'Class name';
 		accessor: #methodClassName;
+		comment: 'The name of the class or trait, without " class": classSide tells the side.';
 		beRequired
 ]
 
@@ -98,7 +100,7 @@ GtLMethodCompilationRequest >> protocolDescription [
 	^ MAStringDescription new
 		label: 'Protocol';
 		accessor: #protocol;
-		comment: 'Optional. Omit it when modifying an existing method: the method keeps its current protocol. Changing the protocol of an extension method (a protocol starting with *) moves the method to a different package. Provide a protocol only for a new method, or to deliberately change the protocol of an existing method.';
+		comment: 'Required for a new method, including one that overrides an inherited or trait-provided method; without it the new method is not compiled. Omit it when modifying an existing method: the method keeps its current protocol. Changing the protocol of an extension method (a protocol starting with *) moves the method to a different package.';
 		yourself
 ]
 
@@ -118,5 +120,6 @@ GtLMethodCompilationRequest >> sourceCodeDescription [
 	^ MAStringDescription new
 		label: 'Source code';
 		accessor: #sourceCode;
+		comment: 'The whole method: its selector, arguments and body, without the class name.';
 		beRequired
 ]

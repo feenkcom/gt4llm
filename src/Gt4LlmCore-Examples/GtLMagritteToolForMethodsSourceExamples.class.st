@@ -33,6 +33,37 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForExistingMethods [
 ]
 
 { #category : #examples }
+GtLMagritteToolForMethodsSourceExamples >> methodSourcesForInheritedMethod [
+	<gtExample>
+	| call targetObject |
+	call := self
+			executeTool: GtLMagritteToolForMethodsSource new
+			withArguments: {'methodDescriptors'
+						-> {{'methodClassName' -> 'GtLMagritteToolForMethodsSourceExamples'.
+									'methodName' -> 'methodSourcesForInheritedMethod'.
+									'classSide' -> false} asDictionary.
+								{'methodClassName' -> 'GtLMagritteToolForMethodsSourceExamples'.
+									'methodName' -> 'printString'.
+									'classSide' -> false} asDictionary} asArray} asDictionary.
+	targetObject := call result targetObject.
+
+	self assert: (targetObject isKindOf: GtLMethodsWithSource).
+	self assert: targetObject methods size equals: 2.
+	self assert: (targetObject methods first isKindOf: GtLMethodWithSource).
+	self
+		assert: targetObject methods first sourceCode
+		equals: (GtLMagritteToolForMethodsSourceExamples >> #methodSourcesForInheritedMethod)
+				sourceCode.
+	self
+		assert: (targetObject methods second isKindOf: GtLMissingInheritedMethodDomainObject).
+	self
+		assert: targetObject methods second definingMethodReference
+		equals: (GtLMethodReference
+				fromCompiledMethod: (GtLMagritteToolForMethodsSourceExamples lookupSelector: #printString)).
+	^ call
+]
+
+{ #category : #examples }
 GtLMagritteToolForMethodsSourceExamples >> methodSourcesForMissingArguments [
 	<gtExample>
 	| call |
@@ -69,6 +100,36 @@ GtLMagritteToolForMethodsSourceExamples >> methodSourcesForMissingMethodArgument
 		withPropertyNames: #('methodName') 
 		path: #('methodDescriptors' 1) 
 		errorMessage: '@[methodDescriptors/1] required properties missing [methodName]'.
+	^ call
+]
+
+{ #category : #examples }
+GtLMagritteToolForMethodsSourceExamples >> methodSourcesForTraitProvidedMethod [
+	<gtExample>
+	| call targetObject |
+	call := self
+			executeTool: GtLMagritteToolForMethodsSource new
+			withArguments: {'methodDescriptors'
+						-> {{'methodClassName' -> TGtLExampleTrait name asString.
+									'methodName' -> 'traitMethod'.
+									'classSide' -> false} asDictionary.
+								{'methodClassName' -> GtLExampleTraitUser name asString.
+									'methodName' -> 'aliasedTraitMethod'.
+									'classSide' -> false} asDictionary} asArray} asDictionary.
+	targetObject := call result targetObject.
+
+	self assert: (targetObject isKindOf: GtLMethodsWithSource).
+	self assert: targetObject methods size equals: 2.
+	self assert: (targetObject methods first isKindOf: GtLMethodWithSource).
+	self
+		assert: targetObject methods first sourceCode
+		equals: (TGtLExampleTrait >> #traitMethod) sourceCode.
+	self
+		assert: targetObject methods second class
+		equals: GtLMissingTraitMethodDomainObject.
+	self
+		assert: targetObject methods second definingMethodReference
+		equals: targetObject methods first methodReference.
 	^ call
 ]
 

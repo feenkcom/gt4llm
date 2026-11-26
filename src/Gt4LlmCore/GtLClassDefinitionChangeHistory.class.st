@@ -42,7 +42,10 @@ GtLClassDefinitionChangeHistory >> gtDiffFor: aView [
 		to: [ self latestChange changeResult updatedDefinitionWithCommentString ];
 		fromLabel: 'Initial version:';
 		toLabel: 'Changed version:';
-		styler: GtCodeDiffRBTextStyler new
+		styler: [ :aSource | 
+			GtPharoStyler new
+				coderViewModel: (GtPharoSnippetCoder forSource: aSource) asCoderViewModel;
+				yourself ]
 ]
 
 { #category : #'gt - extensions' }
@@ -55,7 +58,10 @@ GtLClassDefinitionChangeHistory >> gtDiffWithCurrentVersionFor: aView [
 		to: [ self latestChange changeResult updatedDefinitionWithCommentString ];
 		fromLabel: 'Image content:';
 		toLabel: 'Change content:';
-		styler: GtCodeDiffRBTextStyler new
+		styler: [ :aSource | 
+			GtPharoStyler new
+				coderViewModel: (GtPharoSnippetCoder forSource: aSource) asCoderViewModel;
+				yourself ]
 ]
 
 { #category : #'gt - extensions' }
@@ -103,18 +109,26 @@ GtLClassDefinitionChangeHistory >> initialChange [
 
 { #category : #testing }
 GtLClassDefinitionChangeHistory >> isInitialChangeAddition [
+	"A rename adds the class under its new name"
+
 	| initialChange |
 	self changes ifEmpty: [ ^ false ].
-	initialChange := self initialChange.
-	^ initialChange changeResult isClassAdditionResult
+	initialChange := self initialChange changeResult.
+	^ initialChange isClassAdditionResult
+		or: [ initialChange isClassRenameResult
+				and: [ initialChange currentClassName asString = self targetClassName asString ] ]
 ]
 
 { #category : #testing }
 GtLClassDefinitionChangeHistory >> isLatestChangeRemoval [
+	"A rename removes the class under its old name"
+
 	| latestChange |
 	self changes ifEmpty: [ ^ false ].
-	latestChange := self changes latestChange.
-	^ latestChange changeResult isClassRemovalResult
+	latestChange := self changes latestChange changeResult.
+	^ latestChange isClassRemovalResult
+		or: [ latestChange isClassRenameResult
+				and: [ latestChange originalClassName = self targetClassName asString ] ]
 ]
 
 { #category : #private }

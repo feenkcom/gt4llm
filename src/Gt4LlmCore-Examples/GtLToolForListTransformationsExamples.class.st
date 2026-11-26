@@ -18,34 +18,38 @@ GtLToolForListTransformationsExamples >> gtToolsIncludeRefactoringTools [
 GtLToolForListTransformationsExamples >> listTransformations [
 	<gtExample>
 	| call targetObject |
-	call := self executeTool: GtLToolForListTransformations new
-				withArguments: Dictionary new.
+	call := self
+			executeTool: GtLToolForListTransformations new
+			withArguments: Dictionary new.
 	targetObject := call result targetObject.
 	self assert: targetObject class equals: GtLTransformationsSchema.
-	self assert: (self transformationNamesIn: targetObject schema)
-		equals: #('AddClass' 'AddMethod' 'PushUpInstanceVariable' 'PushUpMethod' 'RemoveMethod')
+	self
+		assert: (self transformationNamesIn: targetObject schema)
+		equals: #('AddClass' 'AddMethod' 'PushUpInstanceVariable' 'PushUpMethod' 'RemoveMethod' 'RenameClass')
 				asSet.
-	self assert: ((self transformationNamesIn: targetObject schema)
+	self
+		assert: ((self transformationNamesIn: targetObject schema)
 				includes: 'PushUpInstanceVariable').
-	^call
+	^ call
 ]
 
 { #category : #examples }
 GtLToolForListTransformationsExamples >> listTransformationsSchemaEntries [
 	<gtExample>
 	| targetObject entries |
-	targetObject := (self executeTool: GtLToolForListTransformations new
-				withArguments: Dictionary new) result
-				targetObject.
+	targetObject := (self
+			executeTool: GtLToolForListTransformations new
+			withArguments: Dictionary new) result targetObject.
 	entries := targetObject transformationSchemas.
 	self
-		assert: (entries
-				collect: [:each | targetObject nameOfTransformationSchema: each]) asSet
-		equals: #('AddClass' 'AddMethod' 'PushUpInstanceVariable' 'PushUpMethod' 'RemoveMethod')
+		assert: (entries collect: [ :each | targetObject nameOfTransformationSchema: each ])
+				asSet
+		equals: #('AddClass' 'AddMethod' 'PushUpInstanceVariable' 'PushUpMethod' 'RemoveMethod' 'RenameClass')
 				asSet.
-	self assert: (entries
-				allSatisfy: [:each | (targetObject descriptionOfTransformationSchema: each) notEmpty]).
-	^targetObject
+	self
+		assert: (entries
+				allSatisfy: [ :each | (targetObject descriptionOfTransformationSchema: each) notEmpty ]).
+	^ targetObject
 ]
 
 { #category : #helpers }

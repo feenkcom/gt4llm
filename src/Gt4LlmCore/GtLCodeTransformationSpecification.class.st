@@ -4,6 +4,15 @@ Class {
 	#category : #'Gt4LlmCore-Formats'
 }
 
+{ #category : #accessing }
+GtLCodeTransformationSpecification class >> instanceSideNameOf: aClassName [
+	"MyClass for both MyClass and MyClass class"
+
+	^ (aClassName asString endsWith: ' class')
+		ifTrue: [ aClassName asString allButLast: ' class' size ]
+		ifFalse: [ aClassName asString ]
+]
+
 { #category : #testing }
 GtLCodeTransformationSpecification class >> isConcrete [
 	^ false
@@ -11,9 +20,7 @@ GtLCodeTransformationSpecification class >> isConcrete [
 
 { #category : #accessing }
 GtLCodeTransformationSpecification class >> jsonSchemaLabel [
-	^ (self class name
-		withoutPrefix: 'GtL')
-		withoutSuffix: 'Specification'
+	^ (self name withoutPrefix: 'GtL') withoutSuffix: 'Specification'
 ]
 
 { #category : #accessing }
@@ -38,6 +45,13 @@ GtLCodeTransformationSpecification >> addContentOneLineSummaryTo: aWriteStream [
 ]
 
 { #category : #accessing }
+GtLCodeTransformationSpecification >> addedClassName [
+	"Return the name of the class I add, or nil"
+
+	^ nil
+]
+
+{ #category : #accessing }
 GtLCodeTransformationSpecification >> asRefactoring [
 	| namespace |
 	namespace := GtRBNamespace new.
@@ -47,6 +61,20 @@ GtLCodeTransformationSpecification >> asRefactoring [
 { #category : #'as yet unclassified' }
 GtLCodeTransformationSpecification >> asRefactoringIn: aNamespace [
 	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+GtLCodeTransformationSpecification >> changeGroupNames [
+	"Return the names of the groups in which a preview lists my changes, each also when it is empty. Without names, my changes are listed one by one"
+
+	^ #()
+]
+
+{ #category : #accessing }
+GtLCodeTransformationSpecification >> classRename [
+	"Return the old name -> the new name of the class I rename, or nil"
+
+	^ nil
 ]
 
 { #category : #'api - ui' }
@@ -69,25 +97,20 @@ GtLCodeTransformationSpecification >> gtProblems [
 	^#()
 ]
 
-{ #category : #validation }
-GtLCodeTransformationSpecification >> gtProblemsWithClassNamed: aString [
-	^(Smalltalk globals classNamed: aString) isNil
-		ifTrue: 
-			[Array
-				with: (GtLTransformationProblem description: 'Class not found: ' , aString)]
-		ifFalse: [#()]
+{ #category : #accessing }
+GtLCodeTransformationSpecification >> gtProblemsAfterAdding: someClassNames [
+	"Return my problems once the earlier transformations of the same call added the classes named someClassNames"
+
+	^ self gtProblems
 ]
 
 { #category : #validation }
-GtLCodeTransformationSpecification >> gtProblemsWithMethod: aSelectorString inClassNamed: aClassName [
-	| class |
-	class := Smalltalk globals classNamed: aClassName.
-	class isNil ifTrue: [^self gtProblemsWithClassNamed: aClassName].
-	^(class includesSelector: aSelectorString asSymbol)
-		ifTrue: [#()]
-		ifFalse: 
-			[Array with: (GtLTransformationProblem
-						description: aClassName , ' does not implement #' , aSelectorString)]
+GtLCodeTransformationSpecification >> gtProblemsWithClassNamed: aString [
+	aString isEmptyOrNil
+		ifTrue: [ ^ {GtLTransformationProblem description: 'Missing class name'} ].
+	^ (Smalltalk globals classNamed: aString) isNil
+		ifTrue: [ {GtLTransformationProblem description: 'Class not found: ' , aString} ]
+		ifFalse: [ #() ]
 ]
 
 { #category : #accessing }
@@ -111,4 +134,11 @@ GtLCodeTransformationSpecification >> refactoringName [
 	"Return a short human readable name of the transformation, such as 'Push up method'"
 
 	^ self class refactoringName
+]
+
+{ #category : #accessing }
+GtLCodeTransformationSpecification >> usedClassNames [
+	"Return the names of the existing classes I refer to"
+
+	^ #()
 ]

@@ -40,6 +40,11 @@ GtLCodeChangeResult >> isClassRemovalResult [
 ]
 
 { #category : #testing }
+GtLCodeChangeResult >> isClassRenameResult [
+	^ false
+]
+
+{ #category : #testing }
 GtLCodeChangeResult >> isErrorDomainObject [
 	^ false
 ]
@@ -57,6 +62,30 @@ GtLCodeChangeResult >> isVariableAdditionResult [
 { #category : #testing }
 GtLCodeChangeResult >> isVariableRemovalResult [
 	^ false
+]
+
+{ #category : #refactoring }
+GtLCodeChangeResult >> llmChangeEntry [
+	"Return the entry that lists me in the groups of changes of an applied refactoring"
+
+	^ GtLRefactoringOtherChangeEntry new
+		target: self llmChangeTarget;
+		kind: self llmChangeKind;
+		yourself
+]
+
+{ #category : #refactoring }
+GtLCodeChangeResult >> llmChangeKind [
+	"Return a short label of what changed when a refactoring was applied, such as 'added method' or 'renamed class'"
+
+	^ 'changed'
+]
+
+{ #category : #refactoring }
+GtLCodeChangeResult >> llmChangeTarget [
+	"Return the method signature or class name that changed"
+
+	^ self targetClassName asString
 ]
 
 { #category : #accessing }

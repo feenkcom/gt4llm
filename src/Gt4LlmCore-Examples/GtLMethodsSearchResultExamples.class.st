@@ -44,3 +44,21 @@ GtLMethodsSearchResultExamples >> methodsSearchResultDataViewSerialization [
 	
 	^ dataBlock
 ]
+
+{ #category : #examples }
+GtLMethodsSearchResultExamples >> methodsSearchResultForTraitCopies [
+	"A search can match the copies that classes get from a trait; the result names the trait method, once"
+
+	<gtExample>
+	| result |
+	result := GtLMethodsSearchResult
+			fromReferences: {GtLExampleTraitUser >> #traitMethod.
+					TGtLExampleTrait >> #traitMethod.
+					GtLExampleComposedTraitUser >> #traitMethod}.
+	self
+		assert: result foundMethods asArray
+		equals: {GtLMethodReference fromCompiledMethod: TGtLExampleTrait >> #traitMethod}.
+	self assert: result foundMethods first existsInImage.
+	self assert: result mayHaveMore not.
+	^ result
+]
