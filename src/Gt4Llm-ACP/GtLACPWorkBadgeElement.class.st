@@ -11,9 +11,9 @@ Class {
 GtLACPWorkBadgeElement >> initialize [
 	super initialize.
 	self
-		aptitude: (BrGlamorousLabelAptitude new foreground: Color black);
+		aptitude: (BrGlamorousLabelAptitude new);
 		beSmallSize;
-		background: self theme default backdropBackground;
+		background: self theme status neutralBackgroundColor;
 		geometry: (BlRoundedRectangleGeometry cornerRadius: 2);
 		padding: (BlInsets left: 2 right: 2);
 		margin: (BlInsets right: 4);
