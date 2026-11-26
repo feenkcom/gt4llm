@@ -31,21 +31,23 @@ GtLRefactoringChangeExamples >> addMethodRefactoringChange [
 
 { #category : #examples }
 GtLRefactoringChangeExamples >> modifyMethodRefactoringChange [
-	"A change that compiles an existing method is a modification"
+	"RB describes every compiled method as added. A change that compiles a method the class already defines is described as modified, consistent with its kind"
 
 	<gtExample>
 	<return: #GtLRefactoringChange>
 	| rbChange change |
 	rbChange := RBAddMethodChange
-			compile: 'addMethodRefactoringChange ^ nil'
+			compile: 'addMethodRefactoringChange ^ 42'
 			in: self class
 			classified: 'examples'.
 	change := GtLRefactoringChange fromChange: rbChange.
 	self assert: change kind equals: 'modified method'.
 	self
-		assert: change target
-		equals: 'GtLRefactoringChangeExamples>>#addMethodRefactoringChange'.
-	self assert: change newSource equals: 'addMethodRefactoringChange ^ nil'.
+		assert: change changeDescription
+		equals: 'Modify GtLRefactoringChangeExamples>>#addMethodRefactoringChange'.
+	self
+		assert: rbChange changeString
+		equals: 'Add GtLRefactoringChangeExamples>>#addMethodRefactoringChange'.
 	^ change
 ]
 

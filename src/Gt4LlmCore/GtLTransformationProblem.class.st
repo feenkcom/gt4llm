@@ -1,3 +1,6 @@
+"
+I am a problem that prevents a transformation specification from becoming a refactoring. My subclasses tell the kind: {{gtClass:GtLTransformationParameterProblem}} for a missing or invalid parameter, {{gtClass:GtLTransformationPreconditionProblem}} for something the refactoring expects of the code. See {{gtMethod:GtLCodeTransformationSpecification>>#gtProblemsAfterAdding:}}.
+"
 Class {
 	#name : #GtLTransformationProblem,
 	#superclass : #Object,

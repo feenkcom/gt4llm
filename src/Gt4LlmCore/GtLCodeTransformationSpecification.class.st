@@ -93,24 +93,41 @@ GtLCodeTransformationSpecification >> gtChangesFor: aView [
 ]
 
 { #category : #validation }
+GtLCodeTransformationSpecification >> gtParameterProblems [
+	"Return the problems with my parameters, such as a missing or invalid name, found from the parameters alone, without looking at the code"
+
+	^ #()
+]
+
+{ #category : #validation }
+GtLCodeTransformationSpecification >> gtPreconditionProblems [
+	"Return the problems with what my refactoring expects of the code, such as a class that exists or a name that is not used yet. My parameters are valid"
+
+	^ #()
+]
+
+{ #category : #validation }
+GtLCodeTransformationSpecification >> gtPreconditionProblemsAfterAdding: someClassNames [
+	"Return the problems with what my refactoring expects of the code once the earlier transformations of the same call added the classes named someClassNames. My parameters are valid"
+
+	^ self gtPreconditionProblems
+]
+
+{ #category : #validation }
 GtLCodeTransformationSpecification >> gtProblems [
-	^#()
+	"Return my problems: those of my parameters or, when my parameters are valid, those of the preconditions of my refactoring"
+
+	^ self gtProblemsAfterAdding: #()
 ]
 
 { #category : #accessing }
 GtLCodeTransformationSpecification >> gtProblemsAfterAdding: someClassNames [
-	"Return my problems once the earlier transformations of the same call added the classes named someClassNames"
+	"Return my problems once the earlier transformations of the same call added the classes named someClassNames. The preconditions are checked only when the parameters are valid"
 
-	^ self gtProblems
-]
-
-{ #category : #validation }
-GtLCodeTransformationSpecification >> gtProblemsWithClassNamed: aString [
-	aString isEmptyOrNil
-		ifTrue: [ ^ {GtLTransformationProblem description: 'Missing class name'} ].
-	^ (Smalltalk globals classNamed: aString) isNil
-		ifTrue: [ {GtLTransformationProblem description: 'Class not found: ' , aString} ]
-		ifFalse: [ #() ]
+	| problems |
+	problems := self gtParameterProblems.
+	problems ifNotEmpty: [ ^ problems ].
+	^ self gtPreconditionProblemsAfterAdding: someClassNames
 ]
 
 { #category : #accessing }
@@ -120,6 +137,30 @@ GtLCodeTransformationSpecification >> namespaceWithAppliedRefactoring [
 	composite := self asRefactoringIn: namespace.
 	composite primitiveExecute.
 	^ namespace
+]
+
+{ #category : #private }
+GtLCodeTransformationSpecification >> parameterProblem: aString [
+	^ GtLTransformationParameterProblem description: aString
+]
+
+{ #category : #validation }
+GtLCodeTransformationSpecification >> parameterProblemsWithClassName: aString [
+	^ aString isEmptyOrNil
+		ifTrue: [ {self parameterProblem: 'Missing class name'} ]
+		ifFalse: [ #() ]
+]
+
+{ #category : #private }
+GtLCodeTransformationSpecification >> preconditionProblem: aString [
+	^ GtLTransformationPreconditionProblem description: aString
+]
+
+{ #category : #validation }
+GtLCodeTransformationSpecification >> preconditionProblemsWithClassNamed: aString [
+	^ (Smalltalk globals classNamed: aString) isNil
+		ifTrue: [ {self preconditionProblem: 'Class not found: ' , aString} ]
+		ifFalse: [ #() ]
 ]
 
 { #category : #accessing }

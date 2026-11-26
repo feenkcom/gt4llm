@@ -44,8 +44,13 @@ GtLPushDownMethodSpecification >> gtDisplayOn: aStream [
 ]
 
 { #category : #validation }
-GtLPushDownMethodSpecification >> gtProblems [
-	^ self gtProblemsWithMethodNamed: methodNameToPushDown
+GtLPushDownMethodSpecification >> gtParameterProblems [
+	^ self parameterProblemsWithMethodNamed: methodNameToPushDown
+]
+
+{ #category : #validation }
+GtLPushDownMethodSpecification >> gtPreconditionProblems [
+	^ self preconditionProblemsWithMethodNamed: methodNameToPushDown
 ]
 
 { #category : #'as yet unclassified' }

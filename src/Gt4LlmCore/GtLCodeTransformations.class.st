@@ -39,7 +39,8 @@ GtLCodeTransformations >> gtProblems [
 
 { #category : #accessing }
 GtLCodeTransformations >> orderProblems [
-	"Each transformation is checked against the image as it is, but they run in order. After a RenameClass, a transformation can name its class neither by the old name, which no longer exists then, nor by the new one, which does not exist yet when it is checked"
+	"Each transformation is checked against the image as it is, but they run in order. After a RenameClass, a transformation can name its class neither by the old name, which no longer exists then, nor by the new one, which does not exist yet when it is checked.
+	These are precondition problems: they come from checking the transformations against the image instead of in the namespace where the earlier ones already ran. Once the preconditions are checked in that namespace, the order is enforced there and these problems go away"
 
 	| oldNames newNames |
 	oldNames := Set new.
@@ -55,7 +56,7 @@ GtLCodeTransformations >> orderProblems [
 									instanceSideNameOf: aName.
 							(oldNames includes: aClassName)
 								ifTrue: [ aStream
-										nextPut: (GtLTransformationProblem
+										nextPut: (GtLTransformationPreconditionProblem
 												description: each class jsonSchemaLabel , ' on ' , aClassName
 														, ' comes after the RenameClass of ' , aClassName
 														, ': put it before the RenameClass, with the current name') ].
@@ -63,7 +64,7 @@ GtLCodeTransformations >> orderProblems [
 								at: aClassName
 								ifPresent: [ :anOldName | 
 									aStream
-										nextPut: (GtLTransformationProblem
+										nextPut: (GtLTransformationPreconditionProblem
 												description: each class jsonSchemaLabel , ' names ' , aClassName , ', the new name of '
 														, anOldName
 														, ': put it before the RenameClass, with the current name '

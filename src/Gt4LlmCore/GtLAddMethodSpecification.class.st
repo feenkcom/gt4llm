@@ -67,33 +67,35 @@ GtLAddMethodSpecification >> gtDisplayOn: aStream [
 				nextPutAll: protocol ]
 ]
 
-{ #category : #accessing }
-GtLAddMethodSpecification >> gtProblems [
-	^ self gtProblemsAfterAdding: #()
+{ #category : #validation }
+GtLAddMethodSpecification >> gtParameterProblems [
+	^ (self parameterProblemsWithClassName: methodClassName)
+		, (sourceCode isEmptyOrNil
+				ifTrue: [ {self parameterProblem: 'Missing source code'} ]
+				ifFalse: [ #() ])
 ]
 
-{ #category : #accessing }
-GtLAddMethodSpecification >> gtProblemsAfterAdding: someClassNames [
+{ #category : #validation }
+GtLAddMethodSpecification >> gtPreconditionProblemsAfterAdding: someClassNames [
 	"Check the method as compileMethods does. The class can be added by an earlier transformation of the same call: the method is then new and needs a protocol"
 
-	| anExtractor |
-	(methodClassName notNil
-		and: [ someClassNames includes: methodClassName asString ])
+	(someClassNames includes: methodClassName asString)
 		ifTrue: [ ^ self protocolProblemsInAddedClass ].
-	(self gtProblemsWithClassNamed: methodClassName)
+	(self preconditionProblemsWithClassNamed: methodClassName)
 		ifNotEmpty: [ :someProblems | ^ someProblems ].
-	anExtractor := self dataExtractor.
-	anExtractor
+	self dataExtractor
 		extractAllIfError: [ :aDomainObject | ^ {self problemFromDomainObject: aDomainObject} ].
 	^ #()
 ]
 
 { #category : #private }
 GtLAddMethodSpecification >> problemFromDomainObject: aDomainObject [
-	^ GtLTransformationProblem
-		description: ((aDomainObject isKindOf: GtLMethodCompilationExceptionDomainObject)
-				ifTrue: [ aDomainObject description , ': ' , aDomainObject messageText ]
-				ifFalse: [ aDomainObject messageText ])
+	"The extractor of compileMethods checks the source and the code together: a source that does not parse is a problem with my parameters, the others are problems with the code"
+
+	^ (aDomainObject isKindOf: GtLMethodCompilationExceptionDomainObject)
+		ifTrue: [ self
+				parameterProblem: aDomainObject description , ': ' , aDomainObject messageText ]
+		ifFalse: [ self preconditionProblem: aDomainObject messageText ]
 ]
 
 { #category : #accessing }
@@ -130,8 +132,8 @@ GtLAddMethodSpecification >> protocolForRefactoring [
 { #category : #validation }
 GtLAddMethodSpecification >> protocolProblemsInAddedClass [
 	^ self dataExtractor requestedProtocol
-		ifNil: [ {GtLTransformationProblem
-					description: 'The method is new in ' , methodClassName asString
+		ifNil: [ {self
+					preconditionProblem: 'The method is new in ' , methodClassName asString
 							, ', added by an earlier transformation: provide a protocol for it'} ]
 		ifNotNil: [ #() ]
 ]

@@ -41,8 +41,18 @@ GtLPushUpInstanceVariableSpecification >> gtDisplayOn: aStream [
 ]
 
 { #category : #validation }
-GtLPushUpInstanceVariableSpecification >> gtProblems [
-	^self gtProblemsWithClassNamed: self variableClassName
+GtLPushUpInstanceVariableSpecification >> gtParameterProblems [
+	^ (self parameterProblemsWithClassName: variableClassName)
+		, (variableName isEmptyOrNil
+				ifTrue: [ {self parameterProblem: 'Missing variable name'} ]
+				ifFalse: [ #() ])
+]
+
+{ #category : #validation }
+GtLPushUpInstanceVariableSpecification >> gtPreconditionProblems [
+	"RB checks that the subclasses define the variable"
+
+	^ self preconditionProblemsWithClassNamed: variableClassName
 ]
 
 { #category : #description }
