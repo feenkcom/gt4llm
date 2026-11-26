@@ -346,7 +346,7 @@ GtLClassChangeBlueprint >> layerContentsContainer [
 			c grid horizontal alignCenter.
 			c grid vertical alignTop ];
 		layout: (BlOnceLayout
-				on: (GtGradHorizontalTreeLayout new
+				on: (GtGradHorizontalDominanceTreeLayout new
 						treesDistance: 10;
 						levelDistance: 10;
 						nodeDistance: 5))
