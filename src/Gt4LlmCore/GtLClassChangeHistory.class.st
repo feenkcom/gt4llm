@@ -55,6 +55,20 @@ GtLClassChangeHistory >> gtBehaviourChangesFor: aView [
 		view: #gtCodeChangesFor:
 ]
 
+{ #category : #'gt - extensions' }
+GtLClassChangeHistory >> gtClassBlueprintFor: aView [
+	<gtView>
+	| blueprint |
+	blueprint := GtLClassChangeBlueprint on: self.
+	(blueprint methodNodes isEmpty and: [ blueprint variableHistories isEmpty ])
+		ifTrue: [ ^ aView empty ].
+	^ aView canvassable
+		title: 'Class Blueprint';
+		priority: 22;
+		question: 'How did the methods, variables, and relationships change?';
+		stencil: [ blueprint ]
+]
+
 { #category : #printing }
 GtLClassChangeHistory >> gtDisplayOn: aStream [
 	aStream nextPutAll: self targetClassName
