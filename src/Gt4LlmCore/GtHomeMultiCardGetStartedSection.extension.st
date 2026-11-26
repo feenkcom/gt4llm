@@ -19,7 +19,7 @@ GtHomeMultiCardGetStartedSection >> gtLlmCard [
 				withDeselectionOnSpawnEvents;
 				registryViewModel: GtL registry asViewModel;
 				background: anElement theme default contentBackground;
-				addAptitude: BrShadowAptitude new beLarge;
+				addAptitude: BrShadowAptitude new;
 				addAptitude: (BrGlamorousWithHorizontalResizerAptitude new
 						beRight;
 						resizerDo: [ :aResizer | 
