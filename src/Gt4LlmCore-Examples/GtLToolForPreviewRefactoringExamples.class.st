@@ -513,27 +513,37 @@ GtLToolForPreviewRefactoringExamples >> pushUpMethod: aSelectorString from: aCla
 		yourself
 ]
 
+{ #category : #private }
+GtLToolForPreviewRefactoringExamples >> refuseAddClassWith: aDictionary [
+	^ self
+		executeTool: GtLToolForPreviewRefactoring new
+		withArguments: (self
+				argumentsWithTransformations: {Dictionary new
+							at: 'AddClass' put: aDictionary copy;
+							yourself})
+		inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new)
+]
+
 { #category : #examples }
 GtLToolForPreviewRefactoringExamples >> refuseInvalidAddClass [
-	"The names of an added class are checked before the refactoring engine runs, and all the problems are named"
+	"The names of an added class are checked before the refactoring engine runs, and all the problems of a kind are named: the problems with the parameters first, then, once the parameters are valid, the problems with the code"
 
 	<gtExample>
-	| call |
-	call := self
-			executeTool: GtLToolForPreviewRefactoring new
-			withArguments: (self
-					argumentsWithTransformations: {Dictionary new
-								at: 'AddClass'
-									put: (Dictionary new
-											at: 'newClassName' put: 'Object';
-											at: 'superclassName' put: 'GtLNoSuchSuperclass';
-											at: 'packageName' put: ' ';
-											yourself);
-								yourself})
-			inContext: (GtLToolExecutionContext new objectStorage: GtLObjectStorage new).
+	| arguments call |
+	arguments := Dictionary new
+			at: 'newClassName' put: 'Object';
+			at: 'superclassName' put: 'GtLNoSuchSuperclass';
+			at: 'packageName' put: ' ';
+			yourself.
+	call := self refuseAddClassWith: arguments.
 	self
 		assertProblem: (self modelOf: call)
-		withErrorMessage: 'Invalid transformations: Object is already the name of a class or global variable; Class not found: GtLNoSuchSuperclass; Missing package name'.
+		withErrorMessage: 'Invalid transformations: Missing package name'.
+	arguments at: 'packageName' put: 'GtLNoSuchPackage'.
+	call := self refuseAddClassWith: arguments.
+	self
+		assertProblem: (self modelOf: call)
+		withErrorMessage: 'Invalid transformations: Object is already the name of a class or global variable; Class not found: GtLNoSuchSuperclass'.
 	^ call
 ]
 

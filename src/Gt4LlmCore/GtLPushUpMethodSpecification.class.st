@@ -50,9 +50,26 @@ GtLPushUpMethodSpecification >> gtDisplayOn: aStream [
 ]
 
 { #category : #validation }
-GtLPushUpMethodSpecification >> gtProblems [
-	^ (selectors flatCollect: [ :each | self gtProblemsWithMethodNamed: each ])
-		, (self gtProblemsWithClassNamed: targetClassName)
+GtLPushUpMethodSpecification >> gtParameterProblems [
+	"The class is named once for all the selectors"
+
+	^ (self parameterProblemsWithClassName: methodClassName)
+		, ((selectors anySatisfy: [ :each | each isEmptyOrNil ])
+				ifTrue: [ {self parameterProblem: 'Missing method name'} ]
+				ifFalse: [ #() ]) , (self parameterProblemsWithClassName: targetClassName)
+]
+
+{ #category : #validation }
+GtLPushUpMethodSpecification >> gtPreconditionProblems [
+	"An unknown class is named once, not for each selector"
+
+	| targetProblems |
+	targetProblems := self preconditionProblemsWithClassNamed: targetClassName.
+	(self preconditionProblemsWithClassNamed: methodClassName)
+		ifNotEmpty: [ :someProblems | ^ someProblems , targetProblems ].
+	^ (selectors
+		flatCollect: [ :each | self preconditionProblemsWithMethodNamed: each ])
+		, targetProblems
 ]
 
 { #category : #'as yet unclassified' }

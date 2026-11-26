@@ -41,8 +41,13 @@ GtLRemoveMethodSpecification >> gtDisplayOn: aStream [
 ]
 
 { #category : #validation }
-GtLRemoveMethodSpecification >> gtProblems [
-	^ self gtProblemsWithMethodNamed: methodNameToRemove
+GtLRemoveMethodSpecification >> gtParameterProblems [
+	^ self parameterProblemsWithMethodNamed: methodNameToRemove
+]
+
+{ #category : #validation }
+GtLRemoveMethodSpecification >> gtPreconditionProblems [
+	^ self preconditionProblemsWithMethodNamed: methodNameToRemove
 ]
 
 { #category : #magritte }

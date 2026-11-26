@@ -63,16 +63,18 @@ GtLAbstractMagritteFunctionToolExamples >> modelOf: aToolCall [
 { #category : #fixtures }
 GtLAbstractMagritteFunctionToolExamples >> removeDummies: anEnvironment [
 	"Remove the temporary classes, the classes added to their packages and the packages, and the names the classes leave in Undeclared.
-	Remove the methods first: the method index then forgets them, and a later rename does not find them"
+	Remove the methods first: the method index then forgets them, and a later rename does not find them. The generated traits are removed by the environment, after the generated classes that use them"
 
 	| allClasses dummyClasses names |
 	allClasses := anEnvironment realPackages
 			flatCollect: [ :aPackage | aPackage definedClasses ].
 	dummyClasses := anEnvironment dummyPackages
-			flatCollect: [ :aPackage | aPackage dummyClasses collect: [ :each | each realClass ] ].
+			flatCollect: [ :aPackage | aPackage dummyClasses , aPackage dummyTraits collect: [ :each | each realClass ] ].
 	names := (allClasses collect: [ :each | each name ]) asSet.
 	anEnvironment dummyPackages
-		do: [ :aPackage | aPackage dummyClasses do: [ :each | names add: each className ] ].
+		do: [ :aPackage | 
+			aPackage dummyClasses , aPackage dummyTraits
+				do: [ :each | names add: each className ] ].
 	EpMonitor
 		disableDuring: [ allClasses
 				do: [ :aClass | 
@@ -106,4 +108,33 @@ GtLAbstractMagritteFunctionToolExamples >> withDummyHierarchyDo: aBlock [
 			| aLeafClass |
 			aLeafClass := anEnvironment anyDummyLeafClass realClass.
 			aBlock value: aLeafClass superclass value: aLeafClass ]
+]
+
+{ #category : #private }
+GtLAbstractMagritteFunctionToolExamples >> withDummyVariablesDo: aBlock [
+	"Evaluate aBlock with the root and the leaf dummy class of a temporary hierarchy of two classes, and the dummy trait that the root uses. Each class has instance variables, a class variable and a class slot, the trait has a slot, and all have accessors that refer to their variables"
+
+	| generator |
+	generator := GtPharoDummiesGenerator new
+			amountOfPackages: 1;
+			amountOfClasses: 2;
+			amountOfClassVariables: 1;
+			amountOfClassSlots: 1;
+			amountOfTraits: 1;
+			yourself.
+	^ self
+		withDummies: [ | anEnvironment |
+			anEnvironment := generator generateHierarchy.
+			anEnvironment dummyPackages
+				do: [ :aPackage | 
+					aPackage dummyClasses , aPackage dummyTraits
+						do: [ :each | generator addDummyAccessorsToClass: each ] ].
+			anEnvironment ]
+		do: [ :anEnvironment | 
+			| aPackage |
+			aPackage := anEnvironment dummyPackages first.
+			aBlock
+				value: aPackage dummyClasses first
+				value: aPackage dummyClasses last
+				value: aPackage dummyTraits first ]
 ]
