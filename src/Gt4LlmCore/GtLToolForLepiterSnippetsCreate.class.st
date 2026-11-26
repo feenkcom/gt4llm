@@ -1,9 +1,6 @@
 Class {
 	#name : #GtLToolForLepiterSnippetsCreate,
-	#superclass : #GtLAbstractMagritteFunctionTool,
-	#instVars : [
-		'database'
-	],
+	#superclass : #GtLAbstractLepiterSnippetTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -11,27 +8,23 @@ Class {
 GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
 	"Add the snippet to the page, or to the parent snippet, and answer its addition result"
 
-	| pageUidString parentSnippetUidString locator parent snippet |
-	pageUidString := snippetArguments pageUid.
-	(pageUidString isNil or: [ pageUidString trimBoth isEmpty ])
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				arguments: snippetArguments;
-				missingArgument: 'pageUid' ].
+	| parentSnippetUidString parent snippet |
+	(self missingArgumentAmong: #('pageUid') in: snippetArguments)
+		ifNotNil: [ :aProblem | ^ aProblem ].
 	^ snippetArguments
 		validateSnippetArgumentsFor: self
-		ifCorrect: [ locator := GtLLepiterSnippetLocator database: self database.
-			parentSnippetUidString := snippetArguments parentSnippetUid
+		ifCorrect: [ parentSnippetUidString := snippetArguments parentSnippetUid
 					ifNil: [ '' ]
 					ifNotNil: [ :aString | aString asString trimBoth ].
 			parentSnippetUidString isEmpty
-				ifTrue: [ locator
-						pageWithUid: pageUidString
+				ifTrue: [ self snippetLocator
+						pageWithUid: snippetArguments pageUid
 						databaseId: snippetArguments databaseId
 						ifFound: [ :aPage | parent := aPage ]
 						ifNone: [ :aProblem | ^ aProblem ] ]
-				ifFalse: [ locator
+				ifFalse: [ self snippetLocator
 						snippetWithUid: parentSnippetUidString
-						pageUid: pageUidString
+						pageUid: snippetArguments pageUid
 						databaseId: snippetArguments databaseId
 						ifFound: [ :aSnippet | parent := aSnippet ]
 						ifNone: [ :aProblem | ^ aProblem ] ].
@@ -45,16 +38,6 @@ GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
 			GtLLepiterSnippetAdditionResult new
 				newSnippet: (GtLLepiterSnippetWithContent fromSnippet: snippet);
 				yourself ]
-]
-
-{ #category : #accessing }
-GtLToolForLepiterSnippetsCreate >> database [
-	^ database
-]
-
-{ #category : #accessing }
-GtLToolForLepiterSnippetsCreate >> database: aDatabase [
-	database := aDatabase
 ]
 
 { #category : #accessing }
@@ -84,12 +67,6 @@ Example JSON response:
     {"errorMessage": "Could not locate page with id PAGE_ID"}
   ]
 }'
-]
-
-{ #category : #initialization }
-GtLToolForLepiterSnippetsCreate >> initialize [
-	super initialize.
-	database := LeDatabasesRegistry defaultLogicalDatabase
 ]
 
 { #category : #accessing }

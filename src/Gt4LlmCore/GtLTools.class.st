@@ -100,7 +100,7 @@ GtLTools class >> leChange [
 	^ self
 		withAll: {GtLToolForLepiterPageCreate new.
 				GtLToolForLepiterPageRemove new.
-				GtLToolForLepiterSnippetEdit new.
+				GtLToolForLepiterSnippetsEdit new.
 				GtLToolForLepiterSnippetsCreate new.
 				GtLToolForLepiterSnippetsRemove new} asOrderedCollection
 ]

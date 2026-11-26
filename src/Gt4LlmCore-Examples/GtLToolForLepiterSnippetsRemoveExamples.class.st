@@ -5,6 +5,45 @@ Class {
 }
 
 { #category : #examples }
+GtLToolForLepiterSnippetsRemoveExamples >> copiesInTwoDatabasesAreRemovedInOneCall [
+	"The same page and snippet ids in two databases are two snippets: with their databaseIds, both are removed in one call. A request without databaseId after them is answered as already removed"
+
+	<gtExample>
+	^ GtLToolForLepiterSnippetsEditExamples new
+		withCopiedPageInTwoDatabasesDo: [ :aLogicalDatabase :theDatabases :theSnippets | 
+			| theArguments call results |
+			theArguments := (1 to: 2)
+					collect: [ :anIndex | 
+						Dictionary new
+							at: 'databaseId' put: (theDatabases at: anIndex) uuidString;
+							at: 'pageUid' put: (theSnippets at: anIndex) page uidString;
+							at: 'snippetUid' put: (theSnippets at: anIndex) uidString;
+							yourself ].
+			call := self
+					executeTool: (GtLToolForLepiterSnippetsRemove new
+							database: aLogicalDatabase;
+							yourself)
+					withArguments: {'snippets'
+								-> (theArguments asArray
+										, {theArguments first copy
+													removeKey: 'databaseId';
+													yourself})} asDictionary.
+			results := call result targetObject snippets.
+			self
+				assert: ((results first: 2) collect: [ :each | each status ]) asArray
+				equals: #('removed' 'removed').
+			self
+				assert: ((results first: 2) collect: [ :each | each targetSnippetReference databaseId ])
+						asArray
+				equals: (theDatabases collect: [ :each | each uuidString ]) asArray.
+			self
+				assert: (results third errorMessage
+						includesSubstring: 'was already removed earlier in this call').
+			self assert: (theSnippets allSatisfy: [ :each | each page isNil ]).
+			call ]
+]
+
+{ #category : #examples }
 GtLToolForLepiterSnippetsRemoveExamples >> emptyPageUid [
 	"Test behavior when pageUid is an empty string.
 	The schema accepts empty strings, but the tool logic validates it."

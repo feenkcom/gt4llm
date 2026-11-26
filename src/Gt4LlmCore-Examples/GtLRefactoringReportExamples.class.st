@@ -301,7 +301,7 @@ GtLRefactoringReportExamples >> lepiterChangesSerialization [
 
 { #category : #examples }
 GtLRefactoringReportExamples >> lepiterChangesWithSources [
-	"With sources, a snippet has its new text, in the form editLepiterSnippet accepts"
+	"With sources, a snippet has its new text, in the form editLepiterSnippets accepts"
 
 	<gtExample>
 	<return: #GtLRefactoringLepiterChangesReport>

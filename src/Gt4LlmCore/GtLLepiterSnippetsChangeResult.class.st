@@ -1,5 +1,5 @@
 "
-I am the result of one call of createLepiterSnippets or removeLepiterSnippets: the snippet change results ({{gtClass:GtLLepiterSnippetChangeResult}}) and the error domain objects, in the order of the request. My JSON key is `snippets`. The results of removed descendants are nested in the result of the snippet that was asked for.
+I am the result of one call of createLepiterSnippets, editLepiterSnippets or removeLepiterSnippets: the snippet change results ({{gtClass:GtLLepiterSnippetChangeResult}}) and the error domain objects, in the order of the request. My JSON key is `snippets`. The results of removed descendants are nested in the result of the snippet that was asked for.
 
 editLepiterSnippet changes one snippet and answers its {{gtClass:GtLLepiterSnippetModificationResult}} directly.
 "

@@ -85,19 +85,25 @@ GtLLepiterSnippetLocator >> namesOfDatabasesOf: aCollectionOfSnippetsOrPages [
 
 { #category : #resolving }
 GtLLepiterSnippetLocator >> pageUuidFrom: aPageUidString ifInvalid: anInvalidBlock [
+	"Return the uuid of a page id: base 36, as the Lepiter tools give it, or the dashed form of a UUID, as the page JSON shows it.
+	UUID class>>#fromString36: does not refuse other characters (it answers an unrelated uuid), so they are checked first"
+
 	| aString |
 	aString := aPageUidString
 			ifNil: [ '' ]
 			ifNotNil: [ aPageUidString asString trimBoth ].
 	aString isEmpty
 		ifTrue: [ ^ anInvalidBlock value: (self problem: 'Missing page uid') ].
+	(aString size = 36 and: [ (aString occurrencesOf: $-) = 4 ])
+		ifTrue: [ ^ [ UUID fromString: aString ]
+				on: Error
+				do: [ :anError | anInvalidBlock value: (self problemOfInvalidPageUid: aString) ] ].
+	(aString
+		allSatisfy: [ :each | each isDigit or: [ each asLowercase between: $a and: $z ] ])
+		ifFalse: [ ^ anInvalidBlock value: (self problemOfInvalidPageUid: aString) ].
 	^ [ UUID fromString36: aString ]
 		on: Error
-		do: [ :anError | 
-			anInvalidBlock
-				value: (self
-						problem: 'Invalid page uid ' , aString
-								, ': page ids are base 36, as getLepiterPageContents and searchForLepiterPages give them') ]
+		do: [ :anError | anInvalidBlock value: (self problemOfInvalidPageUid: aString) ]
 ]
 
 { #category : #resolving }
@@ -151,6 +157,13 @@ GtLLepiterSnippetLocator >> problem: aString [
 	^ GtLProblemDomainObject new
 		errorMessage: aString;
 		yourself
+]
+
+{ #category : #private }
+GtLLepiterSnippetLocator >> problemOfInvalidPageUid: aString [
+	^ self
+		problem: 'Invalid page uid ' , aString
+				, ': a page id is base 36, as getLepiterPageContents and searchForLepiterPages give it, or the dashed form of the page UUID'
 ]
 
 { #category : #private }

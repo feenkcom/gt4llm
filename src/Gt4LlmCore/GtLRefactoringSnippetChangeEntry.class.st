@@ -126,7 +126,7 @@ GtLRefactoringSnippetChangeEntry >> pageTitle: aStringOrNil [
 
 { #category : #accessing }
 GtLRefactoringSnippetChangeEntry >> pageUid [
-	"The form getLepiterPageContents and editLepiterSnippet expect"
+	"The form getLepiterPageContents and editLepiterSnippets expect"
 
 	^ pageUid
 ]
@@ -162,7 +162,7 @@ GtLRefactoringSnippetChangeEntry >> snippetReference [
 
 { #category : #accessing }
 GtLRefactoringSnippetChangeEntry >> snippetUid [
-	"The form editLepiterSnippet expects; nil for a snippet that is not added yet"
+	"The form editLepiterSnippets expects; nil for a snippet that is not added yet"
 
 	^ snippetUid
 ]

@@ -201,6 +201,6 @@ GtLLepiterSnippetReference >> snippetUidDescription [
 	^ MAStringDescription new
 		label: 'Snippet uid';
 		accessor: #snippetUid;
-		comment: 'The uid of the snippet, as editLepiterSnippet takes it.';
+		comment: 'The uid of the snippet, as editLepiterSnippets takes it.';
 		beRequired
 ]
