@@ -2,7 +2,7 @@ Class {
 	#name : #GtLLepiterSnippetRemovalRequest,
 	#superclass : #Object,
 	#instVars : [
-		'knowledgeBaseUid',
+		'databaseId',
 		'pageUid',
 		'snippetUid'
 	],
@@ -10,23 +10,23 @@ Class {
 }
 
 { #category : #accessing }
-GtLLepiterSnippetRemovalRequest >> knowledgeBaseUid [
-	^ knowledgeBaseUid
+GtLLepiterSnippetRemovalRequest >> databaseId [
+	^ databaseId
 ]
 
 { #category : #accessing }
-GtLLepiterSnippetRemovalRequest >> knowledgeBaseUid: aKnowledgeBaseUid [
-	knowledgeBaseUid := aKnowledgeBaseUid
+GtLLepiterSnippetRemovalRequest >> databaseId: aString [
+	databaseId := aString
 ]
 
 { #category : #magritte }
-GtLLepiterSnippetRemovalRequest >> knowledgeBaseUidDescription [
+GtLLepiterSnippetRemovalRequest >> databaseIdDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
-		label: 'Knowledge base uid';
-		accessor: #knowledgeBaseUid;
-		beRequired
+		label: 'Database id';
+		comment: 'Optional id of the database of the page, as lepiterKnowledgeBases lists it. Needed only when the page and snippet ids are in several databases.';
+		accessor: #databaseId;
+		yourself
 ]
 
 { #category : #accessing }
@@ -42,10 +42,10 @@ GtLLepiterSnippetRemovalRequest >> pageUid: aPageUid [
 { #category : #magritte }
 GtLLepiterSnippetRemovalRequest >> pageUidDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Page uid';
 		accessor: #pageUid;
+		comment: 'The id of the page (base 36), as getLepiterPageContents gives it.';
 		beRequired
 ]
 
@@ -62,9 +62,9 @@ GtLLepiterSnippetRemovalRequest >> snippetUid: aSnippetUid [
 { #category : #magritte }
 GtLLepiterSnippetRemovalRequest >> snippetUidDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Snippet uid';
 		accessor: #snippetUid;
+		comment: 'The uid of the snippet, as getLepiterPageContents gives it.';
 		beRequired
 ]

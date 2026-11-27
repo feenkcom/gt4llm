@@ -1,3 +1,8 @@
+"
+I describe a snippet changed by the Wardley map edit tool (GtWardleyMapEditTool, in Gt4Llm-WardleyMap), which is my only user: status, page uid, snippet uid and the live snippet.
+
+The Lepiter snippet tools answer snapshot-based results instead ({{gtClass:GtLLepiterSnippetChangeResult}}, in a {{gtClass:GtLLepiterSnippetsChangeResult}}). I am kept unchanged for the Wardley tool, which proposes changes rather than making them; moving me to Gt4Llm-WardleyMap, or replacing me, is a separate step.
+"
 Class {
 	#name : #GtLLepiterSnippetDomainObject,
 	#superclass : #Object,

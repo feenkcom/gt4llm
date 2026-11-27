@@ -58,6 +58,79 @@ GtLToolForLepiterSnippetsCreateExamples >> allSnippetsWithErrors [
 ]
 
 { #category : #examples }
+GtLToolForLepiterSnippetsCreateExamples >> ambiguousPageIdIsRefused [
+	"A page id that is in two databases (a page copied by hand) is refused, naming the databases. With the databaseId, the snippet is created in that database"
+
+	<gtExample>
+	| databases pageUid logicalDatabase tool arguments call result secondPage |
+	databases := #('one' 'two')
+			collect: [ :aName | 
+				| aFolder aStore |
+				aFolder := FileSystem memory / aName.
+				aFolder ensureCreateDirectory.
+				aStore := LeLocalStoreLoad current.
+				aStore localRoot: aFolder.
+				aStore loadAndMonitorFrom: aFolder ].
+	[ pageUid := UUID new.
+	databases
+		do: [ :aDatabase | 
+			aDatabase
+				addPage: ((LePage named: 'Copied page')
+						basicUid: pageUid;
+						yourself) ].
+	logicalDatabase := LeLogicalDatabase new
+			primaryDB: databases first;
+			addDB: databases second;
+			yourself.
+	tool := GtLToolForLepiterSnippetsCreate new.
+	tool database: logicalDatabase.
+	arguments := Dictionary new
+			at: 'pageUid' put: pageUid asString36;
+			at: 'snippetText' put: 'New snippet text';
+			yourself.
+	call := self
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'TextSnippet' put: arguments;
+									yourself}} asDictionary.
+	result := call result targetObject snippets first.
+	self assert: (result isKindOf: GtLProblemDomainObject).
+	self assert: (result errorMessage includesSubstring: 'is in several databases').
+	self
+		assert: (result errorMessage includesSubstring: databases second uuidString).
+	self
+		assert: (databases
+				allSatisfy: [ :each | 
+					(each
+						pageWithID: pageUid
+						ifPresent: [ :aPage | aPage children size ]
+						ifAbsent: [ -1 ]) = 0 ]).
+	arguments at: 'databaseId' put: databases second uuidString.
+	call := self
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'TextSnippet' put: arguments;
+									yourself}} asDictionary.
+	result := call result targetObject snippets first.
+	self assert: result status equals: 'created'.
+	self
+		assert: result targetSnippetReference databaseId
+		equals: databases second uuidString.
+	secondPage := databases second
+			pageWithID: pageUid
+			ifPresent: [ :aPage | aPage ]
+			ifAbsent: [ nil ].
+	self assert: secondPage children size equals: 1.
+	self
+		assert: secondPage children first uid uidString
+		equals: result targetSnippetReference snippetUid ]
+		ensure: [ databases do: [ :each | each stopMonitoring ] ].
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> emptyExampleClassName [
 	<gtExample>
 	| call targetObject tool page |
@@ -218,20 +291,20 @@ GtLToolForLepiterSnippetsCreateExamples >> existingPictureAttachmentIsNotCopied 
 	attachmentUrl := 'attachments/already-stored-picture.png'.
 
 	call := self
-		executeTool: tool
-		withArguments: {
-			'snippets' -> {
-				Dictionary new
-					at: 'PictureSnippet'
-					put: (Dictionary new
-						at: 'pageUid' put: page uidString;
-						at: 'urlString' put: attachmentUrl;
-						yourself);
-					yourself
-			}
-		} asDictionary.
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'PictureSnippet'
+										put: (Dictionary new
+												at: 'pageUid' put: page uidString;
+												at: 'urlString' put: attachmentUrl;
+												yourself);
+									yourself}} asDictionary.
 	targetObject := call result targetObject.
-	pictureSnippet := targetObject snippets first snippet.
+	pictureSnippet := targetObject snippets first targetSnippetReference
+			snippetIn: tool database
+			ifPresent: [ :aSnippet | aSnippet ]
+			ifMissing: [ :aProblem | nil ].
 
 	self assert: pictureSnippet urlString equals: attachmentUrl.
 
@@ -584,25 +657,22 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulExampleSnippetCreate [
 	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
-	
+
 	call := self
-		executeTool: tool
-		withArguments: {
-			'snippets' -> {
-				Dictionary new
-					at: 'ExampleSnippet'
-					put: (Dictionary new
-						at: 'pageUid' put: page uidString;
-						at: 'exampleClassName' put: self class name;
-						at: 'exampleMethodName' put: 'successfulSnippetCreate';
-						yourself);
-					yourself
-			}
-		} asDictionary.
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'ExampleSnippet'
+										put: (Dictionary new
+												at: 'pageUid' put: page uidString;
+												at: 'exampleClassName' put: self class name;
+												at: 'exampleMethodName' put: 'successfulSnippetCreate';
+												yourself);
+									yourself}} asDictionary.
 	targetObject := call result targetObject.
-	
-	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
-	
+
+	self assert: (targetObject isKindOf: GtLLepiterSnippetsChangeResult).
+
 	^ call
 ]
 
@@ -663,33 +733,32 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulNestedSnippetCreate [
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
 	parentSnippet := page snippetBuilder
-		string: 'Parent snippet text';
-		add.
-	
+			string: 'Parent snippet text';
+			add.
+
 	call := self
-		executeTool: tool
-		withArguments: {
-			'snippets' -> {
-				Dictionary new
-					at: 'PharoSnippet'
-					put: (Dictionary new
-						at: 'pageUid' put: page uidString;
-						at: 'parentSnippetUid' put: parentSnippet uidString;
-						at: 'pharoCode' put: 'Transcript show: 1';
-						yourself);
-					yourself
-			}
-		} asDictionary.
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'PharoSnippet'
+										put: (Dictionary new
+												at: 'pageUid' put: page uidString;
+												at: 'parentSnippetUid' put: parentSnippet uidString;
+												at: 'pharoCode' put: 'Transcript show: 1';
+												yourself);
+									yourself}} asDictionary.
 	targetObject := call result targetObject.
-	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
+	self assert: (targetObject isKindOf: GtLLepiterSnippetsChangeResult).
 	childSnippets := targetObject snippets.
 	self assert: childSnippets size equals: 1.
-	
+
 	self assert: page children size equals: 1.
 	self assert: parentSnippet children size equals: 1.
 	childSnippet := parentSnippet children anyOne.
-	self assert: childSnippet uidString equals: childSnippets anyOne snippetUid.
-	
+	self
+		assert: childSnippet uidString
+		equals: childSnippets anyOne targetSnippetReference snippetUid.
+
 	^ call
 ]
 
@@ -699,24 +768,21 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulPharoSnippetCreate [
 	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
-	
+
 	call := self
-		executeTool: tool
-		withArguments: {
-			'snippets' -> {
-				Dictionary new
-					at: 'PharoSnippet'
-					put: (Dictionary new
-						at: 'pageUid' put: page uidString;
-						at: 'pharoCode' put: 'Transcript show: 1';
-						yourself);
-					yourself
-			}
-		} asDictionary.
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'PharoSnippet'
+										put: (Dictionary new
+												at: 'pageUid' put: page uidString;
+												at: 'pharoCode' put: 'Transcript show: 1';
+												yourself);
+									yourself}} asDictionary.
 	targetObject := call result targetObject.
-	
-	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
-	
+
+	self assert: (targetObject isKindOf: GtLLepiterSnippetsChangeResult).
+
 	^ call
 ]
 
@@ -728,24 +794,24 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulPictureSnippetCreate [
 	page := self pageInLogicalDatabase.
 
 	call := self
-		executeTool: tool
-		withArguments: {
-			'snippets' -> {
-				Dictionary new
-					at: 'PictureSnippet'
-					put: (Dictionary new
-						at: 'pageUid' put: page uidString;
-						at: 'urlString' put: 'https://example.com/picture.png';
-						at: 'caption' put: 'An example picture';
-						at: 'previewHeight' put: 200;
-						yourself);
-					yourself
-			}
-		} asDictionary.
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'PictureSnippet'
+										put: (Dictionary new
+												at: 'pageUid' put: page uidString;
+												at: 'urlString' put: 'https://example.com/picture.png';
+												at: 'caption' put: 'An example picture';
+												at: 'previewHeight' put: 200;
+												yourself);
+									yourself}} asDictionary.
 	targetObject := call result targetObject.
 
 	self assert: targetObject snippets size equals: 1.
-	pictureSnippet := targetObject snippets first snippet.
+	pictureSnippet := targetObject snippets first targetSnippetReference
+			snippetIn: tool database
+			ifPresent: [ :aSnippet | aSnippet ]
+			ifMissing: [ :aProblem | nil ].
 	self assert: (pictureSnippet isKindOf: LePictureSnippet).
 	self assert: pictureSnippet urlString equals: 'https://example.com/picture.png'.
 	self assert: pictureSnippet caption equals: 'An example picture'.
@@ -760,24 +826,21 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulPythonSnippetCreate [
 	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
-	
+
 	call := self
-		executeTool: tool
-		withArguments: {
-			'snippets' -> {
-				Dictionary new
-					at: 'PythonSnippet'
-					put: (Dictionary new
-						at: 'pageUid' put: page uidString;
-						at: 'pythonCode' put: 'print(1)';
-						yourself);
-					yourself
-			}
-		} asDictionary.
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'PythonSnippet'
+										put: (Dictionary new
+												at: 'pageUid' put: page uidString;
+												at: 'pythonCode' put: 'print(1)';
+												yourself);
+									yourself}} asDictionary.
 	targetObject := call result targetObject.
-	
-	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
-	
+
+	self assert: (targetObject isKindOf: GtLLepiterSnippetsChangeResult).
+
 	^ call
 ]
 
@@ -787,85 +850,107 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulShellSnippetCreate [
 	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
-	
+
 	call := self
-		executeTool: tool
-		withArguments: {
-			'snippets' -> {
-				Dictionary new
-					at: 'ShellSnippet'
-					put: (Dictionary new
-						at: 'pageUid' put: page uidString;
-						at: 'shellCode' put: 'echo "Hello"';
-						yourself);
-					yourself
-			}
-		} asDictionary.
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'ShellSnippet'
+										put: (Dictionary new
+												at: 'pageUid' put: page uidString;
+												at: 'shellCode' put: 'echo "Hello"';
+												yourself);
+									yourself}} asDictionary.
 	targetObject := call result targetObject.
-	
-	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
-	
+
+	self assert: (targetObject isKindOf: GtLLepiterSnippetsChangeResult).
+
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetCreate [
+	"A created snippet is added at the end of the page; the response names it by its reference only"
+
 	<gtExample>
-	| call targetObject tool page |
+	| call tool page result expectedReference |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
-	
 	call := self
-		executeTool: tool
-		withArguments: {
-			'snippets' -> {
-				Dictionary new
-					at: 'TextSnippet'
-					put: (Dictionary new
-						at: 'pageUid' put: page uidString;
-						at: 'snippetText' put: 'New snippet text';
-						yourself);
-					yourself
-			}
-		} asDictionary.
-	targetObject := call result targetObject.
-	
-	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
-	
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'TextSnippet'
+										put: (Dictionary new
+												at: 'pageUid' put: page uidString;
+												at: 'snippetText' put: 'New snippet text';
+												yourself);
+									yourself}} asDictionary.
+	result := call result targetObject snippets first.
+	self assert: (result isKindOf: GtLLepiterSnippetAdditionResult).
+	self assert: result status equals: 'created'.
+	self assert: result newSnippet snippetType equals: 'text'.
+	self
+		assert: page children last uid uidString
+		equals: result targetSnippetReference snippetUid.
+	self assert: page children last string equals: 'New snippet text'.
+	expectedReference := Dictionary new
+			at: 'pageUid' put: page uidString;
+			at: 'snippetUid' put: result targetSnippetReference snippetUid;
+			yourself.
+	(GtLLepiterSnippetReference databaseIdOf: page database)
+		ifNotNil: [ :anId | expectedReference at: 'databaseId' put: anId ].
+	self
+		assert: (self jsonOf: call)
+		equals: (Dictionary new
+				at: 'snippets'
+					put: {Dictionary new
+								at: 'status' put: 'created';
+								at: 'targetSnippetReference' put: expectedReference;
+								yourself};
+				yourself).
 	^ call
 ]
 
 { #category : #examples }
 GtLToolForLepiterSnippetsCreateExamples >> successfulSnippetsCreateMultiple [
+	"Each requested snippet gets its own result, in order, and the snippets are added at the end of the page in that order"
+
 	<gtExample>
-	| call targetObject tool page |
+	| call tool page results |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
-	
 	call := self
-		executeTool: tool
-		withArguments: {
-			'snippets' -> {
-				Dictionary new
-					at: 'TextSnippet'
-					put: (Dictionary new
-						at: 'pageUid' put: page uidString;
-						at: 'snippetText' put: 'Notes';
-						yourself);
-					yourself.
-				Dictionary new
-					at: 'PythonSnippet'
-					put: (Dictionary new
-						at: 'pageUid' put: page uidString;
-						at: 'pythonCode' put: 'print(2)';
-						yourself);
-					yourself
-			}
-		} asDictionary.
-	targetObject := call result targetObject.
-	
-	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
-	
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'TextSnippet'
+										put: (Dictionary new
+												at: 'pageUid' put: page uidString;
+												at: 'snippetText' put: 'Notes';
+												yourself);
+									yourself.
+								Dictionary new
+									at: 'PythonSnippet'
+										put: (Dictionary new
+												at: 'pageUid' put: page uidString;
+												at: 'pythonCode' put: 'print(2)';
+												yourself);
+									yourself}} asDictionary.
+	results := call result targetObject snippets.
+	self
+		assert: (results collect: [ :each | each class ]) asArray
+		equals: {GtLLepiterSnippetAdditionResult.
+				GtLLepiterSnippetAdditionResult}.
+	self
+		assert: (results collect: [ :each | each newSnippet snippetType ]) asArray
+		equals: #('text' 'python').
+	self
+		assert: (results collect: [ :each | each newSnippet contentString ]) asArray
+		equals: #('Notes' 'print(2)').
+	self
+		assert: ((page children asArray last: 2) collect: [ :each | each uid uidString ])
+		equals: (results collect: [ :each | each targetSnippetReference snippetUid ]) asArray.
 	^ call
 ]
 
@@ -875,24 +960,21 @@ GtLToolForLepiterSnippetsCreateExamples >> successfulTextSnippetCreate [
 	| call targetObject tool page |
 	tool := self toolOnLogicalDatabase.
 	page := self pageInLogicalDatabase.
-	
+
 	call := self
-		executeTool: tool
-		withArguments: {
-			'snippets' -> {
-				Dictionary new
-					at: 'TextSnippet'
-					put: (Dictionary new
-						at: 'pageUid' put: page uidString;
-						at: 'snippetText' put: 'New snippet text';
-						yourself);
-					yourself
-			}
-		} asDictionary.
+			executeTool: tool
+			withArguments: {'snippets'
+						-> {Dictionary new
+									at: 'TextSnippet'
+										put: (Dictionary new
+												at: 'pageUid' put: page uidString;
+												at: 'snippetText' put: 'New snippet text';
+												yourself);
+									yourself}} asDictionary.
 	targetObject := call result targetObject.
-	
-	self assert: (targetObject isKindOf: GtLLepiterSnippetsDomainObject).
-	
+
+	self assert: (targetObject isKindOf: GtLLepiterSnippetsChangeResult).
+
 	^ call
 ]
 

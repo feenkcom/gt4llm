@@ -57,11 +57,12 @@ GtLRefactoringPreview >> applicationStatus [
 { #category : #applying }
 GtLRefactoringPreview >> apply [
 	"Apply the previewed changes and answer a GtLRefactoringResult.
-	The methods and classes affected by the changes are snapshotted before and after applying them, so that the result describes what changed with GtLCodeChangeResult objects. Each of my changes (GtLRefactoringChange) is then linked to the code change result it led to, since the RB changes can no longer compute their diffs once the image contains them.
-	If applying the changes or describing them raises an error, the result is marked as failed, holds the frozen exception and describes the changes that could be described.
+	The methods, classes and Lepiter snippets affected by the changes are snapshotted before and after applying them, so that the result describes what changed with GtLCodeChangeResult and GtLLepiterSnippetChangeResult objects. Each of my changes (GtLRefactoringChange) is then linked to the change result it led to, since the RB changes can no longer compute their diffs once the image contains them; a Le change is linked to the result of its own snippet, by identity.
+	If applying the changes or describing them raises an error, the result is marked as failed and holds the first frozen exception. The code results, the Lepiter results and the links are built in separate steps, so that an error in one step does not lose what the others describe.
 	I count as applied from the moment the changes start to be performed, also if something fails afterwards: applying me again would apply again the changes already made"
 
-	| targets before undo after exception results |
+	| targets before undo after exception builder results lepiterResults recordError |
+	recordError := [ :anError | exception ifNil: [ exception := GtLExceptionDomainObject freeze: anError ] ].
 	targets := GtLRefactoringChangeTargets forChange: namespace changes.
 	before := targets snapshotBeforeChanges.
 	applied := true.
@@ -69,22 +70,40 @@ GtLRefactoringPreview >> apply [
 			performChangeReturningUndo: namespace changes ]
 		on: Error
 		do: [ :anError | 
-			exception := GtLExceptionDomainObject freeze: anError.
+			recordError value: anError.
 			anError return: nil ].
 	[ after := targets snapshotAfterChanges.
-	results := (GtLRefactoringCodeChangesBuilder
+	builder := GtLRefactoringCodeChangesBuilder
 			targets: targets
 			before: before
-			after: after) build.
-	changes do: [ :each | each markAppliedWithCodeChangeResults: results ] ]
+			after: after.
+	results := builder build ]
 		on: Error
 		do: [ :anError | 
-			exception ifNil: [ exception := GtLExceptionDomainObject freeze: anError ].
+			recordError value: anError.
+			anError return: nil ].
+	builder
+		ifNotNil: [ [ lepiterResults := builder buildLepiterChangeResults ]
+				on: Error
+				do: [ :anError | 
+					recordError value: anError.
+					anError return: nil ] ].
+	[ changes
+		do: [ :each | 
+			each
+				markAppliedWithCodeChangeResults: (results ifNil: [ #() ])
+				lepiterChangeResultsBySnippet: (builder
+						ifNil: [ IdentityDictionary new ]
+						ifNotNil: [ :aBuilder | aBuilder lepiterChangeResultsBySnippet ]) ] ]
+		on: Error
+		do: [ :anError | 
+			recordError value: anError.
 			anError return: nil ].
 	^ result := GtLRefactoringResult
 			preview: self
 			undoChange: undo
 			codeChangeResults: (results ifNil: [ #() ])
+			lepiterChangeResults: (lepiterResults ifNil: [ #() ])
 			exception: exception
 ]
 
@@ -174,7 +193,7 @@ GtLRefactoringPreview >> gtNewSourcesFor: aView [
 			text: [ :each | each kind ifNil: [ '' ] ]
 			width: 160;
 		column: 'Target'
-			text: [ :each | each target ifNil: [ '' ] ]
+			text: [ :each | each gtViewChangeTarget ifNil: [ '' ] ]
 			width: 300;
 		column: 'New source' text: [ :each | each newSource ];
 		send: [ :each | each ]
@@ -193,7 +212,7 @@ GtLRefactoringPreview >> gtRefactoringChangesFor: aView [
 		column: 'Kind'
 			text: [ :each | each kind ifNil: [ '' ] ]
 			width: 160;
-		column: 'Target' text: [ :each | each target ifNil: [ '' ] ];
+		column: 'Target' text: [ :each | each gtViewChangeTarget ifNil: [ '' ] ];
 		column: 'Description' text: [ :each | each changeDescription ifNil: [ '' ] ];
 		send: [ :each | each ];
 		actionButtonIcon: BrGlamorousVectorIcons inspect
@@ -214,13 +233,6 @@ GtLRefactoringPreview >> gtReportFor: aView [
 		actionButtonIcon: BrGlamorousVectorIcons inspect
 			tooltip: 'Inspect the report'
 			action: [ :aButton | aButton phlow spawnObject: self report ]
-]
-
-{ #category : #testing }
-GtLRefactoringPreview >> hasUnknownLepiterChanges [
-	"A preview knows all its changes"
-
-	^ false
 ]
 
 { #category : #initialization }

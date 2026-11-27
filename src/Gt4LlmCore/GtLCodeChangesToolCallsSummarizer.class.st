@@ -264,7 +264,7 @@ GtLCodeChangesToolCallsSummarizer >> initializeWithToolCalls: aToolCallGroup [
 
 { #category : #testing }
 GtLCodeChangesToolCallsSummarizer >> isCodeChangeToolCall: aToolCall [
-	^ #(createClass createClassesAndTraits changeClassOrTraitSignature changeClassOrTraitComment removeClass renameClass compileMethod compileMethods removeMethod removeMethods applyRefactoring)
+	^ #(createClass createClassesAndTraits changeClassOrTraitSignature changeClassOrTraitComment removeClass renameClass renameMethod compileMethod compileMethods removeMethod removeMethods applyRefactoring)
 		includes: aToolCall name asSymbol
 ]
 

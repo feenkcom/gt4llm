@@ -1,7 +1,7 @@
 "
-I am a snapshot of the state of the methods and classes listed by a {{gtClass:GtLRefactoringChangeTargets}}.
+I am a snapshot of the state of the methods, classes and Lepiter snippets listed by a {{gtClass:GtLRefactoringChangeTargets}}.
 
-For each method reference I store a {{gtClass:GtLMethodWithSource}} (or nil when the method does not exist) and for each class name a {{gtClass:GtLClassDefinitionDescription}} (or nil when the class does not exist). The keys are always the references and names known before applying the changes; a snapshot taken after applying them looks renamed classes up under their new name.
+For each method reference I store a {{gtClass:GtLMethodWithSource}} (or nil when the method does not exist), for each class name a {{gtClass:GtLClassDefinitionDescription}} (or nil when the class does not exist), and for each live snippet, by identity, a {{gtClass:GtLLepiterSnippetWithContent}} (or nil when the snippet is not in a page: not added yet, or removed). The keys are always the references, names and snippets known before applying the changes; a snapshot taken after applying them looks renamed classes up under their new name.
 
 Two snapshots, one taken before and one after applying a refactoring, are compared by {{gtClass:GtLRefactoringCodeChangesBuilder}}.
 "
@@ -10,7 +10,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'methods',
-		'classes'
+		'classes',
+		'snippets'
 	],
 	#category : #'Gt4LlmCore-Refactorings'
 }
@@ -41,7 +42,9 @@ GtLCodeSnapshot >> captureTargets: aChangeTargets classNameMapping: aBlock [
 						localMethodNamed: eachReference methodName
 						inClassNamed: (aBlock value: eachReference methodClassName)
 						classSide: eachReference isClassSide)
-						ifNotNil: [ :aMethod | GtLMethodWithSource fromCompiledMethod: aMethod ]) ]
+						ifNotNil: [ :aMethod | GtLMethodWithSource fromCompiledMethod: aMethod ]) ].
+	aChangeTargets snippets
+		do: [ :eachSnippet | snippets at: eachSnippet put: (self snapshotOfSnippet: eachSnippet) ]
 ]
 
 { #category : #accessing }
@@ -87,7 +90,8 @@ GtLCodeSnapshot >> gtEntriesFor: aView [
 GtLCodeSnapshot >> initialize [
 	super initialize.
 	methods := Dictionary new.
-	classes := Dictionary new
+	classes := Dictionary new.
+	snippets := IdentityDictionary new
 ]
 
 { #category : #private }
@@ -113,4 +117,24 @@ GtLCodeSnapshot >> methodAt: aMethodReference [
 { #category : #accessing }
 GtLCodeSnapshot >> methods [
 	^ methods
+]
+
+{ #category : #private }
+GtLCodeSnapshot >> snapshotOfSnippet: aSnippet [
+	"Return a GtLLepiterSnippetWithContent of a snippet that is in a page, or nil for one that is not (not added yet, or removed)"
+
+	(aSnippet uid isNil or: [ aSnippet page isNil ]) ifTrue: [ ^ nil ].
+	^ GtLLepiterSnippetWithContent fromSnippet: aSnippet
+]
+
+{ #category : #accessing }
+GtLCodeSnapshot >> snippetAt: aSnippet [
+	"Return the GtLLepiterSnippetWithContent of the live snippet, or nil if it was not in a page"
+
+	^ snippets at: aSnippet ifAbsent: [ nil ]
+]
+
+{ #category : #accessing }
+GtLCodeSnapshot >> snippets [
+	^ snippets
 ]

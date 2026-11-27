@@ -76,15 +76,15 @@ GtLSmalltalkCodeEvaluationResult >> gtCodeFor: aView [
 					container := BrVerticalPane new.
 					container matchParent
 						addAptitude: (BrLayoutResizerAptitude new common: [ container children ]);
-						background: BrGlamorousColors backdropColor;
+						background: container theme default backdropBackground;
 						addChild: (coderViewModel asExpandedOnlyElement
 								margin: (BlInsets all: 10);
-								background: Color white;
+								background: container theme default contentBackground;
 								addAptitude: BrShadowAptitude;
 								vFitContentLimited);
 						addChild: (object gtDefaultInspectorTool asElement
 								margin: (BlInsets all: 10);
-								background: Color white;
+								background: container theme default contentBackground;
 								addAptitude: BrShadowAptitude;
 								vFitContentLimited;
 								hMatchParent) ] ]

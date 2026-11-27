@@ -6,17 +6,19 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'report',
-		'page',
+		'pageUid',
+		'pageTitle',
 		'entries'
 	],
 	#category : #'Gt4LlmCore-Refactorings'
 }
 
 { #category : #'instance creation' }
-GtLRefactoringLepiterPageReport class >> report: aLepiterChangesReport page: aPageOrNil entries: aCollectionOfSnippetEntries [
+GtLRefactoringLepiterPageReport class >> report: aLepiterChangesReport pageUid: aPageUidOrNil pageTitle: aPageTitleOrNil entries: aCollectionOfSnippetEntries [
 	^ self new
 		initializeReport: aLepiterChangesReport
-		page: aPageOrNil
+		pageUid: aPageUidOrNil
+		pageTitle: aPageTitleOrNil
 		entries: aCollectionOfSnippetEntries
 ]
 
@@ -38,21 +40,23 @@ GtLRefactoringLepiterPageReport >> entries [
 ]
 
 { #category : #initialization }
-GtLRefactoringLepiterPageReport >> initializeReport: aLepiterChangesReport page: aPageOrNil entries: aCollectionOfSnippetEntries [
-	"Keep the snippets in the order they have in the page"
+GtLRefactoringLepiterPageReport >> initializeReport: aLepiterChangesReport pageUid: aPageUidOrNil pageTitle: aPageTitleOrNil entries: aCollectionOfSnippetEntries [
+	"Keep the snippets in the order they had in the page before the changes, as the entries recorded it, and the added snippets, which have no such position, after them. Entries with the same position keep their order"
 
-	| positions |
+	| indexed |
 	report := aLepiterChangesReport.
-	page := aPageOrNil.
-	positions := IdentityDictionary new.
-	page
-		ifNotNil: [ :aPage | 
-			aPage
-				allChildrenDepthFirstDo: [ :each | positions at: each put: positions size + 1 ] ].
-	entries := (aCollectionOfSnippetEntries
+	pageUid := aPageUidOrNil.
+	pageTitle := aPageTitleOrNil.
+	indexed := aCollectionOfSnippetEntries asArray
+			withIndexCollect: [ :each :anIndex | each -> anIndex ].
+	entries := ((indexed
 			asSortedCollection: [ :a :b | 
-				(positions at: a snippet ifAbsent: [ 0 ])
-					<= (positions at: b snippet ifAbsent: [ 0 ]) ]) asArray
+				| aPosition bPosition |
+				aPosition := a key position ifNil: [ SmallInteger maxVal ].
+				bPosition := b key position ifNil: [ SmallInteger maxVal ].
+				aPosition < bPosition
+					or: [ aPosition = bPosition and: [ a value <= b value ] ] ])
+			collect: [ :each | each key ]) asArray
 ]
 
 { #category : #converting }
@@ -72,20 +76,15 @@ GtLRefactoringLepiterPageReport >> llmJsonObjectIncludingSources: aBoolean [
 ]
 
 { #category : #accessing }
-GtLRefactoringLepiterPageReport >> page [
-	^ page
-]
-
-{ #category : #accessing }
 GtLRefactoringLepiterPageReport >> pageTitle [
-	^ page ifNotNil: [ :aPage | aPage title ]
+	^ pageTitle
 ]
 
 { #category : #accessing }
 GtLRefactoringLepiterPageReport >> pageUid [
-	"The form getLepiterPageContents and editLepiterSnippet expect"
+	"The form getLepiterPageContents and editLepiterSnippet expect, as recorded by the entries"
 
-	^ page ifNotNil: [ :aPage | aPage uidString ]
+	^ pageUid
 ]
 
 { #category : #printing }

@@ -184,7 +184,7 @@ GtLRefactoringReportExamples >> exampleSnippetChangeNewSource [
 
 { #category : #examples }
 GtLRefactoringReportExamples >> failedGroupedApplyListsAppliedChanges [
-	"After a failure, the response has the error and lists the changes made before it, also when the changes were not wanted. The Lepiter changes are not known then: their group is left out"
+	"After a failure, the response has the error and lists the changes made before it, also when the changes were not wanted. The Lepiter changes are known too, from the snapshot taken after the failure: their group is listed, empty here"
 
 	<gtExample>
 	<return: #NeoJSONObject>
@@ -201,7 +201,7 @@ GtLRefactoringReportExamples >> failedGroupedApplyListsAppliedChanges [
 	self assert: (json at: 'errorMessage') notEmpty.
 	self assert: ((json at: 'methodChanges') at: 'totalCount') equals: 1.
 	self assert: ((json at: 'classChanges') at: 'totalCount') equals: 0.
-	self assert: (json includesKey: 'lepiterChanges') not.
+	self assert: ((json at: 'lepiterChanges') at: 'totalSnippetsCount') equals: 0.
 	self assert: (json includesKey: 'codeChanges') not.
 	^ json
 ]
@@ -250,18 +250,15 @@ GtLRefactoringReportExamples >> lepiterChangesLimitedToTheFirstSnippets [
 
 { #category : #examples }
 GtLRefactoringReportExamples >> lepiterChangesSerialization [
-	"In-memory databases have no id; their name is left out too. Without sources, a snippet has only its kind and uid. As the list is cut, nextOffset tells where the next snippets start"
+	"Without sources, a snippet has only its kind and uid; its database and page are given by the groups. As the list is cut, nextOffset tells where the next snippets start"
 
 	<gtExample>
 	<return: #NeoJSONObject>
-	| report json aSnippet aPage |
+	| report json |
 	report := GtLRefactoringLepiterChangesReport
 			entries: (self snippetEntriesInDatabases: 2)
 			limit: 1
 			includeSources: false.
-	aSnippet := report displayedDatabaseReports first displayedPageReports first
-			displayedEntries first snippet.
-	aPage := aSnippet page.
 	json := report llmJsonObject.
 	self
 		assert: json
@@ -279,20 +276,22 @@ GtLRefactoringReportExamples >> lepiterChangesSerialization [
 							yourself);
 				at: 'databases'
 					put: {NeoJSONObject new
+								at: 'databaseId' put: 'database-1';
+								at: 'databaseName' put: 'Database 1';
 								at: 'totalSnippetsCount' put: 5;
 								at: 'displayedSnippetsCount' put: 1;
 								at: 'totalPagesCount' put: 2;
 								at: 'displayedPagesCount' put: 1;
 								at: 'pages'
 									put: {NeoJSONObject new
-												at: 'pageUid' put: aPage uidString;
+												at: 'pageUid' put: 'page-1-1';
 												at: 'pageTitle' put: 'Page 1-1';
 												at: 'totalSnippetsCount' put: 3;
 												at: 'displayedSnippetsCount' put: 1;
 												at: 'snippets'
 													put: {NeoJSONObject new
 																at: 'kind' put: 'modified snippet';
-																at: 'snippetUid' put: aSnippet uid uidString;
+																at: 'snippetUid' put: 'snippet-1-1-1';
 																yourself};
 												yourself};
 								yourself};
@@ -364,17 +363,16 @@ GtLRefactoringReportExamples >> lepiterPagesSortedByTitleThenUid [
 
 	<gtExample>
 	<return: #GtLRefactoringLepiterChangesReport>
-	| aDatabase entries report |
-	aDatabase := LeDatabase new.
+	| entries report |
 	entries := #('Page 2' 'Page')
-			collect: [ :aTitle | 
-				| aPage aSnippet |
-				aPage := LePage named: aTitle.
-				aDatabase addPage: aPage.
-				aSnippet := LeTextSnippet string: 'Uses {{gtClass:MyClass}}'.
-				aPage addSnippet: aSnippet.
+			withIndexCollect: [ :aTitle :anIndex | 
 				GtLRefactoringSnippetChangeEntry new
-					snippet: aSnippet;
+					databaseId: 'database';
+					databaseName: 'Database';
+					pageUid: 'page-' , anIndex printString;
+					pageTitle: aTitle;
+					position: 1;
+					snippetUid: 'snippet-' , anIndex printString;
 					kind: 'modified snippet';
 					yourself ].
 	report := GtLRefactoringLepiterChangesReport
@@ -385,6 +383,36 @@ GtLRefactoringReportExamples >> lepiterPagesSortedByTitleThenUid [
 		assert: (report databaseReports first pageReports collect: [ :each | each pageTitle ])
 		equals: #('Page' 'Page 2').
 	self assert: report displayedEntries first == entries last.
+	^ report
+]
+
+{ #category : #examples }
+GtLRefactoringReportExamples >> lepiterSnippetsOrderedByRecordedPosition [
+	"In a page, the snippets are listed in the depth-first order recorded in their entries, and databases without id (in memory) are grouped together"
+
+	<gtExample>
+	<return: #GtLRefactoringLepiterChangesReport>
+	| entries report |
+	entries := #(3 1 2)
+			collect: [ :aPosition | 
+				GtLRefactoringSnippetChangeEntry new
+					pageUid: 'page';
+					pageTitle: 'Page';
+					position: aPosition;
+					snippetUid: 'snippet-' , aPosition printString;
+					kind: 'modified snippet';
+					yourself ].
+	report := GtLRefactoringLepiterChangesReport
+			entries: entries
+			limit: 10
+			includeSources: false.
+	self assert: report totalDatabasesCount equals: 1.
+	self assert: report databaseReports first databaseId isNil.
+	self
+		assert: (report displayedEntries collect: [ :each | each snippetUid ]) asArray
+		equals: #('snippet-1' 'snippet-2' 'snippet-3').
+	self
+		assert: ((report llmJsonObject at: 'databases') first includesKey: 'databaseId') not.
 	^ report
 ]
 
@@ -546,30 +574,27 @@ GtLRefactoringReportExamples >> reportViewsShownForAToolCall [
 
 { #category : #private }
 GtLRefactoringReportExamples >> snippetEntriesInDatabases: aNumberOfDatabases [
-	"Return the entries of changed snippets in in-memory databases, each with a page of three snippets and a page of two"
+	"Return the entries of changed snippets in aNumberOfDatabases databases, each with a page of three snippets and a page of two. Entries hold the values recorded from snapshots, not snippets, so no Lepiter database is needed"
 
 	| entries |
 	entries := OrderedCollection new.
 	1
 		to: aNumberOfDatabases
 		do: [ :eachDatabaseIndex | 
-			| aDatabase |
-			aDatabase := LeDatabase new.
 			#(3 2)
 				withIndexDo: [ :aSnippetsCount :aPageIndex | 
-					| aPage |
-					aPage := LePage
-							named: 'Page ' , eachDatabaseIndex printString , '-' , aPageIndex printString.
-					aDatabase addPage: aPage.
 					1
 						to: aSnippetsCount
 						do: [ :eachSnippetIndex | 
-							| aSnippet |
-							aSnippet := LeTextSnippet string: 'Uses {{gtClass:MyClass}}'.
-							aPage addSnippet: aSnippet.
 							entries
 								add: (GtLRefactoringSnippetChangeEntry new
-										snippet: aSnippet;
+										databaseId: 'database-' , eachDatabaseIndex printString;
+										databaseName: 'Database ' , eachDatabaseIndex printString;
+										pageUid: 'page-' , eachDatabaseIndex printString , '-' , aPageIndex printString;
+										pageTitle: 'Page ' , eachDatabaseIndex printString , '-' , aPageIndex printString;
+										position: eachSnippetIndex;
+										snippetUid: 'snippet-' , eachDatabaseIndex printString , '-' , aPageIndex printString , '-'
+												, eachSnippetIndex printString;
 										kind: 'modified snippet';
 										newSource: 'Uses {{gtClass:MyRenamedClass}}';
 										yourself) ] ] ].

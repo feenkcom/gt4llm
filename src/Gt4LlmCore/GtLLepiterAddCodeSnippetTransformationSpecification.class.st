@@ -17,6 +17,11 @@ GtLLepiterAddCodeSnippetTransformationSpecification class >> jsonSchemaLabel [
 	^ 'AddCodeSnippet'
 ]
 
+{ #category : #accessing }
+GtLLepiterAddCodeSnippetTransformationSpecification class >> refactoringName [
+	^ 'Add code snippet'
+]
+
 { #category : #'as yet unclassified' }
 GtLLepiterAddCodeSnippetTransformationSpecification >> asRefactoringIn: aNamespace [
 	aNamespace changes

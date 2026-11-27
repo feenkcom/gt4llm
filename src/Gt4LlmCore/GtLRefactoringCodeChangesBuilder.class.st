@@ -9,6 +9,8 @@ I compare a snapshot taken before applying a refactoring with one taken after ap
 - a class that disappears is a {{gtClass:GtLClassRemovalResult}}.
 
 These are the same objects that the other code changing tools produce, so the {{gtClass:GtLCodeChangesToolCallsSummarizer}} handles them without knowing about refactorings.
+
+{{gtMethod:GtLRefactoringCodeChangesBuilder>>#buildLepiterChangeResults}} builds the Lepiter snippet change results in the same way (a snippet that appears is a {{gtClass:GtLLepiterSnippetAdditionResult}}, one whose content changed a {{gtClass:GtLLepiterSnippetModificationResult}}, one that disappears a {{gtClass:GtLLepiterSnippetRemovalResult}}), and keeps them by live snippet so that each Le change is linked to the result of its own snippet.
 "
 Class {
 	#name : #GtLRefactoringCodeChangesBuilder,
@@ -16,7 +18,8 @@ Class {
 	#instVars : [
 		'targets',
 		'before',
-		'after'
+		'after',
+		'lepiterResults'
 	],
 	#category : #'Gt4LlmCore-Refactorings'
 }
@@ -58,6 +61,29 @@ GtLRefactoringCodeChangesBuilder >> build [
 			collect: [ :eachReference | self methodChangeResultFor: eachReference ]
 			thenSelect: [ :each | each notNil ].
 	^ (classResults , methodResults , removalResults) asArray
+]
+
+{ #category : #building }
+GtLRefactoringCodeChangesBuilder >> buildLepiterChangeResults [
+	"Return the Lepiter snippet change results, in the order of the snippets, and keep them by live snippet (identity) in #lepiterChangeResultsBySnippet.
+	The result of a removed snippet holds the results of the descendants removed with it, depth first, each linked back to it"
+
+	| results |
+	lepiterResults := IdentityDictionary new.
+	results := OrderedCollection new.
+	targets snippets
+		do: [ :eachSnippet | 
+			(self lepiterChangeResultFor: eachSnippet)
+				ifNotNil: [ :aResult | 
+					lepiterResults at: eachSnippet put: aResult.
+					results add: aResult ] ].
+	targets snippets
+		do: [ :eachSnippet | 
+			(lepiterResults at: eachSnippet ifAbsent: [ nil ])
+				ifNotNil: [ :aResult | 
+					aResult isSnippetRemovalResult
+						ifTrue: [ self linkDescendantsOf: eachSnippet to: aResult ] ] ].
+	^ results asArray
 ]
 
 { #category : #building }
@@ -116,6 +142,52 @@ GtLRefactoringCodeChangesBuilder >> initializeTargets: aChangeTargets before: aB
 	targets := aChangeTargets.
 	before := aBeforeSnapshot.
 	after := anAfterSnapshot
+]
+
+{ #category : #building }
+GtLRefactoringCodeChangesBuilder >> lepiterChangeResultFor: aSnippet [
+	"Return a Lepiter snippet change result for the snippet, or nil if it did not change"
+
+	| oldSnippet newSnippet |
+	oldSnippet := before snippetAt: aSnippet.
+	newSnippet := after snippetAt: aSnippet.
+	(oldSnippet isNil and: [ newSnippet isNil ]) ifTrue: [ ^ nil ].
+	oldSnippet
+		ifNil: [ ^ GtLLepiterSnippetAdditionResult new
+				newSnippet: newSnippet;
+				yourself ].
+	newSnippet
+		ifNil: [ ^ GtLLepiterSnippetRemovalResult new
+				removedSnippet: oldSnippet;
+				yourself ].
+	oldSnippet content = newSnippet content ifTrue: [ ^ nil ].
+	^ GtLLepiterSnippetModificationResult new
+		oldSnippet: oldSnippet;
+		newSnippet: newSnippet;
+		yourself
+]
+
+{ #category : #accessing }
+GtLRefactoringCodeChangesBuilder >> lepiterChangeResultsBySnippet [
+	"Return the Lepiter results by live snippet (identity), once #buildLepiterChangeResults was called. They link each Le change to the result of its own snippet while applying"
+
+	^ lepiterResults ifNil: [ IdentityDictionary new ]
+]
+
+{ #category : #building }
+GtLRefactoringCodeChangesBuilder >> linkDescendantsOf: aSnippet to: aRemovalResult [
+	"The descendants removed with aSnippet become the removedChildResults of its removal result, depth first, and each names it as removedWithSnippet"
+
+	| theChildResults |
+	theChildResults := OrderedCollection new.
+	(targets descendantsRemovedWith: aSnippet)
+		do: [ :each | 
+			(lepiterResults at: each ifAbsent: [ nil ])
+				ifNotNil: [ :aChildResult | 
+					aChildResult isSnippetRemovalResult
+						ifTrue: [ aChildResult removedWithSnippet: aRemovalResult targetSnippetReference.
+							theChildResults add: aChildResult ] ] ].
+	aRemovalResult removedChildResults: theChildResults
 ]
 
 { #category : #building }

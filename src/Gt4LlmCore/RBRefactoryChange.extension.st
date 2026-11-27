@@ -30,6 +30,13 @@ RBRefactoryChange >> gtLlmChangeTarget [
 ]
 
 { #category : #'*Gt4LlmCore' }
+RBRefactoryChange >> gtLlmChangedSnippet [
+	"Return the Lepiter snippet I change, add or remove, or nil when I change code"
+
+	^ nil
+]
+
+{ #category : #'*Gt4LlmCore' }
 RBRefactoryChange >> gtLlmMatchesCodeChangeResult: aCodeChangeResult [
 	"Return true if aCodeChangeResult (a GtLCodeChangeResult) describes the method or class that I change"
 
@@ -63,14 +70,41 @@ RBRefactoryChange >> gtLlmPreviewChanges [
 RBRefactoryChange >> gtLlmTargetOfSnippet: aSnippet [
 	"Name a changed Lepiter snippet by its uid and page"
 
+	^ self gtLlmTargetOfSnippet: aSnippet inPage: aSnippet page
+]
+
+{ #category : #'*Gt4LlmCore' }
+RBRefactoryChange >> gtLlmTargetOfSnippet: aSnippet inPage: aPageOrNil [
+	"Name a changed Lepiter snippet by its uid and page. A snippet that is not added yet has no uid: it is a new snippet"
+
 	^ String
 		streamContents: [ :aStream | 
-			aStream
-				nextPutAll: 'snippet ';
-				nextPutAll: aSnippet uid uidString.
-			aSnippet page
+			aSnippet uid
+				ifNil: [ aStream nextPutAll: 'new snippet' ]
+				ifNotNil: [ :anUid | 
+					aStream
+						nextPutAll: 'snippet ';
+						nextPutAll: anUid uidString ].
+			aPageOrNil
 				ifNotNil: [ :aPage | 
 					aStream
 						nextPutAll: ' in page ';
 						nextPutAll: aPage title asString ] ]
+]
+
+{ #category : #'*Gt4LlmCore' }
+RBRefactoryChange >> gtLlmViewChangeTarget [
+	"Return how the views of a refactoring preview name what I change. By default my gtLlmChangeTarget, the identifier that the LLM JSON gives"
+
+	^ self gtLlmChangeTarget
+]
+
+{ #category : #'*Gt4LlmCore' }
+RBRefactoryChange >> gtLlmViewTargetOfSnippet: aSnippet content: aString inPage: aPageOrNil [
+	"Name a changed snippet in the views as its change result will: its type, the start of its content and its page"
+
+	^ GtLLepiterSnippetWithContent
+		viewTargetOfType: (GtLLepiterSnippetWithContent snippetTypeOf: aSnippet)
+		content: aString
+		pageTitle: (aPageOrNil ifNotNil: [ :aPage | aPage title asString ])
 ]

@@ -19,21 +19,25 @@ GtLToolForLepiterSnippetsRemove >> database: aDatabase [
 
 { #category : #accessing }
 GtLToolForLepiterSnippetsRemove >> description [
-	^ 'Remove one or more Lepiter snippets using the knowledge base, page, and snippet identifiers.
+	^ 'Removes one or more Lepiter snippets, identified by their page ids (base 36, as getLepiterPageContents gives them) and snippet ids. Removing a snippet also removes its child snippets.
+
+The optional databaseId is needed only when the page and snippet ids are in several databases: the response then says so and lists them.
 
 Example JSON arguments:
 {
   "snippets": [
-    {"knowledgeBaseUid": "UUID", "pageUid": "UUID", "snippetUid": "UUID"},
-    {"knowledgeBaseUid": "UUID", "pageUid": "UUID", "snippetUid": "UUID"}
+    {"pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"},
+    {"databaseId": "DATABASE_ID", "pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"}
   ]
 }
+
+The response has one entry per requested snippet, in order: the result, or an errorMessage. The result of a snippet that had child snippets lists their uids, depth first, in removedChildSnippetUids. A snippet that is listed after one of its ancestors, or twice, is answered with an errorMessage saying that it was already removed.
 
 Example JSON response:
 {
   "snippets": [
-    {"status": "removed", "pageUid": "UUID", "snippetUid": "UUID"},
-    {"status": "removed", "pageUid": "UUID", "snippetUid": "UUID"}
+    {"status": "removed", "targetSnippetReference": {"databaseId": "DATABASE_ID", "pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"}, "removedChildSnippetUids": ["CHILD_SNIPPET_ID"]},
+    {"status": "removed", "targetSnippetReference": {"databaseId": "DATABASE_ID", "pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"}}
   ]
 }'
 ]
@@ -44,6 +48,20 @@ GtLToolForLepiterSnippetsRemove >> initialize [
 	database := LeDatabasesRegistry defaultLogicalDatabase
 ]
 
+{ #category : #private }
+GtLToolForLepiterSnippetsRemove >> missingArgumentIn: aRemovalRequest [
+	"Return a missing argument error for a blank page or snippet uid, or nil. The JSON schema already refuses absent and null uids"
+
+	{'pageUid' -> aRemovalRequest pageUid.
+		'snippetUid' -> aRemovalRequest snippetUid}
+		do: [ :each | 
+			each value trimBoth isEmpty
+				ifTrue: [ ^ GtLMissingArgumentDomainObject new
+						arguments: aRemovalRequest;
+						missingArgument: each key ] ].
+	^ nil
+]
+
 { #category : #accessing }
 GtLToolForLepiterSnippetsRemove >> name [
 	^ 'removeLepiterSnippets'
@@ -51,82 +69,81 @@ GtLToolForLepiterSnippetsRemove >> name [
 
 { #category : #private }
 GtLToolForLepiterSnippetsRemove >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments snippetsArgument results |
-	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	snippetsArgument := arguments at: 'snippets'.
-			
-	results := snippetsArgument collect: [ :each |
-		self removeSnippetFrom: each ].
-		
-	^ GtLLepiterSnippetsDomainObject new
-		snippets: results;
+	| results |
+	results := OrderedCollection new.
+	(aToolCall arguments at: 'snippets')
+		do: [ :each | results add: (self removeSnippetFrom: each after: results) ].
+	^ GtLLepiterSnippetsChangeResult new
+		snippetResults: results;
 		yourself
 ]
 
 { #category : #private }
-GtLToolForLepiterSnippetsRemove >> removeSnippetFrom: snippetArguments [
-	| pageUidString snippetUidString knowledgeBaseUid targetDatabase pageUid snippetUid  |
-	knowledgeBaseUid := snippetArguments knowledgeBaseUid.
-	(knowledgeBaseUid trimBoth isEmpty)
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			arguments: snippetArguments;
-			missingArgument: 'knowledgeBaseUid' ].
-	pageUidString := snippetArguments pageUid.
-	(pageUidString trimBoth isEmpty)
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			arguments: snippetArguments;
-			missingArgument: 'pageUid' ].
-	snippetUidString := snippetArguments snippetUid.
-	(snippetUidString trimBoth isEmpty)
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			arguments: snippetArguments;
-			missingArgument: 'snippetUid' ].
-	targetDatabase := self database.
-	(targetDatabase respondsTo: #databaseWithID:ifNone:)
-		ifTrue: [ targetDatabase := targetDatabase
-			databaseWithID: knowledgeBaseUid
-			ifNone: [ nil ] ]
-		ifFalse: [ targetDatabase := (targetDatabase respondsTo: #uuid)
-			ifTrue: [ targetDatabase uuidString = knowledgeBaseUid
-				ifTrue: [ targetDatabase ]
-				ifFalse: [ nil ] ]
-			ifFalse: [ nil ] ].
-	targetDatabase ifNil: [ ^ GtLProblemDomainObject new
-		description: 'Database with ' , knowledgeBaseUid asString , ' not found' ].
-	pageUid := [ UUID fromString36: pageUidString ]
+GtLToolForLepiterSnippetsRemove >> problemOfRemovedEarlier: aRemovalRequest in: theEarlierResults [
+	"Return an error if the snippet was already removed earlier in this call, itself or with an ancestor, or nil. Without it, the snippet would only be reported as not found"
+
+	| aPageUid aSnippetUid |
+	aPageUid := aRemovalRequest pageUid trimBoth.
+	aSnippetUid := aRemovalRequest snippetUid trimBoth.
+	theEarlierResults
+		do: [ :each | 
+			each isErrorDomainObject
+				ifFalse: [ each allResults
+						do: [ :aResult | 
+							| aReference |
+							aReference := aResult targetSnippetReference.
+							(aReference pageUid = aPageUid
+								and: [ aReference snippetUid = aSnippetUid ])
+								ifTrue: [ ^ GtLProblemDomainObject new
+										errorMessage: 'The snippet ' , aSnippetUid , ' was already removed earlier in this call'
+												, (aResult == each
+														ifTrue: [ '' ]
+														ifFalse: [ ', with its ancestor ' , each targetSnippetReference snippetUid
+																, ' (see the removedChildSnippetUids of that snippet)' ]) , '.';
+										yourself ] ] ] ].
+	^ nil
+]
+
+{ #category : #private }
+GtLToolForLepiterSnippetsRemove >> removeSnippetFrom: aRemovalRequest after: theEarlierResults [
+	"Remove the snippet with its descendants, and answer its removal result, which holds the results of the descendants. theEarlierResults are those of the snippets asked for before in the same call"
+
+	| snippet removedSnippet removedDescendants |
+	(self missingArgumentIn: aRemovalRequest) ifNotNil: [ :aProblem | ^ aProblem ].
+	(self problemOfRemovedEarlier: aRemovalRequest in: theEarlierResults)
+		ifNotNil: [ :aProblem | ^ aProblem ].
+	snippet := self snippetFrom: aRemovalRequest ifNone: [ :aProblem | ^ aProblem ].	"The snapshots are taken before the removal, which also removes the descendants"
+	removedSnippet := GtLLepiterSnippetWithContent fromSnippet: snippet.
+	removedDescendants := OrderedCollection new.
+	snippet
+		allChildrenDepthFirstDo: [ :each | removedDescendants add: (GtLLepiterSnippetWithContent fromSnippet: each) ].
+	[ snippet removeSelf ]
 		on: Error
-		do: [ :error |
+		do: [ :error | 
 			^ GtLExceptionDomainObject new
 				freeze: error;
-				errorReason: 'Invalid page uid' ].
-	snippetUid := LeUID new.
-	[ snippetUid uidString: snippetUidString ]
-		on: Error
-		do: [ :error |
-			^ GtLExceptionDomainObject new
-				freeze: error;
-				errorReason: 'Invalid snippet uid' ].
-	targetDatabase
-		pageWithID: pageUid
-		ifPresent: [ :page |
-			|snippets|
-			snippets := page allChildrenSnippetsMatching: [ :aSnippet | aSnippet uid = snippetUid ].
-			snippets ifEmpty: [ ^ GtLProblemDomainObject new
-				description: 'Could not locate snippet with id ' , snippetUid uidString ].
-			[ snippets anyOne removeSelf ]
-				on: Error
-				do: [ :error |
-					^ GtLExceptionDomainObject new
-						freeze: error;
-						errorReason: 'Error while removing snippet' ] ]
-		ifAbsent: [ ^ GtLProblemDomainObject new
-			description: 'Could not locate page with id ' , pageUid ].
-			
-	^ GtLLepiterSnippetDomainObject new
-		status: 'removed';
-		pageUid: pageUid asString;
-		snippetUid: snippetUid uidString;
-		snippet: nil
+				errorReason: 'Error while removing snippet' ].
+	^ GtLLepiterSnippetRemovalResult new
+		removedSnippet: removedSnippet;
+		removedChildResults: (removedDescendants
+				collect: [ :each | 
+					GtLLepiterSnippetRemovalResult new
+						removedSnippet: each;
+						removedWithSnippet: removedSnippet reference;
+						yourself ]);
+		yourself
+]
+
+{ #category : #private }
+GtLToolForLepiterSnippetsRemove >> snippetFrom: aRemovalRequest ifNone: aBlock [
+	"Return the snippet named by the request, or the value of aBlock with the problem: not found or ambiguous"
+
+	^ (GtLLepiterSnippetLocator database: self database)
+		snippetWithUid: aRemovalRequest snippetUid
+		pageUid: aRemovalRequest pageUid
+		databaseId: aRemovalRequest databaseId
+		ifFound: [ :aSnippet | aSnippet ]
+		ifNone: aBlock
 ]
 
 { #category : #magritte }

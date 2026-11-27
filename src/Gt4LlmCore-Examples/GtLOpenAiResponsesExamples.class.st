@@ -324,10 +324,6 @@ GtLOpenAiResponsesExamples >> openAiServerSideCompaction [
 	"Have a conversation with ChatGPT with server-side compaction.
 	GT only: not exported to GemStone (see GtGemStoneGtCodeExporter>>#excludedMethodsList), as GtLTools gt includes the Lepiter tools (leSearch, leChange), and the stone doesn't have Lepiter."
 
-	"noTest as compaction messages are currently incorrectly grouped before the final assistant message."
-
-	"<noTest>"
-
 	<gtExample>
 	| executor provider chat message entity |
 	executor := GtLOpenAiResponsesExampleExecutor new.
@@ -363,13 +359,19 @@ GtLOpenAiResponsesExamples >> openAiServerSideCompaction [
 	message := (chat messages at: 4) finalMessage.
 	self assert: message isAssistantRole.
 	self deny: (provider assistantMessageHasCompactionResponse: message).
-	self assert: (message contentText includesSubstring: 'Object').
-
-	self
-		compareIfKnownShapes: chat messages
-		with: executor expectedHistory
-		in: chat
-		selector: #openAiServerSideCompactionHistory.
+	self assert: (message contentText includesSubstring: 'Object').	"The GT tool catalog changes independently of compaction. Compare the rest of each request."
+	executor expectedHistory
+		ifNotNil: [ chat messages
+				withIndexDo: [ :eachMessage :index | 
+					eachMessage isUserMessage
+						ifTrue: [ | actualRequest expectedRequest |
+							actualRequest := eachMessage requestResponse request gtJsonContents copy.
+							expectedRequest := (executor expectedHistory at: index) request
+									gtJsonContents copy.
+							actualRequest removeKey: 'tools' ifAbsent: [  ].
+							expectedRequest removeKey: 'tools' ifAbsent: [  ].
+							self
+								assert: (GtJsonShapeComparison compare: actualRequest with: expectedRequest) matches ] ] ].
 
 	^ chat
 ]
@@ -405,13 +407,19 @@ GtLOpenAiResponsesExamples >> openAiServerSideMultipleCompaction [
 
 	message := (chat messages at: 2) finalMessage.
 	self assert: message isAssistantRole.
-	self assert: (provider assistantMessageHasCompactionResponse: message).
-
-	self
-		compareIfKnownShapes: chat messages
-		with: executor expectedHistory
-		in: chat
-		selector: #openAiServerSideMultipleCompactionHistory.
+	self assert: (provider assistantMessageHasCompactionResponse: message).	"The GT tool catalog changes independently of compaction. Compare the rest of each request."
+	executor expectedHistory
+		ifNotNil: [ chat messages
+				withIndexDo: [ :eachMessage :index | 
+					eachMessage isUserMessage
+						ifTrue: [ | actualRequest expectedRequest |
+							actualRequest := eachMessage requestResponse request gtJsonContents copy.
+							expectedRequest := (executor expectedHistory at: index) request
+									gtJsonContents copy.
+							actualRequest removeKey: 'tools' ifAbsent: [  ].
+							expectedRequest removeKey: 'tools' ifAbsent: [  ].
+							self
+								assert: (GtJsonShapeComparison compare: actualRequest with: expectedRequest) matches ] ] ].
 
 	^ chat
 ]
