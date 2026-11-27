@@ -76,17 +76,28 @@ GtLValueSerializer >> serializeClass: aClass [
 
 { #category : #'as yet unclassified' }
 GtLValueSerializer >> serializeException: anException [
-	^NeoJSONObject new
-		at: 'errorMessage' put: anException description;
-		at: 'errorClass' put: anException className;
-		at: 'stackTrace' put: (anException signalerContext
+	"The stack trace stops at the root of the code that the agent ran (GtLExceptionStackTrace). Nothing here raises, so that an error is always reported"
+
+	<gsCode: '^NeoJSONObject new
+		at: ''errorMessage'' put: anException description;
+		at: ''errorClass'' put: anException className;
+		at: ''stackTrace'' put: (anException signalerContext
 			ifNotNil: [ :ctx | 
 				String lf join: ((ctx stackOfSize: 30) 
 					collect: [ :each | each gtDisplayString]) ]
 			ifNil: [ | str | 
-				str := anException	 stackString ifNil: [''].
+				str := anException stackString ifNil: [''''].
 				str takeFirst: 1000 ]);
-		yourself 
+		yourself'>
+	^ NeoJSONObject new
+		at: 'errorMessage'
+			put: ([ anException description asString ]
+					on: Error
+					do: [ :anError | anException class name asString ]);
+		at: 'errorClass' put: anException class name asString;
+		at: 'stackTrace'
+			put: (GtLExceptionStackTrace stackTraceStringOf: anException);
+		yourself
 ]
 
 { #category : #serialization }
