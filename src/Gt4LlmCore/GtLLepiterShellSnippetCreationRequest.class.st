@@ -30,13 +30,11 @@ GtLLepiterShellSnippetCreationRequest >> shellCode: aString [
 { #category : #magritte }
 GtLLepiterShellSnippetCreationRequest >> shellCodeDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Shell code';
-		comment: 'Shell code for the snippet.';
 		accessor: #shellCode;
-		beRequired;
-		yourself
+		comment: 'The shell code of the snippet.';
+		beRequired
 ]
 
 { #category : #validation }

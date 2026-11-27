@@ -33,8 +33,24 @@ GtLLepiterSnippetRemovalResult >> initialize [
 ]
 
 { #category : #testing }
+GtLLepiterSnippetRemovalResult >> isReportedOnItsOwn [
+	"A snippet removed with an ancestor is listed in the removedChildSnippetUids of that ancestor"
+
+	^ removedWithSnippet isNil
+]
+
+{ #category : #testing }
 GtLLepiterSnippetRemovalResult >> isSnippetRemovalResult [
 	^ true
+]
+
+{ #category : #accessing }
+GtLLepiterSnippetRemovalResult >> llmChangeEntry [
+	"The entry of a removed snippet lists the descendants removed with it, as removeLepiterSnippets does"
+
+	^ super llmChangeEntry
+		removedChildSnippetUids: self removedChildSnippetUids;
+		yourself
 ]
 
 { #category : #refactoring }
@@ -80,7 +96,7 @@ GtLLepiterSnippetRemovalResult >> removedChildSnippetUidsDescription [
 		accessor: #removedChildSnippetUids;
 		classes: {String};
 		priority: 3;
-		comment: 'The uids of the descendants removed with the snippet, depth first.';
+		comment: 'The ids of the descendants removed with the snippet, depth first.';
 		yourself
 ]
 

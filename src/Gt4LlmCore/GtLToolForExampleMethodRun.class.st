@@ -15,7 +15,7 @@ GtLToolForExampleMethodRun >> description [
   1. if it succeeds: 
     - the resulting object as one or more JSON or image entries, each representing a view of the resulting object. Look at all of them to interpret the result.
     - the object id that you can use as reference for other tool calls.
-    - the playgroundPageReference to the contextual playground page. Use that page to look for object specific snippets and explanations.
+    - the playgroundPageReference: the databaseId and pageUid of the contextual playground page, with snippets and explanations specific to the object. Read it with getLepiterPageContents.
   2. if there is an exception, it gets the errorDetails (errorMessage, stackTrace, errorClass). It can also get other JSON or image entries each representing a view of the exception. Look at all of them to interpret the result.'
 ]
 

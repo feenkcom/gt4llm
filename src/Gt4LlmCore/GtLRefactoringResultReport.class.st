@@ -9,14 +9,18 @@ Class {
 
 { #category : #converting }
 GtLRefactoringResultReport >> codeChangesJson [
-	"Each code or Lepiter change with its kind and target, as the changes of a preview"
+	"Each code or Lepiter change with its kind and target, as the changes of a preview. A snippet removed with an ancestor is named in the removedChildSnippetUids of that ancestor"
 
-	^ refactoring allChangeResults
+	^ refactoring reportedChangeResults
 		collect: [ :each | 
-			NeoJSONObject new
-				at: 'kind' put: each llmChangeKind;
-				at: 'target' put: each llmChangeTarget;
-				yourself ]
+			| json |
+			json := NeoJSONObject new
+					at: 'kind' put: each llmChangeKind;
+					at: 'target' put: each llmChangeTarget;
+					yourself.
+			each llmChangeEntry removedChildSnippetUids
+				ifNotNil: [ :theUids | json at: 'removedChildSnippetUids' put: theUids ].
+			json ]
 		as: Array
 ]
 

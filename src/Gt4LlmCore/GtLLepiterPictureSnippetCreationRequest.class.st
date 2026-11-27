@@ -40,11 +40,10 @@ GtLLepiterPictureSnippetCreationRequest >> caption: aString [
 { #category : #magritte }
 GtLLepiterPictureSnippetCreationRequest >> captionDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Caption';
-		comment: 'Optional caption for the picture.';
 		accessor: #caption;
+		comment: 'Optional caption.';
 		yourself
 ]
 
@@ -81,11 +80,10 @@ GtLLepiterPictureSnippetCreationRequest >> previewHeight: aNumber [
 { #category : #magritte }
 GtLLepiterPictureSnippetCreationRequest >> previewHeightDescription [
 	<magritteDescription>
-
 	^ MANumberDescription new
 		label: 'Preview height';
-		comment: 'Optional preview height in pixels.';
 		accessor: #previewHeight;
+		comment: 'Optional height of the preview, in pixels.';
 		yourself
 ]
 
@@ -102,13 +100,11 @@ GtLLepiterPictureSnippetCreationRequest >> urlString: aString [
 { #category : #magritte }
 GtLLepiterPictureSnippetCreationRequest >> urlStringDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'URL string';
-		comment: 'URL of the picture to display.';
 		accessor: #urlString;
-		beRequired;
-		yourself
+		comment: 'The URL of the picture.';
+		beRequired
 ]
 
 { #category : #validating }

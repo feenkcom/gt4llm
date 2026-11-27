@@ -9,54 +9,38 @@ GtLToolForLepiterSnippetEditExamples >> ambiguousSnippetIsRefused [
 	"A page and snippet id pair that is in two databases (a page copied by hand) is refused, naming the databases. With the databaseId, only the snippet of that database is edited"
 
 	<gtExample>
-	| databases pageUid snippets logicalDatabase tool arguments call result |
-	databases := #('one' 'two')
-			collect: [ :aName | 
-				| aFolder aStore |
-				aFolder := FileSystem memory / aName.
-				aFolder ensureCreateDirectory.
-				aStore := LeLocalStoreLoad current.
-				aStore localRoot: aFolder.
-				aStore loadAndMonitorFrom: aFolder ].
-	[ pageUid := UUID new.
-	snippets := databases
-			collect: [ :aDatabase | 
-				| aPage aSnippet |
-				aPage := (LePage named: 'Copied page')
-						basicUid: pageUid;
-						yourself.
-				aDatabase addPage: aPage.
-				aSnippet := LeTextSnippet string: 'Copied text'.
-				aPage addSnippet: aSnippet.
-				aSnippet ].
-	snippets second uid: snippets first uid.
-	logicalDatabase := LeLogicalDatabase new
-			primaryDB: databases first;
-			addDB: databases second;
-			yourself.
-	tool := GtLToolForLepiterSnippetEdit new.
-	tool database: logicalDatabase.
-	arguments := Dictionary new
-			at: 'pageUid' put: pageUid asString36;
-			at: 'snippetUid' put: snippets first uid uidString;
-			at: 'updatedText' put: 'Edited text';
-			yourself.
-	result := (self executeTool: tool withArguments: arguments) result targetObject.
-	self assert: (result isKindOf: GtLProblemDomainObject).
-	self
-		assert: (result errorMessage includesSubstring: 'are in several databases').
-	self assert: (snippets allSatisfy: [ :each | each string = 'Copied text' ]).
-	arguments at: 'databaseId' put: databases second uuidString.
-	call := self executeTool: tool withArguments: arguments.
-	result := call result targetObject.
-	self assert: result status equals: 'updated'.
-	self
-		assert: result targetSnippetReference databaseId
-		equals: databases second uuidString.
-	self assert: snippets first string equals: 'Copied text'.
-	self assert: snippets second string equals: 'Edited text' ]
-		ensure: [ databases do: [ :each | each stopMonitoring ] ].
-	^ call
+	^ GtLToolForLepiterSnippetsEditExamples new
+		withCopiedPageInTwoDatabasesDo: [ :aLogicalDatabase :theDatabases :theSnippets | 
+			| tool arguments call result |
+			tool := GtLToolForLepiterSnippetEdit new
+					database: aLogicalDatabase;
+					yourself.
+			arguments := Dictionary new
+					at: 'pageUid' put: theSnippets first page uidString;
+					at: 'snippetUid' put: theSnippets first uidString;
+					at: 'updatedText' put: 'Edited text';
+					yourself.
+			result := (self
+					executeTool: tool
+					withArguments: {'snippetEdit' -> arguments} asDictionary) result
+					targetObject.
+			self assert: (result isKindOf: GtLProblemDomainObject).
+			self
+				assert: (result errorMessage includesSubstring: 'are in several databases').
+			self
+				assert: (theSnippets allSatisfy: [ :each | each string = 'Copied text' ]).
+			arguments at: 'databaseId' put: theDatabases second uuidString.
+			call := self
+					executeTool: tool
+					withArguments: {'snippetEdit' -> arguments} asDictionary.
+			result := call result targetObject.
+			self assert: result status equals: 'updated'.
+			self
+				assert: result targetSnippetReference databaseId
+				equals: theDatabases second uuidString.
+			self assert: theSnippets first string equals: 'Copied text'.
+			self assert: theSnippets second string equals: 'Edited text'.
+			call ]
 ]
 
 { #category : #examples }
@@ -64,12 +48,11 @@ GtLToolForLepiterSnippetEditExamples >> emptyPageUid [
 	<gtExample>
 	| call |
 	call := self
-		executeTool: GtLToolForLepiterSnippetEdit new
-		withArguments: {
-			'pageUid' -> ''.
-			'snippetUid' -> 'someSnippetUid'.
-			'updatedText' -> 'Updated text'
-		} asDictionary.
+			executeTool: GtLToolForLepiterSnippetEdit new
+			withArguments: {'snippetEdit'
+						-> {'pageUid' -> ''.
+								'snippetUid' -> 'someSnippetUid'.
+								'updatedText' -> 'Updated text'} asDictionary} asDictionary.
 	self
 		assertMissingArgument: call result targetObject
 		withArgumentName: 'pageUid'
@@ -82,12 +65,11 @@ GtLToolForLepiterSnippetEditExamples >> emptySnippetUid [
 	<gtExample>
 	| call |
 	call := self
-		executeTool: GtLToolForLepiterSnippetEdit new
-		withArguments: {
-			'pageUid' -> UUID new asString.
-			'snippetUid' -> ''.
-			'updatedText' -> 'Updated text'
-		} asDictionary.
+			executeTool: GtLToolForLepiterSnippetEdit new
+			withArguments: {'snippetEdit'
+						-> {'pageUid' -> UUID new asString.
+								'snippetUid' -> ''.
+								'updatedText' -> 'Updated text'} asDictionary} asDictionary.
 	self
 		assertMissingArgument: call result targetObject
 		withArgumentName: 'snippetUid'
@@ -100,14 +82,15 @@ GtLToolForLepiterSnippetEditExamples >> emptyUpdatedText [
 	<gtExample>
 	| call pageUid snippetUid |
 	pageUid := UUID new asString.
-	snippetUid := LeUID new uidString: UUID new asString; uidString.
+	snippetUid := LeUID new
+			uidString: UUID new asString;
+			uidString.
 	call := self
-		executeTool: GtLToolForLepiterSnippetEdit new
-		withArguments: {
-			'pageUid' -> pageUid.
-			'snippetUid' -> snippetUid.
-			'updatedText' -> ''
-		} asDictionary.
+			executeTool: GtLToolForLepiterSnippetEdit new
+			withArguments: {'snippetEdit'
+						-> {'pageUid' -> pageUid.
+								'snippetUid' -> snippetUid.
+								'updatedText' -> ''} asDictionary} asDictionary.
 	self
 		assertMissingArgument: call result targetObject
 		withArgumentName: 'updatedText'
@@ -120,16 +103,15 @@ GtLToolForLepiterSnippetEditExamples >> missingPageUid [
 	<gtExample>
 	| call |
 	call := self
-		executeTool: GtLToolForLepiterSnippetEdit new
-		withArguments: {
-			'snippetUid' -> 'invalid'.
-			'updatedText' -> 'Updated text'
-		} asDictionary.
+			executeTool: GtLToolForLepiterSnippetEdit new
+			withArguments: {'snippetEdit'
+						-> {'snippetUid' -> 'invalid'.
+								'updatedText' -> 'Updated text'} asDictionary} asDictionary.
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('pageUid')
-		path: #(nil)
-		errorMessage: 'required properties missing [pageUid]'.
+		path: #('snippetEdit')
+		errorMessage: '@[snippetEdit] required properties missing [pageUid]'.
 	^ call
 ]
 
@@ -138,16 +120,15 @@ GtLToolForLepiterSnippetEditExamples >> missingSnippetUid [
 	<gtExample>
 	| call |
 	call := self
-		executeTool: GtLToolForLepiterSnippetEdit new
-		withArguments: {
-			'pageUid' -> UUID new asString.
-			'updatedText' -> 'Updated text'
-		} asDictionary.
+			executeTool: GtLToolForLepiterSnippetEdit new
+			withArguments: {'snippetEdit'
+						-> {'pageUid' -> UUID new asString.
+								'updatedText' -> 'Updated text'} asDictionary} asDictionary.
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('snippetUid')
-		path: #(nil)
-		errorMessage: 'required properties missing [snippetUid]'.
+		path: #('snippetEdit')
+		errorMessage: '@[snippetEdit] required properties missing [snippetUid]'.
 	^ call
 ]
 
@@ -155,19 +136,36 @@ GtLToolForLepiterSnippetEditExamples >> missingSnippetUid [
 GtLToolForLepiterSnippetEditExamples >> missingUpdatedText [
 	<gtExample>
 	| call snippetUid |
-	snippetUid := LeUID new uidString: UUID new asString; uidString.
+	snippetUid := LeUID new
+			uidString: UUID new asString;
+			uidString.
 	call := self
-		executeTool: GtLToolForLepiterSnippetEdit new
-		withArguments: {
-			'pageUid' -> UUID new asString.
-			'snippetUid' -> snippetUid
-		} asDictionary.
+			executeTool: GtLToolForLepiterSnippetEdit new
+			withArguments: {'snippetEdit'
+						-> {'pageUid' -> UUID new asString.
+								'snippetUid' -> snippetUid} asDictionary} asDictionary.
 	self
 		assertMissingRequiredProperties: call result targetObject
 		withPropertyNames: #('updatedText')
-		path: #(nil)
-		errorMessage: 'required properties missing [updatedText]'.
+		path: #('snippetEdit')
+		errorMessage: '@[snippetEdit] required properties missing [updatedText]'.
 	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterSnippetEditExamples >> nestedRequestSchema [
+	"editLepiterSnippet takes one edit request, snippetEdit, of the class that editLepiterSnippets takes a list of"
+
+	<gtExample>
+	| schema request |
+	schema := GtLToolForLepiterSnippetEdit new parametersJsonSchemaDictionary.
+	self assert: (schema at: 'required') asArray equals: #('snippetEdit').
+	request := (schema at: 'properties') at: 'snippetEdit'.
+	self
+		assert: (request at: 'required') asSortedCollection asArray
+		equals: #('pageUid' 'snippetUid' 'updatedText').
+	self assert: ((request at: 'properties') includesKey: 'databaseId').
+	^ schema
 ]
 
 { #category : #examples }
@@ -175,16 +173,15 @@ GtLToolForLepiterSnippetEditExamples >> nilPageUid [
 	<gtExample>
 	| call |
 	call := self
-		executeTool: GtLToolForLepiterSnippetEdit new
-		withArguments: {
-			'pageUid' -> nil.
-			'snippetUid' -> 'someSnippetUid'.
-			'updatedText' -> 'Updated text'
-		} asDictionary.
+			executeTool: GtLToolForLepiterSnippetEdit new
+			withArguments: {'snippetEdit'
+						-> {'pageUid' -> nil.
+								'snippetUid' -> 'someSnippetUid'.
+								'updatedText' -> 'Updated text'} asDictionary} asDictionary.
 	self
 		assertJSONSchemaValidationError: call result targetObject
-		withPath: #('pageUid')
-		errorMessage: '@[pageUid] string expected'.
+		withPath: #('snippetEdit' 'pageUid')
+		errorMessage: '@[snippetEdit/pageUid] string expected'.
 	^ call
 ]
 
@@ -193,16 +190,15 @@ GtLToolForLepiterSnippetEditExamples >> nilSnippetUid [
 	<gtExample>
 	| call |
 	call := self
-		executeTool: GtLToolForLepiterSnippetEdit new
-		withArguments: {
-			'pageUid' -> UUID new asString.
-			'snippetUid' -> nil.
-			'updatedText' -> 'Updated text'
-		} asDictionary.
+			executeTool: GtLToolForLepiterSnippetEdit new
+			withArguments: {'snippetEdit'
+						-> {'pageUid' -> UUID new asString.
+								'snippetUid' -> nil.
+								'updatedText' -> 'Updated text'} asDictionary} asDictionary.
 	self
 		assertJSONSchemaValidationError: call result targetObject
-		withPath: #('snippetUid')
-		errorMessage: '@[snippetUid] string expected'.
+		withPath: #('snippetEdit' 'snippetUid')
+		errorMessage: '@[snippetEdit/snippetUid] string expected'.
 	^ call
 ]
 
@@ -210,18 +206,19 @@ GtLToolForLepiterSnippetEditExamples >> nilSnippetUid [
 GtLToolForLepiterSnippetEditExamples >> nilUpdatedText [
 	<gtExample>
 	| call snippetUid |
-	snippetUid := LeUID new uidString: UUID new asString; uidString.
+	snippetUid := LeUID new
+			uidString: UUID new asString;
+			uidString.
 	call := self
-		executeTool: GtLToolForLepiterSnippetEdit new
-		withArguments: {
-			'pageUid' -> UUID new asString.
-			'snippetUid' -> snippetUid.
-			'updatedText' -> nil
-		} asDictionary.
+			executeTool: GtLToolForLepiterSnippetEdit new
+			withArguments: {'snippetEdit'
+						-> {'pageUid' -> UUID new asString.
+								'snippetUid' -> snippetUid.
+								'updatedText' -> nil} asDictionary} asDictionary.
 	self
 		assertJSONSchemaValidationError: call result targetObject
-		withPath: #('updatedText')
-		errorMessage: '@[updatedText] string expected'.
+		withPath: #('snippetEdit' 'updatedText')
+		errorMessage: '@[snippetEdit/updatedText] string expected'.
 	^ call
 ]
 
@@ -246,9 +243,10 @@ GtLToolForLepiterSnippetEditExamples >> nonTextualSnippetEditIsRefused [
 	tool database: database.
 	call := self
 			executeTool: tool
-			withArguments: {'pageUid' -> page uidString.
-					'snippetUid' -> exampleSnippet uidString.
-					'updatedText' -> 'Some text'} asDictionary.
+			withArguments: {'snippetEdit'
+						-> {'pageUid' -> page uidString.
+								'snippetUid' -> exampleSnippet uidString.
+								'updatedText' -> 'Some text'} asDictionary} asDictionary.
 	problem := call result targetObject.
 	self assert: (problem isKindOf: GtLProblemDomainObject).
 	self assert: (problem errorMessage includesSubstring: 'of type example').
@@ -256,9 +254,11 @@ GtLToolForLepiterSnippetEditExamples >> nonTextualSnippetEditIsRefused [
 	self assert: exampleSnippet exampleSelector equals: #successfulSnippetEdit.
 	problem := (self
 			executeTool: tool
-			withArguments: {'pageUid' -> page uidString.
-					'snippetUid' -> unknownSnippet uidString.
-					'updatedText' -> 'Some text'} asDictionary) result targetObject.
+			withArguments: {'snippetEdit'
+						-> {'pageUid' -> page uidString.
+								'snippetUid' -> unknownSnippet uidString.
+								'updatedText' -> 'Some text'} asDictionary} asDictionary) result
+			targetObject.
 	self assert: (problem isKindOf: GtLProblemDomainObject).
 	self assert: (problem errorMessage includesSubstring: 'unknown type').
 	^ call
@@ -280,9 +280,10 @@ GtLToolForLepiterSnippetEditExamples >> successfulSnippetEdit [
 	tool database: database.
 	call := self
 			executeTool: tool
-			withArguments: {'pageUid' -> page uidString.
-					'snippetUid' -> snippet uidString.
-					'updatedText' -> updatedText} asDictionary.
+			withArguments: {'snippetEdit'
+						-> {'pageUid' -> page uidString.
+								'snippetUid' -> snippet uidString.
+								'updatedText' -> updatedText} asDictionary} asDictionary.
 	result := call result targetObject.
 	self assert: (result isKindOf: GtLLepiterSnippetModificationResult).
 	self assert: result status equals: 'updated'.

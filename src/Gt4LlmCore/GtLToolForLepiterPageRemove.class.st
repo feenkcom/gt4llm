@@ -1,55 +1,28 @@
 Class {
 	#name : #GtLToolForLepiterPageRemove,
-	#superclass : #GtLAbstractMagritteFunctionTool,
-	#instVars : [
-		'logicalDatabase'
-	],
+	#superclass : #GtLAbstractLepiterTool,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #accessing }
-GtLToolForLepiterPageRemove >> database [
-	^ logicalDatabase
-]
-
-{ #category : #accessing }
-GtLToolForLepiterPageRemove >> database: aDatabase [
-	logicalDatabase := aDatabase
-]
 
 { #category : #magritte }
 GtLToolForLepiterPageRemove >> databaseIdDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Database id';
 		accessor: #databaseId;
+		comment: 'The id of the database of the page, from lepiterKnowledgeBases or searchForLepiterPages.';
 		beRequired
 ]
 
 { #category : #accessing }
 GtLToolForLepiterPageRemove >> description [
-	^ 'Remove a Lepiter page using the database and page identifiers.
+	^ 'Removes a Lepiter page and all its snippets.
 
 Example JSON arguments:
-{
-  "databaseId": "UUID",
-  "pageUid": "UUID"
-}
+{"databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "4cz39477un3tnbzdfe3lwi475"}
 
 Example JSON response:
-{
-  "status": "removed",
-  "databaseId": "UUID",
-  "pageUid": "UUID",
-  "title": "Page Title"
-}'
-]
-
-{ #category : #initialization }
-GtLToolForLepiterPageRemove >> initialize [
-	super initialize.
-	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase
+{"status": "removed", "databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "4cz39477un3tnbzdfe3lwi475", "pageTitle": "New Page"}'
 ]
 
 { #category : #accessing }
@@ -60,61 +33,42 @@ GtLToolForLepiterPageRemove >> name [
 { #category : #magritte }
 GtLToolForLepiterPageRemove >> pageUidDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Page uid';
 		accessor: #pageUid;
+		comment: 'The id of the page (base 36), from searchForLepiterPages or createLepiterPage.';
 		beRequired
 ]
 
 { #category : #private }
 GtLToolForLepiterPageRemove >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments pageUidString databaseId baseDatabase targetDatabase pageUid page |
+	| arguments |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	pageUidString := arguments	at: 'pageUid'.
-	(pageUidString trimBoth isEmpty)
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'pageUid' ].
-	databaseId := arguments at: 'databaseId'.
-	(databaseId trimBoth isEmpty)
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'databaseId' ].
-	baseDatabase := self database.
-	targetDatabase := (baseDatabase respondsTo: #databaseWithID:ifNone:)
-		ifTrue: [ baseDatabase databaseWithID: databaseId ifNone: [ nil ] ]
-		ifFalse: [ (baseDatabase respondsTo: #uuid)
-				ifTrue: [ baseDatabase uuid asString = databaseId
-						ifTrue: [ baseDatabase ]
-						ifFalse: [ nil ] ]
-				ifFalse: [ nil ] ].
-	targetDatabase ifNil: [ ^ GtLProblemDomainObject new
-			description: 'Database with ' , databaseId asString , ' not found' ].
-	pageUidString := pageUidString asString trimBoth.
-	pageUid := [ UUID fromString36: pageUidString ]
+	(self missingArgumentAmong: #('pageUid' 'databaseId') inArguments: arguments)
+		ifNotNil: [ :aProblem | ^ aProblem ].
+	^ self snippetLocator
+		pageWithUid: (arguments at: 'pageUid')
+		databaseId: (arguments at: 'databaseId')
+		ifFound: [ :aPage | self removePage: aPage ]
+		ifNone: [ :aProblem | aProblem ]
+]
+
+{ #category : #private }
+GtLToolForLepiterPageRemove >> removePage: aPage [
+	"Remove aPage and answer what was removed; the database is taken before, as a removed page has none"
+
+	| databaseId |
+	databaseId := GtLLepiterSnippetReference databaseIdOf: aPage database.
+	[ aPage removeSelf ]
 		on: Error
-		do: [ :error |
+		do: [ :error | 
 			^ GtLExceptionDomainObject new
 				freeze: error;
-				errorReason: 'Invalid page uid' ].
-	page := nil.
-	targetDatabase
-		pageWithID: pageUid
-		ifPresent: [ :aPage |
-			page := aPage.
-			[ aPage removeSelf ]
-				on: Error
-				do: [ :error |
-					^ GtLExceptionDomainObject new
-						freeze: error;
-						errorReason: 'Error while removing page' ] ]
-		ifAbsent: [ ^ GtLProblemDomainObject new
-			description: 'Could not locate page with id ' , pageUid asString ].
+				errorReason: 'Error while removing page' ].
 	^ GtLLepiterPageRemoveDomainObject new
 		status: 'removed';
 		databaseId: databaseId;
-		pageUid: pageUidString;
-		title: page title;
-		page: page
+		pageUid: aPage uidString;
+		title: aPage title;
+		page: aPage
 ]

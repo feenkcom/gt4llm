@@ -17,7 +17,7 @@ GtLLepiterKnowledgeBases >> gtKnowledgeBasesFor: aView [
 		items: [ self knowledgeBases ];
 		column: 'Name' text: [ :each | each databaseName ifNil: [ 'Unnamed' ] ];
 		column: 'Pages' text: [ :each | each pageCount ];
-		column: 'UUID' text: #uuidString
+		column: 'Database id' text: [ :each | each databaseId ifNil: [ '' ] ]
 ]
 
 { #category : #accessing }
@@ -37,6 +37,7 @@ GtLLepiterKnowledgeBases >> knowledgeBasesDescription [
 		label: 'Knowledge bases';
 		accessor: #knowledgeBases;
 		classes: {GtLLepiterKnowledgeBase};
+		comment: 'The Lepiter databases.';
 		beRequired
 ]
 

@@ -192,6 +192,7 @@ GtLLepiterSnippetChangeResult >> statusDescription [
 	^ MAStringDescription new
 		label: 'Status';
 		accessor: #status;
+		comment: 'created, updated or removed.';
 		priority: 1;
 		beRequired
 ]
@@ -215,6 +216,7 @@ GtLLepiterSnippetChangeResult >> targetSnippetReferenceDescription [
 		label: 'Snippet';
 		accessor: #targetSnippetReference;
 		classes: {GtLLepiterSnippetReference};
+		comment: 'The ids of the snippet.';
 		priority: 2;
 		beRequired
 ]

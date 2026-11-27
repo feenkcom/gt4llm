@@ -27,31 +27,29 @@ GtLAbstractFunctionTool >> description [
 { #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionAnthropic [
 	^ {'name' -> self name.
-		'description' -> self description.
+		'description' -> self llmDescription.
 		'input_schema' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
 { #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionGemini [
 	^ {'name' -> self name.
-		'description' -> self description.
+		'description' -> self llmDescription.
 		'parameters' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
 { #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionMCP [
-	^
-	{'name' -> self name.
-	'description' -> self description.
-	'inputSchema' -> self parametersJsonSchemaDictionary}
-			asDictionary
+	^ {'name' -> self name.
+		'description' -> self llmDescription.
+		'inputSchema' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
 { #category : #'api - responses' }
 GtLAbstractFunctionTool >> functionOpenAI [
 	^ {'name' -> self name.
 		'type' -> self type.
-		'description' -> self description.
+		'description' -> self llmDescription.
 		'parameters' -> self parametersJsonSchemaDictionary} asDictionary
 ]
 
@@ -130,6 +128,14 @@ GtLAbstractFunctionTool >> gtViewDescriptionFor: aView [
 		priority: 5;
 		object: [ GtLMarkdown new content: self description ];
 		view: #gtMarkdownFor:
+]
+
+{ #category : #'api - responses' }
+GtLAbstractFunctionTool >> llmDescription [
+	"Return my description as the tool definitions give it to models and clients: with line feeds as line ends. A description written as a multi-line string literal has the carriage returns of Pharo method source, which JSON clients and models do not show as line breaks"
+
+	^ self description
+		ifNotNil: [ :aDescription | aDescription withUnixLineEndings ]
 ]
 
 { #category : #accessing }

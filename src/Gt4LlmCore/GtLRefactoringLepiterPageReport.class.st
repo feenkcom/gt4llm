@@ -82,7 +82,7 @@ GtLRefactoringLepiterPageReport >> pageTitle [
 
 { #category : #accessing }
 GtLRefactoringLepiterPageReport >> pageUid [
-	"The form getLepiterPageContents and editLepiterSnippet expect, as recorded by the entries"
+	"The form getLepiterPageContents and editLepiterSnippets expect, as recorded by the entries"
 
 	^ pageUid
 ]

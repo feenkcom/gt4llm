@@ -30,13 +30,11 @@ GtLLepiterPharoSnippetCreationRequest >> pharoCode: aString [
 { #category : #magritte }
 GtLLepiterPharoSnippetCreationRequest >> pharoCodeDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Pharo code';
-		comment: 'Pharo code for the snippet.';
 		accessor: #pharoCode;
-		beRequired;
-		yourself
+		comment: 'The Pharo code of the snippet.';
+		beRequired
 ]
 
 { #category : #validation }

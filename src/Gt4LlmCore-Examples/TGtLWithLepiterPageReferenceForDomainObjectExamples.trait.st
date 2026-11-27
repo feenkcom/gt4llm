@@ -16,7 +16,7 @@ TGtLWithLepiterPageReferenceForDomainObjectExamples >> expectedPlaygroundPageRef
 	page := self theDatabase pages detect: [ :each | each title = expectedTitle ].
 	^ NeoJSONObject new
 		at: 'databaseId' put: self theDatabase primaryDB uuidString;
-		at: 'pageId' put: page uid asString36;
+		at: 'pageUid' put: page uid asString36;
 		yourself
 ]
 

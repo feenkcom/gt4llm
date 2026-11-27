@@ -105,7 +105,7 @@ GtLRenameMethodSpecification >> definerOf: aSelector inHierarchyOf: anImplemento
 { #category : #magritte }
 GtLRenameMethodSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'Renames the method methodNameToRename of methodClassName, or of its class side when classSide is true, to newMethodName, which must take the same number of arguments. The rename is global: it renames every implementor of the selector in all classes, not only in methodClassName and its hierarchy, and rewrites all its senders, including symbols such as #foo, and all the Lepiter snippets that mention it. Strings and comments are not changed. Put the other transformations on the method before the RenameMethod, with its current name. A preview with a RenameMethod lists its changes in groups.';
+		comment: 'Renames the method methodNameToRename of methodClassName, or of its class side when classSide is true, to newMethodName, which must take the same number of arguments. The rename is global: it renames every implementor of the selector in all classes, not only in methodClassName and its hierarchy, and rewrites all its senders, including symbols such as #foo, and all the Lepiter snippets that mention it. Strings and comments are not changed. Put the other transformations on the method before the RenameMethod, with its current name. A preview with a RenameMethod lists its changes in groups: methodChanges and lepiterChanges.';
 		yourself
 ]
 

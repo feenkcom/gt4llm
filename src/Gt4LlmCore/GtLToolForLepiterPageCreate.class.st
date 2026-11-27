@@ -1,54 +1,50 @@
 Class {
 	#name : #GtLToolForLepiterPageCreate,
-	#superclass : #GtLAbstractMagritteFunctionTool,
-	#instVars : [
-		'logicalDatabase'
-	],
+	#superclass : #GtLAbstractLepiterTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #accessing }
-GtLToolForLepiterPageCreate >> database [
-	^ logicalDatabase
-]
+{ #category : #private }
+GtLToolForLepiterPageCreate >> createPageTitled: aTitle in: aDatabase [
+	"Create the page, or refuse a title that a page of aDatabase already has"
 
-{ #category : #accessing }
-GtLToolForLepiterPageCreate >> database: aDatabase [
-	logicalDatabase := aDatabase
+	| page |
+	page := [ aDatabase pageBuilder
+			title: aTitle;
+			add ]
+			on: LeDuplicatePageIdError
+			do: [ :anError | 
+				^ GtLProblemDomainObject new
+					errorMessage: 'A page titled ' , aTitle printString , ' is already in '
+							, aDatabase databaseName asString , ': use it or choose another title';
+					yourself ].
+	^ GtLLepiterPageCreateDomainObject new
+		status: 'created';
+		databaseId: (GtLLepiterSnippetReference databaseIdOf: aDatabase);
+		pageUid: page uidString;
+		title: page title;
+		page: page
 ]
 
 { #category : #magritte }
 GtLToolForLepiterPageCreate >> databaseIdDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Database id';
 		accessor: #databaseId;
+		comment: 'The id of the database to add the page to, from lepiterKnowledgeBases.';
 		beRequired
 ]
 
 { #category : #accessing }
 GtLToolForLepiterPageCreate >> description [
-	^ 'Create a new Lepiter page in a database with the provided title and target database id.
+	^ 'Creates an empty Lepiter page in the database databaseId; add snippets to it with createLepiterSnippets. The response gives its pageUid, the id that the other Lepiter tools take. A title that a page of the database already has is refused.
 
 Example JSON arguments:
-{
-  "title": "New Page",
-  "databaseId": "UUID"
-}
+{"databaseId": "dklrfmltzaib6womkfkknkfap", "title": "New Page"}
 
 Example JSON response:
-{
-  "status": "created",
-  "pageUid": "UUID",
-  "title": "New Page"
-}'
-]
-
-{ #category : #initialization }
-GtLToolForLepiterPageCreate >> initialize [
-	super initialize.
-	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase
+{"status": "created", "databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "4cz39477un3tnbzdfe3lwi475", "pageTitle": "New Page"}'
 ]
 
 { #category : #accessing }
@@ -58,43 +54,22 @@ GtLToolForLepiterPageCreate >> name [
 
 { #category : #private }
 GtLToolForLepiterPageCreate >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments title targetDatabase page databaseId baseDatabase |
+	| arguments targetDatabase |
 	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	title := arguments at: 'title'.
-	(title trimBoth isEmpty)
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'title' ].
-	databaseId := arguments at: 'databaseId'.
-	(databaseId trimBoth isEmpty)
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-			arguments: arguments;
-			missingArgument: 'databaseId' ].
-	baseDatabase := self database.
-	targetDatabase := (baseDatabase respondsTo: #databaseWithID:ifNone:)
-		ifTrue: [ baseDatabase databaseWithID: databaseId ifNone: [ nil ] ]
-		ifFalse: [ (baseDatabase respondsTo: #uuid)
-				ifTrue: [ baseDatabase uuid asString = databaseId
-						ifTrue: [ baseDatabase ]
-						ifFalse: [ nil ] ]
-				ifFalse: [ nil ] ].
-	targetDatabase ifNil: [ ^ GtLProblemDomainObject new
-			description: 'Database with ' , databaseId asString , ' not found' ].
-	page := targetDatabase pageBuilder title: title; add.
-	^ GtLLepiterPageCreateDomainObject new
-		status: 'created';
-		databaseId: databaseId;
-		pageUid: page uidString;
-		title: page title;
-		page: page
+	(self missingArgumentAmong: #('title' 'databaseId') inArguments: arguments)
+		ifNotNil: [ :aProblem | ^ aProblem ].
+	targetDatabase := (self snippetLocator
+			databasesWithId: (arguments at: 'databaseId')
+			ifNone: [ :aProblem | ^ aProblem ]) first.
+	^ self createPageTitled: (arguments at: 'title') in: targetDatabase
 ]
 
 { #category : #magritte }
 GtLToolForLepiterPageCreate >> titleDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Title';
 		accessor: #title;
+		comment: 'The title of the new page.';
 		beRequired
 ]

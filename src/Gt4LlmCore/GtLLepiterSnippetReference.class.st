@@ -76,7 +76,7 @@ GtLLepiterSnippetReference >> databaseIdDescription [
 	^ MAStringDescription new
 		label: 'Database id';
 		accessor: #databaseId;
-		comment: 'The id of the Lepiter database (base 36), as lepiterKnowledgeBases lists it.';
+		comment: 'The id of the database; absent for an in-memory database.';
 		yourself
 ]
 
@@ -147,7 +147,7 @@ GtLLepiterSnippetReference >> pageUidDescription [
 	^ MAStringDescription new
 		label: 'Page uid';
 		accessor: #pageUid;
-		comment: 'The id of the page (base 36), as getLepiterPageContents takes it.';
+		comment: 'The id of the page (base 36).';
 		beRequired
 ]
 
@@ -201,6 +201,6 @@ GtLLepiterSnippetReference >> snippetUidDescription [
 	^ MAStringDescription new
 		label: 'Snippet uid';
 		accessor: #snippetUid;
-		comment: 'The uid of the snippet, as editLepiterSnippet takes it.';
+		comment: 'The id of the snippet (base 64).';
 		beRequired
 ]

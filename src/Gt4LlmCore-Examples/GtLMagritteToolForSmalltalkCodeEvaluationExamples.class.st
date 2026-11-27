@@ -37,12 +37,16 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertExceptionDomainObject
 ]
 
 { #category : #asserting }
-GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertPlaygroundPageReference: aPlaygroundPageReference [ 
+GtLMagritteToolForSmalltalkCodeEvaluationExamples >> assertPlaygroundPageReference: aPlaygroundPageReference [
 	<gsCode: '	self assert: aPlaygroundPageReference isNil.'>
 	self assert: aPlaygroundPageReference notNil.
-	
-	self assert: aPlaygroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
-	self assert: aPlaygroundPageReference pageId equals: self theDatabase pages first uid asString36.
+
+	self
+		assert: aPlaygroundPageReference databaseId
+		equals: self theDatabase primaryDB uuidString.
+	self
+		assert: aPlaygroundPageReference pageUid
+		equals: self theDatabase pages first uid asString36
 ]
 
 { #category : #'private - examples' }
@@ -131,29 +135,32 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> evaluateProvenanceCode: aSt
 
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningBlElement [
+	"Test execution that returns a BlElement, which has image views."
+
 	<gtExample>
 	<return: #GtLFunctionToolCall>
-	"Test execution that returns a BlElement, which has image views."
 	| objectStorage tool call targetObject objectValue |
 	objectStorage := GtLObjectStorage new.
 	self ensureLepiterPageForObject: BlElement new withSnippetCode: 'BlElement new'.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := self
-		executeTool: tool
-		withArguments: {
-			'code' -> 'BlElement new'.
-			'bindings' -> #()
-		} asDictionary
-		inContext: (GtLToolExecutionContext new 
-			objectStorage: objectStorage;
-			lepiterDatabase: self theDatabase).
+			executeTool: tool
+			withArguments: {'code' -> 'BlElement new'.
+					'bindings' -> #()} asDictionary
+			inContext: (GtLToolExecutionContext new
+					objectStorage: objectStorage;
+					lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: (targetObject object isKindOf: BlElement).
 	self assert: targetObject code equals: 'BlElement new'.
 	self assert: targetObject playgroundPageReference notNil.
-	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
-	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
+	self
+		assert: targetObject playgroundPageReference databaseId
+		equals: self theDatabase primaryDB uuidString.
+	self
+		assert: targetObject playgroundPageReference pageUid
+		equals: self theDatabase pages first uid asString36.
 	objectValue := targetObject objectValue.
 	self assert: objectValue objectClassName equals: 'BlElement'.
 	self assert: objectValue superclassName equals: 'Object'.
@@ -164,12 +171,15 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningBlElement [
 	self assert: objectValue allInstanceSlots isNotEmpty.
 	self assert: targetObject objectId isNotEmpty.
 	self assert: objectStorage objectCount equals: 1.
-	self assert: (objectStorage objectAt: targetObject objectId) == targetObject object.
+	self
+		assert: (objectStorage objectAt: targetObject objectId) == targetObject object.
 	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithSlots [
+	"Test execution that returns an object with slots and views."
+
 	<gsCode: '	<gtExample>
 	"Test execution that returns an object with slots and views."
 	| objectStorage tool call targetObject objectValue storedResult |
@@ -208,20 +218,20 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 	self assert: storedResult reason asReasonString equals: ''GtLSerializedObjectValueTestObject exampleInstance''.
 	^ call'>
 	<gtExample>
-	"Test execution that returns an object with slots and views."
 	| objectStorage tool call targetObject objectValue storedResult |
 	objectStorage := GtLObjectStorage new.
-	self ensureLepiterPageForObject: GtLSerializedObjectValueTestObject exampleInstance withSnippetCode: 'GtLSerializedObjectValueTestObject exampleInstance'.
+	self
+		ensureLepiterPageForObject: GtLSerializedObjectValueTestObject exampleInstance
+		withSnippetCode: 'GtLSerializedObjectValueTestObject exampleInstance'.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := self
-		executeTool: tool
-		withArguments: {
-			'code' -> 'GtLSerializedObjectValueTestObject exampleInstance'.
-			'bindings' -> #()
-		} asDictionary
-		inContext: (GtLToolExecutionContext new 
-			objectStorage: objectStorage;
-			lepiterDatabase: self theDatabase).
+			executeTool: tool
+			withArguments: {'code'
+						-> 'GtLSerializedObjectValueTestObject exampleInstance'.
+					'bindings' -> #()} asDictionary
+			inContext: (GtLToolExecutionContext new
+					objectStorage: objectStorage;
+					lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: (targetObject object isKindOf: GtLSerializedObjectValueTestObject).
@@ -229,10 +239,16 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 	self assert: targetObject object count equals: 42.
 	self assert: targetObject object items equals: #('apple' 'banana' 'cherry').
 	self assert: targetObject playgroundPageReference notNil.
-	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
-	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
+	self
+		assert: targetObject playgroundPageReference databaseId
+		equals: self theDatabase primaryDB uuidString.
+	self
+		assert: targetObject playgroundPageReference pageUid
+		equals: self theDatabase pages first uid asString36.
 	objectValue := targetObject objectValue.
-	self assert: objectValue objectClassName equals: 'GtLSerializedObjectValueTestObject'.
+	self
+		assert: objectValue objectClassName
+		equals: 'GtLSerializedObjectValueTestObject'.
 	self assert: objectValue superclassName equals: 'Object'.
 	self assert: objectValue packageName equals: 'Gt4LlmCore-Examples'.
 	self assert: (objectValue objectPrintString includesSubstring: 'TestObject').
@@ -240,20 +256,29 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 	self assert: (objectValue phlowViews anySatisfy: [ :v | v title = 'Details' ]).
 	self assert: (objectValue phlowViews anySatisfy: [ :v | v title = 'Items' ]).
 	self assert: objectValue allInstanceSlots size equals: 3.
-	self assert: (objectValue allInstanceSlots anySatisfy: [ :s | 
-		s name = 'name' and: [ s valueClassName = 'ByteString' ] ]).
-	self assert: (objectValue allInstanceSlots anySatisfy: [ :s | 
-		s name = 'count' and: [ s valuePrintString = '42' ] ]).
+	self
+		assert: (objectValue allInstanceSlots
+				anySatisfy: [ :s | s name = 'name' and: [ s valueClassName = 'ByteString' ] ]).
+	self
+		assert: (objectValue allInstanceSlots
+				anySatisfy: [ :s | s name = 'count' and: [ s valuePrintString = '42' ] ]).
 	self assert: targetObject objectId isNotEmpty.
-	self assert: (objectStorage objectAt: targetObject objectId) == targetObject object.
+	self
+		assert: (objectStorage objectAt: targetObject objectId) == targetObject object.
 	storedResult := objectStorage storedObjectAt: targetObject objectId.
-	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
-	self assert: storedResult reason asReasonString equals: 'GtLSerializedObjectValueTestObject exampleInstance'.
+	self
+		assert: storedResult reason class
+		equals: GtLStoredObjectCodeExecutionReason.
+	self
+		assert: storedResult reason asReasonString
+		equals: 'GtLSerializedObjectValueTestObject exampleInstance'.
 	^ call
 ]
 
 { #category : #examples }
 GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithSlotsSerialization [
+	"Test that the result serializes correctly to JSON."
+
 	<gsCode: '	<gtExample>
 	"Test that the result serializes correctly to JSON."
 	| call jsonObject objectValue slots pageReference |
@@ -280,32 +305,41 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeReturningObjectWithS
 				and: [ (s at: ''valuePrintString'') = ''42'' ] ] ]).
 	^ jsonObject'>
 	<gtExample>
-	"Test that the result serializes correctly to JSON."
 	| call jsonObject objectValue slots pageReference |
 	call := self executeReturningObjectWithSlots.
 	jsonObject := GtMagritteJSONDataExporter exportObject: call result targetObject.
-	self assert: (jsonObject at: 'code') equals: 'GtLSerializedObjectValueTestObject exampleInstance'.
+	self
+		assert: (jsonObject at: 'code')
+		equals: 'GtLSerializedObjectValueTestObject exampleInstance'.
 	self assert: (jsonObject at: 'objectId') isNotEmpty.
 	pageReference := jsonObject at: 'playgroundPageReference'.
-	self assert: (pageReference at: 'databaseId') equals: self theDatabase primaryDB uuidString.
-	self assert: (pageReference at: 'pageId') isNotEmpty.
+	self
+		assert: (pageReference at: 'databaseId')
+		equals: self theDatabase primaryDB uuidString.
+	self assert: (pageReference at: 'pageUid') isNotEmpty.
 	objectValue := jsonObject at: 'objectValue'.
-	self assert: (objectValue at: 'objectClassName') equals: 'GtLSerializedObjectValueTestObject'.
+	self
+		assert: (objectValue at: 'objectClassName')
+		equals: 'GtLSerializedObjectValueTestObject'.
 	self assert: (objectValue at: 'superclassName') equals: 'Object'.
 	self assert: (objectValue at: 'packageName') equals: 'Gt4LlmCore-Examples'.
 	self assert: (objectValue at: 'phlowViews') isNotEmpty.
-	self assert: ((objectValue at: 'phlowViews') anySatisfy: [ :v | 
-		(v at: 'title') = 'Details' ]).
+	self
+		assert: ((objectValue at: 'phlowViews') anySatisfy: [ :v | (v at: 'title') = 'Details' ]).
 	slots := objectValue at: 'allInstanceSlots'.
 	self assert: slots size equals: 3.
-	self assert: (slots anySatisfy: [ :s | 
-		(s at: 'name') = 'name' 
-			and: [ (s at: 'valueClassName') = 'ByteString'
-				and: [ (s at: 'valuePrintString') = 'TestObject' ] ] ]).
-	self assert: (slots anySatisfy: [ :s | 
-		(s at: 'name') = 'count' 
-			and: [ (s at: 'valueClassName') = 'SmallInteger'
-				and: [ (s at: 'valuePrintString') = '42' ] ] ]).
+	self
+		assert: (slots
+				anySatisfy: [ :s | 
+					(s at: 'name') = 'name'
+						and: [ (s at: 'valueClassName') = 'ByteString'
+								and: [ (s at: 'valuePrintString') = 'TestObject' ] ] ]).
+	self
+		assert: (slots
+				anySatisfy: [ :s | 
+					(s at: 'name') = 'count'
+						and: [ (s at: 'valueClassName') = 'SmallInteger'
+								and: [ (s at: 'valuePrintString') = '42' ] ] ]).
 	^ jsonObject
 ]
 
@@ -406,13 +440,11 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithNoBind
 	self ensureLepiterPageForObject: 3 withSnippetCode: '1 + 2'.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := self
-		executeTool: tool
-		withArguments: {
-			'code' -> '1 + 2'.
-		} asDictionary
-		inContext: (GtLToolExecutionContext new 
-			objectStorage: objectStorage;
-			lepiterDatabase: self theDatabase).
+			executeTool: tool
+			withArguments: {'code' -> '1 + 2'} asDictionary
+			inContext: (GtLToolExecutionContext new
+					objectStorage: objectStorage;
+					lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: targetObject object equals: 3.
@@ -421,12 +453,18 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeSimpleDoItWithNoBind
 	self assert: targetObject objectValue objectPrintString equals: '3'.
 	self assert: targetObject objectId isNotEmpty.
 	self assert: targetObject playgroundPageReference notNil.
-	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
-	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
+	self
+		assert: targetObject playgroundPageReference databaseId
+		equals: self theDatabase primaryDB uuidString.
+	self
+		assert: targetObject playgroundPageReference pageUid
+		equals: self theDatabase pages first uid asString36.
 	self assert: objectStorage objectCount equals: 1.
 	self assert: (objectStorage objectAt: objectStorage objectIds first) equals: 3.
 	storedResult := objectStorage storedObjectAt: targetObject objectId.
-	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
+	self
+		assert: storedResult reason class
+		equals: GtLStoredObjectCodeExecutionReason.
 	self assert: storedResult reason asReasonString equals: '1 + 2'.
 	^ call
 ]
@@ -830,29 +868,33 @@ GtLMagritteToolForSmalltalkCodeEvaluationExamples >> executeWithBindings [
 	self ensureLepiterPageForObject: 42 withSnippetCode: 'value + 2'.
 	tool := GtLMagritteToolForSmalltalkCodeEvaluation new.
 	call := self
-		executeTool: tool
-		withArguments: {
-			'code' -> 'value + 2'.
-			'bindings' -> {
-				{ 'name' -> 'value'. 'objectId' -> bindingObjectId } asDictionary
-			} asArray
-		} asDictionary
-		inContext: (GtLToolExecutionContext new 
-			objectStorage: objectStorage;
-			lepiterDatabase: self theDatabase).
+			executeTool: tool
+			withArguments: {'code' -> 'value + 2'.
+					'bindings'
+						-> {{'name' -> 'value'.
+									'objectId' -> bindingObjectId} asDictionary} asArray} asDictionary
+			inContext: (GtLToolExecutionContext new
+					objectStorage: objectStorage;
+					lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLSmalltalkCodeEvaluationResult).
 	self assert: targetObject object equals: 42.
 	self assert: targetObject playgroundPageReference notNil.
-	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
-	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
+	self
+		assert: targetObject playgroundPageReference databaseId
+		equals: self theDatabase primaryDB uuidString.
+	self
+		assert: targetObject playgroundPageReference pageUid
+		equals: self theDatabase pages first uid asString36.
 	resultObjectId := targetObject objectId.
 	self assert: resultObjectId isNotEmpty.
 	self assert: resultObjectId ~= bindingObjectId.
 	self assert: (objectStorage objectAt: bindingObjectId) equals: 40.
 	self assert: (objectStorage objectAt: resultObjectId) equals: 42.
 	storedResult := objectStorage storedObjectAt: resultObjectId.
-	self assert: storedResult reason class equals: GtLStoredObjectCodeExecutionReason.
+	self
+		assert: storedResult reason class
+		equals: GtLStoredObjectCodeExecutionReason.
 	self assert: storedResult reason asReasonString equals: 'value + 2'.
 	^ call
 ]

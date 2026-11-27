@@ -1,9 +1,6 @@
 Class {
 	#name : #GtLToolForLepiterSnippetsCreate,
-	#superclass : #GtLAbstractMagritteFunctionTool,
-	#instVars : [
-		'database'
-	],
+	#superclass : #GtLAbstractLepiterTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
@@ -11,27 +8,23 @@ Class {
 GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
 	"Add the snippet to the page, or to the parent snippet, and answer its addition result"
 
-	| pageUidString parentSnippetUidString locator parent snippet |
-	pageUidString := snippetArguments pageUid.
-	(pageUidString isNil or: [ pageUidString trimBoth isEmpty ])
-		ifTrue: [ ^ GtLMissingArgumentDomainObject new
-				arguments: snippetArguments;
-				missingArgument: 'pageUid' ].
+	| parentSnippetUidString parent snippet |
+	(self missingArgumentAmong: #('pageUid') in: snippetArguments)
+		ifNotNil: [ :aProblem | ^ aProblem ].
 	^ snippetArguments
 		validateSnippetArgumentsFor: self
-		ifCorrect: [ locator := GtLLepiterSnippetLocator database: self database.
-			parentSnippetUidString := snippetArguments parentSnippetUid
+		ifCorrect: [ parentSnippetUidString := snippetArguments parentSnippetUid
 					ifNil: [ '' ]
 					ifNotNil: [ :aString | aString asString trimBoth ].
 			parentSnippetUidString isEmpty
-				ifTrue: [ locator
-						pageWithUid: pageUidString
+				ifTrue: [ self snippetLocator
+						pageWithUid: snippetArguments pageUid
 						databaseId: snippetArguments databaseId
 						ifFound: [ :aPage | parent := aPage ]
 						ifNone: [ :aProblem | ^ aProblem ] ]
-				ifFalse: [ locator
+				ifFalse: [ self snippetLocator
 						snippetWithUid: parentSnippetUidString
-						pageUid: pageUidString
+						pageUid: snippetArguments pageUid
 						databaseId: snippetArguments databaseId
 						ifFound: [ :aSnippet | parent := aSnippet ]
 						ifNone: [ :aProblem | ^ aProblem ] ].
@@ -48,48 +41,26 @@ GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
 ]
 
 { #category : #accessing }
-GtLToolForLepiterSnippetsCreate >> database [
-	^ database
-]
-
-{ #category : #accessing }
-GtLToolForLepiterSnippetsCreate >> database: aDatabase [
-	database := aDatabase
-]
-
-{ #category : #accessing }
 GtLToolForLepiterSnippetsCreate >> description [
-	^ 'Creates new Lepiter snippets in pages identified by their page ids (base 36, as getLepiterPageContents and searchForLepiterPages give them). A snippet is added at the end of the page, or at the end of the children of parentSnippetUid when it is given.
+	^ 'Adds snippets to Lepiter pages, in the given order. The key of each item is the snippet type. A snippet is added at the end of the page, or as the last child of parentSnippetUid.
 
-The optional databaseId is needed only when the page id is in several databases: the response then says so and lists them.
+The response has one entry per requested snippet, in order: the reference of the created snippet, or an errorMessage. When one fails, the others are still created.
 
 Example JSON arguments:
-{
-  "snippets": [
-    {"TextSnippet": {"pageUid": "PAGE_ID", "snippetText": "Notes"}},
-    {"PharoSnippet": {"pageUid": "PAGE_ID", "parentSnippetUid": "SNIPPET_ID", "pharoCode": "Transcript show: 1"}},
-    {"PictureSnippet": {"pageUid": "PAGE_ID", "urlString": "https://example.com/picture.png", "caption": "Optional caption", "previewHeight": 200}},
-    {"ExampleSnippet": {"pageUid": "PAGE_ID", "databaseId": "DATABASE_ID", "exampleClassName": "MyExamples", "exampleMethodName": "exampleMethod"}}
-  ]
-}
-
-Supported snippet types are: text, pharo, python, shell, example, picture.
-
-The response has one entry per requested snippet, in order: the result, or an errorMessage. A result names the created snippet with its databaseId, pageUid and snippetUid.
+{"snippets": [
+  {"TextSnippet": {"pageUid": "86t968o90hlfreacjec76wapk", "snippetText": "Notes"}},
+  {"PharoSnippet": {"pageUid": "86t968o90hlfreacjec76wapk", "parentSnippetUid": "SgJekENeTPytZjVknCfulw==", "pharoCode": "Transcript show: 1"}},
+  {"ExampleSnippet": {"databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "86t968o90hlfreacjec76wapk", "exampleClassName": "MyExamples", "exampleMethodName": "exampleMethod"}},
+  {"PictureSnippet": {"pageUid": "7h2k9w0x3m5n1p8q4r6s2t0u9", "urlString": "https://example.com/picture.png", "previewHeight": 200}}
+]}
 
 Example JSON response:
-{
-  "snippets": [
-    {"status": "created", "targetSnippetReference": {"databaseId": "DATABASE_ID", "pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"}},
-    {"errorMessage": "Could not locate page with id PAGE_ID"}
-  ]
-}'
-]
-
-{ #category : #initialization }
-GtLToolForLepiterSnippetsCreate >> initialize [
-	super initialize.
-	database := LeDatabasesRegistry defaultLogicalDatabase
+{"snippets": [
+  {"status": "created", "targetSnippetReference": {"databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "86t968o90hlfreacjec76wapk", "snippetUid": "q7Tn0dVbRZ6uJ1cE4yHw2A=="}},
+  {"status": "created", "targetSnippetReference": {"databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "86t968o90hlfreacjec76wapk", "snippetUid": "Xk3mZ0aQS8y1nV2pL7wR9g=="}},
+  {"status": "created", "targetSnippetReference": {"databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "86t968o90hlfreacjec76wapk", "snippetUid": "bb49pqTrTh+k1tAEnG4H4Q=="}},
+  {"errorMessage": "Could not locate page with id 7h2k9w0x3m5n1p8q4r6s2t0u9"}
+]}'
 ]
 
 { #category : #accessing }
