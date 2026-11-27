@@ -3,32 +3,9 @@ I am the renameClass tool: I rename a class or trait at once, with its reference
 "
 Class {
 	#name : #GtLMagritteToolForClassRename,
-	#superclass : #GtLAbstractMagritteFunctionTool,
+	#superclass : #GtLAbstractMagritteToolForTransformation,
 	#category : #'Gt4LlmCore-Tools'
 }
-
-{ #category : #private }
-GtLMagritteToolForClassRename >> applySpecification: aSpecification inContext: anExecutionContext [
-	"Go through the transformations, as previewRefactoring does, so that the changes are linked to the refactoring. Name the changes: the undo history shows the name.
-	Store the result, as applyRefactoring does: the response gives its objectId, and the result keeps all the changes, also when the response does not list them"
-
-	| transformations namespace result |
-	transformations := GtLCodeTransformations new transformations: {aSpecification}.
-	namespace := transformations applyRefactoring.
-	namespace name: aSpecification gtDisplayString.
-	result := (GtLRefactoringPreview
-			namespace: namespace
-			refactoringName: transformations refactoringName
-			refactoringDescription: transformations refactoringDescription
-			changeGroupNames: transformations changeGroupNames) apply.
-	anExecutionContext objectStorage
-		ifNotNil: [ :aStorage | 
-			result
-				objectId: (aStorage
-						addNewObject: result
-						reason: (GtLStoredObjectStringReason text: 'Class rename result')) ].
-	^ result
-]
 
 { #category : #magritte }
 GtLMagritteToolForClassRename >> classNameDescription [
@@ -58,14 +35,9 @@ Example JSON response when the rename is refused:
 {"errorMessage": "MyOtherClass is already the name of a class or global variable"}'
 ]
 
-{ #category : #magritte }
-GtLMagritteToolForClassRename >> displayOptionsDescription [
-	<magritteDescription>
-	^ MAToOneRelationDescription new
-		label: 'Display options';
-		accessor: #displayOptions;
-		classes: {GtLRefactoringResultDisplayOptions};
-		beOptional
+{ #category : #private }
+GtLMagritteToolForClassRename >> errorReason [
+	^ 'Error while renaming class'
 ]
 
 { #category : #accessing }
@@ -83,38 +55,15 @@ GtLMagritteToolForClassRename >> newClassNameDescription [
 		beRequired
 ]
 
-{ #category : #'tool api' }
-GtLMagritteToolForClassRename >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	"The JSON schema has already checked that both names are given"
-
-	| specification problems |
-	specification := GtLRenameClassSpecification new
-			className: (aToolCall arguments at: 'className');
-			newClassName: (aToolCall arguments at: 'newClassName');
-			yourself.
-	problems := specification gtProblems.
-	problems
-		ifNotEmpty: [ ^ GtLProblemDomainObject new
-				errorMessage: ('; ' join: (problems collect: [ :each | each description ])) ].
-	^ self
-		renameClassWith: specification
-		displayOptions: (GtLRefactoringResultDisplayOptions
-				fromArguments: aToolCall arguments)
-		inContext: anExecutionContext
+{ #category : #private }
+GtLMagritteToolForClassRename >> resultDescription [
+	^ 'Class rename result'
 ]
 
 { #category : #private }
-GtLMagritteToolForClassRename >> renameClassWith: aSpecification displayOptions: aDisplayOptions inContext: anExecutionContext [
-	"Answer a report of the result, built for the display options of the call. A failure while executing the changes is reported by the result itself"
-
-	| result |
-	result := [ self
-			applySpecification: aSpecification
-			inContext: anExecutionContext ]
-			on: Error
-			do: [ :anError | 
-				^ (GtLExceptionDomainObject freeze: anError)
-					errorReason: 'Error while renaming class';
-					yourself ].
-	^ result reportFor: aDisplayOptions
+GtLMagritteToolForClassRename >> specificationFromArguments: aDictionary [
+	^ GtLRenameClassSpecification new
+		className: (aDictionary at: 'className');
+		newClassName: (aDictionary at: 'newClassName');
+		yourself
 ]

@@ -9,57 +9,42 @@ Class {
 
 { #category : #private }
 GtLToolForLepiterSnippetsCreate >> createSnippetFrom: snippetArguments [
-	"Answer the page id in the form the other Lepiter tools take, as it was given"
+	"Add the snippet to the page, or to the parent snippet, and answer its addition result"
 
-	| pageUidString pageUid snippet snippetValidation parentSnippetUidString parentSnippetUid parentSnippets |
+	| pageUidString parentSnippetUidString locator parent snippet |
 	pageUidString := snippetArguments pageUid.
 	(pageUidString isNil or: [ pageUidString trimBoth isEmpty ])
 		ifTrue: [ ^ GtLMissingArgumentDomainObject new
 				arguments: snippetArguments;
 				missingArgument: 'pageUid' ].
-	pageUid := [ UUID fromString36: pageUidString ]
-			on: Error
-			do: [ :error | 
-				^ GtLExceptionDomainObject new
-					freeze: error;
-					errorReason: 'Invalid page uid' ].
 	^ snippetArguments
 		validateSnippetArgumentsFor: self
-		ifCorrect: [ self database
-				pageWithID: pageUid
-				ifPresent: [ :page | 
-					[ snippet := snippetArguments buildSnippetFor: self.
-					parentSnippetUidString := snippetArguments parentSnippetUid.
-					parentSnippetUidString := parentSnippetUidString
-							ifNil: [ '' ]
-							ifNotNil: [ :string | string asString trimBoth ].
-					parentSnippetUidString isEmpty
-						ifTrue: [ page addSnippet: snippet ]
-						ifFalse: [ parentSnippetUid := LeUID new.
-							[ parentSnippetUid uidString: parentSnippetUidString ]
-								on: Error
-								do: [ :error | 
-									^ GtLExceptionDomainObject new
-										freeze: error;
-										errorReason: 'Invalid parent snippet uid' ].
-							parentSnippets := page
-									allChildrenSnippetsMatching: [ :each | each uid = parentSnippetUid ].
-							parentSnippets
-								ifEmpty: [ ^ GtLProblemDomainObject new
-										description: 'Could not locate parent snippet with id ' , parentSnippetUid uidString ].
-							parentSnippets anyOne addSnippet: snippet ] ]
-						on: Error
-						do: [ :error | 
-							^ GtLExceptionDomainObject new
-								freeze: error;
-								errorReason: 'Error while creating snippet' ] ]
-				ifAbsent: [ ^ GtLProblemDomainObject new
-						description: 'Could not locate page with id ' , pageUidString ].
-			^ GtLLepiterSnippetDomainObject new
-				status: 'created';
-				pageUid: pageUid asString36;
-				snippetUid: snippet uidString;
-				snippet: snippet ]
+		ifCorrect: [ locator := GtLLepiterSnippetLocator database: self database.
+			parentSnippetUidString := snippetArguments parentSnippetUid
+					ifNil: [ '' ]
+					ifNotNil: [ :aString | aString asString trimBoth ].
+			parentSnippetUidString isEmpty
+				ifTrue: [ locator
+						pageWithUid: pageUidString
+						databaseId: snippetArguments databaseId
+						ifFound: [ :aPage | parent := aPage ]
+						ifNone: [ :aProblem | ^ aProblem ] ]
+				ifFalse: [ locator
+						snippetWithUid: parentSnippetUidString
+						pageUid: pageUidString
+						databaseId: snippetArguments databaseId
+						ifFound: [ :aSnippet | parent := aSnippet ]
+						ifNone: [ :aProblem | ^ aProblem ] ].
+			[ snippet := snippetArguments buildSnippetFor: self.
+			parent addSnippet: snippet ]
+				on: Error
+				do: [ :error | 
+					^ GtLExceptionDomainObject new
+						freeze: error;
+						errorReason: 'Error while creating snippet' ].
+			GtLLepiterSnippetAdditionResult new
+				newSnippet: (GtLLepiterSnippetWithContent fromSnippet: snippet);
+				yourself ]
 ]
 
 { #category : #accessing }
@@ -74,25 +59,29 @@ GtLToolForLepiterSnippetsCreate >> database: aDatabase [
 
 { #category : #accessing }
 GtLToolForLepiterSnippetsCreate >> description [
-	^ 'Creates new Lepiter snippets for pages identified by their page ids.
+	^ 'Creates new Lepiter snippets in pages identified by their page ids (base 36, as getLepiterPageContents and searchForLepiterPages give them). A snippet is added at the end of the page, or at the end of the children of parentSnippetUid when it is given.
+
+The optional databaseId is needed only when the page id is in several databases: the response then says so and lists them.
 
 Example JSON arguments:
 {
   "snippets": [
-    {"TextSnippet": {"pageUid": "UUID", "snippetText": "Notes"}},
-    {"PharoSnippet": {"pageUid": "UUID", "pharoCode": "Transcript show: 1"}},
-    {"PictureSnippet": {"pageUid": "UUID", "urlString": "https://example.com/picture.png", "caption": "Optional caption", "previewHeight": 200}},
-    {"ExampleSnippet": {"pageUid": "UUID", "exampleClassName": "MyExamples", "exampleMethodName": "exampleMethod"}}
+    {"TextSnippet": {"pageUid": "PAGE_ID", "snippetText": "Notes"}},
+    {"PharoSnippet": {"pageUid": "PAGE_ID", "parentSnippetUid": "SNIPPET_ID", "pharoCode": "Transcript show: 1"}},
+    {"PictureSnippet": {"pageUid": "PAGE_ID", "urlString": "https://example.com/picture.png", "caption": "Optional caption", "previewHeight": 200}},
+    {"ExampleSnippet": {"pageUid": "PAGE_ID", "databaseId": "DATABASE_ID", "exampleClassName": "MyExamples", "exampleMethodName": "exampleMethod"}}
   ]
 }
 
 Supported snippet types are: text, pharo, python, shell, example, picture.
 
+The response has one entry per requested snippet, in order: the result, or an errorMessage. A result names the created snippet with its databaseId, pageUid and snippetUid.
+
 Example JSON response:
 {
   "snippets": [
-    {"status": "created", "pageUid": "UUID", "snippetUid": "UUID"},
-    {"status": "created", "pageUid": "UUID", "snippetUid": "UUID"}
+    {"status": "created", "targetSnippetReference": {"databaseId": "DATABASE_ID", "pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"}},
+    {"errorMessage": "Could not locate page with id PAGE_ID"}
   ]
 }'
 ]
@@ -110,21 +99,13 @@ GtLToolForLepiterSnippetsCreate >> name [
 
 { #category : #private }
 GtLToolForLepiterSnippetsCreate >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments snippets results |
-	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	snippets := arguments at: 'snippets'.
-			
-	results := snippets collect: [ :each |
-		(each isKindOf: GtLLepiterSnippetCreationRequest)
-			ifFalse: [ ^ GtLIncorrectArgumentArrayItemDomainObject new
-				argumentName: 'snippets';
-				argumentValue: snippets;
-				expectedItemKind: GtLLepiterSnippetCreationRequest;
-				incorrectItems: { each } ].
-		self createSnippetFrom: each ].
-		
-	^ GtLLepiterSnippetsDomainObject new
-		snippets: results;
+	"The JSON schema and the Magritte reader make each element of snippets a creation request of the type its key names, so the elements need no type check"
+
+	| results |
+	results := (aToolCall arguments at: 'snippets')
+			collect: [ :each | self createSnippetFrom: each ].
+	^ GtLLepiterSnippetsChangeResult new
+		snippetResults: results;
 		yourself
 ]
 

@@ -37,6 +37,17 @@ GtLProblemDomainObject >> errorMessageDescription [
 			beRequired
 ]
 
+{ #category : #views }
+GtLProblemDomainObject >> gtErrorMessageFor: aView [
+	<gtView>
+	<gtLlmView>
+	^ aView forward
+		title: 'Error message';
+		priority: 10;
+		object: [ errorMessage ];
+		view: #gtStringFor:
+]
+
 { #category : #'llm - views' }
 GtLProblemDomainObject >> llmRawDataViewFor: aDataView [
 	<gtLlmDataView>

@@ -91,6 +91,13 @@ GtLRefactoringDefinitionChange >> gtLlmChangeTarget [
 	^ className
 ]
 
+{ #category : #matching }
+GtLRefactoringDefinitionChange >> gtLlmChangedSnippet [
+	"I describe a class definition, not a snippet"
+
+	^ nil
+]
+
 { #category : #llm }
 GtLRefactoringDefinitionChange >> gtLlmMatchesCodeChangeResult: aCodeChangeResult [
 	^ aCodeChangeResult isClassChangeResult
@@ -107,6 +114,13 @@ GtLRefactoringDefinitionChange >> gtLlmNewChangeEntry [
 { #category : #llm }
 GtLRefactoringDefinitionChange >> gtLlmNewSource [
 	^ newDefinition
+]
+
+{ #category : #accessing }
+GtLRefactoringDefinitionChange >> gtLlmViewChangeTarget [
+	"The views name a class definition as the LLM JSON does"
+
+	^ self gtLlmChangeTarget
 ]
 
 { #category : #initialization }

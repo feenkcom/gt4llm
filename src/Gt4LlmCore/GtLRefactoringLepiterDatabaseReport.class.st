@@ -6,37 +6,32 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'report',
-		'database',
+		'databaseId',
+		'databaseName',
 		'pageReports'
 	],
 	#category : #'Gt4LlmCore-Refactorings'
 }
 
 { #category : #'instance creation' }
-GtLRefactoringLepiterDatabaseReport class >> report: aLepiterChangesReport database: aDatabaseOrNil entries: aCollectionOfSnippetEntries [
+GtLRefactoringLepiterDatabaseReport class >> report: aLepiterChangesReport databaseId: aDatabaseIdOrNil databaseName: aDatabaseNameOrNil entries: aCollectionOfSnippetEntries [
 	^ self new
 		initializeReport: aLepiterChangesReport
-		database: aDatabaseOrNil
+		databaseId: aDatabaseIdOrNil
+		databaseName: aDatabaseNameOrNil
 		entries: aCollectionOfSnippetEntries
 ]
 
 { #category : #accessing }
-GtLRefactoringLepiterDatabaseReport >> database [
-	^ database
-]
-
-{ #category : #accessing }
 GtLRefactoringLepiterDatabaseReport >> databaseId [
-	"The form getLepiterPageContents expects. An in-memory database has no id"
+	"The form getLepiterPageContents expects, as recorded by the entries. An in-memory database has no id"
 
-	database ifNil: [ ^ nil ].
-	database uuid = UUID nilUUID ifTrue: [ ^ nil ].
-	^ database uuidString
+	^ databaseId
 ]
 
 { #category : #accessing }
 GtLRefactoringLepiterDatabaseReport >> databaseName [
-	^ database ifNotNil: [ :aDatabase | aDatabase databaseName ]
+	^ databaseName
 ]
 
 { #category : #accessing }
@@ -64,17 +59,19 @@ GtLRefactoringLepiterDatabaseReport >> entries [
 ]
 
 { #category : #initialization }
-GtLRefactoringLepiterDatabaseReport >> initializeReport: aLepiterChangesReport database: aDatabaseOrNil entries: aCollectionOfSnippetEntries [
+GtLRefactoringLepiterDatabaseReport >> initializeReport: aLepiterChangesReport databaseId: aDatabaseIdOrNil databaseName: aDatabaseNameOrNil entries: aCollectionOfSnippetEntries [
 	report := aLepiterChangesReport.
-	database := aDatabaseOrNil.
+	databaseId := aDatabaseIdOrNil.
+	databaseName := aDatabaseNameOrNil.
 	pageReports := GtLRefactoringLepiterChangesReport
 			sortedReports: ((GtLRefactoringLepiterChangesReport
 					groupsOf: aCollectionOfSnippetEntries
-					by: [ :each | each page ])
+					by: [ :each | each pageUid ])
 					collect: [ :each | 
 						GtLRefactoringLepiterPageReport
 							report: aLepiterChangesReport
-							page: each key
+							pageUid: each key
+							pageTitle: each value first pageTitle
 							entries: each value ])
 ]
 

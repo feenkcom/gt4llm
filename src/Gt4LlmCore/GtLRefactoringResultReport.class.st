@@ -9,9 +9,9 @@ Class {
 
 { #category : #converting }
 GtLRefactoringResultReport >> codeChangesJson [
-	"Each code change with its kind and target, as the changes of a preview"
+	"Each code or Lepiter change with its kind and target, as the changes of a preview"
 
-	^ refactoring codeChangeResults
+	^ refactoring allChangeResults
 		collect: [ :each | 
 			NeoJSONObject new
 				at: 'kind' put: each llmChangeKind;

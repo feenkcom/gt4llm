@@ -41,7 +41,8 @@ GtLTools class >> gtCodeChange [
 				GtLMagritteToolForMethodsCompilation new.
 				GtLMagritteToolForMethodsRemoval new.
 				GtLMagritteToolForClassRemoval new.
-				GtLMagritteToolForClassRename new} asOrderedCollection
+				GtLMagritteToolForClassRename new.
+				GtLMagritteToolForMethodRename new} asOrderedCollection
 ]
 
 { #category : #defaults }

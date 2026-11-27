@@ -86,6 +86,8 @@ GtLOnDemandMcpServer >> start [
 		port: self port;
 		addTools: GtLTools gt;
 		start.
+	GtLMcpServer current ifNil:
+		[ GtLMcpServer current: server ].
 	GtLOnDemandMcpServerStartupSignal new
 		server: self;
 		emit.

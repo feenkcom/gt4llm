@@ -4,10 +4,14 @@ I describe one basic change of a refactoring preview (see {{gtClass:GtLRefactori
 I keep the RB change I describe in `change`. The other properties are computed from it when I am created, against the current image, so I should be created before the change is applied:
 - `changeDescription`: the RB change string, e.g. 'Remove MyClass>>#foo';
 - `kind`: a short label such as 'added method', 'modified method', 'removed method', 'added slot', 'removed slot', 'changed superclass', 'changed class comment', 'added class' or 'removed class';
-- `target`: the method, variable, class or package affected, e.g. 'MyClass>>#foo';
-- `newSource`: the method source, class definition, class comment or snippet text introduced by the change, or nil for changes that carry no code, such as removals.
+- `target`: the method, variable, class or package affected, e.g. 'MyClass>>#foo', or the snippet by its uid and page ('new snippet in page ...' for a snippet that is not added yet). It is the `target` of the LLM JSON, an identifier the agent can use;
+- `viewTarget`: how my views name the target ({{gtMethod:GtLRefactoringChange>>#gtViewChangeTarget}}). It is the target, except for a snippet, which is named by its type, the start of its content and its page, as its change result is;
+- `newSource`: the method source, class definition, class comment or snippet text introduced by the change, or nil for changes that carry no code, such as removals;
+- `changeEntry`: for a Le change, the entry that lists me in a report, with the location of the snippet at that time; the entries of the other changes hold names only and are made when asked ({{gtMethod:GtLRefactoringChange>>#asChangeEntry}}).
 
-The kind, target and new source come from the gtLlmChangeKind, gtLlmChangeTarget and gtLlmNewSource extension methods of the RB change classes. A preview that lists its changes one by one writes me with {{gtMethod:GtLRefactoringChange>>#llmJsonObjectIncludingSources:}}; a preview that groups them lists my {{gtMethod:GtLRefactoringChange>>#asChangeEntry}}.
+The kind, target, view target and new source come from the gtLlmChangeKind, gtLlmChangeTarget, gtLlmViewChangeTarget and gtLlmNewSource extension methods of the RB change classes. A preview that lists its changes one by one writes me with {{gtMethod:GtLRefactoringChange>>#llmJsonObjectIncludingSources:}}; a preview that groups them lists my {{gtMethod:GtLRefactoringChange>>#asChangeEntry}}.
+
+Once the preview is applied, `codeChangeResult` is the change result my change led to: a {{gtClass:GtLCodeChangeResult}} for a code change, or the {{gtClass:GtLLepiterSnippetChangeResult}} of its own snippet for a Le change ({{gtMethod:GtLRefactoringChange>>#markAppliedWithCodeChangeResults:lepiterChangeResultsBySnippet:}}).
 "
 Class {
 	#name : #GtLRefactoringChange,
@@ -17,6 +21,8 @@ Class {
 		'newSource',
 		'kind',
 		'target',
+		'viewTarget',
+		'changeEntry',
 		'change',
 		'applied',
 		'codeChangeResult',
@@ -45,10 +51,13 @@ GtLRefactoringChange class >> fromChange: aRefactoryChange matchingChange: aMatc
 
 { #category : #accessing }
 GtLRefactoringChange >> appliedDiffNote [
-	"Explain that the applied diff is the one of the code change result, which can contain more than my change"
+	"Explain that the applied diff is the one of the change result, which can contain more than my change"
 
 	| aTarget |
 	codeChangeResult ifNil: [ ^ '' ].
+	codeChangeResult isLepiterChangeResult
+		ifTrue: [ ^ 'Applied: the change recorded for the ' , codeChangeResult llmChangeTarget
+				, ' when the refactoring was applied.' ].
 	aTarget := codeChangeResult isMethodChangeResult
 			ifTrue: [ codeChangeResult targetMethodReference methodSignature ]
 			ifFalse: [ codeChangeResult targetClassName asString ].
@@ -61,12 +70,7 @@ GtLRefactoringChange >> appliedDiffNote [
 GtLRefactoringChange >> asChangeEntry [
 	"Return the entry that lists me in the groups of changes of a report"
 
-	^ (self matchingChange
-		ifNil: [ GtLRefactoringOtherChangeEntry new target: target asString ]
-		ifNotNil: [ :aChange | aChange gtLlmNewChangeEntry ])
-		kind: kind;
-		newSource: newSource;
-		yourself
+	^ changeEntry ifNil: [ self newChangeEntry ]
 ]
 
 { #category : #accessing }
@@ -83,9 +87,9 @@ GtLRefactoringChange >> changeDescription [
 
 { #category : #accessing }
 GtLRefactoringChange >> codeChangeResult [
-	"Return the GtLCodeChangeResult describing what my change did to the image once the preview was applied,
-	or nil if the preview was not applied or my change did not lead to a code change result
-	(for example a protocol change, or a change that was not applied because applying failed before it)"
+	"Return the change result (a GtLCodeChangeResult, or a GtLLepiterSnippetChangeResult for a Lepiter change) describing what my change did once the preview was applied,
+	or nil if the preview was not applied or my change did not lead to a change result
+	(for example a protocol change, an unchanged snippet, or a change that was not applied because applying failed before it)"
 
 	^ codeChangeResult
 ]
@@ -140,6 +144,7 @@ GtLRefactoringChange >> gtDetailsFor: aView [
 		priority: 5;
 		items: [ {'Kind' -> self kind.
 				'Target' -> self target.
+				'Shown as' -> self gtViewChangeTarget.
 				'Description' -> self changeDescription.
 				'New source' -> self newSource.
 				'Applied' -> self isApplied.
@@ -192,6 +197,14 @@ GtLRefactoringChange >> gtDisplayOn: aStream [
 ]
 
 { #category : #accessing }
+GtLRefactoringChange >> gtViewChangeTarget [
+	"Return how the views name what my change affects: my target, except for a snippet, which is named by its type, the start of its content and its page, as its change result is.
+	It is computed when I am created, since the snippet changes once the preview is applied"
+
+	^ viewTarget ifNil: [ target ]
+]
+
+{ #category : #accessing }
 GtLRefactoringChange >> hasNewSource [
 	^ newSource notNil
 ]
@@ -202,14 +215,18 @@ GtLRefactoringChange >> initializeFromChange: aRefactoryChange [
 	changeDescription := aRefactoryChange gtLlmChangeDescription.
 	kind := aRefactoryChange gtLlmChangeKind.
 	target := aRefactoryChange gtLlmChangeTarget.
-	newSource := aRefactoryChange gtLlmNewSource
+	viewTarget := aRefactoryChange gtLlmViewChangeTarget.
+	newSource := aRefactoryChange gtLlmNewSource.
+	self recordChangeEntryOfSnippet
 ]
 
 { #category : #initialization }
 GtLRefactoringChange >> initializeFromChange: aRefactoryChange matchingChange: aMatchingChange [
 	self initializeFromChange: aRefactoryChange.
 	matchingChange := aMatchingChange.
-	target := aMatchingChange gtLlmChangeTarget
+	target := aMatchingChange gtLlmChangeTarget.
+	viewTarget := aMatchingChange gtLlmViewChangeTarget.
+	self recordChangeEntryOfSnippet
 ]
 
 { #category : #accessing }
@@ -241,17 +258,19 @@ GtLRefactoringChange >> llmJsonObjectIncludingSources: aBoolean [
 ]
 
 { #category : #applying }
-GtLRefactoringChange >> markAppliedWithCodeChangeResults: aCollectionOfCodeChangeResults [
-	"The preview I belong to was applied and produced aCollectionOfCodeChangeResults.
-	Keep the one describing the method or class that my change modified.
-	Several of my siblings can share a code change result, for example when several slots of the same class change"
+GtLRefactoringChange >> markAppliedWithCodeChangeResults: aCollectionOfCodeChangeResults lepiterChangeResultsBySnippet: anIdentityDictionary [
+	"The preview I belong to was applied. Keep the change result that describes what my change did:
+	- a Le change gets the result of its own snippet, from anIdentityDictionary (live snippet -> result) built while applying: two databases can hold the same uids, so it is not matched by uid. A snippet whose content did not change has no result;
+	- the other changes get the code change result of the method or class they modified, from aCollectionOfCodeChangeResults. Several of my siblings can share a code change result, for example when several slots of the same class change"
 
 	applied := true.
 	codeChangeResult := self matchingChange
 			ifNotNil: [ :aChange | 
-				aCollectionOfCodeChangeResults
-					detect: [ :each | aChange gtLlmMatchesCodeChangeResult: each ]
-					ifNone: [ nil ] ]
+				aChange gtLlmChangedSnippet
+					ifNotNil: [ :aSnippet | anIdentityDictionary at: aSnippet ifAbsent: [ nil ] ]
+					ifNil: [ aCollectionOfCodeChangeResults
+							detect: [ :each | aChange gtLlmMatchesCodeChangeResult: each ]
+							ifNone: [ nil ] ] ]
 ]
 
 { #category : #accessing }
@@ -261,9 +280,27 @@ GtLRefactoringChange >> matchingChange [
 	^ matchingChange ifNil: [ change ]
 ]
 
+{ #category : #private }
+GtLRefactoringChange >> newChangeEntry [
+	^ (self matchingChange
+		ifNil: [ GtLRefactoringOtherChangeEntry new target: target asString ]
+		ifNotNil: [ :aChange | aChange gtLlmNewChangeEntry ])
+		kind: kind;
+		newSource: newSource;
+		yourself
+]
+
 { #category : #accessing }
 GtLRefactoringChange >> newSource [
 	^newSource
+]
+
+{ #category : #initialization }
+GtLRefactoringChange >> recordChangeEntryOfSnippet [
+	"The entry of a Le change records where its snippet is now: once the preview is applied, the snippet can be elsewhere or removed. The entries of the other changes hold names only and are made when asked"
+
+	changeEntry := self matchingChange gtLlmChangedSnippet
+			ifNotNil: [ self newChangeEntry ]
 ]
 
 { #category : #accessing }

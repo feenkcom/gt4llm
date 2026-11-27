@@ -62,6 +62,95 @@ GtLMagritteToolForClassRenameExamples >> appliedRenameListsChangedSnippets [
 	^ applied
 ]
 
+{ #category : #examples }
+GtLMagritteToolForClassRenameExamples >> appliedRenameRecordsSnippetChangeResults [
+	"A class rename that changes a snippet, and its copy (same uids) in another database: each Le change is linked, by identity, to the result of its own snippet. The results hold snapshots: the applied diff, the report entries and the Code changes view come from them, also once the page is changed later"
+
+	<gtExample>
+	| transformations namespace aRenameChange pages snippets preview applied leChanges lepiterChanges results anEntry |
+	[ self installClassFixtures.
+	transformations := GtLCodeTransformations new
+			transformations: {GtLRenameClassSpecification new
+						className: self targetName;
+						newClassName: self renamedTargetName;
+						yourself}.
+	namespace := transformations applyRefactoring.
+	namespace changes
+		gtAllChangesDo: [ :each | (each isKindOf: RBRenameClassChange) ifTrue: [ aRenameChange := each ] ].
+	pages := #('Using the target' 'Copy of the page')
+			collect: [ :aTitle | 
+				| aPage |
+				aPage := LePage named: aTitle.
+				LeDatabase new addPage: aPage.
+				aPage addSnippet: (LeTextSnippet string: 'Intro').
+				aPage ].
+	snippets := pages
+			collect: [ :aPage | 
+				| aSnippet |
+				aSnippet := LePharoSnippet code: self targetName , ' new'.
+				aPage addSnippet: aSnippet.
+				aSnippet ].
+	snippets second uid: snippets first uid.
+	snippets
+		do: [ :aSnippet | 
+			aRenameChange
+				addChange: (LeSnippetChange new
+						snippet: aSnippet;
+						newSource: self renamedTargetName , ' new';
+						yourself) ].
+	preview := GtLRefactoringPreview
+			namespace: namespace
+			refactoringName: transformations refactoringName
+			refactoringDescription: transformations refactoringDescription
+			changeGroupNames: transformations changeGroupNames.
+	leChanges := preview changes
+			select: [ :each | each change isKindOf: LeSnippetChange ].
+	self assert: leChanges size equals: 2.
+	applied := GtRefactoryChangeManager isolatedInstanceDuring: [ preview apply ].
+	self assert: applied status equals: 'applied'.
+	results := applied lepiterChangeResults.
+	self assert: results size equals: 2.
+	self
+		assert: (results
+				allSatisfy: [ :each | each isKindOf: GtLLepiterSnippetModificationResult ]).
+	self
+		assert: (applied codeChangeResults noneSatisfy: [ :each | each isLepiterChangeResult ]).	"Each Le change is linked to the result of its own snippet, though both snippets have the same uid"
+	self assert: leChanges first codeChangeResult == results first.
+	self assert: leChanges second codeChangeResult == results second.
+	self assert: results first newSnippet pageTitle equals: 'Using the target'.
+	self assert: results second newSnippet pageTitle equals: 'Copy of the page'.
+	self
+		assert: results first oldSnippet contentString
+		equals: self targetName , ' new'.
+	self
+		assert: results first newSnippet contentString
+		equals: self renamedTargetName , ' new'.	"The applied diff is the one of the result"
+	self
+		assert: (leChanges first gtAppliedDiffFor: GtPhlowEmptyView new) title asString
+		equals: 'Applied diff'.
+	self
+		assert: (leChanges first appliedDiffNote
+				includesSubstring: results first llmChangeTarget).
+	self assert: results first asDiffElement notNil.	"The Code changes view lists the code and the snippet changes"
+	self assert: (applied allChangeResults includes: results first).
+	self
+		assert: (applied gtChangesFor: GtPhlowEmptyView new) title asString
+		equals: 'Code changes'.	"The report entries come from the snapshots, so a later change to the page does not change them"
+	pages first title: 'Renamed later'.
+	snippets first removeSelf.
+	lepiterChanges := applied report changeGroups lepiterChanges.
+	self assert: lepiterChanges totalSnippetsCount equals: 2.
+	self assert: lepiterChanges totalPagesCount equals: 2.
+	anEntry := lepiterChanges entries
+			detect: [ :each | each pageTitle = 'Using the target' ].
+	self assert: anEntry kind equals: 'modified snippet'.
+	self assert: anEntry position equals: 2.
+	self assert: anEntry snippetUid equals: snippets first uid uidString.
+	self assert: anEntry newSource equals: self renamedTargetName , ' new' ]
+		ensure: [ self removeFixtures ].
+	^ applied
+]
+
 { #category : #fixtures }
 GtLMagritteToolForClassRenameExamples >> classNamed: aString [
 	^ Smalltalk globals at: aString asSymbol ifAbsent: [ nil ]
