@@ -8,6 +8,39 @@ Class {
 }
 
 { #category : #examples }
+GtLMethodsSearchResultExamples >> methodFilterResultViewIsBounded [
+	<gtExample>
+	| methods filter data |
+	methods := Object methods.
+	50
+		to: 51
+		do: [ :size | 
+			filter := GtSearchFixedMethodsFilter new methods: (methods first: size).
+			data := (filter llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData
+					llmJsonData at: 'methodMatches'.
+			self assert: (data at: 'foundMethods') size equals: 50.
+			self assert: (data at: 'mayHaveMore') equals: size = 51 ].
+	^ filter
+]
+
+{ #category : #examples }
+GtLMethodsSearchResultExamples >> methodGroupStreamDataViewPreservesStream [
+	<gtExample>
+	| methods stream data |
+	methods := {GtSearchFilter >> #result.
+			GtSearchMethodsFilter class >> #resultType}.
+	stream := (GtSearchFixedMethodsFilter new methods: methods) result.
+	data := (stream llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData
+			llmJsonData at: 'methodMatches'.
+	self
+		assert: ((data at: 'foundMethods') collect: [ :each | each at: 'classSide' ]) asArray
+		equals: #(false true).
+	self assert: (data at: 'mayHaveMore') equals: false.
+	self assert: stream toArray wait equals: methods.
+	^ stream asyncSimilarCopy
+]
+
+{ #category : #examples }
 GtLMethodsSearchResultExamples >> methodsSearchResultCreation [
 	<gtExample>
 	| references result |
