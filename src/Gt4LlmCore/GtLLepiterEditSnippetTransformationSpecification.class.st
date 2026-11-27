@@ -46,7 +46,7 @@ GtLLepiterEditSnippetTransformationSpecification >> targetSnippet [
 
 	^ (GtLLepiterSnippetLocator database: self database)
 		snippetWithUid: (self snippetUid ifNotNil: [ :anUid | anUid uidString ])
-		pageUid: self pageUid asString36
+		pageUid: self pageUidString
 		databaseId: nil
 		ifFound: [ :aSnippet | aSnippet ]
 		ifNone: [ :aProblem | Error signal: aProblem errorMessage ]

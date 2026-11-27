@@ -245,13 +245,17 @@ GtLRefactoringChange >> kind [
 
 { #category : #converting }
 GtLRefactoringChange >> llmJsonObjectIncludingSources: aBoolean [
-	"Describe me in a preview that lists its changes one by one. Properties without a value are left out, and so is the new source when it is not wanted"
+	"Describe me in a preview that lists its changes one by one. Properties without a value are left out, and so is the new source when it is not wanted. The removal of a snippet names the descendants removed with it"
 
 	| json |
 	json := NeoJSONObject new.
 	json at: 'changeDescription' put: changeDescription.
 	kind ifNotNil: [ :aKind | json at: 'kind' put: aKind ].
 	target ifNotNil: [ :aTarget | json at: 'target' put: aTarget asString ].
+	changeEntry
+		ifNotNil: [ :anEntry | 
+			anEntry removedChildSnippetUids
+				ifNotNil: [ :theUids | json at: 'removedChildSnippetUids' put: theUids ] ].
 	(aBoolean and: [ newSource notNil ])
 		ifTrue: [ json at: 'newSource' put: newSource ].
 	^ json

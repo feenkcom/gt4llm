@@ -24,10 +24,10 @@ GtLLepiterPageCreateDomainObject >> databaseId: aString [
 { #category : #magritte }
 GtLLepiterPageCreateDomainObject >> databaseIdDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Database id';
 		accessor: #databaseId;
+		comment: 'The id of the database of the page.';
 		beRequired
 ]
 
@@ -60,6 +60,21 @@ GtLLepiterPageCreateDomainObject >> page: aPage [
 ]
 
 { #category : #accessing }
+GtLLepiterPageCreateDomainObject >> pageTitle [
+	^ title
+]
+
+{ #category : #'accessing - descriptions' }
+GtLLepiterPageCreateDomainObject >> pageTitleDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Page title';
+		accessor: #pageTitle;
+		comment: 'The title of the page.';
+		beRequired
+]
+
+{ #category : #accessing }
 GtLLepiterPageCreateDomainObject >> pageUid [
 	^ pageUid
 ]
@@ -72,10 +87,10 @@ GtLLepiterPageCreateDomainObject >> pageUid: aString [
 { #category : #magritte }
 GtLLepiterPageCreateDomainObject >> pageUidDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Page uid';
 		accessor: #pageUid;
+		comment: 'The id of the new page (base 36).';
 		beRequired
 ]
 
@@ -92,10 +107,10 @@ GtLLepiterPageCreateDomainObject >> status: aString [
 { #category : #magritte }
 GtLLepiterPageCreateDomainObject >> statusDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Status';
 		accessor: #status;
+		comment: 'created.';
 		beRequired
 ]
 
@@ -107,14 +122,4 @@ GtLLepiterPageCreateDomainObject >> title [
 { #category : #accessing }
 GtLLepiterPageCreateDomainObject >> title: aString [
 	title := aString
-]
-
-{ #category : #magritte }
-GtLLepiterPageCreateDomainObject >> titleDescription [
-	<magritteDescription>
-
-	^ MAStringDescription new
-		label: 'Title';
-		accessor: #title;
-		beRequired
 ]

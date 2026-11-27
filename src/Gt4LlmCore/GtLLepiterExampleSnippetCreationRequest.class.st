@@ -36,10 +36,10 @@ GtLLepiterExampleSnippetCreationRequest >> exampleClassName: aString [
 { #category : #magritte }
 GtLLepiterExampleSnippetCreationRequest >> exampleClassNameDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Example class name';
 		accessor: #exampleClassName;
+		comment: 'The name of the class that defines the example method.';
 		beRequired
 ]
 
@@ -56,10 +56,10 @@ GtLLepiterExampleSnippetCreationRequest >> exampleMethodName: aString [
 { #category : #magritte }
 GtLLepiterExampleSnippetCreationRequest >> exampleMethodNameDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Example method name';
 		accessor: #exampleMethodName;
+		comment: 'The selector of the example method.';
 		beRequired
 ]
 

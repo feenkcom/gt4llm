@@ -107,27 +107,28 @@ GtLSmalltalkCodeEvaluationResultExamples >> resultWithLepiterPageReferenceDataVi
 	<return: #Dictionary>
 	| result compositeView dataBlock jsonData expectedPlaygroundPageReference expectedJson page |
 	result := self resultWithLepiterPageReference.
-	
+
 	compositeView := result llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 2.
-	
+
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
-	
+
 	jsonData := dataBlock compositeJsonData.
-	page := self theDatabase pages detect: [ :each | each title = 'SmallInteger Page' ].
-	
+	page := self theDatabase pages
+			detect: [ :each | each title = 'SmallInteger Page' ].
+
 	expectedPlaygroundPageReference := NeoJSONObject new
-		at: 'databaseId' put: self theDatabase primaryDB uuidString;
-		at: 'pageId' put: page uid asString36;
-		yourself.
-	
-	expectedJson := self expectedSimpleResultJsonData 
-		at: 'playgroundPageReference' put: expectedPlaygroundPageReference;
-		yourself.
-	
+			at: 'databaseId' put: self theDatabase primaryDB uuidString;
+			at: 'pageUid' put: page uid asString36;
+			yourself.
+
+	expectedJson := self expectedSimpleResultJsonData
+			at: 'playgroundPageReference' put: expectedPlaygroundPageReference;
+			yourself.
+
 	self assert: jsonData equals: expectedJson.
-	
+
 	^ jsonData
 ]
 

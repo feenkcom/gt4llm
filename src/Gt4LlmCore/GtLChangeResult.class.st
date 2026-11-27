@@ -63,6 +63,13 @@ GtLChangeResult >> isLepiterChangeResult [
 	^ false
 ]
 
+{ #category : #testing }
+GtLChangeResult >> isReportedOnItsOwn [
+	"Return whether a report lists me as a change of its own. A snippet removed with an ancestor is listed in the entry of that ancestor"
+
+	^ true
+]
+
 { #category : #refactoring }
 GtLChangeResult >> llmChangeEntry [
 	"Return the entry that lists me in the groups of changes of an applied refactoring"

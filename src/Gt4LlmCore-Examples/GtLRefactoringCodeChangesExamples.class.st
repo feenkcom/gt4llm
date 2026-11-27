@@ -166,7 +166,7 @@ GtLRefactoringCodeChangesExamples >> failedRefactoringReportsAppliedChanges [
 
 { #category : #'examples - lepiter' }
 GtLRefactoringCodeChangesExamples >> lepiterChangesAreRecordedFromSnapshots [
-	"Hand-made Le changes (refactorings produce only modifications today): a removal of a snippet with a child, a modification and an addition, on an in-memory database. The removal also reports the child, linked to the removed snippet. Each Le change is linked to the result of its own snippet.
+	"Hand-made Le changes (refactorings produce only modifications today): a removal of a snippet with a child, a modification and an addition, on an in-memory database. The removal also has a change result for the child, linked to the removed snippet; the entries and the JSON list the child only in the removedChildSnippetUids of the removed snippet. Each Le change is linked to the result of its own snippet.
 	The preview recorded its entries and view targets before applying, so they still name the removed snippet. A page report lists the snippets in their order before the change, and the added snippet after them"
 
 	<gtExample>
@@ -235,9 +235,11 @@ GtLRefactoringCodeChangesExamples >> lepiterChangesAreRecordedFromSnapshots [
 		assert: (anAppliedRefactoring changeEntries collect: [ :each | each snippetUid ])
 				asArray
 		equals: {removed uid uidString.
-				child uid uidString.
 				modified uid uidString.
 				added uid uidString}.
+	self
+		assert: anAppliedRefactoring changeEntries first removedChildSnippetUids
+		equals: {child uid uidString}.
 	aPageReport := GtLRefactoringLepiterPageReport
 			report: nil
 			pageUid: aPage uidString
@@ -246,13 +248,12 @@ GtLRefactoringCodeChangesExamples >> lepiterChangesAreRecordedFromSnapshots [
 	self
 		assert: (aPageReport entries collect: [ :each | each snippetUid ]) asArray
 		equals: {removed uid uidString.
-				child uid uidString.
 				modified uid uidString.
 				added uid uidString}.
 	self
 		assert: ((anAppliedRefactoring report llmJsonObject at: 'codeChanges')
 				collect: [ :each | each at: 'kind' ])
-		equals: #('removed snippet' 'removed snippet' 'modified snippet' 'added snippet').
+		equals: #('removed snippet' 'modified snippet' 'added snippet').
 	self
 		assert: aPage children asArray
 		equals: {modified.

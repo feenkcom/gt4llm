@@ -3,6 +3,8 @@ I list a changed Lepiter snippet by its uid. I hold no snippet, only the values 
 
 - A previewed change gives me from the location of its snippet when the preview is made ({{gtMethod:GtLRefactoringSnippetChangeEntry class>>#fromSnippet:}});
 - an applied change gives me from the snapshot of its snippet change result ({{gtMethod:GtLRefactoringSnippetChangeEntry class>>#fromSnippetWithContent:}}).
+
+The entry of a removed snippet also names the descendants removed with it, depth first (`removedChildSnippetUids`), as removeLepiterSnippets answers; those descendants get no entry of their own ({{gtMethod:GtLRefactoringResult>>#reportedChangeResults}}).
 "
 Class {
 	#name : #GtLRefactoringSnippetChangeEntry,
@@ -13,7 +15,8 @@ Class {
 		'pageUid',
 		'pageTitle',
 		'position',
-		'snippetUid'
+		'snippetUid',
+		'removedChildSnippetUids'
 	],
 	#category : #'Gt4LlmCore-Refactorings'
 }
@@ -43,7 +46,11 @@ GtLRefactoringSnippetChangeEntry class >> fromSnippetWithContent: aSnippetWithCo
 
 { #category : #converting }
 GtLRefactoringSnippetChangeEntry >> addTargetPropertiesTo: aJsonObject [
-	self snippetUid ifNotNil: [ :anUid | aJsonObject at: 'snippetUid' put: anUid ]
+	"A removed snippet lists the descendants removed with it, as removeLepiterSnippets does"
+
+	self snippetUid ifNotNil: [ :anUid | aJsonObject at: 'snippetUid' put: anUid ].
+	self removedChildSnippetUids
+		ifNotNil: [ :theUids | aJsonObject at: 'removedChildSnippetUids' put: theUids ]
 ]
 
 { #category : #accessing }
@@ -146,6 +153,21 @@ GtLRefactoringSnippetChangeEntry >> position [
 { #category : #accessing }
 GtLRefactoringSnippetChangeEntry >> position: anIntegerOrNil [
 	position := anIntegerOrNil
+]
+
+{ #category : #accessing }
+GtLRefactoringSnippetChangeEntry >> removedChildSnippetUids [
+	"Return the ids of the descendants removed with my snippet, depth first, or nil when it had none or was not removed"
+
+	^ removedChildSnippetUids
+]
+
+{ #category : #accessing }
+GtLRefactoringSnippetChangeEntry >> removedChildSnippetUids: aCollectionOfUids [
+	removedChildSnippetUids := (aCollectionOfUids isNil
+			or: [ aCollectionOfUids isEmpty ])
+			ifTrue: [ nil ]
+			ifFalse: [ aCollectionOfUids asArray ]
 ]
 
 { #category : #accessing }

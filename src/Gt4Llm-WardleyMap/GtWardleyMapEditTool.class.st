@@ -62,12 +62,9 @@ GtWardleyMapEditTool >> privatePerformToolCall: aToolCall inContext: anExecution
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
 					arguments: arguments;
 					missingArgument: 'pageUid' ].
-	pageUid := [ UUID fromString36: pageUidString ]
-			on: Error
-			do: [ :error | 
-				^ GtLExceptionDomainObject new
-					freeze: error;
-					errorReason: 'Invalid page uid' ].
+	pageUid := GtLLepiterSnippetLocator
+			pageUuidFrom: pageUidString
+			ifInvalid: [ :aProblem | ^ aProblem ].
 	snippetUidString := (arguments
 			at: 'snippetUid'
 			ifAbsent: [ ^ GtLMissingArgumentDomainObject new
@@ -94,7 +91,7 @@ GtWardleyMapEditTool >> privatePerformToolCall: aToolCall inContext: anExecution
 				ifEmpty: [ ^ GtLProblemDomainObject new
 						description: 'Could not locate snippet with id ' , snippetUid uidString ] ]
 		ifAbsent: [ ^ GtLProblemDomainObject new
-				description: 'Could not locate page with id ' , pageUid asString ].
+				description: 'Could not locate page with id ' , pageUidString asString trimBoth ].
 	[ | idMap |
 	snippet := snippets anyOne.
 	map := snippet wardleyMap.
@@ -110,7 +107,7 @@ GtWardleyMapEditTool >> privatePerformToolCall: aToolCall inContext: anExecution
 				errorReason: 'Error while applying Wardley map change' ].
 	^ GtLLepiterSnippetDomainObject new
 		status: 'updated';
-		pageUid: pageUid asString;
+		pageUid: pageUid asString36;
 		snippetUid: snippet uidString;
 		snippet: snippet
 ]

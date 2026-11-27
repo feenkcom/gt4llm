@@ -163,6 +163,30 @@ GtLLepiterSnippetChangeResultExamples >> modificationResult [
 ]
 
 { #category : #examples }
+GtLLepiterSnippetChangeResultExamples >> pageUuidFromBothForms [
+	"Every Lepiter tool reads a page id with GtLLepiterSnippetLocator class>>#pageUuidFrom:ifInvalid:. It takes base 36, as the tools give it, and the dashed form of the UUID, as the stored page JSON shows it, with spaces around. A missing or invalid id goes to the block, with an errorMessage"
+
+	<gtExample>
+	| aUuid parse |
+	aUuid := UUID new.
+	parse := [ :aString | 
+		GtLLepiterSnippetLocator
+			pageUuidFrom: aString
+			ifInvalid: [ :aProblem | aProblem errorMessage ] ].
+	self assert: (parse value: aUuid asString36) equals: aUuid.
+	self assert: (parse value: aUuid asString) equals: aUuid.
+	self assert: (parse value: ' ' , aUuid asString , ' ') equals: aUuid.
+	self assert: (parse value: nil) equals: 'Missing page uid'.
+	self assert: (parse value: '  ') equals: 'Missing page uid'.
+	self
+		assert: ((parse value: 'not base 36!') includesSubstring: 'Invalid page uid').
+	self
+		assert: ((parse value: 'zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz')
+				includesSubstring: 'Invalid page uid').
+	^ aUuid
+]
+
+{ #category : #examples }
 GtLLepiterSnippetChangeResultExamples >> pageWithSnippets [
 	"An in-memory database with a page: a text snippet with a nested Pharo snippet, then an example snippet"
 

@@ -44,6 +44,28 @@ GtLLepiterTransformationSpecificationExamples >> appliedSnippetTransformations [
 ]
 
 { #category : #examples }
+GtLLepiterTransformationSpecificationExamples >> dashedPageUidIsAccepted [
+	"A specification can name its page by the dashed form of the page UUID too"
+
+	<gtExample>
+	| aPage aSpecification aNamespace |
+	aPage := self pageWithTextSnippet.
+	aSpecification := GtLLepiterAddTextSnippetTransformationSpecification new
+			database: aPage database;
+			pageUidString: aPage uid asString;
+			newSnippetText: (GtLMarkdown new content: 'A new text');
+			yourself.
+	self
+		assert: aSpecification refactoringDescription
+		equals: 'Add text snippet to page Transformations page'.
+	self assert: aSpecification pageUid equals: aPage uid.
+	aNamespace := aSpecification namespaceWithAppliedRefactoring.
+	self assert: aNamespace changes changes size equals: 1.
+	self assert: aNamespace changes changes first gtLlmPageOfParent == aPage.
+	^ aSpecification
+]
+
+{ #category : #examples }
 GtLLepiterTransformationSpecificationExamples >> pageWithTextSnippet [
 	"A page with one text snippet, in an in-memory database"
 

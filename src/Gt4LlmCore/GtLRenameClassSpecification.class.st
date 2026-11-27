@@ -72,7 +72,7 @@ GtLRenameClassSpecification >> classToRenameIfAbsent: anAbsentBlock [
 { #category : #magritte }
 GtLRenameClassSpecification >> descriptionContainer [
 	^ super descriptionContainer
-		comment: 'Renames the class or trait className to newClassName, rewriting its references in all methods, including symbols such as #MyClass, and in all Lepiter snippets; comments, strings and plain text are not changed. Put the other transformations on the renamed class before the RenameClass, with its current name. A preview with a RenameClass lists its changes in groups.';
+		comment: 'Renames the class or trait className to newClassName, rewriting its references in all methods, including symbols such as #MyClass, and in all Lepiter snippets; comments, strings and plain text are not changed. Put the other transformations on the renamed class before the RenameClass, with its current name. A preview with a RenameClass lists its changes in groups: classChanges, methodChanges and lepiterChanges.';
 		yourself
 ]
 

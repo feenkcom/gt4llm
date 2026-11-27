@@ -24,10 +24,10 @@ GtLLepiterPageRemoveDomainObject >> databaseId: aString [
 { #category : #magritte }
 GtLLepiterPageRemoveDomainObject >> databaseIdDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Database id';
 		accessor: #databaseId;
+		comment: 'The id of the database of the page.';
 		beRequired
 ]
 
@@ -60,6 +60,21 @@ GtLLepiterPageRemoveDomainObject >> page: aPage [
 ]
 
 { #category : #accessing }
+GtLLepiterPageRemoveDomainObject >> pageTitle [
+	^ title
+]
+
+{ #category : #'accessing - descriptions' }
+GtLLepiterPageRemoveDomainObject >> pageTitleDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Page title';
+		accessor: #pageTitle;
+		comment: 'The title of the page.';
+		beRequired
+]
+
+{ #category : #accessing }
 GtLLepiterPageRemoveDomainObject >> pageUid [
 	^ pageUid
 ]
@@ -72,10 +87,10 @@ GtLLepiterPageRemoveDomainObject >> pageUid: aString [
 { #category : #magritte }
 GtLLepiterPageRemoveDomainObject >> pageUidDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Page uid';
 		accessor: #pageUid;
+		comment: 'The id of the removed page (base 36).';
 		beRequired
 ]
 
@@ -92,10 +107,10 @@ GtLLepiterPageRemoveDomainObject >> status: aString [
 { #category : #magritte }
 GtLLepiterPageRemoveDomainObject >> statusDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Status';
 		accessor: #status;
+		comment: 'removed.';
 		beRequired
 ]
 
@@ -107,14 +122,4 @@ GtLLepiterPageRemoveDomainObject >> title [
 { #category : #accessing }
 GtLLepiterPageRemoveDomainObject >> title: aString [
 	title := aString
-]
-
-{ #category : #magritte }
-GtLLepiterPageRemoveDomainObject >> titleDescription [
-	<magritteDescription>
-
-	^ MAStringDescription new
-		label: 'Title';
-		accessor: #title;
-		beRequired
 ]

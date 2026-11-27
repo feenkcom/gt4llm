@@ -4,6 +4,20 @@ Class {
 	#category : #'Gt4LlmCore-Examples-Tools'
 }
 
+{ #category : #examples }
+GtLToolForSearchForLepiterPagesExamples >> blankQueryIsRefused [
+	<gtExample>
+	| call |
+	call := self
+			executeTool: GtLToolForSearchForLepiterPages new
+			withArguments: {'query' -> '  '} asDictionary.
+	self
+		assertMissingArgument: call result targetObject
+		withArgumentName: 'query'
+		errorMessage: 'Missing argument called query'.
+	^ call
+]
+
 { #category : #'examples - data views' }
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupDataViewSerialization [
 	<gtExample>
@@ -31,18 +45,15 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupDataViewSerializat
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForExistingPage [
 	<gtExample>
 	| call targetObject |
-	
 	call := self
-		executeTool: GtLToolForSearchForLepiterPages new
-		withArguments: {
-			'query' -> 'Warmup: understanding the Money classes'.
-			'knowledgeBases' -> { LeDatabase gtBook uuidString }
-		} asDictionary.
+			executeTool: GtLToolForSearchForLepiterPages new
+			withArguments: {'query' -> 'Warmup: understanding the Money classes'.
+					'databaseIds' -> {LeDatabase gtBook uuidString}} asDictionary.
 	targetObject := call result targetObject.
-	
+
 	self assert: (targetObject isKindOf: GtLLepiterPagesDomainObject).
 	self assert: targetObject pages size equals: 1.
-	
+
 	^ call
 ]
 
@@ -50,18 +61,15 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForExistingPage [
 GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMissingPage [
 	<gtExample>
 	| call targetObject |
-	
 	call := self
-		executeTool: GtLToolForSearchForLepiterPages new
-		withArguments: {
-			'query' -> 'NonExistingDocumentationPage42'.
-			'knowledgeBases' -> { LeDatabase gtBook uuidString }
-		} asDictionary.
+			executeTool: GtLToolForSearchForLepiterPages new
+			withArguments: {'query' -> 'NonExistingDocumentationPage42'.
+					'databaseIds' -> {LeDatabase gtBook uuidString}} asDictionary.
 	targetObject := call result targetObject.
-	
+
 	self assert: (targetObject isKindOf: GtLLepiterPagesDomainObject).
 	self assert: targetObject pages equals: #().
-	
+
 	^ call
 ]
 
@@ -71,23 +79,20 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForMultipleKnowled
 	| call targetObject logicalDatabase defaultDatabase |
 	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase.
 	defaultDatabase := logicalDatabase databases
-		detect: [ :each | each databaseName = 'default' ]
-		ifNone: [ LeDatabase gtBook ].
-	
+			detect: [ :each | each databaseName = 'default' ]
+			ifNone: [ LeDatabase gtBook ].
+
 	call := self
-		executeTool: GtLToolForSearchForLepiterPages new
-		withArguments: {
-			'query' -> 'Warmup: understanding the Money classes'.
-			'knowledgeBases' -> {
-				defaultDatabase uuidString.
-				LeDatabase gtBook uuidString
-			}
-		} asDictionary.
+			executeTool: GtLToolForSearchForLepiterPages new
+			withArguments: {'query' -> 'Warmup: understanding the Money classes'.
+					'databaseIds'
+						-> {defaultDatabase uuidString.
+								LeDatabase gtBook uuidString}} asDictionary.
 	targetObject := call result targetObject.
-	
+
 	self assert: (targetObject isKindOf: GtLLepiterPagesDomainObject).
 	self assert: targetObject pages isNotEmpty.
-	
+
 	^ call
 ]
 
@@ -96,14 +101,47 @@ GtLToolForSearchForLepiterPagesExamples >> documentationLookupForWrongKnowledgeB
 	<gtExample>
 	| call |
 	call := self
-		executeTool: GtLToolForSearchForLepiterPages new
-		withArguments: {
-			'query' -> 'Warmup: understanding the Money classes'.
-			'knowledgeBases' -> { 'missing-uuid-42' }
-		} asDictionary.
+			executeTool: GtLToolForSearchForLepiterPages new
+			withArguments: {'query' -> 'Warmup: understanding the Money classes'.
+					'databaseIds' -> {'missing-uuid-42'}} asDictionary.
+	self assert: call result targetObject isErrorDomainObject.
 	self
-		assertMissingObject: call result targetObject
-		withObjectName: 'missing-uuid-42'
-		errorMessage: 'missing-uuid-42 is not found'.
+		assert: call result targetObject errorMessage
+		equals: 'Could not locate the database with id missing-uuid-42. The lepiterKnowledgeBases tool lists the databases and their ids.'.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForSearchForLepiterPagesExamples >> searchWithoutDatabaseIdsSearchesAllDatabases [
+	"databaseIds is optional: without it, every database of the logical database is searched. Pages are given with their base 36 pageUid"
+
+	<gtExample>
+	| firstDatabase secondDatabase firstPage secondPage tool call pages schema |
+	firstDatabase := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+	secondDatabase := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+	firstPage := firstDatabase pageBuilder
+			title: 'Searched page in the first database';
+			add.
+	secondPage := secondDatabase pageBuilder
+			title: 'Searched page in the second database';
+			add.
+	tool := GtLToolForSearchForLepiterPages new
+			database: (LeLogicalDatabase new
+					primaryDB: firstDatabase;
+					addDB: secondDatabase;
+					yourself);
+			yourself.
+	call := self
+			executeTool: tool
+			withArguments: {'query' -> 'Searched page'} asDictionary.
+	pages := (self jsonOf: call) at: 'pages'.
+	self
+		assert: (pages collect: [ :each | (each at: 'databaseId') -> (each at: 'pageUid') ])
+				asSet
+		equals: {firstDatabase uuidString -> firstPage uid asString36.
+				secondDatabase uuidString -> secondPage uid asString36} asSet.
+	schema := tool parametersJsonSchemaDictionary.
+	self assert: (schema at: 'required') asArray equals: #('query').
+	self assert: ((schema at: 'properties') includesKey: 'databaseIds').
 	^ call
 ]

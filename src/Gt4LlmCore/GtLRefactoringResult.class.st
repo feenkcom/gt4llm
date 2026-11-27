@@ -47,9 +47,9 @@ GtLRefactoringResult >> allChangeResults [
 
 { #category : #accessing }
 GtLRefactoringResult >> changeEntries [
-	"Return the entries that list the applied changes in the groups of a report: the code change results and the Lepiter snippet change results. Both are built from snapshots, also after a failure, when they describe the changes made before the error"
+	"Return the entries that list the applied changes in the groups of a report: the code change results and the Lepiter snippet change results, except the snippets removed with an ancestor, which the entry of that ancestor names. Both are built from snapshots, also after a failure, when they describe the changes made before the error"
 
-	^ (self allChangeResults collect: [ :each | each llmChangeEntry ]) asArray
+	^ (self reportedChangeResults collect: [ :each | each llmChangeEntry ]) asArray
 ]
 
 { #category : #accessing }
@@ -278,6 +278,13 @@ GtLRefactoringResult >> reportFor: aDisplayOptions [
 	"Return a report of my changes built for the display options of a tool call"
 
 	^ GtLRefactoringResultReport refactoring: self displayOptions: aDisplayOptions
+]
+
+{ #category : #accessing }
+GtLRefactoringResult >> reportedChangeResults [
+	"Return the change results that a report lists, each as a change of its own: all of them, except the snippets removed with an ancestor, which the result of that ancestor names"
+
+	^ self allChangeResults select: [ :each | each isReportedOnItsOwn ]
 ]
 
 { #category : #accessing }

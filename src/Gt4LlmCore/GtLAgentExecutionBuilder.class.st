@@ -111,12 +111,14 @@ GtLAgentExecutionBuilder >> locateDatabaseForReference: aPageReference [
 ]
 
 { #category : #running }
-GtLAgentExecutionBuilder >> locatePageForReference: aPageReference [ 
-	| targetDatabase |
+GtLAgentExecutionBuilder >> locatePageForReference: aPageReference [
+	| targetDatabase pageUuid |
 	targetDatabase := self locateDatabaseForReference: aPageReference.
-	^ targetDatabase 
-		ifNotNil: [ :aDatabase |
-			aDatabase pageWithID: aPageReference pageId ifAbsent: [ nil ] ]
+	targetDatabase ifNil: [ ^ nil ].
+	pageUuid := GtLLepiterSnippetLocator
+			pageUuidFrom: aPageReference pageUid
+			ifInvalid: [ :aProblem | ^ nil ].
+	^ targetDatabase pageWithID: pageUuid ifAbsent: [ nil ]
 ]
 
 { #category : #printing }
@@ -146,20 +148,20 @@ GtLAgentExecutionBuilder >> startFromParentAgent: aParentAgent inContext: anExec
 
 { #category : #running }
 GtLAgentExecutionBuilder >> validateExecutionIfErrorDo: anErrorBlock [
-	agentCreationReauest instructionPageReferences do: [ :aPageReference | 
-		| targetDatabase |
-		targetDatabase := self locateDatabaseForReference: aPageReference.
-		targetDatabase ifNil: [
-			^ GtLProblemDomainObject new
-				description: ('Database with id {1} not found' format: {
-					aPageReference databaseId asString })].
-				
-		(targetDatabase 
-			pageWithID: aPageReference pageId
-			ifAbsent: [ 
-				^ GtLProblemDomainObject new
-					description: ('Page with with id {1} not found in database with id {2}' format: {
-						aPageReference pageId asString,
-						aPageReference databaseId asString}) ]) ]
-	
+	agentCreationReauest instructionPageReferences
+		do: [ :aPageReference | 
+			| targetDatabase pageUuid |
+			targetDatabase := self locateDatabaseForReference: aPageReference.
+			targetDatabase
+				ifNil: [ ^ GtLProblemDomainObject new
+						description: ('Database with id {1} not found' format: {aPageReference databaseId asString}) ].
+			pageUuid := GtLLepiterSnippetLocator
+					pageUuidFrom: aPageReference pageUid
+					ifInvalid: [ :aProblem | ^ aProblem ].
+			targetDatabase
+				pageWithID: pageUuid
+				ifAbsent: [ ^ GtLProblemDomainObject new
+						description: ('Page with id {1} not found in database with id {2}'
+								format: {aPageReference pageUid asString.
+										aPageReference databaseId asString}) ] ]
 ]

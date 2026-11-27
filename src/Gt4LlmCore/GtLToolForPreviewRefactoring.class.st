@@ -13,7 +13,7 @@ GtLToolForPreviewRefactoring >> description [
 
 The response has refactoringName, refactoringDescription, changesCount, objectId and status (not applied), and lists the changes:
 - usually in changes, each with a changeDescription, a kind, a target and, with includeSources, its newSource;
-- with a RenameClass, in groups: classChanges, methodChanges and lepiterChanges, also when empty, and otherChanges when there are such changes. The renamed class is listed under its new name, with its changed methods only; its direct subclasses and trait users are changed classes, as their definitions name it. The snippets are listed by database and page, with the snippetUid that getLepiterPageContents and editLepiterSnippets take.
+- when a transformation says that it lists its changes in groups (as RenameClass and RenameMethod do), in groups: the groups of all the transformations, also when empty, and otherChanges when there are changes outside them. With a RenameClass, the renamed class is listed under its new name, with its changed methods only; its direct subclasses and trait users are changed classes, as their definitions name it. The snippets are listed by database and page, with the databaseId, pageUid and snippetUid that the snippet tools take.
 Each group has a totalCount, a displayedCount, kindCounts and, when its limit cut it, a nextOffset: getRefactoringChanges lists the rest. lepiterChanges has these counts for snippets, pages and databases.
 
 Invalid transformations answer an errorMessage; an error of the refactoring engine answers an errorReason.

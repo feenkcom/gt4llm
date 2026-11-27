@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'page',
-		'pageId',
+		'pageUid',
 		'databaseId'
 	],
 	#category : #'Gt4LlmCore-Domain Objects'
@@ -22,9 +22,11 @@ GtLLepiterPageReference >> databaseId: anObject [
 { #category : #accessing }
 GtLLepiterPageReference >> databaseIdDescription [
 	<magritteDescription>
-	^ MAStringDescription new 
-		label: 'DatabaseId';
-		accessor: #databaseId
+	^ MAStringDescription new
+		label: 'Database id';
+		accessor: #databaseId;
+		comment: 'The id of the database of the page.';
+		yourself
 ]
 
 { #category : #'gt-views' }
@@ -46,35 +48,37 @@ GtLLepiterPageReference >> page [
 ]
 
 { #category : #accessing }
-GtLLepiterPageReference >> page: anObject [
-	page := anObject.
-	pageId := page uid asString36.
-	databaseId := page database uuidString.
+GtLLepiterPageReference >> page: aPage [
+	page := aPage.
+	pageUid := aPage uid asString36.
+	databaseId := GtLLepiterSnippetReference databaseIdOf: aPage database
 ]
 
 { #category : #accessing }
-GtLLepiterPageReference >> pageId [
-	^ pageId
+GtLLepiterPageReference >> pageUid [
+	^ pageUid
 ]
 
 { #category : #accessing }
-GtLLepiterPageReference >> pageId: anObject [
-	pageId := anObject
+GtLLepiterPageReference >> pageUid: aString [
+	pageUid := aString
 ]
 
-{ #category : #accessing }
-GtLLepiterPageReference >> pageIdDescription [
+{ #category : #magritte }
+GtLLepiterPageReference >> pageUidDescription [
 	<magritteDescription>
-	^ MAStringDescription new 
-		label: 'PageId';
-		accessor: #pageId
+	^ MAStringDescription new
+		label: 'Page uid';
+		accessor: #pageUid;
+		comment: 'The id of the page (base 36).';
+		yourself
 ]
 
 { #category : #printing }
 GtLLepiterPageReference >> printOn: aStream [
 	aStream
-		nextPutAll: 'pageId=';
-		nextPutAll: pageId asString;
+		nextPutAll: 'pageUid=';
+		nextPutAll: pageUid asString;
 		nextPutAll: ', databaseId=';
 		nextPutAll: databaseId asString
 ]

@@ -20,13 +20,11 @@ GtLLepiterTextSnippetCreationRequest >> buildSnippetFor: aTool [
 { #category : #magritte }
 GtLLepiterTextSnippetCreationRequest >> snippetTextDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Snippet text';
-		comment: 'Textual content of the snippet.';
 		accessor: #snippetText;
-		beRequired;
-		yourself
+		comment: 'The text of the snippet: markdown, which can hold Lepiter annotations such as {{gtClass:MyClass}}.';
+		beRequired
 ]
 
 { #category : #validation }

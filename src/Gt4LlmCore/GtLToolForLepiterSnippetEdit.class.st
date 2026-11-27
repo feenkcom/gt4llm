@@ -1,20 +1,18 @@
 Class {
 	#name : #GtLToolForLepiterSnippetEdit,
-	#superclass : #GtLAbstractLepiterSnippetTool,
+	#superclass : #GtLAbstractLepiterTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLToolForLepiterSnippetEdit >> description [
-	^ 'Replaces the text of one Lepiter snippet, identified by its page id (base 36, as getLepiterPageContents gives it) and snippet id. To edit several snippets in one call, use editLepiterSnippets. Only textual snippets (text, pharo, python, shell and other code snippets) have a text; other snippets, such as example or picture snippets, are refused.
-
-The optional databaseId is needed only when the page and snippet ids are in several databases: the response then says so and lists them.
+	^ 'Replaces the whole text of one Lepiter snippet: the string of a text snippet or the code of a code snippet, as getLepiterPageContents with format structure shows them. To edit several snippets in one call, use editLepiterSnippets. Only text and code snippets have a text; other snippets, such as example or picture snippets, are refused.
 
 Example JSON arguments:
-{"snippetEdit": {"pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID", "updatedText": "New text"}}
+{"snippetEdit": {"pageUid": "86t968o90hlfreacjec76wapk", "snippetUid": "SgJekENeTPytZjVknCfulw==", "updatedText": "New text"}}
 
 Example JSON response:
-{"status": "updated", "targetSnippetReference": {"databaseId": "DATABASE_ID", "pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"}}'
+{"status": "updated", "targetSnippetReference": {"databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "86t968o90hlfreacjec76wapk", "snippetUid": "SgJekENeTPytZjVknCfulw=="}}'
 ]
 
 { #category : #private }

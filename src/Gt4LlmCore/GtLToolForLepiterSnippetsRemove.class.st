@@ -1,32 +1,26 @@
 Class {
 	#name : #GtLToolForLepiterSnippetsRemove,
-	#superclass : #GtLAbstractLepiterSnippetTool,
+	#superclass : #GtLAbstractLepiterTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLToolForLepiterSnippetsRemove >> description [
-	^ 'Removes one or more Lepiter snippets, identified by their page ids (base 36, as getLepiterPageContents gives them) and snippet ids. Removing a snippet also removes its child snippets.
+	^ 'Removes Lepiter snippets with all their descendants.
 
-The optional databaseId is needed only when the page and snippet ids are in several databases: the response then says so and lists them.
+The response has one entry per requested snippet, in order: the reference of the removed snippet, with removedChildSnippetUids (its descendants, depth first) when it had some, or an errorMessage. When one fails, the others are still removed. A snippet listed twice, or after one of its ancestors, is answered with an errorMessage saying that it was already removed.
 
 Example JSON arguments:
-{
-  "snippets": [
-    {"pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"},
-    {"databaseId": "DATABASE_ID", "pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"}
-  ]
-}
-
-The response has one entry per requested snippet, in order: the result, or an errorMessage. The result of a snippet that had child snippets lists their uids, depth first, in removedChildSnippetUids. A snippet that is listed after one of its ancestors, or twice, is answered with an errorMessage saying that it was already removed.
+{"snippets": [
+  {"pageUid": "86t968o90hlfreacjec76wapk", "snippetUid": "SgJekENeTPytZjVknCfulw=="},
+  {"databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "4cz39477un3tnbzdfe3lwi475", "snippetUid": "q7Tn0dVbRZ6uJ1cE4yHw2A=="}
+]}
 
 Example JSON response:
-{
-  "snippets": [
-    {"status": "removed", "targetSnippetReference": {"databaseId": "DATABASE_ID", "pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"}, "removedChildSnippetUids": ["CHILD_SNIPPET_ID"]},
-    {"status": "removed", "targetSnippetReference": {"databaseId": "DATABASE_ID", "pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"}}
-  ]
-}'
+{"snippets": [
+  {"status": "removed", "targetSnippetReference": {"databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "86t968o90hlfreacjec76wapk", "snippetUid": "SgJekENeTPytZjVknCfulw=="}, "removedChildSnippetUids": ["bb49pqTrTh+k1tAEnG4H4Q=="]},
+  {"status": "removed", "targetSnippetReference": {"databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "4cz39477un3tnbzdfe3lwi475", "snippetUid": "q7Tn0dVbRZ6uJ1cE4yHw2A=="}}
+]}'
 ]
 
 { #category : #accessing }

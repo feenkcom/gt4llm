@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'databaseName',
-		'uuidString',
+		'databaseId',
 		'pageCount',
 		'storeLocation'
 	],
@@ -11,13 +11,33 @@ Class {
 }
 
 { #category : #'instance creation' }
-GtLLepiterKnowledgeBase class >> forDatabase: aDatabase [ 
-	^ self new 
-			databaseName: aDatabase databaseName;
-			uuidString: aDatabase uuidString;
-			pageCount: aDatabase pageCount;
-			storeLocation: aDatabase storeLocation asString;
-			yourself
+GtLLepiterKnowledgeBase class >> forDatabase: aDatabase [
+	^ self new
+		databaseName: aDatabase databaseName;
+		databaseId: (GtLLepiterSnippetReference databaseIdOf: aDatabase);
+		pageCount: aDatabase pageCount;
+		storeLocation: aDatabase storeLocation asString;
+		yourself
+]
+
+{ #category : #accessing }
+GtLLepiterKnowledgeBase >> databaseId [
+	^ databaseId
+]
+
+{ #category : #accessing }
+GtLLepiterKnowledgeBase >> databaseId: aString [
+	databaseId := aString
+]
+
+{ #category : #magritte }
+GtLLepiterKnowledgeBase >> databaseIdDescription [
+	<magritteDescription>
+	^ MAStringDescription new
+		label: 'Database id';
+		accessor: #databaseId;
+		comment: 'The id of the database, as the other Lepiter tools take it.';
+		beRequired
 ]
 
 { #category : #accessing }
@@ -36,6 +56,7 @@ GtLLepiterKnowledgeBase >> databaseNameDescription [
 	^ MAStringDescription new
 		label: 'Database name';
 		accessor: #databaseName;
+		comment: 'The name of the database.';
 		beRequired
 ]
 
@@ -67,6 +88,7 @@ GtLLepiterKnowledgeBase >> pageCountDescription [
 	^ MANumberDescription new
 		label: 'Pages';
 		accessor: #pageCount;
+		comment: 'The number of pages in the database.';
 		beRequired
 ]
 
@@ -86,24 +108,6 @@ GtLLepiterKnowledgeBase >> storeLocationDescription [
 	^ MAStringDescription new
 		label: 'Store location';
 		accessor: #storeLocation;
-		beRequired
-]
-
-{ #category : #accessing }
-GtLLepiterKnowledgeBase >> uuidString [
-	^ uuidString
-]
-
-{ #category : #accessing }
-GtLLepiterKnowledgeBase >> uuidString: aString [
-	uuidString := aString
-]
-
-{ #category : #magritte }
-GtLLepiterKnowledgeBase >> uuidStringDescription [
-	<magritteDescription>
-	^ MAStringDescription new
-		label: 'UUID';
-		accessor: #uuidString;
+		comment: 'Where the database is stored.';
 		beRequired
 ]

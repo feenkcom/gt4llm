@@ -50,18 +50,18 @@ GtLLepiterPageDomainObjectExamples >> pageCreateDataViewSerialization [
 	domainObject := self basicPageCreateDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
-	
+
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
-	
+
 	expected := Dictionary new
-		at: 'status' put: 'created';
-		at: 'pageUid' put: 'test-page-uid';
-		at: 'title' put: 'Test Page';
-		at: 'databaseId' put: 'test-db-uuid';
-		yourself.
+			at: 'status' put: 'created';
+			at: 'pageUid' put: 'test-page-uid';
+			at: 'pageTitle' put: 'Test Page';
+			at: 'databaseId' put: 'test-db-uuid';
+			yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
-	
+
 	^ dataBlock
 ]
 
@@ -72,17 +72,17 @@ GtLLepiterPageDomainObjectExamples >> pageRemoveDataViewSerialization [
 	domainObject := self basicPageRemoveDomainObject.
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 1.
-	
+
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
-	
+
 	expected := Dictionary new
-		at: 'status' put: 'removed';
-		at: 'pageUid' put: 'test-page-uid';
-		at: 'title' put: 'Test Page';
-		at: 'databaseId' put: 'test-db-uuid';
-		yourself.
+			at: 'status' put: 'removed';
+			at: 'pageUid' put: 'test-page-uid';
+			at: 'pageTitle' put: 'Test Page';
+			at: 'databaseId' put: 'test-db-uuid';
+			yourself.
 	self assertDataBlock: dataBlock hasLlmJsonData: expected.
-	
+
 	^ dataBlock
 ]

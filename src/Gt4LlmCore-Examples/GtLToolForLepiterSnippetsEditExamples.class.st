@@ -89,7 +89,7 @@ GtLToolForLepiterSnippetsEditExamples >> isOfferedInsteadOfTheSingleEdit [
 	self assert: (names includes: 'editLepiterSnippet') not.
 	self assert: (names includes: 'createLepiterSnippets').
 	self assert: (names includes: 'removeLepiterSnippets').
-	self assert: GtLAbstractLepiterSnippetTool isAbstract.
+	self assert: GtLAbstractLepiterTool isAbstract.
 	self assert: GtLToolForLepiterSnippetsEdit isAbstract not.
 	^ names
 ]
@@ -222,16 +222,17 @@ GtLToolForLepiterSnippetsEditExamples >> schemaOfTheEditRequests [
 
 { #category : #examples }
 GtLToolForLepiterSnippetsEditExamples >> snippetToolsUseTheLogicalDatabaseByDefault [
-	"A snippet tool that was given no database, or whose database slot was reset (as when the slot moves between classes), looks pages up in the current logical database"
+	"Every Lepiter tool, for pages and for snippets, that was given no database, or whose database slot was reset (as when the slot moves between classes), looks databases, pages and snippets up in the current logical database"
 
 	<gtExample>
 	| theTools |
-	theTools := {GtLToolForLepiterSnippetsCreate new.
-			GtLToolForLepiterSnippetEdit new.
-			GtLToolForLepiterSnippetsEdit new.
-			GtLToolForLepiterSnippetsRemove new
-				database: nil;
-				yourself}.
+	theTools := (GtLAbstractLepiterTool allSubclasses
+			reject: [ :each | each isAbstract ]) collect: [ :each | each new ].
+	self
+		assert: (theTools collect: [ :each | each name ]) asSet
+		equals: #('lepiterKnowledgeBases' 'searchForLepiterPages' 'getLepiterPageContents' 'createLepiterPage' 'removeLepiterPage' 'createLepiterSnippets' 'editLepiterSnippet' 'editLepiterSnippets' 'removeLepiterSnippets')
+				asSet.
+	theTools first database: nil.
 	self
 		assert: (theTools
 				allSatisfy: [ :each | each database == LeDatabasesRegistry defaultLogicalDatabase ]).

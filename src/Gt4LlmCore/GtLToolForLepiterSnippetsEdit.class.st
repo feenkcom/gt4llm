@@ -5,33 +5,27 @@ I answer a {{gtClass:GtLLepiterSnippetsChangeResult}}: one entry per request, in
 "
 Class {
 	#name : #GtLToolForLepiterSnippetsEdit,
-	#superclass : #GtLAbstractLepiterSnippetTool,
+	#superclass : #GtLAbstractLepiterTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
 { #category : #accessing }
 GtLToolForLepiterSnippetsEdit >> description [
-	^ 'Replaces the text of one or more Lepiter snippets, identified by their page ids (base 36, as getLepiterPageContents gives them) and snippet ids. updatedText is the whole new text of the snippet. Only textual snippets (text, pharo, python, shell and other code snippets) have a text; other snippets, such as example or picture snippets, are refused.
+	^ 'Replaces the whole text of Lepiter snippets: the string of a text snippet or the code of a code snippet, as getLepiterPageContents with format structure shows them. Only text and code snippets (pharo, python, shell, ...) have a text; other snippets, such as example or picture snippets, are refused.
 
-The optional databaseId is needed only when the page and snippet ids are in several databases: the response then says so and lists them.
+The response has one entry per requested snippet, in order: the reference of the updated snippet, or an errorMessage. When one fails, the others are still made. List each snippet once: a second entry for it is refused.
 
 Example JSON arguments:
-{
-  "snippets": [
-    {"pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID", "updatedText": "New text"},
-    {"databaseId": "DATABASE_ID", "pageUid": "PAGE_ID", "snippetUid": "OTHER_SNIPPET_ID", "updatedText": "Transcript show: 1"}
-  ]
-}
-
-The response has one entry per requested snippet, in order: the result, or an errorMessage. The edits are not atomic: when one fails, the others are still made. A snippet that is listed twice is answered with an errorMessage for its second entry: give all its new text in one entry.
+{"snippets": [
+  {"pageUid": "86t968o90hlfreacjec76wapk", "snippetUid": "SgJekENeTPytZjVknCfulw==", "updatedText": "New text"},
+  {"databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "86t968o90hlfreacjec76wapk", "snippetUid": "q7Tn0dVbRZ6uJ1cE4yHw2A==", "updatedText": "Transcript show: 1"}
+]}
 
 Example JSON response:
-{
-  "snippets": [
-    {"status": "updated", "targetSnippetReference": {"databaseId": "DATABASE_ID", "pageUid": "PAGE_ID", "snippetUid": "SNIPPET_ID"}},
-    {"errorMessage": "Could not locate snippet with id OTHER_SNIPPET_ID in page PAGE_ID"}
-  ]
-}'
+{"snippets": [
+  {"status": "updated", "targetSnippetReference": {"databaseId": "dklrfmltzaib6womkfkknkfap", "pageUid": "86t968o90hlfreacjec76wapk", "snippetUid": "SgJekENeTPytZjVknCfulw=="}},
+  {"errorMessage": "Could not locate snippet with id q7Tn0dVbRZ6uJ1cE4yHw2A== in page 86t968o90hlfreacjec76wapk"}
+]}'
 ]
 
 { #category : #accessing }

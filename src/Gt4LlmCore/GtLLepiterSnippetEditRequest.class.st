@@ -29,7 +29,7 @@ GtLLepiterSnippetEditRequest >> databaseIdDescription [
 	^ MAStringDescription new
 		label: 'Database id';
 		accessor: #databaseId;
-		comment: 'Optional id of the database of the page, as lepiterKnowledgeBases lists it. Needed only when the page and snippet ids are in several databases.';
+		comment: 'Optional id of the database of the page, from lepiterKnowledgeBases. Needed only when the page and snippet ids are in several databases: the errorMessage then lists them.';
 		yourself
 ]
 
@@ -49,7 +49,7 @@ GtLLepiterSnippetEditRequest >> pageUidDescription [
 	^ MAStringDescription new
 		label: 'Page uid';
 		accessor: #pageUid;
-		comment: 'The id of the page (base 36), as getLepiterPageContents gives it.';
+		comment: 'The id of the page (base 36), from searchForLepiterPages or createLepiterPage.';
 		beRequired
 ]
 
@@ -69,7 +69,7 @@ GtLLepiterSnippetEditRequest >> snippetUidDescription [
 	^ MAStringDescription new
 		label: 'Snippet uid';
 		accessor: #snippetUid;
-		comment: 'The uid of the snippet, as getLepiterPageContents gives it.';
+		comment: 'The id of the snippet (base 64), from getLepiterPageContents with format structure or from createLepiterSnippets.';
 		beRequired
 ]
 
@@ -89,6 +89,6 @@ GtLLepiterSnippetEditRequest >> updatedTextDescription [
 	^ MAStringDescription new
 		label: 'Updated text';
 		accessor: #updatedText;
-		comment: 'The whole new text of the snippet. It replaces the current text and must not be blank.';
+		comment: 'The whole new text of the snippet: the string of a text snippet or the code of a code snippet. Must not be blank.';
 		beRequired
 ]
