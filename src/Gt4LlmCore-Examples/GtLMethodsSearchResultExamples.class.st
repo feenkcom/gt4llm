@@ -8,6 +8,22 @@ Class {
 }
 
 { #category : #examples }
+GtLMethodsSearchResultExamples >> methodFilterResultViewIsBounded [
+	<gtExample>
+	| methods filter data |
+	methods := Object methods.
+	50
+		to: 51
+		do: [ :size | 
+			filter := GtSearchFixedMethodsFilter new methods: (methods first: size).
+			data := (filter llmDataViewsFor: GtLDataView new) serializeToLlmPrimiteData
+					llmJsonData at: 'methodMatches'.
+			self assert: (data at: 'foundMethods') size equals: 50.
+			self assert: (data at: 'mayHaveMore') equals: size = 51 ].
+	^ filter
+]
+
+{ #category : #examples }
 GtLMethodsSearchResultExamples >> methodsSearchResultCreation [
 	<gtExample>
 	| references result |
