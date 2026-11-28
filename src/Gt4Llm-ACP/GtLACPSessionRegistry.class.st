@@ -123,7 +123,7 @@ GtLACPSessionRegistry >> gtNewSessionFor: anAction [
 	^ anAction dropdown
 		id: #'acp-registry-new-session';
 		addTarget: GtLACPSessionRegistryActionTarget;
-		icon: BrGlamorousIcons add;
+		icon: BrGlamorousVectorIcons add;
 		label: 'New session';
 		priority: 1;
 		menu: [ :aDropdown | self newSessionDropdownFor: aDropdown clients: self sessionClients ]
@@ -163,7 +163,7 @@ GtLACPSessionRegistry >> gtRemoveClosedSessionsFor: anAction [
 	^ anAction button
 		id: #'acp-registry-remove-closed-sessions';
 		addTarget: GtLACPSessionRegistryActionTarget;
-		icon: BrGlamorousIcons remove;
+		icon: BrGlamorousVectorIcons remove;
 		label: 'Remove closed sessions';
 		priority: 30;
 		action: [ self removeClosedSessions ]
