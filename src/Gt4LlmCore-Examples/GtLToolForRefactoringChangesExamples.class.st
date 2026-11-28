@@ -203,7 +203,7 @@ GtLToolForRefactoringChangesExamples >> refuseInvalidCalls [
 
 { #category : #examples }
 GtLToolForRefactoringChangesExamples >> refuseLepiterChangesOfARewriteResult [
-	"A rewrite result has no Lepiter changes: the refusal names its groups, and does not mistake it for a failed apply, after which the Lepiter changes are not known"
+	"A rewrite result has no Lepiter changes: the refusal names the groups it has"
 
 	<gtExample>
 	^ self

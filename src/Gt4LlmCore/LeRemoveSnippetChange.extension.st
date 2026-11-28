@@ -34,7 +34,11 @@ LeRemoveSnippetChange >> gtLlmChangedSnippet [
 
 { #category : #'*Gt4LlmCore' }
 LeRemoveSnippetChange >> gtLlmNewChangeEntry [
-	^ GtLRefactoringSnippetChangeEntry fromSnippet: self snippet
+	"The entry of the snippet to remove names its descendants, which are removed with it"
+
+	^ (GtLRefactoringSnippetChangeEntry fromSnippet: self snippet)
+		removedChildSnippetUids: (self snippet allChildrenDepthFirst collect: [ :each | each uidString ]);
+		yourself
 ]
 
 { #category : #'*Gt4LlmCore' }

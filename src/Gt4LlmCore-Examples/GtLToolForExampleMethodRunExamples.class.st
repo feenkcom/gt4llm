@@ -242,29 +242,29 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccess [
 	<gtExample>
 	| tool call targetObject resultObject |
 	resultObject := GtLExampleRunDummyExamples new successfulExample.
-	self ensureLepiterPageForObject: resultObject withSnippetCode: 'GtLExampleRunDummyExamples new successfulExample'.
+	self
+		ensureLepiterPageForObject: resultObject
+		withSnippetCode: 'GtLExampleRunDummyExamples new successfulExample'.
 	tool := GtLToolForExampleMethodRun new.
 	call := self
-		executeTool: tool
-		withArguments: {
-			'exampleReference' -> {
-					'exampleClassName' -> 'GtLExampleRunDummyExamples'.
-					'methodName' -> 'successfulExample'.
-					'classSide' -> false
-				} asDictionary
-			} asDictionary
-		inContext: (GtLToolExecutionContext new 
-			lepiterDatabase: self theDatabase).
+			executeTool: tool
+			withArguments: {'exampleReference'
+						-> {'exampleClassName' -> 'GtLExampleRunDummyExamples'.
+								'methodName' -> 'successfulExample'.
+								'classSide' -> false} asDictionary} asDictionary
+			inContext: (GtLToolExecutionContext new lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.
 	self assert: targetObject objectId isNil.
 	self
-		gtDo: [
-	self assert: targetObject playgroundPageReference notNil.
-	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
-	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
-		]
+		gtDo: [ self assert: targetObject playgroundPageReference notNil.
+			self
+				assert: targetObject playgroundPageReference databaseId
+				equals: self theDatabase primaryDB uuidString.
+			self
+				assert: targetObject playgroundPageReference pageUid
+				equals: self theDatabase pages first uid asString36 ]
 		gemstoneDo: [ self assert: targetObject playgroundPageReference isNil ].
 	^ call
 ]
@@ -274,36 +274,39 @@ GtLToolForExampleMethodRunExamples >> exampleRunSuccessStoresObjectId [
 	<gtExample>
 	| objectStorage tool call targetObject objectId storedObject resultObject |
 	resultObject := GtLExampleRunDummyExamples new successfulExample.
-	self ensureLepiterPageForObject: resultObject withSnippetCode: 'GtLExampleRunDummyExamples new successfulExample'.
+	self
+		ensureLepiterPageForObject: resultObject
+		withSnippetCode: 'GtLExampleRunDummyExamples new successfulExample'.
 	objectStorage := GtLObjectStorage new.
 	tool := GtLToolForExampleMethodRun new.
 	call := self
-		executeTool: tool
-		withArguments: {
-			'exampleReference' -> {
-				'exampleClassName' -> 'GtLExampleRunDummyExamples'.
-				'methodName' -> 'successfulExample'.
-				'classSide' -> false
-			} asDictionary
-		} asDictionary
-		inContext: (GtLToolExecutionContext new 
-			objectStorage: objectStorage;
-			lepiterDatabase: self theDatabase).
+			executeTool: tool
+			withArguments: {'exampleReference'
+						-> {'exampleClassName' -> 'GtLExampleRunDummyExamples'.
+								'methodName' -> 'successfulExample'.
+								'classSide' -> false} asDictionary} asDictionary
+			inContext: (GtLToolExecutionContext new
+					objectStorage: objectStorage;
+					lepiterDatabase: self theDatabase).
 	targetObject := call result targetObject.
 	self assert: (targetObject isKindOf: GtLExampleWithResult).
 	self assert: targetObject isSuccessResult.
 	self
-		gtDo: [
-	self assert: targetObject playgroundPageReference notNil.
-	self assert: targetObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
-	self assert: targetObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
-		]
+		gtDo: [ self assert: targetObject playgroundPageReference notNil.
+			self
+				assert: targetObject playgroundPageReference databaseId
+				equals: self theDatabase primaryDB uuidString.
+			self
+				assert: targetObject playgroundPageReference pageUid
+				equals: self theDatabase pages first uid asString36 ]
 		gemstoneDo: [ self assert: targetObject playgroundPageReference isNil ].
 	objectId := targetObject objectId.
 	self assert: objectId isString.
 	self assert: (objectStorage objectAt: objectId) equals: 42.
 	storedObject := objectStorage storedObjectAt: objectId.
-	self assert: storedObject reason class equals: GtLStoredObjectExampleMethodReason.
+	self
+		assert: storedObject reason class
+		equals: GtLStoredObjectExampleMethodReason.
 	^ call
 ]
 

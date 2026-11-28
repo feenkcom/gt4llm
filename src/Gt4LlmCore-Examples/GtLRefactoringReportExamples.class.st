@@ -183,6 +183,46 @@ GtLRefactoringReportExamples >> exampleSnippetChangeNewSource [
 ]
 
 { #category : #examples }
+GtLRefactoringReportExamples >> failedApplyListsSnippetsChangedBeforeTheError [
+	"A snippet edited before the change that fails stays edited, and the result lists it: the Lepiter changes are built from the snapshot taken after the failure, like the code changes"
+
+	<gtExample>
+	| aPage aNamespace anOtherEnvironment anOtherClass aPreview aResult json |
+	aPage := GtLLepiterTransformationSpecificationExamples new pageWithTextSnippet.
+	aNamespace := (GtLLepiterTransformations new
+			transformations: {GtLLepiterEditTextSnippetTransformationSpecification new
+						database: aPage database;
+						pageUidString: aPage uidString;
+						snippetUid: aPage children first uid;
+						updatedSnippetText: (GtLMarkdown new content: 'Edited before the error');
+						yourself};
+			yourself) applyRefactoring.
+	anOtherEnvironment := GtPharoDummiesGenerator withPackages: 1 classHierarchy: 1.
+	[ anOtherClass := anOtherEnvironment anyDummyLeafClass realClass.
+	(aNamespace classFor: anOtherClass)
+		compile: 'failingMethod ^ 2'
+		classified: #examples ] ensure: [ anOtherEnvironment removeFromSystem ].
+	aPreview := (GtLRefactoringPreview namespace: aNamespace)
+			objectId: 'example-object-id';
+			changeGroupNames: #('methodChanges' 'lepiterChanges');
+			yourself.
+	aResult := GtRefactoryChangeManager isolatedInstanceDuring: [ aPreview apply ].
+	self assert: aResult hasFailed.
+	self assert: aPage children first string equals: 'Edited before the error'.
+	self assert: aResult lepiterChangeResults size equals: 1.
+	self
+		assert: aResult lepiterChangeResults first newSnippet contentString
+		equals: 'Edited before the error'.
+	json := (GtLRefactoringResultReport
+			refactoring: aResult
+			displayOptions: (GtLRefactoringResultDisplayOptions new includeChanges: false))
+			llmJsonObject.
+	self assert: (json at: 'status') equals: 'failed'.
+	self assert: ((json at: 'lepiterChanges') at: 'totalSnippetsCount') equals: 1.
+	^ json
+]
+
+{ #category : #examples }
 GtLRefactoringReportExamples >> failedGroupedApplyListsAppliedChanges [
 	"After a failure, the response has the error and lists the changes made before it, also when the changes were not wanted. The Lepiter changes are known too, from the snapshot taken after the failure: their group is listed, empty here"
 
@@ -301,7 +341,7 @@ GtLRefactoringReportExamples >> lepiterChangesSerialization [
 
 { #category : #examples }
 GtLRefactoringReportExamples >> lepiterChangesWithSources [
-	"With sources, a snippet has its new text, in the form editLepiterSnippet accepts"
+	"With sources, a snippet has its new text, in the form editLepiterSnippets accepts"
 
 	<gtExample>
 	<return: #GtLRefactoringLepiterChangesReport>
@@ -549,6 +589,73 @@ GtLRefactoringReportExamples >> otherChangesAreListedWhenPresent [
 				at: 'target' put: 'MyPackage';
 				yourself).
 	^ json
+]
+
+{ #category : #examples }
+GtLRefactoringReportExamples >> removedChildSnippetsAreListedWithTheirAncestor [
+	"A removed snippet takes its descendants with it. The preview and the result list it once, with the ids of its descendants, depth first, in removedChildSnippetUids, as removeLepiterSnippets answers; the descendants are not listed as removals of their own. The result still holds a change result for each removed snippet"
+
+	<gtExample>
+	| aPage aParent aChild aGrandChild aNamespace aPreview previewJson aResult resultJson ungroupedJson snippetsOf childUids |
+	aPage := LePage named: 'Nested removal'.
+	LeDatabase new addPage: aPage.
+	aParent := LeTextSnippet string: 'Parent'.
+	aPage addSnippet: aParent.
+	aChild := LeTextSnippet string: 'Child'.
+	aParent addSnippet: aChild.
+	aGrandChild := LePharoSnippet code: '1 + 2'.
+	aChild addSnippet: aGrandChild.
+	aPage addSnippet: (LeTextSnippet string: 'Kept').
+	childUids := {aChild uidString.
+			aGrandChild uidString}.
+	aNamespace := GtRBNamespace new.
+	aNamespace changes addChange: (LeRemoveSnippetChange new snippet: aParent).
+	aPreview := (GtLRefactoringPreview namespace: aNamespace)
+			objectId: 'example-object-id';
+			changeGroupNames: #('lepiterChanges');
+			yourself.
+	snippetsOf := [ :aJson | 
+		(((aJson at: 'lepiterChanges') at: 'databases') first at: 'pages') first
+			at: 'snippets' ].
+	previewJson := (GtLRefactoringPreviewReport
+			refactoring: aPreview
+			displayOptions: GtLRefactoringDisplayOptions new) llmJsonObject.
+	self
+		assert: ((previewJson at: 'lepiterChanges') at: 'totalSnippetsCount')
+		equals: 1.
+	self
+		assert: ((snippetsOf value: previewJson) first at: 'removedChildSnippetUids') asArray
+		equals: childUids.
+	aResult := GtRefactoryChangeManager isolatedInstanceDuring: [ aPreview apply ].
+	self assert: aResult hasFailed not.
+	self assert: aResult lepiterChangeResults size equals: 3.
+	self assert: aResult reportedChangeResults size equals: 1.
+	resultJson := (GtLRefactoringResultReport
+			refactoring: aResult
+			displayOptions: GtLRefactoringResultDisplayOptions new) llmJsonObject.
+	self
+		assert: ((resultJson at: 'lepiterChanges') at: 'totalSnippetsCount')
+		equals: 1.
+	self
+		assert: ((snippetsOf value: resultJson) first at: 'removedChildSnippetUids') asArray
+		equals: childUids.
+	self
+		assert: ((snippetsOf value: resultJson) first at: 'snippetUid')
+		equals: aParent uidString.
+	aPreview changeGroupNames: #().
+	ungroupedJson := (GtLRefactoringResultReport
+			refactoring: aResult
+			displayOptions: GtLRefactoringResultDisplayOptions new) llmJsonObject.
+	self assert: (ungroupedJson at: 'codeChanges') size equals: 1.
+	self
+		assert: ((ungroupedJson at: 'codeChanges') first at: 'removedChildSnippetUids') asArray
+		equals: childUids.
+	self
+		assert: ((aPreview changes first llmJsonObjectIncludingSources: false)
+				at: 'removedChildSnippetUids') asArray
+		equals: childUids.
+	self assert: aPage children size equals: 1.
+	^ resultJson
 ]
 
 { #category : #examples }

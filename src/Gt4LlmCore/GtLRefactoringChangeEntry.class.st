@@ -71,6 +71,13 @@ GtLRefactoringChangeEntry >> printOn: aStream [
 ]
 
 { #category : #accessing }
+GtLRefactoringChangeEntry >> removedChildSnippetUids [
+	"Only the entry of a removed snippet names descendants removed with it"
+
+	^ nil
+]
+
+{ #category : #accessing }
 GtLRefactoringChangeEntry >> target [
 	"Return the class, method, snippet or other entity I describe, as a string"
 

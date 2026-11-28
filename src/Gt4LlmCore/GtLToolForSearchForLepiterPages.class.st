@@ -1,23 +1,46 @@
 Class {
 	#name : #GtLToolForSearchForLepiterPages,
-	#superclass : #GtLAbstractMagritteFunctionTool,
+	#superclass : #GtLAbstractLepiterTool,
 	#category : #'Gt4LlmCore-Tools'
 }
 
-{ #category : #accessing }
-GtLToolForSearchForLepiterPages >> description [
-	^ 'Searches for Lepiter pages by name matching the query substring (case-insensitive).'
+{ #category : #'accessing - descriptions' }
+GtLToolForSearchForLepiterPages >> databaseIdsDescription [
+	<magritteDescription>
+	^ MAToManyScalarRelationDescription new
+		label: 'Database ids';
+		accessor: #databaseIds;
+		classes: {String};
+		comment: 'Optional ids of the databases to search, from lepiterKnowledgeBases. Without them, all databases are searched.';
+		yourself
+]
+
+{ #category : #private }
+GtLToolForSearchForLepiterPages >> databasesWithIds: aCollectionOfIds ifNone: aNoneBlock [
+	"Return the databases with these ids, or all databases when no id is given. aNoneBlock gets an error domain object for an unknown id"
+
+	| locator databases |
+	locator := self snippetLocator.
+	aCollectionOfIds ifEmpty: [ ^ locator databases ].
+	databases := OrderedCollection new.
+	aCollectionOfIds
+		do: [ :anId | 
+			(locator
+				databasesWithId: anId
+				ifNone: [ :aProblem | ^ aNoneBlock value: aProblem ])
+				do: [ :each | databases addIfNotPresent: each ] ].
+	^ databases
 ]
 
 { #category : #accessing }
-GtLToolForSearchForLepiterPages >> knowledgeBasesDescription [
-	<magritteDescription>
+GtLToolForSearchForLepiterPages >> description [
+	^ 'Finds the Lepiter pages whose title has, for each word of the query, a word that starts with it, ignoring case: "Money" and "mon" find "Warmup: understanding the Money classes", "oney" does not. Each page comes with its pageTitle, pageUid and databaseId, the ids that the other Lepiter tools take.
 
-	^ MAToManyScalarRelationDescription new
-		label: 'Knowledge bases';
-		accessor: #knowledgeBases;
-		classes: { String };
-		beRequired
+Example JSON arguments:
+{"query": "Money", "databaseIds": ["dklrfmltzaib6womkfkknkfap"]}
+
+Example JSON response:
+{"pages": [{"pageTitle": "Warmup: understanding the Money classes", "pageUid": "86t968o90hlfreacjec76wapk", "databaseId": "dklrfmltzaib6womkfkknkfap"}]}'
 ]
 
 { #category : #accessing }
@@ -26,47 +49,32 @@ GtLToolForSearchForLepiterPages >> name [
 ]
 
 { #category : #private }
-GtLToolForSearchForLepiterPages >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
-	| arguments query baseIds bases pages logicalDatabase missingIds |
-	arguments := aToolCall arguments ifNil: [ Dictionary new ].
-	query := arguments at: 'query'.
-	baseIds := arguments at: 'knowledgeBases' ifAbsent: [ nil ].
-	logicalDatabase := LeDatabasesRegistry defaultLogicalDatabase.
-	missingIds := OrderedCollection new.
-	bases := baseIds
-		ifNil: [ { LeDatabase gtBook } ]
-		ifNotNil: [ | ids |
-			ids := (baseIds isString not and: [ baseIds isCollection])
-				ifTrue: [ baseIds ]
-				ifFalse: [ { baseIds } ].
-			ids collect: [ :each |
-				logicalDatabase
-					databaseWithID: each
-					ifNone: [
-						missingIds add: each.
-						nil ] ] thenSelect: #notNil ].
-	missingIds ifNotEmpty: [
-		^ GtLMissingDomainObject new
-			objectName: missingIds first ].
-	pages := bases
-		ifEmpty: [ #() ]
-		ifNotEmpty: [ | collected |
-			collected := OrderedCollection new.
-			bases do: [ :each | | promise |
-				promise := (each asyncPagesForWord: query) toArray
-					await: GtLSettings futureExecutionConfiguration.
-				collected addAll: promise wait ].
-			collected asArray ].
+GtLToolForSearchForLepiterPages >> pagesMatching: aQuery in: theDatabases [
+	^ (theDatabases
+		flatCollect: [ :each | 
+			((each asyncPagesForWord: aQuery) toArray
+				await: GtLSettings futureExecutionConfiguration) wait ]) asArray
+]
 
-	^ GtLLepiterPagesDomainObject new pages: pages
+{ #category : #private }
+GtLToolForSearchForLepiterPages >> privatePerformToolCall: aToolCall inContext: anExecutionContext [
+	| arguments databases |
+	arguments := aToolCall arguments ifNil: [ Dictionary new ].
+	(self missingArgumentAmong: #('query') inArguments: arguments)
+		ifNotNil: [ :aProblem | ^ aProblem ].
+	databases := self
+			databasesWithIds: (arguments at: 'databaseIds' ifAbsent: [ #() ])
+			ifNone: [ :aProblem | ^ aProblem ].
+	^ GtLLepiterPagesDomainObject new
+		pages: (self pagesMatching: (arguments at: 'query') in: databases)
 ]
 
 { #category : #accessing }
 GtLToolForSearchForLepiterPages >> queryDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Query';
 		accessor: #query;
+		comment: 'The words to look for at the start of the words of the page titles.';
 		beRequired
 ]

@@ -164,60 +164,76 @@ GtLExampleWithResultExamples >> exampleWithResultForSuccessfulExample [
 	<gtExample>
 	<return: #GtLExampleWithResult>
 	| method domainObject compositeView dataBlock jsonData resultJson objectValueJson expectedPhlowViews |
-	
 	method := GtLExampleRunDummyExamples >> #successfulExample.
-	self ensureLepiterPageForObject: 42 withSnippetCode: 'GtLExampleRunDummyExamples new successfulExample'.
+	self
+		ensureLepiterPageForObject: 42
+		withSnippetCode: 'GtLExampleRunDummyExamples new successfulExample'.
 	domainObject := GtLExampleWithResult new
-		exampleWithResult: (self runExampleMethod: method);
-		objectId: 'test-object-id';
-		updatePlaygroundPageReferenceForDatabase: self theDatabase.
-	
-	self 
-		assertDomainObject: domainObject 
-		isSuccess: true 
-		statusText: 'success' 
-		className: #GtLExampleRunDummyExamples 
-		selector: #successfulExample 
+			exampleWithResult: (self runExampleMethod: method);
+			objectId: 'test-object-id';
+			updatePlaygroundPageReferenceForDatabase: self theDatabase.
+
+	self
+		assertDomainObject: domainObject
+		isSuccess: true
+		statusText: 'success'
+		className: #GtLExampleRunDummyExamples
+		selector: #successfulExample
 		objectId: 'test-object-id'.
-		
+
 	self assert: domainObject playgroundPageReference notNil.
-	self assert: domainObject playgroundPageReference databaseId equals: self theDatabase primaryDB uuidString.
-	self assert: domainObject playgroundPageReference pageId equals: self theDatabase pages first uid asString36.
-	
+	self
+		assert: domainObject playgroundPageReference databaseId
+		equals: self theDatabase primaryDB uuidString.
+	self
+		assert: domainObject playgroundPageReference pageUid
+		equals: self theDatabase pages first uid asString36.
+
 	compositeView := domainObject llmDataViewsFor: GtLDataView new.
 	self assert: compositeView dataViews size equals: 2.
-	
+
 	dataBlock := compositeView serializeToLlmPrimiteData.
 	self assertDataBlockHasOnlyJsonData: dataBlock.
-	
+
 	jsonData := dataBlock compositeJsonData.
-	self assertExampleData: jsonData forMethod: method status: 'success'.
-	
+	self
+		assertExampleData: jsonData
+		forMethod: method
+		status: 'success'.
+
 	resultJson := jsonData at: 'result'.
-	self assertSuccessResult: resultJson objectId: 'test-object-id' objectDetails: Dictionary new.
-	self assert: (resultJson at: 'playgroundPageReference') equals: (NeoJSONObject new
-		at: 'databaseId' put: self theDatabase primaryDB uuidString;
-		at: 'pageId' put: self theDatabase pages first uid asString36;
-		yourself).
-	
+	self
+		assertSuccessResult: resultJson
+		objectId: 'test-object-id'
+		objectDetails: Dictionary new.
+	self
+		assert: (resultJson at: 'playgroundPageReference')
+		equals: (NeoJSONObject new
+				at: 'databaseId' put: self theDatabase primaryDB uuidString;
+				at: 'pageUid' put: self theDatabase pages first uid asString36;
+				yourself).
+
 	objectValueJson := resultJson at: 'objectValue'.
-	self 
-		assertObjectValue: objectValueJson 
-		className: 'SmallInteger' 
-		printString: '42' 
-		superclassName: 'Integer' 
-		packageName: 'Kernel' 
+	self
+		assertObjectValue: objectValueJson
+		className: 'SmallInteger'
+		printString: '42'
+		superclassName: 'Integer'
+		packageName: 'Kernel'
 		instanceSlots: #().
-	
-	expectedPhlowViews := {
-		{ 'title' -> 'Preview'. 'methodName' -> 'gtPreviewFor:' } asDictionary.
-		{ 'title' -> 'Integer'. 'methodName' -> 'gtIntegerFor:' } asDictionary.
-		{ 'title' -> 'Raw'. 'methodName' -> 'gtRawFor:' } asDictionary.
-		{ 'title' -> 'Print'. 'methodName' -> 'gtPrintFor:' } asDictionary.
-		{ 'title' -> 'Meta'. 'methodName' -> 'gtMetaFor:' } asDictionary
-	}.
+
+	expectedPhlowViews := {{'title' -> 'Preview'.
+				'methodName' -> 'gtPreviewFor:'} asDictionary.
+			{'title' -> 'Integer'.
+				'methodName' -> 'gtIntegerFor:'} asDictionary.
+			{'title' -> 'Raw'.
+				'methodName' -> 'gtRawFor:'} asDictionary.
+			{'title' -> 'Print'.
+				'methodName' -> 'gtPrintFor:'} asDictionary.
+			{'title' -> 'Meta'.
+				'methodName' -> 'gtMetaFor:'} asDictionary}.
 	self assertObjectValue: objectValueJson hasPhlowViews: expectedPhlowViews.
-	
+
 	^ domainObject
 ]
 

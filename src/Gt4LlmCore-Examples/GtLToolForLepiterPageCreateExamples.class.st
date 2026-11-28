@@ -47,6 +47,32 @@ GtLToolForLepiterPageCreateExamples >> emptyTitle [
 ]
 
 { #category : #examples }
+GtLToolForLepiterPageCreateExamples >> existingTitleIsRefused [
+	"A title that a page of the database already has is refused with a message, not with the error of Lepiter"
+
+	<gtExample>
+	| call db tool |
+	db := LeExplicitlyAttachedLinksExamples new primaryDatabase.
+	db pageBuilder
+		title: 'Existing Page';
+		add.
+	tool := GtLToolForLepiterPageCreate new.
+	tool database: (LeLogicalDatabase new primaryDB: db).
+	call := self
+			executeTool: tool
+			withArguments: {'title' -> 'Existing Page'.
+					'databaseId' -> db uuidString} asDictionary.
+	self assert: call result targetObject isErrorDomainObject.
+	self
+		assert: (call result targetObject errorMessage
+				beginsWith: 'A page titled ''Existing Page'' is already in').
+	self
+		assert: (db pagesByName select: [ :each | each title = 'Existing Page' ]) size
+		equals: 1.
+	^ call
+]
+
+{ #category : #examples }
 GtLToolForLepiterPageCreateExamples >> missingDatabaseId [
 	<gtExample>
 	| call db logicalDB tool |
@@ -131,6 +157,22 @@ GtLToolForLepiterPageCreateExamples >> nilTitle [
 ]
 
 { #category : #examples }
+GtLToolForLepiterPageCreateExamples >> responseKeys [
+	"The response names the page with the same keys as the other Lepiter tools: databaseId, pageUid and pageTitle"
+
+	<gtExample>
+	| call json |
+	call := self successfulPageCreate.
+	json := self jsonOf: call.
+	self
+		assert: json keys asSortedCollection asArray
+		equals: #('databaseId' 'pageTitle' 'pageUid' 'status').
+	self assert: (json at: 'pageTitle') equals: 'New Page'.
+	self assert: (json at: 'status') equals: 'created'.
+	^ json
+]
+
+{ #category : #examples }
 GtLToolForLepiterPageCreateExamples >> successfulPageCreate [
 	<gtExample>
 	| call db logicalDB tool pageUid page targetObject |
@@ -154,5 +196,24 @@ GtLToolForLepiterPageCreateExamples >> successfulPageCreate [
 	self assert: targetObject page == page.
 	self assert: page title equals: 'New Page'.
 	self assert: page children isEmpty.
+	^ call
+]
+
+{ #category : #examples }
+GtLToolForLepiterPageCreateExamples >> unknownDatabaseIsReported [
+	<gtExample>
+	| call tool |
+	tool := GtLToolForLepiterPageCreate new.
+	tool
+		database: (LeLogicalDatabase new
+				primaryDB: LeExplicitlyAttachedLinksExamples new primaryDatabase).
+	call := self
+			executeTool: tool
+			withArguments: {'title' -> 'New Page'.
+					'databaseId' -> 'missing-uuid-42'} asDictionary.
+	self assert: call result targetObject isErrorDomainObject.
+	self
+		assert: call result targetObject errorMessage
+		equals: 'Could not locate the database with id missing-uuid-42. The lepiterKnowledgeBases tool lists the databases and their ids.'.
 	^ call
 ]

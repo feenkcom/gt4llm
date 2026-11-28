@@ -29,16 +29,8 @@ GtLLepiterSnippetTransformationSpecification >> pageDescription [
 GtLLepiterSnippetTransformationSpecification >> pageIfFound: aFoundBlock ifNone: aNoneBlock [
 	"Look my page up in my database. aNoneBlock gets an error domain object when the uid is invalid, the page is not found or its id is in several databases"
 
-	| aUuid |
-	aUuid := [ self pageUid ]
-			on: Error
-			do: [ :anError | 
-				^ aNoneBlock
-					value: (GtLProblemDomainObject new
-							errorMessage: 'Invalid page uid ' , self pageUidString printString;
-							yourself) ].
 	^ (GtLLepiterSnippetLocator database: self database)
-		pageWithUid: aUuid asString36
+		pageWithUid: self pageUidString
 		databaseId: nil
 		ifFound: aFoundBlock
 		ifNone: aNoneBlock
@@ -46,7 +38,11 @@ GtLLepiterSnippetTransformationSpecification >> pageIfFound: aFoundBlock ifNone:
 
 { #category : #accessing }
 GtLLepiterSnippetTransformationSpecification >> pageUid [
-	^ UUID gtFromString: self pageUidString 
+	"Return the uuid of my page id, in base 36 or in the dashed form"
+
+	^ GtLLepiterSnippetLocator
+		pageUuidFrom: self pageUidString
+		ifInvalid: [ :aProblem | Error signal: aProblem errorMessage ]
 ]
 
 { #category : #accessing }

@@ -21,7 +21,7 @@ GtLMagritteToolForClassRename >> classNameDescription [
 GtLMagritteToolForClassRename >> description [
 	^ 'Renames a class or trait at once. It rewrites the references in all methods, including symbols such as #MyClass, and in all Lepiter snippets: code snippets, example snippets, and class, method and example annotations in text snippets. Comments, strings and plain text are not changed. To see the changes first, use previewRefactoring with a RenameClass, then applyRefactoring.
 
-The response is the one of applyRefactoring for a grouped preview: the status, refactoringName, refactoringDescription, changesCount, objectId of the stored result and, unless includeChanges is false, classChanges, methodChanges and lepiterChanges. When the rename fails partway, errorMessage says why, and the changes made before the error, which stay in the image, are listed, except the Lepiter changes.
+The response is the one of applyRefactoring for a grouped preview: the status, refactoringName, refactoringDescription, changesCount, objectId of the stored result and, unless includeChanges is false, classChanges, methodChanges and lepiterChanges. When the rename fails partway, errorMessage says why, and the changes made before the error, to code and to Lepiter snippets, stay in the image and are listed.
 
 A refused rename (unknown class, a class side, an invalid or used new name) answers an errorMessage; a refusal of the refactoring engine answers an errorReason.
 

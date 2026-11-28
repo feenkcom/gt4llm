@@ -30,13 +30,11 @@ GtLLepiterPythonSnippetCreationRequest >> pythonCode: aString [
 { #category : #magritte }
 GtLLepiterPythonSnippetCreationRequest >> pythonCodeDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Python code';
-		comment: 'Python code for the snippet.';
 		accessor: #pythonCode;
-		beRequired;
-		yourself
+		comment: 'The Python code of the snippet.';
+		beRequired
 ]
 
 { #category : #validation }

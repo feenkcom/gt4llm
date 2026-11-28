@@ -63,8 +63,8 @@ GtLStartAgentRequest >> instructionPageReferencesDescription [
 	<magritteDescription>
 	^ MAToManyRelationDescription new
 		accessor: #instructionPageReferences;
-		classes: { GtLLepiterPageReference};
-		comment: 'The names of the Lepiter pages that contain instructions for the agent';
+		classes: {GtLLepiterPageReference};
+		comment: 'The Lepiter pages that contain instructions for the agent, each given by its pageUid and databaseId';
 		beOptional
 ]
 

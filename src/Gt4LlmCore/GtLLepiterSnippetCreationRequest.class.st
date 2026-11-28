@@ -50,8 +50,8 @@ GtLLepiterSnippetCreationRequest >> databaseIdDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Database id';
-		comment: 'Optional id of the database of the page, as lepiterKnowledgeBases lists it. Needed only when the page id is in several databases.';
 		accessor: #databaseId;
+		comment: 'Optional id of the database of the page, from lepiterKnowledgeBases. Needed only when the page id is in several databases: the errorMessage then lists them.';
 		yourself
 ]
 
@@ -71,7 +71,7 @@ GtLLepiterSnippetCreationRequest >> pageUidDescription [
 	^ MAStringDescription new
 		label: 'Page uid';
 		accessor: #pageUid;
-		comment: 'The id of the page (base 36), as getLepiterPageContents and searchForLepiterPages give it.';
+		comment: 'The id of the page (base 36), from searchForLepiterPages or createLepiterPage.';
 		beRequired
 ]
 
@@ -88,11 +88,10 @@ GtLLepiterSnippetCreationRequest >> parentSnippetUid: aString [
 { #category : #magritte }
 GtLLepiterSnippetCreationRequest >> parentSnippetUidDescription [
 	<magritteDescription>
-
 	^ MAStringDescription new
 		label: 'Parent snippet uid';
-		comment: 'Optional uid of the parent snippet. If provided, the new snippet is added as a child of that snippet instead of as a top-level page snippet.';
 		accessor: #parentSnippetUid;
+		comment: 'Optional id of a snippet of the page (base 64), from getLepiterPageContents with format structure or from createLepiterSnippets. The new snippet becomes its last child.';
 		yourself
 ]
 

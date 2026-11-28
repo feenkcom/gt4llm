@@ -213,7 +213,9 @@ GtLMessageStyler >> pageForAnnotation: aPageAnnotation [
 	database ifNil: [ ^ nil ].
 	aPageAnnotation pageUidString
 		ifNotNil: [ :pageId | 
-			uid := [ UUID fromString36: pageId ] on: Error do: [ :error | ^ nil ].
+			uid := GtLLepiterSnippetLocator
+					pageUuidFrom: pageId
+					ifInvalid: [ :aProblem | ^ nil ].
 			^ database
 				pageWithID: uid
 				ifPresent: [ :page | page ]

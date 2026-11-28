@@ -44,7 +44,7 @@ GtLToolForApplyRefactoring >> description [
 
 The response has the status (applied or failed), refactoringName, refactoringDescription, changesCount and objectId, the id of the stored result. Unless includeChanges is false, it lists what changed in the image: for a preview with a changes list, codeChanges, each with a kind and a target; for a grouped preview, the groups of previewRefactoring except otherChanges, built from what changed in the image, so their counts can differ from the preview. getRefactoringChanges lists the changes the response does not.
 
-When applying fails, errorMessage says why, and the changes made before the error, which stay in the image, are listed, except the Lepiter changes. To retry, preview again.
+When applying fails, errorMessage says why, and the changes made before the error, to code and to Lepiter snippets, stay in the image and are listed. To retry, preview again.
 
 A refused call (unknown objectId, an object that is not a preview, a preview already applied) answers an errorMessage.
 

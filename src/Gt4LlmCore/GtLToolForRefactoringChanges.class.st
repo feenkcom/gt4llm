@@ -9,13 +9,13 @@ Class {
 
 { #category : #accessing }
 GtLToolForRefactoringChanges >> description [
-	^ 'Lists the changes of a stored preview (from previewRefactoring or previewRewrite) or result (from applyRefactoring or renameClass) page by page, to go through a large refactoring without getting all its changes at once.
+	^ 'Lists the changes of a stored preview (from previewRefactoring or previewRewrite) or result (from applyRefactoring, renameClass or renameMethod) in batches, to go through a large refactoring without getting all its changes at once.
 
-Each group in groups is listed from its offset, in the order of the other responses. While a group has a nextOffset in the response, pass it as the offset to continue. lepiterChanges pages by snippet, so a page can be split between calls.
+Each group in groups is listed from its offset, in the order of the other responses. While a group has a nextOffset in the response, pass it as the offset to continue. lepiterChanges is listed by snippet, so the snippets of one Lepiter page can be split between calls.
 
 The response has the status, refactoringName, refactoringDescription, changesCount and objectId, and the groups asked for, with the fields they have in the other responses plus their offset. A preview or result whose changes are not grouped lists them all, whatever the groups.
 
-A refused call (unknown objectId, an object that is not a preview or result, no group, a group the refactoring does not have) answers an errorMessage. After a failed apply, the Lepiter changes are not known.
+A refused call (unknown objectId, an object that is not a preview or result, no group, a group the refactoring does not have) answers an errorMessage.
 
 Example JSON arguments:
 {"objectId": "abc123", "groups": {"methodChanges": {"offset": 200, "limit": 100}, "lepiterChanges": {"offset": 50}}}

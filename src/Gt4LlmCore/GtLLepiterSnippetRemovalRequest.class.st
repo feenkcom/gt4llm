@@ -24,8 +24,8 @@ GtLLepiterSnippetRemovalRequest >> databaseIdDescription [
 	<magritteDescription>
 	^ MAStringDescription new
 		label: 'Database id';
-		comment: 'Optional id of the database of the page, as lepiterKnowledgeBases lists it. Needed only when the page and snippet ids are in several databases.';
 		accessor: #databaseId;
+		comment: 'Optional id of the database of the page, from lepiterKnowledgeBases. Needed only when the page and snippet ids are in several databases: the errorMessage then lists them.';
 		yourself
 ]
 
@@ -45,7 +45,7 @@ GtLLepiterSnippetRemovalRequest >> pageUidDescription [
 	^ MAStringDescription new
 		label: 'Page uid';
 		accessor: #pageUid;
-		comment: 'The id of the page (base 36), as getLepiterPageContents gives it.';
+		comment: 'The id of the page (base 36), from searchForLepiterPages or createLepiterPage.';
 		beRequired
 ]
 
@@ -65,6 +65,6 @@ GtLLepiterSnippetRemovalRequest >> snippetUidDescription [
 	^ MAStringDescription new
 		label: 'Snippet uid';
 		accessor: #snippetUid;
-		comment: 'The uid of the snippet, as getLepiterPageContents gives it.';
+		comment: 'The id of the snippet (base 64), from getLepiterPageContents with format structure or from createLepiterSnippets.';
 		beRequired
 ]

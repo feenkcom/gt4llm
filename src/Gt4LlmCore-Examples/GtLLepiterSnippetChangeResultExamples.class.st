@@ -111,6 +111,31 @@ GtLLepiterSnippetChangeResultExamples >> locatorRefusesUnknownAndInvalidIds [
 ]
 
 { #category : #examples }
+GtLLepiterSnippetChangeResultExamples >> locatorTakesTheDashedFormOfAPageUid [
+	"A page id is base 36, as the Lepiter tools give it, or the dashed form of its UUID, as the page JSON shows it. Other text is refused as invalid, also when it has the size of a UUID"
+
+	<gtExample>
+	| aPage aLocator resolve |
+	aPage := self pageWithSnippets.
+	aLocator := GtLLepiterSnippetLocator database: aPage database.
+	resolve := [ :aString | 
+		aLocator
+			pageWithUid: aString
+			databaseId: nil
+			ifFound: [ :each | each ]
+			ifNone: [ :aProblem | aProblem errorMessage ] ].
+	self assert: (resolve value: aPage uidString) == aPage.
+	self assert: (resolve value: aPage uid asString) == aPage.
+	self assert: (resolve value: '  ' , aPage uid asString , ' ') == aPage.
+	self
+		assert: ((resolve value: 'zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz')
+				includesSubstring: 'Invalid page uid').
+	self
+		assert: ((resolve value: 'not-base-36') includesSubstring: 'Invalid page uid').
+	^ aPage
+]
+
+{ #category : #examples }
 GtLLepiterSnippetChangeResultExamples >> modificationResult [
 	"A modification result holds the snapshots before and after; its diff is split as code for a code snippet"
 
@@ -135,6 +160,30 @@ GtLLepiterSnippetChangeResultExamples >> modificationResult [
 	self assert: aResult llmChangeEntry position equals: 2.
 	self assert: aResult llmChangeEntry newSource equals: '3 + 5'.
 	^ aResult
+]
+
+{ #category : #examples }
+GtLLepiterSnippetChangeResultExamples >> pageUuidFromBothForms [
+	"Every Lepiter tool reads a page id with GtLLepiterSnippetLocator class>>#pageUuidFrom:ifInvalid:. It takes base 36, as the tools give it, and the dashed form of the UUID, as the stored page JSON shows it, with spaces around. A missing or invalid id goes to the block, with an errorMessage"
+
+	<gtExample>
+	| aUuid parse |
+	aUuid := UUID new.
+	parse := [ :aString | 
+		GtLLepiterSnippetLocator
+			pageUuidFrom: aString
+			ifInvalid: [ :aProblem | aProblem errorMessage ] ].
+	self assert: (parse value: aUuid asString36) equals: aUuid.
+	self assert: (parse value: aUuid asString) equals: aUuid.
+	self assert: (parse value: ' ' , aUuid asString , ' ') equals: aUuid.
+	self assert: (parse value: nil) equals: 'Missing page uid'.
+	self assert: (parse value: '  ') equals: 'Missing page uid'.
+	self
+		assert: ((parse value: 'not base 36!') includesSubstring: 'Invalid page uid').
+	self
+		assert: ((parse value: 'zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz')
+				includesSubstring: 'Invalid page uid').
+	^ aUuid
 ]
 
 { #category : #examples }

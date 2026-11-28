@@ -26,6 +26,40 @@ GtLLepiterSnippetLocator class >> database: aDatabase [
 		yourself
 ]
 
+{ #category : #parsing }
+GtLLepiterSnippetLocator class >> pageUuidFrom: aPageUidString ifInvalid: anInvalidBlock [
+	"Return the uuid of a page id that an agent gives: base 36, as the Lepiter tools give it, or the dashed form of a UUID, as the stored page JSON shows it. Both are accepted, whatever form the tools answer, as an agent can take an id from either.
+	anInvalidBlock gets an error domain object for a missing or invalid id. UUID class>>#fromString36: does not refuse other characters (it answers an unrelated uuid), so they are checked first"
+
+	| aString |
+	aString := aPageUidString
+			ifNil: [ '' ]
+			ifNotNil: [ aPageUidString asString trimBoth ].
+	aString isEmpty
+		ifTrue: [ ^ anInvalidBlock
+				value: (GtLProblemDomainObject new
+						errorMessage: 'Missing page uid';
+						yourself) ].
+	(aString size = 36 and: [ (aString occurrencesOf: $-) = 4 ])
+		ifTrue: [ ^ [ UUID fromString: aString ]
+				on: Error
+				do: [ :anError | anInvalidBlock value: (self problemOfInvalidPageUid: aString) ] ].
+	(aString
+		allSatisfy: [ :each | each isDigit or: [ each asLowercase between: $a and: $z ] ])
+		ifFalse: [ ^ anInvalidBlock value: (self problemOfInvalidPageUid: aString) ].
+	^ [ UUID fromString36: aString ]
+		on: Error
+		do: [ :anError | anInvalidBlock value: (self problemOfInvalidPageUid: aString) ]
+]
+
+{ #category : #parsing }
+GtLLepiterSnippetLocator class >> problemOfInvalidPageUid: aString [
+	^ GtLProblemDomainObject new
+		errorMessage: 'Invalid page uid ' , aString
+				, ': a page id is base 36, as getLepiterPageContents and searchForLepiterPages give it, or the dashed form of the page UUID';
+		yourself
+]
+
 { #category : #accessing }
 GtLLepiterSnippetLocator >> database [
 	^ database
@@ -84,23 +118,6 @@ GtLLepiterSnippetLocator >> namesOfDatabasesOf: aCollectionOfSnippetsOrPages [
 ]
 
 { #category : #resolving }
-GtLLepiterSnippetLocator >> pageUuidFrom: aPageUidString ifInvalid: anInvalidBlock [
-	| aString |
-	aString := aPageUidString
-			ifNil: [ '' ]
-			ifNotNil: [ aPageUidString asString trimBoth ].
-	aString isEmpty
-		ifTrue: [ ^ anInvalidBlock value: (self problem: 'Missing page uid') ].
-	^ [ UUID fromString36: aString ]
-		on: Error
-		do: [ :anError | 
-			anInvalidBlock
-				value: (self
-						problem: 'Invalid page uid ' , aString
-								, ': page ids are base 36, as getLepiterPageContents and searchForLepiterPages give them') ]
-]
-
-{ #category : #resolving }
 GtLLepiterSnippetLocator >> pageWithUid: aPageUidString databaseId: aDatabaseIdOrNil ifFound: aFoundBlock ifNone: aNoneBlock [
 	"Resolve a page. A page id that is in several databases is refused: the databaseId tells them apart"
 
@@ -114,7 +131,7 @@ GtLLepiterSnippetLocator >> pageWithUid: aPageUidString databaseId: aDatabaseIdO
 				value: (self
 						problem: 'The page id ' , aPageUidString asString trimBoth , ' is in several databases: '
 								, (self namesOfDatabasesOf: pages)
-								, '. Give the databaseId of the one to change.') ].
+								, '. Give the databaseId of the one you mean.') ].
 	^ aFoundBlock value: pages first
 ]
 
@@ -123,7 +140,7 @@ GtLLepiterSnippetLocator >> pagesWithUid: aPageUidString databaseId: aDatabaseId
 	"Return the pages with that id, at most one per database, in the databases to search. aNoneBlock gets an error domain object when the id is invalid or no page is found"
 
 	| aUuid candidates pages |
-	aUuid := self
+	aUuid := self class
 			pageUuidFrom: aPageUidString
 			ifInvalid: [ :aProblem | ^ aNoneBlock value: aProblem ].
 	candidates := self
@@ -207,7 +224,7 @@ GtLLepiterSnippetLocator >> snippetWithUid: aSnippetUidString pageUid: aPageUidS
 						problem: 'The page id ' , aPageUidString asString trimBoth , ' and snippet id '
 								, anUid uidString , ' are in several databases: '
 								, (self namesOfDatabasesOf: matches)
-								, '. Give the databaseId of the one to change.') ].
+								, '. Give the databaseId of the one you mean.') ].
 	^ aFoundBlock value: matches first
 ]
 
